@@ -97,4 +97,16 @@ export class HttpRepository {
       throw HttpError.parse(error as AxiosError);
     }
   }
+
+  parseQueryObject(obj: Record<string, string | number | boolean>): string {
+    const entries = Object.entries(obj);
+
+    const parsed = entries.map((cur) => {
+      const [key, value] = cur;
+
+      return `${key}=${value}`;
+    });
+
+    return `?${parsed.join("&")}`;
+  }
 }
