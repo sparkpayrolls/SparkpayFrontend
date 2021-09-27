@@ -104,6 +104,10 @@ export class HttpRepository {
     const parsed = entries.map((cur) => {
       const [key, value] = cur;
 
+      if (typeof value === "boolean") {
+        return `${key}=${value ? "true" : "false"}`;
+      }
+
       return `${key}=${value}`;
     });
 
