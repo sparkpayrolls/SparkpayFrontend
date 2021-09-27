@@ -1,15 +1,14 @@
 .button {
-  font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 700;
+  font-weight: 500;
   border: 0;
-  border-radius: 3em;
+  border-radius: 8px;
   cursor: pointer;
   display: inline-block;
   line-height: 1;
 
   &--primary {
-    color: white;
-    background-color: #1ea7fd;
+    color: #ffffff;
+    background: #0d0f11;
   }
 
   &--secondary {
@@ -19,12 +18,14 @@
   }
 
   &--small {
-    font-size: 12px;
+    font-size: 0.75rem;
     padding: 10px 16px;
   }
 
   &--medium {
-    font-size: 14px;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
     padding: 11px 20px;
   }
 

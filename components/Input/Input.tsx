@@ -1,11 +1,10 @@
 import React from "react";
-import "./input.scss";
 
 interface InputProps {
   /**
    * Input Placeholder contents
    */
-  placeholder: string;
+  placeholder?: string;
   /**
    * How large should the button be?
    */
@@ -19,6 +18,11 @@ interface InputProps {
    * label htmlFor & input name
    */
   name: string;
+
+  /**
+   * custom class name
+   */
+  className?: string;
 }
 
 /**
@@ -29,11 +33,14 @@ export const Input = ({
   placeholder,
   type = "text",
   name,
+  className,
   ...props
 }: InputProps) => {
   return (
-    <div className="input-container">
-      <label htmlFor={name}>{label}</label>
+    <div className={["input-container", `${className}`].join(" ")}>
+      <label htmlFor={name} className="input-label">
+        {label}
+      </label>
       <input
         type={type}
         className="input"

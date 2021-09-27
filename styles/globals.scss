@@ -3,7 +3,9 @@
 @import "./core/variables";
 
 // COMPONENTS
-@import "./components/button/button";
+@import "./components/button";
+@import "./components/input";
 
 // PAGES
-@import "./pages/home/home";
+@import "./pages/home";
+@import "./pages/create-account";
