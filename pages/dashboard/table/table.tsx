@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import DashboardImage from "../../../dashboard-assets/OBJECTS.svg";
 import Dropdown from "../../../dashboard-assets/dropdown.svg";
+import PlusButton from "../../../dashboard-assets/plusbutton1.svg";
 import { Button } from "../../../components/Button/Button";
 
 const Table: NextPage = () => {
@@ -22,7 +23,32 @@ const Table: NextPage = () => {
       </div>
       <div className="dashboard-table__cards">
         <h1 className="dashboard-table__header">Dashboard</h1>
-        <button>hello</button>
+        <div className="dashboard-table__button">
+          <Button
+            label="Create Organisation"
+            onClick={() => {}}
+            className="dashboard-table__submit-btn"
+            primary
+          />
+        </div>
+      </div>
+      <div className="dashboard-table__card">
+        <div className="dashboard-table__cardDetails">
+          <h1>0</h1>
+          <p>Total number of Organisation</p>
+        </div>
+        <div className="dashboard-table__cardDetails">
+          <h1>₦ 125,000</h1>
+          <p>Total number of payroll burden</p>
+        </div>
+        <div className="dashboard-table__cardDetails">
+          <h1>209</h1>
+          <p>Total number of Payroll</p>
+        </div>
+        <div className="dashboard-table__cardDetails">
+          <h1>5</h1>
+          <p>Total number of employees</p>
+        </div>
       </div>
     </div>
   );

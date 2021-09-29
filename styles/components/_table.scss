@@ -1,24 +1,43 @@
 .dashboard-table {
-margin-left: 32px;
-margin-right: 32px;
-margin-top: 20px;
+  margin-left: 32px;
+  margin-right: 32px;
+  margin-top: 20px;
+  width: 1192px;
 
   &__profile {
     display: flex;
-
+    justify-content: flex-end;
   }
 
   &__cards {
     display: flex;
-   justify-content:space-between;
+    justify-content: space-between;
   }
-  &__header{
-    font-family: Karla;
-font-style: normal;
-font-weight: 600;
-font-size: 28px;
-line-height: 32px;
-color: #0E347E;
-margin-top: 30px;
+  &__header {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 32px;
+    color: #0e347e;
+    margin-top: 30px;
+  }
+  &__button {
+    display: flex;
+    margin-top: 30px;
+  }
+  &__submit-btn {
+    width: 221px;
+    height: 44px;
+  }
+
+  &__card {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__cardDetails {
+    width: 264px;
+    height: 96px;
+    background: #f7f9fb;
+    border-radius: 12px;
   }
 }
