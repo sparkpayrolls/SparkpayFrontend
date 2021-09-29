@@ -3,6 +3,8 @@ import { Country, PaginateParams } from "../types";
 
 export class CountryModule extends HttpRepository {
   async getCountries(params: PaginateParams) {
-    return this.get<Country[]>("/countries", { params });
+    const q = this.parseQueryObject(params);
+
+    return this.get<Country[]>(`/countries${q}`);
   }
 }
