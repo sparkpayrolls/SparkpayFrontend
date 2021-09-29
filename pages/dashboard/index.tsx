@@ -14,7 +14,7 @@ const Dashboard: NextPage = () => {
         </Head>
         <div className="dashboard-section">
           <Sidebar />
-          <Table />
+          <Table/>
         </div>
       </div>
     </div>
