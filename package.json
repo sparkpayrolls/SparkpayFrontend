@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "lint": "next lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -33,5 +33,8 @@
     "node-sass": "4.14.1",
     "sass-loader": "10.1.1",
     "typescript": "4.4.3"
-  }
+  },
+  "cacheDirectories": [
+    ".next/cache"
+  ]
 }
