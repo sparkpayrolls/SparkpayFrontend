@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 import Image from "next/image";
-import inbox from "../../public/inbox.png";
+import inbox from "../../public/inbox.svg";
 
 const CheckInbox: NextPage = () => {
   return (
@@ -18,7 +18,7 @@ const CheckInbox: NextPage = () => {
           {" "}
           Password reset link has been sent to your inbox{" "}
         </p>
-        <Image src={inbox} alt="Picture of the author" className="check-inbox__" />
+        <Image src={inbox} alt="Picture of the author" className="check-inbox__inbox-img" />
       </div>
     </div>
   );
