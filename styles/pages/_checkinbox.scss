@@ -15,17 +15,14 @@
     line-height: 2rem;
     color: #0b2253;
     margin: 0 0 0.5rem;
+    text-align: center;
   }
 
   &__subtext {
     font-weight: normal;
-    font-size: 14px;
+    font-size: 16px;
     color: #6d7a98;
-    margin-bottom: 1rem;
-  }
-
-  &__inbox-img {
-    display: block;
-    align-items: center;
+    margin-bottom: 2rem;
+    text-align: center;
   }
 }
