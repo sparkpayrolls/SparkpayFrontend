@@ -19,12 +19,12 @@ const Table: NextPage = () => {
           src={DashboardImage}
           className="dashboard-table__dashboardImage"
         />
-        <Image src={Dropdown} />
+        <Image src={Dropdown} className="ml-5" />
       </div>
-      <div className="dashboard-table__cards">
-        <h1 className="dashboard-table__header">Dashboard</h1>
+      <div className="dashboard-table__head">
+        <h1 className="dashboard-table__title">Dashboard</h1>
         <div className="dashboard-table__button">
-          <Image src={ PlusButton}/>
+          <Image src={PlusButton} />
           <Button
             label="Create Organisation"
             onClick={() => {}}
@@ -35,20 +35,22 @@ const Table: NextPage = () => {
       </div>
       <div className="dashboard-table__cardFlex">
         <div className="dashboard-table__cardDetails">
-          <h1>0</h1>
-          <p>Total number of Organisation</p>
+          <h1 className="dashboard-table__number">0</h1>
+          <p className="dashboard-table__text">Total number of Organisation</p>
         </div>
         <div className="dashboard-table__cardDetails">
-          <h1>₦ 125,000</h1>
-          <p>Total number of payroll burden</p>
+          <h1 className="dashboard-table__number">₦ 125,000</h1>
+          <p className="dashboard-table__text">
+            Total number of payroll burden
+          </p>
         </div>
         <div className="dashboard-table__cardDetails">
-          <h1>209</h1>
-          <p>Total number of Payroll</p>
+          <h1 className="dashboard-table__number">209</h1>
+          <p className="dashboard-table__text">Total number of Payroll</p>
         </div>
         <div className="dashboard-table__cardDetails">
-          <h1>5</h1>
-          <p>Total number of employees</p>
+          <h1 className="dashboard-table__number">5</h1>
+          <p className="dashboard-table__text">Total number of employees</p>
         </div>
       </div>
     </div>

@@ -1,20 +1,18 @@
 .dashboard-table {
-//   padding-left: 32px;
-// padding-right: 32px;
-  margin-top: 20px;
-  width: 1192px;
+  width: 90%;
+  margin: 10px;
 
   &__profile {
     display: flex;
     justify-content: flex-end;
   }
 
-  &__cards {
+  &__head {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  &__header {
+  &__title {
     font-style: normal;
     font-weight: 600;
     font-size: 28px;
@@ -33,14 +31,31 @@
 
   &__cardFlex {
     display: flex;
-    justify-content: space-between;
+    grid-column-gap: 0.47rem;;
+    // justify-content: space-evenly;
     align-items: center;
-    margin-top: 18px;
+    margin-top: 24px;
   }
   &__cardDetails {
-    width: 265px;
+    width: 264px;
     height: 96px;
     background: #f7f9fb;
     border-radius: 12px;
+    padding-left: 20px;
+  }
+
+  &__number {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    color: #0b2253;
+  }
+
+  &__text {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: #6d7a98;
   }
 }
