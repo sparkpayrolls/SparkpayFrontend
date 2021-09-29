@@ -18,7 +18,7 @@ const CheckInbox: NextPage = () => {
           {" "}
           Password reset link has been sent to your inbox{" "}
         </p>
-        <Image src={inbox} alt="Picture of the author" />
+        <Image src={inbox} alt="Picture of the author" className="check-inbox__" />
       </div>
     </div>
   );
