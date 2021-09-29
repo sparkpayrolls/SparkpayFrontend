@@ -1,7 +1,24 @@
-.dashboard-table{
-  margin: 0;
+.dashboard-table {
+margin-left: 32px;
+margin-right: 32px;
+margin-top: 20px;
 
-  &__dashboardImage {
- background-color:black;
+  &__profile {
+    display: flex;
+
+  }
+
+  &__cards {
+    display: flex;
+   justify-content:space-between;
+  }
+  &__header{
+    font-family: Karla;
+font-style: normal;
+font-weight: 600;
+font-size: 28px;
+line-height: 32px;
+color: #0E347E;
+margin-top: 30px;
   }
 }
