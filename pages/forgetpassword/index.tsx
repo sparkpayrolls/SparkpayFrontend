@@ -20,8 +20,8 @@ const ForgetPassword: NextPage = () => {
         </p>
 
         <form>
-          <div className="login-account__form-input-section">
-            <div className="login-account__form-grid">
+          <div className="forget-password__form-input-section">
+            <div className="forget-password__form-grid">
               <Input
                 type="email"
                 label="Email Address"
@@ -29,32 +29,16 @@ const ForgetPassword: NextPage = () => {
                 name="email"
               />
             </div>
-
-            <Input
-              type="password"
-              label="Password"
-              placeholder="password"
-              name="password"
-            />
           </div>
-          <div className="login-account__forgot-password">
-            <p className="login-account__forgot-password-title">
-              Forgot Password?
-            </p>
-          </div>
-
           <Button
-            label="Log In"
+            label="Recover Password"
             onClick={() => {}}
-            className="login-account__submit-btn"
+            className="forget-password__submit-btn"
             primary
           />
         </form>
-        <div className="login-account__sign-up">
-          <p className="login-account__sign-up-text">
-            Don’t have an account?
-            <span className="login-account__span-text"> Create Account</span>
-          </p>
+        <div>
+          <p className="forget-password__go-back-login">Back to Log In</p>
         </div>
       </div>
     </div>
