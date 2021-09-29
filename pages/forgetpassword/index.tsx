@@ -20,15 +20,13 @@ const ForgetPassword: NextPage = () => {
         </p>
 
         <form>
-          <div className="forget-password__form-input-section">
-            <div className="forget-password__form-grid">
-              <Input
-                type="email"
-                label="Email Address"
-                placeholder="Email Address"
-                name="email"
-              />
-            </div>
+          <div className="forget-password__email-input">
+            <Input
+              type="email"
+              label="Email Address"
+              placeholder="Email Address"
+              name="email"
+            />
           </div>
           <Button
             label="Recover Password"
