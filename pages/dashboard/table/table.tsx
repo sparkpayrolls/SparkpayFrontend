@@ -19,7 +19,7 @@ const Table: NextPage = () => {
           src={DashboardImage}
           className="dashboard-table__dashboardImage"
         />
-        <Image src={Dropdown} className="ml-5" />
+        <Image src={Dropdown}/>
       </div>
       <div className="dashboard-table__head">
         <h1 className="dashboard-table__title">Dashboard</h1>

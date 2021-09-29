@@ -1,10 +1,11 @@
 .dashboard-table {
-  width: 90%;
+  width: 80%;
   margin: 10px;
 
   &__profile {
     display: flex;
     justify-content: flex-end;
+    margin-top: 26px;
   }
 
   &__head {
@@ -31,9 +32,9 @@
 
   &__cardFlex {
     display: flex;
-    grid-column-gap: 0.47rem;;
+    grid-column-gap: 1.5rem;
     // justify-content: space-evenly;
-    align-items: center;
+    // align-items: center;
     margin-top: 24px;
   }
   &__cardDetails {
