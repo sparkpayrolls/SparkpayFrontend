@@ -6,9 +6,12 @@
   margin: 0 0 4rem;
 
   &__section {
-    width: 30%;
     display: flex;
     flex-direction: column;
+    margin: 0 1rem;
+    @media screen and(min-width: 1024px) {
+      width: 30%;
+    }
   }
 
   &__title {
