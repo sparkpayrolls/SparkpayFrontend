@@ -1,6 +1,6 @@
 .dashboard-table {
   width: 78%;
-  margin:0px auto;
+  margin: 0px auto;
 
   &__profile {
     display: flex;
@@ -30,9 +30,8 @@
     height: 44px;
   }
 
-  &___createIcon{
-    position: relative;
-  left: 90px;
+  &__createIcon {
+   
   }
   &__cardFlex {
     display: flex;
