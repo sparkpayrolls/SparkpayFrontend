@@ -42,6 +42,7 @@
     text-decoration: underline;
     color: #0d0f11;
     margin-top: 1rem;
+    cursor: pointer;
   }
 
   &__submit-btn {
@@ -67,5 +68,6 @@
     line-height: 1.5rem;
     color: #0d0f11;
     margin-left: 0.5rem;
+    cursor: pointer;
   }
 }
