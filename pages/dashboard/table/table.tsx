@@ -15,9 +15,10 @@ const Table: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="dashboard-table__profile">
+        
         <Image
           src={DashboardImage}
-          className="dashboard-table__dashboardImage"
+          className="dashboard-table__dashboardImage ml-5"
         />
         <Image src={Dropdown}/>
       </div>
