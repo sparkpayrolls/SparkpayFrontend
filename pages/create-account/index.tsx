@@ -71,10 +71,13 @@ const CreateAccount: NextPage = () => {
             Already have an account?
             <span className="create-account__span-text"> Log In</span>
           </p>
-            <p className="create-account__terms-and-conditions">
-              By creating an account, you have agreed to our
-            </p>
-            <p className="">Terms and conditions</p>
+          <p className="create-account__terms-and-conditions">
+            By creating an account, you have agreed to our
+          </p>
+          <p className="create-account__terms-and-conditions">
+            <span className="create-account__span-text">Terms</span> and{" "}
+            <span className="create-account__span-text">conditions</span>
+          </p>
         </div>
       </div>
     </div>
