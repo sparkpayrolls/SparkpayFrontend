@@ -9,9 +9,6 @@
     margin-top: 26px;
     cursor: pointer;
   }
- &__dashboardImage{
-margin: 0px;
- }
   &__head {
     display: flex;
     justify-content: space-between;
@@ -34,11 +31,11 @@ margin: 0px;
     height: 44px;
   }
 
- &__dashboardImage{
-  margin-right:0;
+  &__dashboardImage {
+    margin-right: 0;
     margin-left: auto;
-    display:block;
- }
+    display: block;
+  }
   &__cardFlex {
     display: flex;
     grid-column-gap: 1.3rem;
