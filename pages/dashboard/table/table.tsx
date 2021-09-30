@@ -24,7 +24,7 @@ const Table: NextPage = () => {
       <div className="dashboard-table__head">
         <h1 className="dashboard-table__title">Dashboard</h1>
         <div className="dashboard-table__button">
-          <Image src={PlusButton} />
+          {/* <Image src={PlusButton} /> */}
           <Button
             label="Create Organisation"
             onClick={() => {}}
