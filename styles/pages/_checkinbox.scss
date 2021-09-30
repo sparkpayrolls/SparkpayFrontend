@@ -6,6 +6,7 @@
 
   &__content {
     margin-bottom: 3rem;
+    text-align: center;
   }
 
   &__title {
@@ -23,5 +24,15 @@
     color: #6d7a98;
     margin-bottom: 2rem;
     text-align: center;
+  }
+
+  &__resend-now-subtext {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    text-decoration-line: underline;
+    color: #0d0f11;
+    margin-top: 3rem;
+    cursor: pointer;
   }
 }

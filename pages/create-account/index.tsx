@@ -66,6 +66,22 @@ const CreateAccount: NextPage = () => {
             primary
           />
         </form>
+        <div className="create-account__have-an-account-section">
+          <p className="create-account__have-an-account-text">
+            Already have an account?
+            <span className="create-account__span-text"> Log In</span>
+          </p>
+          <p className="create-account__terms-and-conditions">
+            By creating an account, you have agreed to our <br />{" "}
+            <strong className="create-account__span-text underline-text">
+              Terms
+            </strong>{" "}
+            and{" "}
+            <strong className="create-account__span-text underline-text ">
+              conditions
+            </strong>
+          </p>
+        </div>
       </div>
     </div>
   );
