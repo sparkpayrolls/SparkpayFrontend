@@ -41,7 +41,7 @@ const Login: NextPage = () => {
               placeholder="password"
               name="password"
             />
-            <input
+            {/* <input
               name="password"
               placeholder="Enter Password"
               type={revealPassword ? "text" : "password"}
@@ -54,7 +54,7 @@ const Login: NextPage = () => {
               alt="hide password img"
               className="login-account__hide-and-show-password"
               onClick={() => setRevealPassword((prevState) => !prevState)}
-            />
+            /> */}
           </div>
           <div className="login-account__forgot-password">
             <p className="login-account__forgot-password-title">

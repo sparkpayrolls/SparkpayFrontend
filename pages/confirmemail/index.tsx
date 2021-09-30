@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import inbox from "../../public/inbox.svg";
 
-const ConfirmEmail: NextPage = () => {
+const VerifyEmail: NextPage = () => {
   return (
     <div className="check-inbox">
       <Head>
@@ -16,7 +16,7 @@ const ConfirmEmail: NextPage = () => {
         <h1 className="check-inbox__title">Check Your Inbox</h1>
         <p className="check-inbox__subtext">
           {" "}
-          Password reset link has been sent to your inbox{" "}
+          Email verification link has been sent to your inbox{" "}
         </p>
         <Image
           src={inbox}
@@ -31,4 +31,4 @@ const ConfirmEmail: NextPage = () => {
   );
 };
 
-export default ConfirmEmail;
+export default VerifyEmail;
