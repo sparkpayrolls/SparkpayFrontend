@@ -1,6 +1,6 @@
 .dashboard-table {
   width: 80%;
-  margin: 10px;
+  margin:0px auto;
 
   &__profile {
     display: flex;
@@ -32,7 +32,7 @@
 
   &__cardFlex {
     display: flex;
-    grid-column-gap: 1.5rem;
+    grid-column-gap: 1.3rem;
     // justify-content: space-evenly;
     // align-items: center;
     margin-top: 24px;
@@ -42,7 +42,7 @@
     height: 96px;
     background: #f7f9fb;
     border-radius: 12px;
-    padding-left: 20px;
+    padding-left: 15px;
   }
 
   &__number {
@@ -50,6 +50,7 @@
     font-weight: 600;
     font-size: 24px;
     color: #0b2253;
+    margin-top: 20px;
   }
 
   &__text {
@@ -58,5 +59,6 @@
     font-size: 16px;
     line-height: 24px;
     color: #6d7a98;
+    padding-bottom: 16px;
   }
 }
