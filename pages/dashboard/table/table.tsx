@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import DashboardImage from "../../../dashboard-assets/OBJECTS.svg";
+import ProfileImage from "../../../dashboard-assets/profile.svg";
 import Dropdown from "../../../dashboard-assets/dropdown.svg";
-import PlusButton from "../../../dashboard-assets/plusbutton1.svg";
+
 import { Button } from "../../../components/Button/Button";
 
 const Table: NextPage = () => {
@@ -17,7 +17,7 @@ const Table: NextPage = () => {
       <div className="dashboard-table__profile">
         
         <Image
-          src={DashboardImage}
+          src={ProfileImage}
           className="dashboard-table__dashboardImage ml-5"
         />
         <Image src={Dropdown}/>
