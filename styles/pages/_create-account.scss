@@ -49,6 +49,7 @@
     line-height: 24px;
     text-align: center;
     color: #0d0f11;
+    cursor: pointer;
   }
 
   &__terms-and-conditions {
@@ -56,5 +57,10 @@
     line-height: 24px;
     text-align: center;
     color: #6d7a98;
+    .underline-text {
+      border-bottom: 1px solid #6d7a98;
+      display: inline-block;
+      line-height: 0.85;
+    }
   }
 }
