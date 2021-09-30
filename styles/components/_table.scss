@@ -30,6 +30,10 @@
     height: 44px;
   }
 
+  &___createIcon{
+    position: relative;
+  left: 90px;
+  }
   &__cardFlex {
     display: flex;
     grid-column-gap: 1.3rem;
