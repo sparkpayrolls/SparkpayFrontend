@@ -7,7 +7,10 @@
     justify-content: flex-end;
     margin-top: 26px;
   }
-
+ &__dashboardImage{
+   max-width: 800vw;
+   background-color: red;
+ }
   &__head {
     display: flex;
     justify-content: space-between;
@@ -30,9 +33,11 @@
     height: 44px;
   }
 
-  &__createIcon {
-   
-  }
+ &__dashboardImage{
+  margin-right:0;
+    margin-left: auto;
+    display:block;
+ }
   &__cardFlex {
     display: flex;
     grid-column-gap: 1.3rem;
