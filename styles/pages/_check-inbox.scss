@@ -1,0 +1,38 @@
+.check-inbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  &__content {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    color: #0b2253;
+    margin: 0 0 0.5rem;
+    text-align: center;
+  }
+
+  &__subtext {
+    font-weight: normal;
+    font-size: 16px;
+    color: #6d7a98;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  &__resend-now-subtext {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    text-decoration-line: underline;
+    color: #0d0f11;
+    margin-top: 3rem;
+    cursor: pointer;
+  }
+}

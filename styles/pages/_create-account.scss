@@ -37,4 +37,30 @@
     height: 3.5rem;
     margin-top: 32px;
   }
+  &__have-an-account-text {
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #6d7a98;
+  }
+  &__span-text {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #0d0f11;
+    cursor: pointer;
+  }
+
+  &__terms-and-conditions {
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #6d7a98;
+    .underline-text {
+      border-bottom: 1px solid #6d7a98;
+      display: inline-block;
+      line-height: 0.85;
+    }
+  }
 }
