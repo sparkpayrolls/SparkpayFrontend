@@ -1,10 +1,16 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import React from "react";
+import React, { useState } from "react";
+import Image from "next/image";
+import hide from "../../public/Hide.svg";
+import show from "../../public/Show.svg";
 import { Button } from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
 
 const Login: NextPage = () => {
+
+  const [password, setPassword] = useState('');
+  const [revealPassword, setRevealPassword] = useState(false);
   return (
     <div className="login-account">
       <Head>
@@ -31,10 +37,16 @@ const Login: NextPage = () => {
             </div>
 
             <Input
-              type="password"
+              type={revealPassword ? "text" : "password"}
               label="Password"
               placeholder="password"
               name="password"
+              // value={password}
+            />
+            <Image
+              src={hide}
+              alt="hide password img"
+              className="login-account__hide-and-show-password"
             />
           </div>
           <div className="login-account__forgot-password">
@@ -53,7 +65,7 @@ const Login: NextPage = () => {
         <div className="login-account__sign-up">
           <p className="login-account__sign-up-text">
             Don’t have an account?
-            <span className="login-account__span-text">  Create Account</span>
+            <span className="login-account__span-text"> Create Account</span>
           </p>
         </div>
       </div>

@@ -20,7 +20,7 @@ const CheckInbox: NextPage = () => {
         </p>
         <Image
           src={inbox}
-          alt="Picture of the author"
+          alt="Picture of the inbox email"
           className="check-inbox__inbox-img"
         />
         <div>
