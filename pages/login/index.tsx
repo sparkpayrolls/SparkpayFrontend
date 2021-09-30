@@ -8,8 +8,7 @@ import { Button } from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
 
 const Login: NextPage = () => {
-
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [revealPassword, setRevealPassword] = useState(false);
   return (
     <div className="login-account">
@@ -41,12 +40,20 @@ const Login: NextPage = () => {
               label="Password"
               placeholder="password"
               name="password"
-              // value={password}
+            />
+            <input
+              name="password"
+              placeholder="Enter Password"
+              type={revealPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Image
-              src={hide}
+              title={revealPassword ? "Hide Password" : "Show Password"}
+              src={revealPassword ? hide : show}
               alt="hide password img"
               className="login-account__hide-and-show-password"
+              onClick={() => setRevealPassword((prevState) => !prevState)}
             />
           </div>
           <div className="login-account__forgot-password">
