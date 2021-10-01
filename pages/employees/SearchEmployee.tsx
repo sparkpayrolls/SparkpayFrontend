@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import SearchInput from "../../dashboard-assets/search.svg";
-import Filter from "../../dashboard-assets/filter.svg"
-import EmployeeInfo from "../../dashboard-assets/employeeIcon.svg"
+import Filter from "../../dashboard-assets/filter.svg";
+import EmployeeInfo from "../../dashboard-assets/employeeIcon.svg";
 import Image from "next/image";
 
 const SearchEmployee: NextPage = () => {
@@ -20,11 +20,28 @@ const SearchEmployee: NextPage = () => {
               <p>12 employees</p>
             </div>
             <div className="employee-section__searchInput">
-              <input type="text" placeholder="Search by name" />
-              <Image src={SearchInput} />
-              <input type="text" placeholder="Filter" />
-              <Image src={Filter} />
-              <Image src={EmployeeInfo} />
+              <div>
+                <Image
+                  src={SearchInput}
+                  className="employee-section__searchIcon"
+                />
+                <input
+                  type="text"
+                  placeholder="Search by name"
+                  className="employee-section__search"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Filter"
+                  className="employee-section__filter"
+                />
+                <Image src={Filter} />
+              </div>
+              <span>
+                <Image src={EmployeeInfo} />
+              </span>
             </div>
           </div>
         </div>

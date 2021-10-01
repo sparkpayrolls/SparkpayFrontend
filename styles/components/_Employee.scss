@@ -13,8 +13,39 @@
     border-radius: 8px;
   }
 
-  &__employeeSearch{
-display: flex;
-justify-content: space-between;
+  &__employeeSearch {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__searchInput {
+    display: flex;
+    grid-column-gap: 1rem;
+  }
+
+  &__search {
+    background: #ffffff;
+    border: 1px solid #d7dce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 384px;
+    height: 40px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+  }
+
+  &__searchIcon {
+   position: relative;
+   left: -300px;
+  }
+
+  &__filter {
+    width: 91px;
+    height: 40px;
+    background: #ffffff;
+    border: 1px solid #d7dce0;
+    box-sizing: border-box;
+    border-radius: 4px;
   }
 }
