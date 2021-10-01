@@ -21,14 +21,14 @@ const SearchEmployee: NextPage = () => {
             </div>
             <div className="employee-section__searchInput">
               <div>
-                <Image
-                  src={SearchInput}
-                  className="employee-section__searchIcon"
-                />
                 <input
                   type="text"
                   placeholder="Search by name"
                   className="employee-section__search"
+                />
+                <Image
+                  src={SearchInput}
+                  className="employee-section__searchIcon"
                 />
               </div>
               <div>
