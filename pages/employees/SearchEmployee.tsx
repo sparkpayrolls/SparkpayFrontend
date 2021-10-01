@@ -1,9 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import SearchInput from "../../dashboard-assets/search.svg";
 import Image from "next/image";
-import ProfileImage from "../../dashboard-assets/profile.svg";
-import Dropdown from "../../dashboard-assets/dropdown.svg";
-import { Button } from "../../components/Button/Button";
 
 const SearchEmployee: NextPage = () => {
   return (
@@ -17,10 +15,11 @@ const SearchEmployee: NextPage = () => {
         <div className="employee-section">
           <div className="employee-section__searchFilter">
             <span>
-              <h1>12 employees</h1>
+              <p>12 employees</p>
             </span>
             <div>
               <input type="text" placeholder="Search by name" />
+              <Image src={SearchInput}/>
             </div>
           </div>
         </div>
