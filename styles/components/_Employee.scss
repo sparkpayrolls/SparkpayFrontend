@@ -1,0 +1,15 @@
+.employee-section {
+  &__details {
+    width: 80%;
+    margin: 0px auto;
+  }
+  &__table {
+    display: flex;
+  }
+
+  &__submit-btn {
+    width: 179px;
+    height: 44px;
+    border-radius: 8px;
+  }
+}

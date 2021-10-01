@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import ProfileImage from "../../../dashboard-assets/profile.svg";
-import Dropdown from "../../../dashboard-assets/dropdown.svg";
+import Dropdown from "../../../dashboard-assets/dropdown.svg"; 
 
 import { Button } from "../../../components/Button/Button";
 
@@ -15,7 +15,6 @@ const Table: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="dashboard-table__profile">
-        
         <Image
           src={ProfileImage}
           className="dashboard-table__dashboardImage ml-5"

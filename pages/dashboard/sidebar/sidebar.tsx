@@ -11,7 +11,6 @@ const sidebar: NextPage = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <div className="sidebar-section-table">
-         
         </div>
       </div>
     </div>
