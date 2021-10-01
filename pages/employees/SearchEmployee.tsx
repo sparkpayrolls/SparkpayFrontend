@@ -37,7 +37,7 @@ const SearchEmployee: NextPage = () => {
                   placeholder="Filter"
                   className="employee-section__filter"
                 />
-                <Image src={Filter} />
+                <Image src={Filter}  className="employee-section__filter-image"/>
               </div>
               <span>
                 <Image src={EmployeeInfo} />
