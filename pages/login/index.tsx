@@ -1,15 +1,11 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
-import Image from "next/image";
-import hide from "../../public/Hide.svg";
-import show from "../../public/Show.svg";
+import Link from "next/link";
+import React from "react";
 import { Button } from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
 
 const Login: NextPage = () => {
-  const [password, setPassword] = useState("");
-  const [revealPassword, setRevealPassword] = useState(false);
   return (
     <div className="login-account">
       <Head>
@@ -36,7 +32,7 @@ const Login: NextPage = () => {
             </div>
 
             <Input
-              type={revealPassword ? "text" : "password"}
+              type="password"
               label="Password"
               placeholder="password"
               name="password"
@@ -57,9 +53,11 @@ const Login: NextPage = () => {
             /> */}
           </div>
           <div className="login-account__forgot-password">
-            <p className="login-account__forgot-password-title">
-              Forgot Password?
-            </p>
+            <Link href="/forgot-password">
+              <a className="login-account__forgot-password-title">
+                Forgot Password?
+              </a>
+            </Link>
           </div>
 
           <Button
@@ -72,7 +70,9 @@ const Login: NextPage = () => {
         <div className="login-account__sign-up">
           <p className="login-account__sign-up-text">
             Don’t have an account?
-            <span className="login-account__span-text"> Create Account</span>
+            <Link href="/create-account">
+              <a className="login-account__span-text"> Create Account</a>
+            </Link>
           </p>
         </div>
       </div>

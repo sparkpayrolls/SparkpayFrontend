@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import React from "react";
 import { Button } from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
@@ -15,8 +16,7 @@ const ForgetPassword: NextPage = () => {
       <div className="forget-password__section">
         <h1 className="forget-password__title">Forget Password</h1>
         <p className="forget-password__subtext">
-          {" "}
-          Enter your email address to reset password{" "}
+          Enter your email address to reset password
         </p>
 
         <form>
@@ -36,7 +36,9 @@ const ForgetPassword: NextPage = () => {
           />
         </form>
         <div>
-          <p className="forget-password__go-back-login">Back to Log In</p>
+          <Link href="/login">
+            <a className="forget-password__go-back-login">Back to Log In</a>
+          </Link>
         </div>
       </div>
     </div>
