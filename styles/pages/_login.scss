@@ -1,0 +1,73 @@
+.login-account {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0 0 4rem;
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    margin: 0 1rem;
+    @media screen and(min-width: 1024px) {
+      width: 30%;
+    }
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 2rem;
+    color: #0b2253;
+    margin: 0 0 0.5rem;
+  }
+
+  &__subtext {
+    font-weight: normal;
+    font-size: 0.875rem;
+    color: #6d7a98;
+    margin-bottom: 2rem;
+  }
+
+  &__form-input-section {
+    display: flex;
+    flex-direction: column;
+    grid-row-gap: 1.5rem;
+  }
+
+  &__forgot-password-title {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    text-decoration: underline;
+    color: #0d0f11;
+    margin-top: 1rem;
+    cursor: pointer;
+  }
+
+  &__submit-btn {
+    width: 100%;
+    height: 3.5rem;
+    margin-top: 2rem;
+  }
+
+  &__sign-up {
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  &__sign-up-text {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #6d7a98;
+  }
+
+  &__span-text {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #0d0f11;
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
+}
