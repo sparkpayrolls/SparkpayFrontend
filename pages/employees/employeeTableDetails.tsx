@@ -3,7 +3,6 @@ import Head from "next/head";
 import Image from "next/image";
 import EmployeeInfo from "../../dashboard-assets/employeeIcon.svg";
 
-
 const employeeTableDetails: NextPage = () => {
   return (
     <div>
@@ -45,7 +44,9 @@ const employeeTableDetails: NextPage = () => {
             <td>First Bank Nig</td>
             <td>334 7030 200</td>
             <td>May 27, 2020 | 12:38 PM</td>
-            <Image src={EmployeeInfo} />
+            <div className="employee-section__employeeImage ">
+              <Image src={EmployeeInfo} />
+            </div>
           </tr>
           <tr className="employee-section__employeeData">
             <span>
@@ -61,7 +62,9 @@ const employeeTableDetails: NextPage = () => {
             <td>First Bank Nig</td>
             <td>334 7030 200</td>
             <td>May 27, 2020 | 12:38 PM</td>
-            <Image src={EmployeeInfo} />
+            <div className="employee-section__employeeImage ">
+              <Image src={EmployeeInfo} />
+            </div>
           </tr>
           <tr className="employee-section__employeeData">
             <span>
@@ -77,10 +80,9 @@ const employeeTableDetails: NextPage = () => {
             <td>First Bank Nig</td>
             <td>334 7030 200</td>
             <td>May 27, 2020 | 12:38 PM</td>
-            <Image
-              src={EmployeeInfo}
-              className="employee-section__employeeImage"
-            />
+            <div className="employee-section__employeeImage ">
+              <Image src={EmployeeInfo} />
+            </div>
           </tr>
           <tr className="employee-section__employeeData">
             <span>
@@ -96,7 +98,9 @@ const employeeTableDetails: NextPage = () => {
             <td>First Bank Nig</td>
             <td>334 7030 200</td>
             <td>May 27, 2020 | 12:38 PM</td>
-            <Image src={EmployeeInfo} />
+            <div className="employee-section__employeeImage ">
+              <Image src={EmployeeInfo} />
+            </div>
           </tr>
           <tr className="employee-section__employeeData">
             <span>
@@ -112,24 +116,9 @@ const employeeTableDetails: NextPage = () => {
             <td>First Bank Nig</td>
             <td>334 7030 200</td>
             <td>May 27, 2020 | 12:38 PM</td>
-            <Image src={EmployeeInfo} />
-          </tr>
-
-          <tr className="employee-section__employeeData">
-            <span>
-              <input
-                type="checkbox"
-                className="employee-section__employee_Input"
-                value="checkInputSix"
-              />
-              <td>Esther Howard</td>
-            </span>
-            <td>estherhoward@gmail.com</td>
-            <td>₦ 120,000</td>
-            <td>First Bank Nig</td>
-            <td>334 7030 200</td>
-            <td>May 27, 2020 | 12:38 PM</td>
-            <Image src={EmployeeInfo} />
+            <div className="employee-section__employeeImage ">
+              <Image src={EmployeeInfo} />
+            </div>
           </tr>
 
           <tr className="employee-section__employeeData">
@@ -146,7 +135,9 @@ const employeeTableDetails: NextPage = () => {
             <td>First Bank Nig</td>
             <td>334 7030 200</td>
             <td>May 27, 2020 | 12:38 PM</td>
-            <Image src={EmployeeInfo} />
+            <div className="employee-section__employeeImage ">
+              <Image src={EmployeeInfo} />
+            </div>
           </tr>
 
           <tr className="employee-section__employeeData">
@@ -163,13 +154,34 @@ const employeeTableDetails: NextPage = () => {
             <td>First Bank Nig</td>
             <td>334 7030 200</td>
             <td>May 27, 2020 | 12:38 PM</td>
-            <Image src={EmployeeInfo} />
+            <div className="employee-section__employeeImage ">
+              <Image src={EmployeeInfo} />
+            </div>
+          </tr>
+
+          <tr className="employee-section__employeeData">
+            <span>
+              <input
+                type="checkbox"
+                className="employee-section__employee_Input"
+                value="checkInputSix"
+              />
+              <td>Esther Howard</td>
+            </span>
+            <td>estherhoward@gmail.com</td>
+            <td>₦ 120,000</td>
+            <td>First Bank Nig</td>
+            <td>334 7030 200</td>
+            <td>May 27, 2020 | 12:38 PM</td>
+            <div className="employee-section__employeeImage ">
+              <Image src={EmployeeInfo} />
+            </div>
           </tr>
         </table>
 
         <div className="employee-section__nextPages">
           <p>
-            Showing <span className="employee-section__pagination">Page 1 of 10</span>
+            Showing <span className="employee">Page 1 of 10</span>
           </p>
           <div className="employee-section__prev_next_pages">
             <p>Prev</p>

@@ -127,7 +127,7 @@
 
   &__employeeImage {
     position: relative;
-    top: 50px;
+    right: 15px;
   }
 
   &__nextPages {
@@ -146,7 +146,7 @@
   &__prev_next_pages {
     display: flex;
     flex-direction: row;
-    grid-column-gap: 1rem;
+    grid-column-gap: 0.9rem;
   }
 
   &__pagination{
