@@ -1,9 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image"
-import CheckButton from "../../dashboard-assets/Checkbox.svg"
 
-const employeeTableDetails: NextPage = ({Image,  Name, EmailAddress, Amount, Bank , Account, Date}){
+
+const employeeTableDetails: NextPage = ({Image,  Name, EmailAddress, Amount, Bank , Account, Date})=>{
   return (
     <div>
       <div className="employeeTableDetails">
