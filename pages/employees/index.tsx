@@ -2,9 +2,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Sidebar from "../dashboard/sidebar/sidebar";
 import AddEmployee from "../employees/AddEmployee"
-
 import SearchEmployee from "./SearchEmployee";
-
+import EmployeeTableDetails from "./employeeTableDetails";
 
 
 const Employee: NextPage = () => {
@@ -20,7 +19,8 @@ const Employee: NextPage = () => {
           <Sidebar />
           <div className=" employee-section__details">
             <AddEmployee />
-            <SearchEmployee/>
+            <SearchEmployee />
+            <EmployeeTableDetails/>
           </div>
         </div>
       </div>
