@@ -16,32 +16,37 @@ const SearchEmployee: NextPage = () => {
         </Head>
         <div className="employee-section">
           <div className="employee-section__employeeSearch">
-            <div>
-              <p>12 employees</p>
+            <div className="employee-section__employeeHeader">
+              <p>12 Employees</p>
             </div>
             <div className="employee-section__searchInput">
-              <div>
-                <input
-                  type="text"
-                  placeholder="Search by name"
-                  className="employee-section__search"
-                />
-                <Image
-                  src={SearchInput}
-                  className="employee-section__searchIcon"
-                />
+              <div className="employee-section__searchIcon">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Search by name"
+                    className="employee-section__search"
+                  />
+                </div>
+                <div className="employee-section__searchImage">
+                  <Image src={SearchInput} />
+                </div>
+                <div className="employee-section__searchIcon">
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Filter"
+                      className="employee-section__filter"
+                    />
+                  </div>
+                  <div className="employee-section__searchImage">
+                    <Image src={Filter} />
+                  </div>
+                <span className="employee-section__employeeInfo">
+                  <Image src={EmployeeInfo} />
+                </span>
+                </div>
               </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Filter"
-                  className="employee-section__filter"
-                />
-                <Image src={Filter}  className="employee-section__filter-image"/>
-              </div>
-              <span>
-                <Image src={EmployeeInfo} />
-              </span>
             </div>
           </div>
         </div>
