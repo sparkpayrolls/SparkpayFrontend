@@ -62,7 +62,7 @@ const employeeTableDetails: NextPage = () => {
             <td>334 7030 200</td>
             <td>May 27, 2020 | 12:38 PM</td>
             <Image src={EmployeeInfo} />
-          </tr>         
+          </tr>
           <tr className="employee-section__employeeData">
             <span>
               <input
@@ -77,7 +77,10 @@ const employeeTableDetails: NextPage = () => {
             <td>First Bank Nig</td>
             <td>334 7030 200</td>
             <td>May 27, 2020 | 12:38 PM</td>
-            <Image src={EmployeeInfo} />
+            <Image
+              src={EmployeeInfo}
+              className="employee-section__employeeImage"
+            />
           </tr>
           <tr className="employee-section__employeeData">
             <span>
@@ -111,7 +114,7 @@ const employeeTableDetails: NextPage = () => {
             <td>May 27, 2020 | 12:38 PM</td>
             <Image src={EmployeeInfo} />
           </tr>
-         
+
           <tr className="employee-section__employeeData">
             <span>
               <input
@@ -128,7 +131,7 @@ const employeeTableDetails: NextPage = () => {
             <td>May 27, 2020 | 12:38 PM</td>
             <Image src={EmployeeInfo} />
           </tr>
-         
+
           <tr className="employee-section__employeeData">
             <span>
               <input
@@ -145,7 +148,7 @@ const employeeTableDetails: NextPage = () => {
             <td>May 27, 2020 | 12:38 PM</td>
             <Image src={EmployeeInfo} />
           </tr>
-        
+
           <tr className="employee-section__employeeData">
             <span>
               <input
@@ -162,8 +165,19 @@ const employeeTableDetails: NextPage = () => {
             <td>May 27, 2020 | 12:38 PM</td>
             <Image src={EmployeeInfo} />
           </tr>
-         
         </table>
+
+        <div className="employee-section__nextPages">
+          <p>
+            Showing <span className="employee-section__pagination">Page 1 of 10</span>
+          </p>
+          <div className="employee-section__prev_next_pages">
+            <p>Prev</p>
+            <p>1</p>
+            <p>2</p>
+            <p>Next</p>
+          </div>
+        </div>
       </section>
     </div>
   );

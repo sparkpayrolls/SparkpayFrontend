@@ -83,6 +83,7 @@
   table {
     border-collapse: collapse;
     width: 100%;
+    margin-top: 10px;
   }
 
   td,
@@ -94,7 +95,6 @@
 
   &__employeeTitle {
     background-color: #f7f9fb;
-    margin-top: 20px;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -109,18 +109,48 @@
     line-height: 16px;
     letter-spacing: 0.01em;
     color: #0b2253;
-    margin-top: 60px;
+    height: 40px;
   }
 
   &__employee_Input {
     cursor: pointer;
     margin-left: 16px;
-    background-color: green;
-    border: 1px solid #dde5ee;
+    border: 1px solid red !important;
+    outline: none;
+    font-size: 30px;
   }
 
-  td{
-     border-bottom: 1px solid #000;
+  td {
+    border-bottom: 1px solid #f7f9fb;
+    padding-top: 30px;
+  }
+
+  &__employeeImage {
+    position: relative;
+    top: 50px;
+  }
+
+  &__nextPages {
+    display: flex;
+    justify-content: space-between;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    color: #6d7a98;
+    margin-top: 24px;
+    padding-left: 20px;
+  }
+
+  &__prev_next_pages {
+    display: flex;
+    flex-direction: row;
+    grid-column-gap: 1rem;
+  }
+
+  &__pagination{
+    color:#0D0F11;
   }
   //   &__employeeName {
   //     display: flex;
