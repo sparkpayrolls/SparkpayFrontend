@@ -1,8 +1,8 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import React from "react";
-import { Button } from "../../components/Button/Button";
-import { Input } from "../../components/Input/Input";
+import { NextPage } from 'next';
+import Head from 'next/head';
+import React from 'react';
+import { Button } from '../../src/components/Button/Button';
+import { Input } from '../../src/components/Input/Input';
 
 const CreateAccount: NextPage = () => {
   return (
@@ -27,6 +27,7 @@ const CreateAccount: NextPage = () => {
                 label="First Name"
                 placeholder="First Name"
                 name="firstname"
+                onChange={() => {}}
               />
 
               <Input
@@ -72,11 +73,11 @@ const CreateAccount: NextPage = () => {
             <span className="create-account__span-text"> Log In</span>
           </p>
           <p className="create-account__terms-and-conditions">
-            By creating an account, you have agreed to our <br />{" "}
+            By creating an account, you have agreed to our <br />{' '}
             <strong className="create-account__span-text underline-text">
               Terms
-            </strong>{" "}
-            and{" "}
+            </strong>{' '}
+            and{' '}
             <strong className="create-account__span-text underline-text ">
               conditions
             </strong>

@@ -4,17 +4,17 @@ import {
   PropsWithChildren,
   useEffect,
   useState,
-} from "react";
-import Cookies from "js-cookie";
+} from 'react';
+import Cookies from 'js-cookie';
 
-import { $api } from "../api";
-import { Country, User } from "../api/types";
-import { HttpError } from "../api/repo/http.error";
-import { Util } from "../helpers/util";
+import { $api } from '../src/api';
+import { Country, User } from '../src/api/types';
+import { HttpError } from '../src/api/repo/http.error';
+import { Util } from '../src/helpers/util';
 
 // import Home from "./Home";
 
-type InputSection = "login" | "signup";
+type InputSection = 'login' | 'signup';
 
 const Error = (props: PropsWithChildren<unknown>) => {
   if (!props.children) {
@@ -33,26 +33,26 @@ const Landing = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [inputs, setInputs] = useState({
     login: {
-      password: "",
-      username: "",
+      password: '',
+      username: '',
     },
     signup: {
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      country: "",
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+      country: '',
     },
   });
   const [errors, setErrors] = useState({
-    login: "",
+    login: '',
     signup: {
-      general: "",
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      country: "",
+      general: '',
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+      country: '',
     },
   });
   const [busy, setBusy] = useState({
@@ -63,7 +63,7 @@ const Landing = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const authToken = Cookies.get("auth_token") as string;
+    const authToken = Cookies.get('auth_token') as string;
     if (authToken && !isLoggedIn) {
       setIsLoggedIn(true);
       $api.$axios.defaults.headers.Authorization = `Bearer ${authToken}`;
@@ -76,13 +76,13 @@ const Landing = () => {
         .catch(() => {
           setIsLoggedIn(false);
           setUser(null);
-          Cookies.remove("auth_token");
+          Cookies.remove('auth_token');
         });
     }
 
     const authinterceptor = $api.$axios.interceptors.response.use((res) => {
       if (res.status === 401) {
-        Cookies.remove("auth_token");
+        Cookies.remove('auth_token');
         setIsLoggedIn(false);
         setUser(null);
       }
@@ -109,10 +109,10 @@ const Landing = () => {
   const handleInput = (input: InputSection) => {
     return (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = event.target;
-      if (input === "signup") {
-        setErrors({ ...errors, signup: { ...errors.signup, [name]: "" } });
+      if (input === 'signup') {
+        setErrors({ ...errors, signup: { ...errors.signup, [name]: '' } });
       }
-      if (name === "email" && value) {
+      if (name === 'email' && value) {
         onEmailChange(value);
       }
 
@@ -124,7 +124,7 @@ const Landing = () => {
   };
 
   const handleLogout = () => {
-    Cookies.remove("auth_token");
+    Cookies.remove('auth_token');
     setIsLoggedIn(false);
     setUser(null);
   };
@@ -136,7 +136,7 @@ const Landing = () => {
     const { username, password } = inputs.login;
     try {
       const loggedinUser = await $api.auth.login(username, password);
-      Cookies.set("auth_token", loggedinUser.token);
+      Cookies.set('auth_token', loggedinUser.token);
       setIsLoggedIn(true);
       setUser(loggedinUser.user);
     } catch (error: any) {
@@ -152,7 +152,7 @@ const Landing = () => {
 
     try {
       const loggedinUser = await $api.auth.signup(inputs.signup);
-      Cookies.set("auth_token", loggedinUser.token);
+      Cookies.set('auth_token', loggedinUser.token);
       setIsLoggedIn(true);
       setUser(loggedinUser.user);
     } catch (error: any) {
@@ -179,16 +179,16 @@ const Landing = () => {
       if (emailTaken) {
         setErrors((errors) => ({
           ...errors,
-          signup: { ...errors.signup, email: "email already exists" },
+          signup: { ...errors.signup, email: 'email already exists' },
         }));
       } else {
         setErrors((errors) => ({
           ...errors,
-          signup: { ...errors.signup, email: "" },
+          signup: { ...errors.signup, email: '' },
         }));
       }
     } catch (error) {
-      console.log("...error checking if email taken");
+      console.log('...error checking if email taken');
     } finally {
       setBusy((busy) => ({ ...busy, signup: false }));
     }
@@ -206,7 +206,7 @@ const Landing = () => {
           <form onSubmit={handleLogin} action="#">
             <Error>{errors.login}</Error>
             <input
-              onChange={handleInput("login")}
+              onChange={handleInput('login')}
               value={inputs.login.username}
               type="email"
               placeholder="email"
@@ -215,7 +215,7 @@ const Landing = () => {
             <br />
             <br />
             <input
-              onChange={handleInput("login")}
+              onChange={handleInput('login')}
               value={inputs.login.password}
               type="password"
               placeholder="password"
@@ -244,7 +244,7 @@ const Landing = () => {
           type="text"
           placeholder="firstname"
           value={inputs.signup.firstname}
-          onChange={handleInput("signup")}
+          onChange={handleInput('signup')}
           name="firstname"
         />
         <Error>{errors.signup.firstname}</Error>
@@ -254,7 +254,7 @@ const Landing = () => {
           type="text"
           placeholder="lastname"
           value={inputs.signup.lastname}
-          onChange={handleInput("signup")}
+          onChange={handleInput('signup')}
           name="lastname"
         />
         <Error>{errors.signup.lastname}</Error>
@@ -264,7 +264,7 @@ const Landing = () => {
           type="email"
           placeholder="email"
           value={inputs.signup.email}
-          onChange={handleInput("signup")}
+          onChange={handleInput('signup')}
           name="email"
         />
         <Error>{errors.signup.email}</Error>
@@ -274,13 +274,13 @@ const Landing = () => {
           type="password"
           placeholder="password"
           value={inputs.signup.password}
-          onChange={handleInput("signup")}
+          onChange={handleInput('signup')}
           name="password"
         />
         <Error>{errors.signup.password}</Error>
         <br />
         <br />
-        <select name="country" onChange={handleInput("signup")}>
+        <select name="country" onChange={handleInput('signup')}>
           <option value="">country</option>
           {countries.map((country) => {
             return (

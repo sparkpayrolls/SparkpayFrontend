@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface ButtonProps {
   /**
@@ -12,7 +12,7 @@ interface ButtonProps {
   /**
    * How large should the button be?
    */
-  size?: "small" | "medium" | "large";
+  size?: 'small' | 'medium' | 'large';
   /**
    * Button contents
    */
@@ -25,6 +25,11 @@ interface ButtonProps {
    * Custom css className
    */
   className?: string;
+
+  /**
+   * Should the button be disabled
+   */
+  disabled?: boolean;
 }
 
 /**
@@ -32,17 +37,17 @@ interface ButtonProps {
  */
 export const Button = ({
   primary = false,
-  size = "medium",
+  size = 'medium',
   backgroundColor,
   label,
   className,
   ...props
 }: ButtonProps) => {
-  const mode = primary ? "button--primary" : "button--secondary";
+  const mode = primary ? 'button--primary' : 'button--secondary';
   return (
     <button
       type="button"
-      className={["button", `button--${size}`, mode, className].join(" ")}
+      className={['button', `button--${size}`, mode, className].join(' ')}
       style={{ backgroundColor }}
       {...props}
     >

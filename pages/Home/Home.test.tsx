@@ -1,8 +1,11 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import Adapter from 'enzyme-adapter-react-16';
+import { shallow, configure } from 'enzyme';
 import Home from './index';
 
-it('renders homepage correctly', () => {
-  const app = renderer.create(<Home />).toJSON();
+configure({ adapter: new Adapter() });
+const app = shallow(<Home />);
+
+it('renders correctly', () => {
   expect(app).toMatchSnapshot();
 });

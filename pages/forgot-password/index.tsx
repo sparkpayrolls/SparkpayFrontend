@@ -1,9 +1,9 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import React from "react";
-import { Button } from "../../components/Button/Button";
-import { Input } from "../../components/Input/Input";
+import { NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import React from 'react';
+import { Button } from '../../src/components/Button/Button';
+import { Input } from '../../src/components/Input/Input';
 
 const ForgetPassword: NextPage = () => {
   return (
@@ -26,6 +26,7 @@ const ForgetPassword: NextPage = () => {
               label="Email Address"
               placeholder="Email Address"
               name="email"
+              onChange={() => {}}
             />
           </div>
           <Button

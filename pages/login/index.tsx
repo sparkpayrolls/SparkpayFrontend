@@ -1,9 +1,26 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import React from "react";
-import { Button } from "../../components/Button/Button";
-import { Input } from "../../components/Input/Input";
+import { NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import { Formik, FormikProps } from 'formik';
+import * as Yup from 'yup';
+import { Button } from '../../src/components/Button/Button';
+import { Input } from '../../src/components/Input/Input';
+
+interface ISignInForm {
+  email: string;
+  password: string;
+}
+
+const loginValidationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Please enter valid email')
+    .required('email is required'),
+  password: Yup.string()
+    .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()]).{8,20}\S$/)
+    .required(
+      'Please valid password. One uppercase, one lowercase, one special character and no spaces'
+    ),
+});
 
 const Login: NextPage = () => {
   return (
@@ -16,43 +33,74 @@ const Login: NextPage = () => {
       <div className="login-account__section">
         <h1 className="login-account__title">Log In</h1>
         <p className="login-account__subtext">
-          {" "}
-          Enter your email & password to login{" "}
+          Enter your email &amp; password to login
         </p>
 
-        <form>
-          <div className="login-account__form-input-section">
-            <div className="login-account__form-grid">
-              <Input
-                type="email"
-                label="Email Address"
-                placeholder="Email Address"
-                name="email"
-              />
-            </div>
+        <Formik
+          initialValues={{
+            email: '',
+            password: '',
+          }}
+          onSubmit={}
+          validationSchema={loginValidationSchema}
+        >
+          {(props: FormikProps<ISignInForm>) => {
+            const {
+              values,
+              touched,
+              errors,
+              handleBlur,
+              handleChange,
+              isSubmitting,
+            } = props;
+            return (
+              <form>
+                <div className="login-account__form-input-section">
+                  <div className="login-account__form-grid">
+                    <Input
+                      type="email"
+                      label="Email Address"
+                      placeholder="Email Address"
+                      name="email"
+                      value={values.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      hasError={errors.email && touched.email}
+                      error={errors.email}
+                    />
+                  </div>
 
-            <Input
-              type="password"
-              label="Password"
-              placeholder="password"
-              name="password"
-            />
-          </div>
-          <div className="login-account__forgot-password">
-            <Link href="/forgot-password">
-              <a className="login-account__forgot-password-title">
-                Forgot Password?
-              </a>
-            </Link>
-          </div>
+                  <Input
+                    type="password"
+                    label="Password"
+                    placeholder="password"
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    hasError={errors.password && touched.password}
+                    error={errors.password}
+                  />
+                </div>
+                <div className="login-account__forgot-password">
+                  <Link href="/forgot-password">
+                    <a className="login-account__forgot-password-title">
+                      Forgot Password?
+                    </a>
+                  </Link>
+                </div>
 
-          <Button
-            label="Log In"
-            onClick={() => {}}
-            className="login-account__submit-btn"
-            primary
-          />
-        </form>
+                <Button
+                  label="Log In"
+                  onClick={() => {}}
+                  className="login-account__submit-btn"
+                  primary
+                  disabled={isSubmitting}
+                />
+              </form>
+            );
+          }}
+        </Formik>
         <div className="login-account__sign-up">
           <p className="login-account__sign-up-text">
             Don’t have an account?
