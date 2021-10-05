@@ -1,10 +1,68 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import * as Yup from 'yup';
 import { Button } from '../../src/components/Button/Button';
 import { Input } from '../../src/components/Input/Input';
+import {
+  createAccountFailure,
+  createAccountPending,
+  createAccountSuccess,
+} from './createAccountSlice';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
+import { $api } from 'src/api';
+import Cookies from 'js-cookie';
+import { HttpError } from 'src/api/repo/http.error';
+import Link from 'next/link';
+
+interface ISignUpForm {
+  firstname: string;
+  lastname: string;
+  country: string;
+  email: string;
+  password: string;
+}
+
+const signupValidationSchema = Yup.object().shape({
+  firstname: Yup.string().required('firstname is required'),
+  lastname: Yup.string().required('lastname is required'),
+  country: Yup.string().required('country is required'),
+  email: Yup.string()
+    .email('Please enter valid email')
+    .required('email is required'),
+  password: Yup.string().required(
+    'Please valid password. One uppercase, one lowercase, one special character and no spaces'
+  ),
+});
 
 const CreateAccount: NextPage = () => {
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state) => state.createAccount);
+
+  const onSubmit = async (
+    values: ISignUpForm,
+    actions: FormikHelpers<ISignUpForm>
+  ) => {
+    dispatch(createAccountPending());
+    // console.log(values, actions);
+
+    try {
+      const loggedinUser = await $api.auth.signup(values);
+      Cookies.set('auth_token', loggedinUser.token);
+      dispatch(createAccountSuccess(loggedinUser.user));
+    } catch (error) {
+      const err = error as HttpError;
+      if (err.status === 422) {
+        // setErrors({ ...errors, signup: { ...errors.signup, ...err.errors } });
+        dispatch(createAccountFailure(err.message));
+        return;
+      }
+    }
+
+    actions.setSubmitting(false);
+  };
+
   return (
     <div className="create-account">
       <Head>
@@ -19,58 +77,113 @@ const CreateAccount: NextPage = () => {
           Enter your details to create a free account
         </p>
 
-        <form>
-          <div className="create-account__form-input-area">
-            <div className="create-account__form-grid">
-              <Input
-                type="text"
-                label="First Name"
-                placeholder="First Name"
-                name="firstname"
-                onChange={() => {}}
-              />
+        <Formik
+          initialValues={{
+            firstname: '',
+            lastname: '',
+            country: '',
+            email: '',
+            password: '',
+          }}
+          onSubmit={onSubmit}
+          validationSchema={signupValidationSchema}
+        >
+          {(props: FormikProps<ISignUpForm>) => {
+            const {
+              values,
+              touched,
+              errors,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              isSubmitting,
+            } = props;
+            return (
+              <form onSubmit={handleSubmit}>
+                <div className="create-account__form-input-area">
+                  <div className="create-account__form-grid">
+                    <Input
+                      type="text"
+                      label="First Name"
+                      placeholder="First Name"
+                      name="firstname"
+                      value={values.firstname}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      hasError={errors.firstname && touched.firstname}
+                      error={errors.firstname}
+                    />
 
-              <Input
-                type="text"
-                label="Last Name"
-                placeholder="Last Name"
-                name="lastname"
-              />
-            </div>
+                    <Input
+                      type="text"
+                      label="Last Name"
+                      placeholder="Last Name"
+                      name="lastname"
+                      value={values.lastname}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      hasError={errors.lastname && touched.lastname}
+                      error={errors.lastname}
+                    />
+                  </div>
 
-            <Input
-              type="email"
-              label="Email Address"
-              placeholder="Email Address"
-              name="email"
-            />
+                  <Input
+                    type="email"
+                    label="Email Address"
+                    placeholder="Email Address"
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    hasError={errors.email && touched.email}
+                    error={errors.email}
+                  />
 
-            <Input
-              type="email"
-              label="Country"
-              placeholder="Country"
-              name="country"
-            />
+                  <Input
+                    type="text"
+                    label="Country"
+                    placeholder="Country"
+                    name="country"
+                    value={values.country}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    hasError={errors.country && touched.country}
+                    error={errors.country}
+                  />
 
-            <Input
-              type="password"
-              label="Password"
-              placeholder="password"
-              name="password"
-            />
-          </div>
+                  <Input
+                    type="password"
+                    label="Password"
+                    placeholder="password"
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    hasError={errors.password && touched.password}
+                    error={errors.password}
+                  />
+                </div>
 
-          <Button
-            label="Create Account"
-            onClick={() => {}}
-            className="create-account__submit-btn"
-            primary
-          />
-        </form>
+                <Button
+                  type="submit"
+                  label="Create Account"
+                  onClick={() => {}}
+                  className="create-account__submit-btn"
+                  primary
+                  disabled={isSubmitting}
+                  showSpinner={loading}
+                />
+              </form>
+            );
+          }}
+        </Formik>
+
         <div className="create-account__have-an-account-section">
           <p className="create-account__have-an-account-text">
-            Already have an account?
-            <span className="create-account__span-text"> Log In</span>
+            Already have an account?{' '}
+            <Link href="/login">
+              <a className="create-account__span-text"> Log In</a>
+            </Link>
           </p>
           <p className="create-account__terms-and-conditions">
             By creating an account, you have agreed to our <br />{' '}

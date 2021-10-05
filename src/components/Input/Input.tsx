@@ -7,7 +7,7 @@ interface InputProps {
    */
   placeholder?: string;
   /**
-   * How large should the button be?
+   * input type 'text' | 'email' | 'password'
    */
   type: 'text' | 'email' | 'password';
   /**

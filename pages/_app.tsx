@@ -3,6 +3,10 @@ import '../src/styles/globals.scss';
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
+
+let persistor = persistStore(store);
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -13,7 +17,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <Provider store={store}>
-        <Component {...pageProps} />
+        <PersistGate loading={null} persistor={persistor}>
+          <Component {...pageProps} />
+        </PersistGate>
       </Provider>
     </>
   );
