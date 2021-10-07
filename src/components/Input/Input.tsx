@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { ChangeEvent, FocusEvent } from 'react';
-
+import { ChangeEvent, FocusEvent, useState } from 'react';
+import Image from 'next/image';
+import eye from '../../../public/svgs/eye.svg';
+import eye_off from '../../../public/svgs/eye-off.svg';
 interface InputProps {
   /**
    * Input Placeholder contents
@@ -72,20 +74,59 @@ export const Input = ({
   error,
   ...props
 }: InputProps) => {
-  return (
-    <div className={['input-container', `${className}`].join(' ')}>
-      <label htmlFor={name} className="input-label">
-        {label}
-      </label>
-      <input
-        type={type}
-        className={['input', `${hasError ? 'input--error' : ''}`].join(' ')}
-        name={name}
-        value={value}
-        {...props}
-      />
+  const [showPassword, setShowPassword] = useState(false);
 
-      {hasError ? <span className="input-error">{error}</span> : null}
-    </div>
+  return (
+    <>
+      {type !== 'password' ? (
+        <div className={['input-container', `${className}`].join(' ')}>
+          <label htmlFor={name} className="input-label">
+            {label}
+          </label>
+          <input
+            type={type}
+            className={['input', `${hasError ? 'input--error' : ''}`].join(' ')}
+            name={name}
+            value={value}
+            {...props}
+          />
+
+          {hasError ? <span className="input-error">{error}</span> : null}
+        </div>
+      ) : (
+        <div className={['input-container', `${className}`].join(' ')}>
+          <label htmlFor={name} className="input-label">
+            {label}
+          </label>
+          <div
+            className={[
+              'input-password-container',
+              `${hasError ? 'input--error' : ''}`,
+            ].join(' ')}
+          >
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className="input"
+              name={name}
+              value={value}
+              {...props}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              <Image
+                src={showPassword ? eye_off : eye}
+                alt="eye icon"
+                width="20"
+                height="20"
+              />
+            </button>
+          </div>
+
+          {hasError ? <span className="input-error">{error}</span> : null}
+        </div>
+      )}
+    </>
   );
 };

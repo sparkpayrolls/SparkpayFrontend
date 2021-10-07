@@ -15,7 +15,7 @@
 }
 
 .input {
-  height: 56px;
+  height: 3.5rem;
   background: #f7f9fb;
   border-radius: 4px;
   box-sizing: border-box;
@@ -40,6 +40,39 @@
 
   &--error {
     border: 1px solid #ca1b1b;
+  }
+}
+
+.input-password-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.5rem;
+  background: #f7f9fb;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  padding-right: 1rem;
+
+  .input {
+    height: 100%;
+    width: 100%;
+    background: none;
+
+    &:focus {
+      border: none;
+      padding: 0 1rem;
+    }
+  }
+
+  .input--error {
+    border: 1px solid #ca1b1b;
+  }
+
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
   }
 }
 

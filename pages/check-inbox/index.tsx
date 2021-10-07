@@ -1,8 +1,8 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import React from "react";
-import Image from "next/image";
-import inbox from "../../public/inbox.svg";
+import { NextPage } from 'next';
+import Head from 'next/head';
+import React from 'react';
+import Image from 'next/image';
+import inbox from '../../public/svgs/letter.svg';
 
 const CheckInbox: NextPage = () => {
   return (
@@ -15,8 +15,8 @@ const CheckInbox: NextPage = () => {
       <div className="check-inbox__content">
         <h1 className="check-inbox__title">Check Your Inbox</h1>
         <p className="check-inbox__subtext">
-          {" "}
-          Password reset link has been sent to your inbox{" "}
+          {' '}
+          Password reset link has been sent to your inbox{' '}
         </p>
         <Image
           src={inbox}
