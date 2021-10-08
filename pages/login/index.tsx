@@ -23,7 +23,7 @@ const loginValidationSchema = Yup.object().shape({
     .email('Please enter valid email')
     .required('email is required'),
   password: Yup.string().required(
-    'Please valid password. One uppercase, one lowercase, one special character and no spaces'
+    'Please valid password. One uppercase, one lowercase, one special character and no spaces',
   ),
 });
 
@@ -71,7 +71,7 @@ const Login: NextPage = () => {
 
   const onSubmit = async (
     values: ISignInForm,
-    actions: FormikHelpers<ISignInForm>
+    actions: FormikHelpers<ISignInForm>,
   ) => {
     dispatch(loginPending());
     // console.log(values, actions);
@@ -83,7 +83,7 @@ const Login: NextPage = () => {
       Cookies.set('auth_token', loggedinUser.token);
       dispatch(loginSuccess(loggedinUser.user));
       Router.replace(Router.query.goto ? `${Router.query.goto}` : '/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       dispatch(loginFailure(error.message));
     }
     actions.setSubmitting(false);

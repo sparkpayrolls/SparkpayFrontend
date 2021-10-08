@@ -34,6 +34,7 @@ const ForgetPassword: NextPage = () => {
             onClick={() => {}}
             className="forget-password__recover-password-btn"
             primary
+            type="submit"
           />
         </form>
         <div>

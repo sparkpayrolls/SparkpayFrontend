@@ -43,6 +43,7 @@ const ResetPassword: NextPage = () => {
             onClick={() => {}}
             className="reset-password__reset-password-btn"
             primary
+            type="submit"
           />
         </form>
       </div>
