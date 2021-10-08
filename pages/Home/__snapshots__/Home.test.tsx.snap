@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`renders homepage correctly 1`] = `
-<div>
-  <h1>
-    This is the home page
-  </h1>
-</div>
-`;
