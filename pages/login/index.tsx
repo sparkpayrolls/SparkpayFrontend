@@ -11,6 +11,7 @@ import { $api } from 'src/api';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { loginFailure, loginPending, loginSuccess } from './loginSlice';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 interface ISignInForm {
   email: string;
@@ -29,7 +30,9 @@ const loginValidationSchema = Yup.object().shape({
 const Login: NextPage = () => {
   const Router = useRouter();
   const dispatch = useAppDispatch();
-  const { authenticated, loading } = useAppSelector((state) => state.login);
+  const { authenticated, loading, error } = useAppSelector(
+    (state) => state.login
+  );
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
@@ -59,6 +62,12 @@ const Login: NextPage = () => {
       $api.$axios.interceptors.response.eject(authinterceptor);
     };
   }, [authenticated, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, { delay: 1000 });
+    }
+  }, [error]);
 
   const onSubmit = async (
     values: ISignInForm,
