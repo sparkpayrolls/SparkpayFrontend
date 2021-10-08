@@ -1,21 +1,21 @@
-import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import React from "react";
+import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import { Spinner } from './Spinner';
+import { Spinner } from "./Spinner";
 
 export default {
-  title: 'Spinner',
+  title: "Spinner",
   component: Spinner,
   argTypes: {
-    backgroundColor: { control: 'color' },
+    backgroundColor: { control: "color" },
   },
 } as ComponentMeta<typeof Spinner>;
 
-const Template: ComponentStory<typeof Spinner> = (args) => (
+const Template: ComponentStory<typeof Spinner> = (args: any) => (
   <Spinner {...args} />
 );
 
 export const Primary = Template.bind({});
 Primary.args = {
-  color: '#fff',
+  color: "#fff",
 };
