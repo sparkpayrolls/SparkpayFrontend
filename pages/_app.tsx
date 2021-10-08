@@ -1,6 +1,8 @@
 import Head from 'next/head';
+import 'react-toastify/dist/ReactToastify.css';
 import '../src/styles/globals.scss';
 import type { AppProps } from 'next/app';
+import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -19,6 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Component {...pageProps} />
+          <ToastContainer hideProgressBar={true} />
         </PersistGate>
       </Provider>
     </>

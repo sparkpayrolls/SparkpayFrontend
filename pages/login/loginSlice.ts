@@ -45,7 +45,7 @@ export const loginSlice = createSlice({
       state.loading = true;
     },
     loginSuccess: (state, action: PayloadAction<user>) => {
-      // state.loading = false;
+      state.loading = false;
       state.authenticated = true;
       state.error = '';
       state.user = action.payload;
