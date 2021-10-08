@@ -1,8 +1,8 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import React from "react";
-import { Button } from "../../src/components/Button/Button";
-import { Input } from "../../src/components/Input/Input";
+import { NextPage } from 'next';
+import Head from 'next/head';
+import React from 'react';
+import { Button } from '../../src/components/Button/Button';
+import { Input } from '../../src/components/Input/Input';
 
 const ResetPassword: NextPage = () => {
   return (
@@ -15,8 +15,8 @@ const ResetPassword: NextPage = () => {
       <div className="reset-password__section">
         <h1 className="reset-password__title">Reset Password</h1>
         <p className="reset-password__subtext">
-          {" "}
-          Enter a new password to proceed{" "}
+          {' '}
+          Enter a new password to proceed{' '}
         </p>
 
         <form>

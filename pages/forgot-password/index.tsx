@@ -1,9 +1,9 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import React from "react";
-import { Button } from "../../src/components/Button/Button";
-import { Input } from "../../src/components/Input/Input";
+import { NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import React from 'react';
+import { Button } from '../../src/components/Button/Button';
+import { Input } from '../../src/components/Input/Input';
 
 const ForgetPassword: NextPage = () => {
   return (

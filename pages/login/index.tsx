@@ -1,16 +1,16 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import { Formik, FormikHelpers, FormikProps } from "formik";
-import * as Yup from "yup";
-import { Button } from "../../src/components/Button/Button";
-import { Input } from "../../src/components/Input/Input";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { $api } from "src/api";
-import { useAppDispatch, useAppSelector } from "src/redux/hooks";
-import { loginFailure, loginPending, loginSuccess } from "./loginSlice";
-import Cookies from "js-cookie";
+import { NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import * as Yup from 'yup';
+import { Button } from '../../src/components/Button/Button';
+import { Input } from '../../src/components/Input/Input';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { $api } from 'src/api';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
+import { loginFailure, loginPending, loginSuccess } from './loginSlice';
+import Cookies from 'js-cookie';
 
 interface ISignInForm {
   email: string;
@@ -19,10 +19,10 @@ interface ISignInForm {
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string()
-    .email("Please enter valid email")
-    .required("email is required"),
+    .email('Please enter valid email')
+    .required('email is required'),
   password: Yup.string().required(
-    "Please valid password. One uppercase, one lowercase, one special character and no spaces"
+    'Please valid password. One uppercase, one lowercase, one special character and no spaces',
   ),
 });
 
@@ -32,7 +32,7 @@ const Login: NextPage = () => {
   const { authenticated, loading } = useAppSelector((state) => state.login);
 
   useEffect(() => {
-    const authToken = Cookies.get("auth_token") as string;
+    const authToken = Cookies.get('auth_token') as string;
     if (authToken && !authenticated) {
       dispatch(loginSuccess);
       $api.$axios.defaults.headers.Authorization = `Bearer ${authToken}`;
@@ -43,13 +43,13 @@ const Login: NextPage = () => {
         })
         .catch((error) => {
           dispatch(loginFailure(error.message));
-          Cookies.remove("auth_token");
+          Cookies.remove('auth_token');
         });
     }
 
     const authinterceptor = $api.$axios.interceptors.response.use((res) => {
       if (res.status === 401) {
-        Cookies.remove("auth_token");
+        Cookies.remove('auth_token');
         // setIsLoggedIn(false);
       }
       return res;
@@ -62,7 +62,7 @@ const Login: NextPage = () => {
 
   const onSubmit = async (
     values: ISignInForm,
-    actions: FormikHelpers<ISignInForm>
+    actions: FormikHelpers<ISignInForm>,
   ) => {
     dispatch(loginPending());
     // console.log(values, actions);
@@ -71,9 +71,9 @@ const Login: NextPage = () => {
 
     try {
       const loggedinUser = await $api.auth.login(username, password);
-      Cookies.set("auth_token", loggedinUser.token);
+      Cookies.set('auth_token', loggedinUser.token);
       dispatch(loginSuccess(loggedinUser.user));
-      Router.replace(Router.query.goto ? `${Router.query.goto}` : "/dashboard");
+      Router.replace(Router.query.goto ? `${Router.query.goto}` : '/dashboard');
     } catch (error: any) {
       dispatch(loginFailure(error.message));
     }
@@ -97,8 +97,8 @@ const Login: NextPage = () => {
 
         <Formik
           initialValues={{
-            email: "",
-            password: "",
+            email: '',
+            password: '',
           }}
           onSubmit={onSubmit}
           validationSchema={loginValidationSchema}
