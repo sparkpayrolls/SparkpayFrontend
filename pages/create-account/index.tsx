@@ -1,19 +1,23 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
-import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { Formik, FormikHelpers, FormikProps, FormikErrors } from 'formik';
 import * as Yup from 'yup';
 import { Button } from '../../src/components/Button/Button';
 import { Input } from '../../src/components/Input/Input';
+import { SelectInput } from '../../src/components/Input/seletct-input';
 import {
   createAccountFailure,
   createAccountPending,
+  createAccountDone,
   createAccountSuccess,
 } from './createAccountSlice';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
 import Cookies from 'js-cookie';
 import { HttpError } from 'src/api/repo/http.error';
+import { Util } from 'src/helpers/util';
+import { Country } from 'src/api/types';
 import Link from 'next/link';
 
 interface ISignUpForm {
@@ -32,17 +36,48 @@ const signupValidationSchema = Yup.object().shape({
     .email('Please enter valid email')
     .required('email is required'),
   password: Yup.string().required(
-    'Please valid password. One uppercase, one lowercase, one special character and no spaces'
+    'Please valid password. One uppercase, one lowercase, one special character and no spaces',
   ),
 });
 
 const CreateAccount: NextPage = () => {
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((state) => state.createAccount);
+  const [countries, setCountries] = React.useState<Country[]>([]);
+
+  const getCountries = React.useCallback(async () => {
+    try {
+      const countries = await $api.country.getCountries({ all: true });
+      setCountries(countries.data);
+    } catch (error: any) {
+      console.log(`error getting countries - ${error.message}`);
+    }
+  }, [setCountries]);
+
+  const validateEmail = Util.debounce(async (
+    email: string,
+    // eslint-disable-next-line no-unused-vars
+    setErrors: (_errors: FormikErrors<ISignUpForm>) => void,
+  ) => {
+    try {
+      const isTaken = await $api.auth.emailTaken(email);
+      if (isTaken && !!email) {
+        setErrors({ email: 'email already taken' });
+        return;
+      }
+      setErrors({ email: '' });
+    } catch (error: any) {
+      console.log(`error validating email - ${error.mesage}`);
+    }
+  }, 1500);
+
+  React.useEffect(() => {
+    getCountries();
+  }, [getCountries]);
 
   const onSubmit = async (
     values: ISignUpForm,
-    actions: FormikHelpers<ISignUpForm>
+    actions: FormikHelpers<ISignUpForm>,
   ) => {
     dispatch(createAccountPending());
     // console.log(values, actions);
@@ -54,10 +89,16 @@ const CreateAccount: NextPage = () => {
     } catch (error) {
       const err = error as HttpError;
       if (err.status === 422) {
-        // setErrors({ ...errors, signup: { ...errors.signup, ...err.errors } });
-        dispatch(createAccountFailure(err.message));
+        actions.setErrors(err.errors);
         return;
       }
+      if (err.status === 409) {
+        actions.setErrors({ email: err.message });
+        return;
+      }
+      dispatch(createAccountFailure(err.message));
+    } finally {
+      dispatch(createAccountDone());
     }
 
     actions.setSubmitting(false);
@@ -97,6 +138,7 @@ const CreateAccount: NextPage = () => {
               handleChange,
               handleSubmit,
               isSubmitting,
+              setErrors,
             } = props;
             return (
               <form onSubmit={handleSubmit}>
@@ -133,13 +175,30 @@ const CreateAccount: NextPage = () => {
                     placeholder="Email Address"
                     name="email"
                     value={values.email}
-                    onChange={handleChange}
+                    onChange={(event: any) => {
+                      validateEmail(event.target.value, setErrors);
+                      handleChange(event);
+                    }}
                     onBlur={handleBlur}
                     hasError={errors.email && touched.email}
                     error={errors.email}
                   />
 
-                  <Input
+                  <SelectInput
+                    options={countries.map((country) => ({
+                      value: country.id,
+                      text: country.name,
+                      ...country,
+                    }))}
+                    name="country"
+                    value={values.country}
+                    onChange={(event) => handleChange(event)}
+                    onBlur={(event) => handleBlur(event)}
+                    error={errors.country}
+                    hasError={!!errors.country && touched.country}
+                    placeholder="Select Country"
+                  />
+                  {/* <Input
                     type="text"
                     label="Country"
                     placeholder="Country"
@@ -149,7 +208,7 @@ const CreateAccount: NextPage = () => {
                     onBlur={handleBlur}
                     hasError={errors.country && touched.country}
                     error={errors.country}
-                  />
+                  /> */}
 
                   <Input
                     type="password"
