@@ -30,9 +30,7 @@ const loginValidationSchema = Yup.object().shape({
 const Login: NextPage = () => {
   const Router = useRouter();
   const dispatch = useAppDispatch();
-  const { authenticated, loading, error } = useAppSelector(
-    (state) => state.login
-  );
+  const { authenticated, loading } = useAppSelector((state) => state.login);
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
@@ -63,11 +61,7 @@ const Login: NextPage = () => {
     };
   }, [authenticated, dispatch]);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error, { delay: 1000 });
-    }
-  }, [error]);
+  // useEffect(() => {}, [error]);
 
   const onSubmit = async (
     values: ISignInForm,
@@ -85,6 +79,7 @@ const Login: NextPage = () => {
       Router.replace(Router.query.goto ? `${Router.query.goto}` : '/dashboard');
     } catch (error: any) {
       dispatch(loginFailure(error.message));
+      toast.error(error.message);
     }
     actions.setSubmitting(false);
   };

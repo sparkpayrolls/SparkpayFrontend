@@ -11,7 +11,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "prepare": "husky install",
-    "pre-commit": "yarn lint --fix && git add -A ."
+    "pre-commit": "yarn lint --fix"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0-rc.1",
