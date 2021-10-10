@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
@@ -25,7 +26,18 @@ const Dashboard = withAuth(() => {
 });
 
 const Landing = () => {
-  return <h1>App landing page</h1>;
+  return (
+    <>
+      <h1>App landing page</h1>
+      <Link href="/login">
+        <a>Login</a>
+      </Link>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      <Link href="/create-account">
+        <a>Create account</a>
+      </Link>
+    </>
+  );
 };
 
 const Index = () => {
