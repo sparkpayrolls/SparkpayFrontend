@@ -1,11 +1,47 @@
+import { Formik, FormikHelpers } from 'formik';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 import React from 'react';
+import { toast } from 'react-toastify';
+import { $api } from 'src/api';
+import { forgotPasswordValidationSchema } from 'src/helpers/validation';
+import { useAppSelector } from 'src/redux/hooks';
 import { Button } from '../../src/components/Button/Button';
 import { Input } from '../../src/components/Input/Input';
 
+type IForgotPassword = {
+  email: string;
+};
+
 const ForgetPassword: NextPage = () => {
+  const { user } = useAppSelector((state) => state);
+  const router = useRouter();
+  if (user) {
+    router.replace('/');
+    return null;
+  }
+  const onSubmit = async (
+    values: IForgotPassword,
+    actions: FormikHelpers<IForgotPassword>,
+  ) => {
+    try {
+      actions.setSubmitting(true);
+      await $api.auth.forgotPassword(values.email);
+      const url = stringifyUrl({
+        url: '/check-inbox',
+        query: { action: 'forgot-password' },
+      });
+      router.replace(url);
+    } catch (error: any) {
+      toast.error(`${error.message}`);
+    } finally {
+      actions.setSubmitting(false);
+    }
+  };
+
   return (
     <div className="forget-password">
       <Head>
@@ -18,25 +54,46 @@ const ForgetPassword: NextPage = () => {
         <p className="forget-password__subtext">
           Enter your email address to reset password
         </p>
-
-        <form>
-          <div className="forget-password__email-input">
-            <Input
-              type="email"
-              label="Email Address"
-              placeholder="Email Address"
-              name="email"
-              onChange={() => {}}
-            />
-          </div>
-          <Button
-            label="Recover Password"
-            onClick={() => {}}
-            className="forget-password__recover-password-btn"
-            primary
-            type="submit"
-          />
-        </form>
+        <Formik
+          initialValues={{ email: '' }}
+          onSubmit={onSubmit}
+          validationSchema={forgotPasswordValidationSchema}
+        >
+          {(props) => {
+            const {
+              handleSubmit,
+              handleChange,
+              values,
+              handleBlur,
+              errors,
+              touched,
+            } = props;
+            return (
+              <form onSubmit={handleSubmit}>
+                <div className="forget-password__email-input">
+                  <Input
+                    type="email"
+                    label="Email Address"
+                    placeholder="Email Address"
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    hasError={errors.email && touched.email}
+                    error={errors.email}
+                  />
+                </div>
+                <Button
+                  label="Recover Password"
+                  onClick={() => {}}
+                  className="forget-password__recover-password-btn"
+                  primary
+                  type="submit"
+                />
+              </form>
+            );
+          }}
+        </Formik>
         <div>
           <Link href="/login">
             <a className="forget-password__go-back-login">Back to Log In</a>

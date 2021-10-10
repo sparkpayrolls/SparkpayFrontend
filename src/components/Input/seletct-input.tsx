@@ -24,16 +24,12 @@ export const SelectInput = ({
   return (
     <>
       <select {...props}>
+        <option value="">{props.placeholder}</option>
         {options.map((option) => {
           return (
-            <>
-              <option key="unique-key-prop" value="">
-                {props.placeholder}
-              </option>
-              <option key={option.id} value={option.value}>
-                {option.text}
-              </option>
-            </>
+            <option key={option.id} value={option.value}>
+              {option.text}
+            </option>
           );
         })}
       </select>
