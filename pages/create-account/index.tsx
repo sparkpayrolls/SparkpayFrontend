@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import { Button } from '../../src/components/Button/Button';
@@ -15,6 +16,10 @@ import { $api } from 'src/api';
 import Cookies from 'js-cookie';
 import { HttpError } from 'src/api/repo/http.error';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
+import { Country } from 'src/api/types';
+import { useRouter } from 'next/router';
+import { Util } from 'src/helpers/util';
 
 interface ISignUpForm {
   firstname: string;
@@ -22,6 +27,13 @@ interface ISignUpForm {
   country: string;
   email: string;
   password: string;
+}
+
+interface ihandleChange {
+  (e: ChangeEvent<any>): void;
+  <T = string | ChangeEvent<any>>(field: T): T extends ChangeEvent<any>
+    ? void
+    : (e: string | ChangeEvent<any>) => void;
 }
 
 const signupValidationSchema = Yup.object().shape({
@@ -32,17 +44,68 @@ const signupValidationSchema = Yup.object().shape({
     .email('Please enter valid email')
     .required('email is required'),
   password: Yup.string().required(
-    'Please valid password. One uppercase, one lowercase, one special character and no spaces'
+    'Please valid password. One uppercase, one lowercase, one special character and no spaces',
   ),
 });
 
+const deboucedEmailCheck = Util.debounce(
+  $api.auth.emailTaken.bind($api.auth),
+  1000,
+);
+
 const CreateAccount: NextPage = () => {
+  const Router = useRouter();
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector((state) => state.createAccount);
+  const { loading, error } = useAppSelector((state) => state.createAccount);
+  const [busy, setBusy] = useState(true);
+  const [countries, setCountries] = useState<Country[]>([]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, { delay: 1000 });
+    }
+  }, [error]);
+
+  useEffect(() => {
+    $api.country
+      .getCountries({ all: true })
+      .then(({ data: countries }) => {
+        setCountries(countries);
+      })
+      .catch(console.debug)
+      .finally(() => {
+        setBusy(false);
+      });
+  }, [setCountries]);
+
+  const onEmailChange = async (email: string) => {
+    setBusy(true);
+    try {
+      const emailTaken = await deboucedEmailCheck(email);
+      if (emailTaken) {
+        dispatch(createAccountFailure('email already exists'));
+      }
+    } catch (error) {
+      console.debug('...error checking if email taken');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleEmailInput = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    handleChange: ihandleChange,
+  ) => {
+    const { value } = e.target;
+
+    onEmailChange(value);
+
+    handleChange(e);
+  };
 
   const onSubmit = async (
     values: ISignUpForm,
-    actions: FormikHelpers<ISignUpForm>
+    actions: FormikHelpers<ISignUpForm>,
   ) => {
     dispatch(createAccountPending());
     // console.log(values, actions);
@@ -51,6 +114,7 @@ const CreateAccount: NextPage = () => {
       const loggedinUser = await $api.auth.signup(values);
       Cookies.set('auth_token', loggedinUser.token);
       dispatch(createAccountSuccess(loggedinUser.user));
+      Router.replace('/check-inbox');
     } catch (error) {
       const err = error as HttpError;
       if (err.status === 422) {
@@ -133,13 +197,15 @@ const CreateAccount: NextPage = () => {
                     placeholder="Email Address"
                     name="email"
                     value={values.email}
-                    onChange={handleChange}
+                    onChange={(
+                      e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+                    ) => handleEmailInput(e, handleChange)}
                     onBlur={handleBlur}
                     hasError={errors.email && touched.email}
                     error={errors.email}
                   />
 
-                  <Input
+                  {/* <Input
                     type="text"
                     label="Country"
                     placeholder="Country"
@@ -149,7 +215,25 @@ const CreateAccount: NextPage = () => {
                     onBlur={handleBlur}
                     hasError={errors.country && touched.country}
                     error={errors.country}
-                  />
+                  /> */}
+
+                  {countries.length > 0 ? (
+                    <select
+                      name="country"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.country}
+                    >
+                      <option value="">country</option>
+                      {countries.map((country) => {
+                        return (
+                          <option key={country.id} value={country.id}>
+                            {country.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  ) : null}
 
                   <Input
                     type="password"
@@ -170,7 +254,7 @@ const CreateAccount: NextPage = () => {
                   onClick={() => {}}
                   className="create-account__submit-btn"
                   primary
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || busy}
                   showSpinner={loading}
                 />
               </form>

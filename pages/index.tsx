@@ -26,7 +26,7 @@ const Error = (props: PropsWithChildren<unknown>) => {
 
 const deboucedEmailCheck = Util.debounce(
   $api.auth.emailTaken.bind($api.auth),
-  1000
+  1000,
 );
 
 const Landing = () => {
