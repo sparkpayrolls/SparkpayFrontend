@@ -9,31 +9,33 @@ $font-family-Rubik: "Rubik", sans-serif;
     width: 90%;
     padding: 0 auto;
   }
+
+  @media screen and (min-width: 1800px) {
+    width: 60%;
+  }
 }
 
 .home {
   .hero-section {
-    @include spacing;
+    // @include spacing;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-family: $font-family-Rubik;
-    margin: 34px 0 17px;
+    margin: 34px auto 17px;
+    padding: 0 1rem;
     background: url("../../../public/svgs/hero-bg.svg") center no-repeat;
     &::after {
       content: url("../../../public/svgs/curly-arrow.svg");
       position: absolute;
       bottom: 25%;
       right: 0;
-
-      @media screen and (min-width: 384px) {
-        bottom: 0;
-        right: 0;
-      }
+      display: none;
 
       @media screen and (min-width: 900px) {
+        display: block;
         bottom: 15%;
         right: 20%;
       }
@@ -52,7 +54,7 @@ $font-family-Rubik: "Rubik", sans-serif;
       line-height: 80px;
       text-align: center;
       color: $blue-900;
-      margin-bottom: 1.5rem;
+      margin-bottom: 3.5rem;
 
       &--em {
         &::after {
@@ -102,6 +104,17 @@ $font-family-Rubik: "Rubik", sans-serif;
       &--input {
         border: none;
         width: 74%;
+        padding: 0.875rem;
+
+        font-family: Karla;
+        font-style: normal;
+        font-weight: 1;
+        font-size: 16px;
+        line-height: 24px;
+
+        &:focus {
+          outline: 0;
+        }
       }
     }
   }
@@ -127,6 +140,10 @@ $font-family-Rubik: "Rubik", sans-serif;
 
     @media screen and (min-width: 992px) {
       flex-direction: row;
+    }
+
+    @media screen and (min-width: 1800px) {
+      padding: 118px 0 141px 20%;
     }
 
     &__title {

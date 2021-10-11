@@ -5,10 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import dashboard_preview from '../../public/svgs/group-33971.svg';
 import dashboard_preview2 from '../../public/svgs/frame-11825.svg';
+import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <DefaultLayout>
       <Head>
         <title>SparkPay</title>
         <meta name="description" content="Sparkpay homepage" />
@@ -21,8 +22,8 @@ const Home: NextPage = () => {
             Payroll Made <span className="hero-section__title--em">Easy</span>
           </caption>
           <p className="hero-section__subtext">
-            Lorem ipsum dolor amet, consectetur adipiscing accumsan pellentesque
-            volutpat.
+            A borderless management system that brings ease to creating payrolls
+            and remitting statutory deductions.
           </p>
 
           <div className="hero-section__join-list">
@@ -62,14 +63,16 @@ const Home: NextPage = () => {
 
             <ul className="features__list">
               <li className="features__list-item">
-                Lorem ipsum sit amet adipiscing.
-              </li>
-              <li className="features__list-item">Adipiscing tortor.</li>
-              <li className="features__list-item">
-                Pellentesque donec accumsan.
+                Direct payment to employees.
               </li>
               <li className="features__list-item">
-                Pellentesque donec accumsan.
+                Tax remittances and pension.
+              </li>
+              <li className="features__list-item">
+                Subgroup employees for specialised benefits.
+              </li>
+              <li className="features__list-item">
+                Easy setup and navigation.
               </li>
             </ul>
 
@@ -83,7 +86,7 @@ const Home: NextPage = () => {
           </div>
         </section>
       </main>
-    </div>
+    </DefaultLayout>
   );
 };
 
