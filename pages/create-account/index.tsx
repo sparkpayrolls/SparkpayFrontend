@@ -1,25 +1,22 @@
 /* eslint-disable no-unused-vars */
 import { NextPage } from 'next';
 import Head from 'next/head';
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Formik, FormikHelpers, FormikProps } from 'formik';
-import * as Yup from 'yup';
+import React from 'react';
+import { Formik, FormikHelpers, FormikProps, FormikErrors } from 'formik';
 import { Button } from '../../src/components/Button/Button';
 import { Input } from '../../src/components/Input/Input';
-import {
-  createAccountFailure,
-  createAccountPending,
-  createAccountSuccess,
-} from './createAccountSlice';
+import { SelectInput } from '../../src/components/Input/seletct-input';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
 import Cookies from 'js-cookie';
 import { HttpError } from 'src/api/repo/http.error';
-import Link from 'next/link';
-import { toast } from 'react-toastify';
-import { Country } from 'src/api/types';
-import { useRouter } from 'next/router';
 import { Util } from 'src/helpers/util';
+import Link from 'next/link';
+import { getCountries } from 'src/redux/slices/countries/countries.slice';
+import { useRouter } from 'next/router';
+import { signupValidationSchema } from 'src/helpers/validation';
+import { toast } from 'react-toastify';
+import { commitUser } from 'src/redux/slices/user/user.slice';
 
 interface ISignUpForm {
   firstname: string;
@@ -29,102 +26,61 @@ interface ISignUpForm {
   password: string;
 }
 
-interface ihandleChange {
-  (e: ChangeEvent<any>): void;
-  <T = string | ChangeEvent<any>>(field: T): T extends ChangeEvent<any>
-    ? void
-    : (e: string | ChangeEvent<any>) => void;
-}
-
-const signupValidationSchema = Yup.object().shape({
-  firstname: Yup.string().required('firstname is required'),
-  lastname: Yup.string().required('lastname is required'),
-  country: Yup.string().required('country is required'),
-  email: Yup.string()
-    .email('Please enter valid email')
-    .required('email is required'),
-  password: Yup.string().required(
-    'Please valid password. One uppercase, one lowercase, one special character and no spaces',
-  ),
-});
-
-const deboucedEmailCheck = Util.debounce(
-  $api.auth.emailTaken.bind($api.auth),
-  1000,
-);
-
 const CreateAccount: NextPage = () => {
-  const Router = useRouter();
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.createAccount);
-  const [busy, setBusy] = useState(true);
-  const [countries, setCountries] = useState<Country[]>([]);
+  const { user, countries } = useAppSelector((state) => state);
+  const { loading } = useAppSelector((state) => state.createAccount);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error, { delay: 1000 });
-    }
-  }, [error]);
+  React.useEffect(() => {
+    getCountries(dispatch);
+  }, [dispatch]);
 
-  useEffect(() => {
-    $api.country
-      .getCountries({ all: true })
-      .then(({ data: countries }) => {
-        setCountries(countries);
-      })
-      .catch(console.debug)
-      .finally(() => {
-        setBusy(false);
-      });
-  }, [setCountries]);
+  if (user) {
+    router.replace('/');
+    return null;
+  }
 
-  const onEmailChange = async (email: string) => {
-    setBusy(true);
-    try {
-      const emailTaken = await deboucedEmailCheck(email);
-      if (emailTaken) {
-        dispatch(createAccountFailure('email already exists'));
-      }
-    } catch (error) {
-      console.debug('...error checking if email taken');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleEmailInput = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    handleChange: ihandleChange,
+  const validateEmail = Util.debounce(async (
+    email: string,
+    // eslint-disable-next-line no-unused-vars
+    setErrors: (errors: FormikErrors<ISignUpForm>) => void,
   ) => {
-    const { value } = e.target;
-
-    onEmailChange(value);
-
-    handleChange(e);
-  };
+    try {
+      if (email) {
+        const isTaken = await $api.auth.emailTaken(email);
+        if (isTaken) {
+          setErrors({ email: 'email already taken' });
+        }
+      }
+    } catch (error: any) {
+      // error validating email
+    }
+  }, 500);
 
   const onSubmit = async (
     values: ISignUpForm,
     actions: FormikHelpers<ISignUpForm>,
   ) => {
-    dispatch(createAccountPending());
-    // console.log(values, actions);
-
     try {
-      const loggedinUser = await $api.auth.signup(values);
-      Cookies.set('auth_token', loggedinUser.token);
-      dispatch(createAccountSuccess(loggedinUser.user));
-      Router.replace('/check-inbox');
+      actions.setSubmitting(true);
+      const { user, token } = await $api.auth.signup(values);
+      Cookies.set('auth_token', token);
+      dispatch(commitUser(user));
     } catch (error) {
       const err = error as HttpError;
       if (err.status === 422) {
-        // setErrors({ ...errors, signup: { ...errors.signup, ...err.errors } });
-        dispatch(createAccountFailure(err.message));
+        actions.setErrors(err.errors);
         return;
       }
+      if (err.status === 409) {
+        actions.setErrors({ email: err.message });
+        return;
+      }
+      toast.error(`${err.message}`);
+    } finally {
+      actions.setSubmitting(false);
     }
-
-    actions.setSubmitting(false);
   };
 
   return (
@@ -161,6 +117,7 @@ const CreateAccount: NextPage = () => {
               handleChange,
               handleSubmit,
               isSubmitting,
+              setErrors,
             } = props;
             return (
               <form onSubmit={handleSubmit}>
@@ -197,43 +154,29 @@ const CreateAccount: NextPage = () => {
                     placeholder="Email Address"
                     name="email"
                     value={values.email}
-                    onChange={(
-                      e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-                    ) => handleEmailInput(e, handleChange)}
+                    onChange={(event: any) => {
+                      validateEmail(event.target.value, setErrors);
+                      handleChange(event);
+                    }}
                     onBlur={handleBlur}
                     hasError={errors.email && touched.email}
                     error={errors.email}
                   />
 
-                  {/* <Input
-                    type="text"
-                    label="Country"
-                    placeholder="Country"
+                  <SelectInput
+                    options={countries.map((country) => ({
+                      value: country.id,
+                      text: country.name,
+                      ...country,
+                    }))}
                     name="country"
                     value={values.country}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    hasError={errors.country && touched.country}
+                    onChange={(event) => handleChange(event)}
+                    onBlur={(event) => handleBlur(event)}
                     error={errors.country}
-                  /> */}
-
-                  {countries.length > 0 ? (
-                    <select
-                      name="country"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.country}
-                    >
-                      <option value="">country</option>
-                      {countries.map((country) => {
-                        return (
-                          <option key={country.id} value={country.id}>
-                            {country.name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  ) : null}
+                    hasError={!!errors.country && touched.country}
+                    placeholder="Select Country"
+                  />
 
                   <Input
                     type="password"
@@ -251,10 +194,9 @@ const CreateAccount: NextPage = () => {
                 <Button
                   type="submit"
                   label="Create Account"
-                  onClick={() => {}}
                   className="create-account__submit-btn"
                   primary
-                  disabled={isSubmitting || busy}
+                  disabled={isSubmitting}
                   showSpinner={loading}
                 />
               </form>

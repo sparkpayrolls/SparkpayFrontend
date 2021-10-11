@@ -47,7 +47,7 @@ export type User = Document & {
 
   country: Country;
 
-  emailVerfied: boolean;
+  emailVerified: boolean;
 };
 
 export type LoggedInUser = {
