@@ -44,6 +44,9 @@ export const createAccountSlice = createSlice({
     createAccountPending: (state) => {
       state.loading = true;
     },
+    createAccountDone: (state) => {
+      state.loading = false;
+    },
     createAccountSuccess: (state, action: PayloadAction<user>) => {
       state.loading = false;
       state.authenticated = true;
@@ -63,6 +66,7 @@ export const {
   createAccountPending,
   createAccountSuccess,
   createAccountFailure,
+  createAccountDone,
 } = createAccountSlice.actions;
 
 export default createAccountSlice.reducer;

@@ -2,94 +2,50 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
-import * as Yup from 'yup';
 import { Button } from '../../src/components/Button/Button';
 import { Input } from '../../src/components/Input/Input';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { $api } from 'src/api';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
-import { loginFailure, loginPending, loginSuccess } from './loginSlice';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
+import { loginValidationSchema } from 'src/helpers/validation';
+import { commitUser } from 'src/redux/slices/user/user.slice';
 
 interface ISignInForm {
   email: string;
   password: string;
 }
 
-const loginValidationSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Please enter valid email')
-    .required('email is required'),
-  password: Yup.string().required(
-    'Please valid password. One uppercase, one lowercase, one special character and no spaces',
-  ),
-});
-
 const Login: NextPage = () => {
-  const Router = useRouter();
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const { authenticated, loading, error } = useAppSelector(
-    (state) => state.login
-  );
+  const { user } = useAppSelector((state) => state);
 
-  useEffect(() => {
-    const authToken = Cookies.get('auth_token') as string;
-    if (authToken && !authenticated) {
-      dispatch(loginSuccess);
-      $api.$axios.defaults.headers.Authorization = `Bearer ${authToken}`;
-      $api.user
-        .getProfile()
-        .then((user) => {
-          dispatch(loginSuccess(user));
-        })
-        .catch((error) => {
-          dispatch(loginFailure(error.message));
-          Cookies.remove('auth_token');
-        });
-    }
-
-    const authinterceptor = $api.$axios.interceptors.response.use((res) => {
-      if (res.status === 401) {
-        Cookies.remove('auth_token');
-        // setIsLoggedIn(false);
-      }
-      return res;
-    });
-
-    return () => {
-      $api.$axios.interceptors.response.eject(authinterceptor);
-    };
-  }, [authenticated, dispatch]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error, { delay: 1000 });
-    }
-  }, [error]);
+  const goto = router.query.goto as string;
+  const isLoggedIn = !!user;
+  if (isLoggedIn) {
+    router.replace(goto ? goto : '/');
+    return null;
+  }
 
   const onSubmit = async (
     values: ISignInForm,
     actions: FormikHelpers<ISignInForm>,
   ) => {
-    dispatch(loginPending());
-    // console.log(values, actions);
-
-    const { email: username, password } = values;
-
     try {
-      const loggedinUser = await $api.auth.login(username, password);
-      Cookies.set('auth_token', loggedinUser.token);
-      dispatch(loginSuccess(loggedinUser.user));
-      Router.replace(Router.query.goto ? `${Router.query.goto}` : '/dashboard');
-    } catch (error: any) {
-      dispatch(loginFailure(error.message));
-    }
-    actions.setSubmitting(false);
-  };
+      actions.setSubmitting(true);
 
-  // TODO -  Show error where appropriate
+      const { email: username, password } = values;
+      const { user, token } = await $api.auth.login(username, password);
+      Cookies.set('auth_token', token);
+      dispatch(commitUser(user));
+    } catch (error: any) {
+      toast.error(error.message, { delay: 1000 });
+    } finally {
+      actions.setSubmitting(false);
+    }
+  };
 
   return (
     <div className="login-account">
@@ -162,10 +118,9 @@ const Login: NextPage = () => {
                 <Button
                   label="Log In"
                   type="submit"
-                  onClick={() => {}}
                   className="login-account__submit-btn"
                   primary
-                  showSpinner={loading}
+                  showSpinner={isSubmitting}
                   disabled={isSubmitting}
                 />
               </form>
