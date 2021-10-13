@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import EmployeeInfo from "../../dashboard-assets/employeeIcon.svg";
 
-const employeeTableDetails: NextPage = () => {
+const employeeTableDetails = () => {
   return (
     <div>
       <div className="employee-section">
@@ -25,10 +25,10 @@ const employeeTableDetails: NextPage = () => {
               <th>Name</th>
             </span>
             <th>Email Address</th>
-            <th>Amount (₦) </th>
-            <th>Bank </th>
-            <th>Account No.</th>
-            <th>Date Added </th>
+            <th>Amount(N)</th>
+            <th>Payment Method</th>
+            <th>Group</th>
+            <th>Date Added</th>
           </tr>
           <tr className="employee-section__employeeData">
             <span>
@@ -178,7 +178,6 @@ const employeeTableDetails: NextPage = () => {
             </div>
           </tr>
         </table>
-
         <div className="employee-section__nextPages">
           <p>
             Showing <span className="employee">Page 1 of 10</span>
