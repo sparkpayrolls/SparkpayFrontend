@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
@@ -8,6 +8,7 @@ import withAuth from 'src/helpers/HOC/withAuth';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { commitUser } from 'src/redux/slices/user/user.slice';
 import { Button } from '../src/components/Button/Button';
+import Home from './Home';
 
 const Dashboard = withAuth(() => {
   const dispatch = useAppDispatch();
@@ -25,20 +26,20 @@ const Dashboard = withAuth(() => {
   );
 });
 
-const Landing = () => {
-  return (
-    <>
-      <h1>App landing page</h1>
-      <Link href="/login">
-        <a>Login</a>
-      </Link>
-      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-      <Link href="/create-account">
-        <a>Create account</a>
-      </Link>
-    </>
-  );
-};
+// const Landing = () => {
+//   return (
+//     <>
+//       <h1>App landing page</h1>
+//       <Link href="/login">
+//         <a>Login</a>
+//       </Link>
+//       &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+//       <Link href="/create-account">
+//         <a>Create account</a>
+//       </Link>
+//     </>
+//   );
+// };
 
 const Index = () => {
   const dispatch = useAppDispatch();
@@ -67,7 +68,7 @@ const Index = () => {
     return <Dashboard />;
   }
 
-  return <Landing />;
+  return <Home />;
 };
 
 export default Index;
