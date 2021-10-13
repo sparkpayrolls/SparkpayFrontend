@@ -1,0 +1,22 @@
+// CORE
+@import "./core/overwrite";
+@import "./core/variables";
+
+// COMPONENTS
+@import "./components/button";
+@import "./components/input";
+@import "./components/dashboard";
+@import "./components/table";
+@import "./components/Employee";
+@import "./components/spinner";
+@import "./components/toast";
+@import "./components/defaultLayout";
+
+// PAGES
+@import "./pages/home";
+@import "./pages/create-account";
+@import "./pages/login";
+@import "./pages/forgot-password";
+@import "./pages/check-inbox";
+@import "./pages/reset-password";
+

@@ -1,0 +1,184 @@
+.employee-section {
+  &__details {
+    margin-right:32px;
+    margin-left:32px;
+  }
+  // 
+
+   &__employee-button1 {
+    width: 216px;
+    height: 44px;
+    right: 225px;
+    top: 78px;
+    background: yellow;
+    border: 1px solid #1d4ed8;
+    box-sizing: border-box;
+    border-radius: 8px;
+  }
+  // 
+
+  &__employeeSearch {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+  &__employeeHeader {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0.25px;
+    margin-top: -5px;
+  }
+  &__searchInput {
+    display: flex;
+    // flex-direction: row;
+    grid-column-gap: 1.5rem;
+  }
+
+  &__search {
+    outline: none;
+    background: #ffffff;
+    border: 1px solid #d7dce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 384px;
+    height: 40px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    padding-left: 16px;
+  }
+
+  &__searchImage {
+    position: relative;
+    right: 30px;
+    top: 12px;
+  }
+  &__searchIcon {
+    display: flex;
+  }
+
+  &__filter-image {
+    position: relative;
+    left: -400px;
+  }
+
+  &__filter {
+    font-size: 14px;
+    width: 91px;
+    height: 40px;
+    background: #ffffff;
+    border: 1px solid #d7dce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding-left: 16px;
+  }
+
+  &__employeeInfo {
+    background: #ffffff;
+    border: 1px solid #d7dce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+    padding: 10px 20px 10px 15px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  th {
+    // border: 1px solid #dddddd;
+    text-align: left;
+    padding: 25px;
+  }
+
+  td{
+   text-align: left;
+    padding: 17px; 
+  }
+  &__employeeTitle {
+    background-color: #f7f9fb;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #6d7a98;
+  }
+
+  &__employeeData {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #0b2253;
+    height: 40px;
+  }
+
+  &__employee_Input {
+    cursor: pointer;
+    margin-left: 16px;
+    border: 1px solid red !important;
+    outline: none;
+    font-size: 30px;
+  }
+
+  td {
+    border-bottom: 1px solid #f7f9fb;
+    padding-top: 30px;
+  }
+
+  &__employeeImage {
+    position: relative;
+    right: 15px;
+  }
+
+  &__nextPages {
+    display: flex;
+    justify-content: space-between;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    color: #6d7a98;
+    margin-top: 24px;
+    padding-left: 20px;
+  }
+
+  &__prev_next_pages {
+    display: flex;
+    flex-direction: row;
+    grid-column-gap: 0.9rem;
+  }
+
+  &__pagination{
+    color:#0D0F11;
+  }
+  //   &__employeeName {
+  //     display: flex;
+  //     grid-column-gap: 0.5rem;
+  //     padding-left:20px;
+
+  //   }
+
+  //   &__employeeList{
+  //      display: flex;
+  //       margin-top: 20px;
+  //     font-style: normal;
+  //     font-size: 14px;
+  //     line-height: 16px;
+  //     color: #6d7a98;
+  //     display:flex;
+  //     justify-content:space-between;
+  //     // grid-column-gap: 3rem;
+  //   }
+  // &__hr{
+  //   border: 1px solid #F7F9FB;
+  // }
+}

@@ -1,10 +1,88 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import React from "react";
-import { Button } from "../../components/Button/Button";
-import { Input } from "../../components/Input/Input";
+/* eslint-disable no-unused-vars */
+import { NextPage } from 'next';
+import Head from 'next/head';
+import React from 'react';
+import { Formik, FormikHelpers, FormikProps, FormikErrors } from 'formik';
+import { Button } from '../../src/components/Button/Button';
+import { Input } from '../../src/components/Input/Input';
+import { SelectInput } from '../../src/components/Input/seletct-input';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
+import { $api } from 'src/api';
+import Cookies from 'js-cookie';
+import { HttpError } from 'src/api/repo/http.error';
+import { Util } from 'src/helpers/util';
+import Link from 'next/link';
+import { getCountries } from 'src/redux/slices/countries/countries.slice';
+import { useRouter } from 'next/router';
+import { signupValidationSchema } from 'src/helpers/validation';
+import { toast } from 'react-toastify';
+import { commitUser } from 'src/redux/slices/user/user.slice';
+
+interface ISignUpForm {
+  firstname: string;
+  lastname: string;
+  country: string;
+  email: string;
+  password: string;
+}
 
 const CreateAccount: NextPage = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { user, countries } = useAppSelector((state) => state);
+  const { loading } = useAppSelector((state) => state.createAccount);
+
+  React.useEffect(() => {
+    getCountries(dispatch);
+  }, [dispatch]);
+
+  if (user) {
+    router.replace('/');
+    return null;
+  }
+
+  const validateEmail = Util.debounce(async (
+    email: string,
+    // eslint-disable-next-line no-unused-vars
+    setErrors: (errors: FormikErrors<ISignUpForm>) => void,
+  ) => {
+    try {
+      if (email) {
+        const isTaken = await $api.auth.emailTaken(email);
+        if (isTaken) {
+          setErrors({ email: 'email already taken' });
+        }
+      }
+    } catch (error: any) {
+      // error validating email
+    }
+  }, 500);
+
+  const onSubmit = async (
+    values: ISignUpForm,
+    actions: FormikHelpers<ISignUpForm>,
+  ) => {
+    try {
+      actions.setSubmitting(true);
+      const { user, token } = await $api.auth.signup(values);
+      Cookies.set('auth_token', token);
+      dispatch(commitUser(user));
+    } catch (error) {
+      const err = error as HttpError;
+      if (err.status === 422) {
+        actions.setErrors(err.errors);
+        return;
+      }
+      if (err.status === 409) {
+        actions.setErrors({ email: err.message });
+        return;
+      }
+      toast.error(`${err.message}`);
+    } finally {
+      actions.setSubmitting(false);
+    }
+  };
+
   return (
     <div className="create-account">
       <Head>
@@ -19,64 +97,126 @@ const CreateAccount: NextPage = () => {
           Enter your details to create a free account
         </p>
 
-        <form>
-          <div className="create-account__form-input-area">
-            <div className="create-account__form-grid">
-              <Input
-                type="text"
-                label="First Name"
-                placeholder="First Name"
-                name="firstname"
-              />
+        <Formik
+          initialValues={{
+            firstname: '',
+            lastname: '',
+            country: '',
+            email: '',
+            password: '',
+          }}
+          onSubmit={onSubmit}
+          validationSchema={signupValidationSchema}
+        >
+          {(props: FormikProps<ISignUpForm>) => {
+            const {
+              values,
+              touched,
+              errors,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              isSubmitting,
+              setErrors,
+            } = props;
+            return (
+              <form onSubmit={handleSubmit}>
+                <div className="create-account__form-input-area">
+                  <div className="create-account__form-grid">
+                    <Input
+                      type="text"
+                      label="First Name"
+                      placeholder="First Name"
+                      name="firstname"
+                      value={values.firstname}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      hasError={errors.firstname && touched.firstname}
+                      error={errors.firstname}
+                    />
 
-              <Input
-                type="text"
-                label="Last Name"
-                placeholder="Last Name"
-                name="lastname"
-              />
-            </div>
+                    <Input
+                      type="text"
+                      label="Last Name"
+                      placeholder="Last Name"
+                      name="lastname"
+                      value={values.lastname}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      hasError={errors.lastname && touched.lastname}
+                      error={errors.lastname}
+                    />
+                  </div>
 
-            <Input
-              type="email"
-              label="Email Address"
-              placeholder="Email Address"
-              name="email"
-            />
+                  <Input
+                    type="email"
+                    label="Email Address"
+                    placeholder="Email Address"
+                    name="email"
+                    value={values.email}
+                    onChange={(event: any) => {
+                      validateEmail(event.target.value, setErrors);
+                      handleChange(event);
+                    }}
+                    onBlur={handleBlur}
+                    hasError={errors.email && touched.email}
+                    error={errors.email}
+                  />
 
-            <Input
-              type="email"
-              label="Country"
-              placeholder="Country"
-              name="country"
-            />
+                  <SelectInput
+                    options={countries.map((country) => ({
+                      value: country.id,
+                      text: country.name,
+                      ...country,
+                    }))}
+                    name="country"
+                    value={values.country}
+                    onChange={(event) => handleChange(event)}
+                    onBlur={(event) => handleBlur(event)}
+                    error={errors.country}
+                    hasError={!!errors.country && touched.country}
+                    placeholder="Select Country"
+                  />
 
-            <Input
-              type="password"
-              label="Password"
-              placeholder="password"
-              name="password"
-            />
-          </div>
+                  <Input
+                    type="password"
+                    label="Password"
+                    placeholder="password"
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    hasError={errors.password && touched.password}
+                    error={errors.password}
+                  />
+                </div>
 
-          <Button
-            label="Create Account"
-            onClick={() => {}}
-            className="create-account__submit-btn"
-            primary
-          />
-        </form>
+                <Button
+                  type="submit"
+                  label="Create Account"
+                  className="create-account__submit-btn"
+                  primary
+                  disabled={isSubmitting}
+                  showSpinner={loading}
+                />
+              </form>
+            );
+          }}
+        </Formik>
+
         <div className="create-account__have-an-account-section">
           <p className="create-account__have-an-account-text">
-            Already have an account?
-            <span className="create-account__span-text"> Log In</span>
+            Already have an account?{' '}
+            <Link href="/login">
+              <a className="create-account__span-text"> Log In</a>
+            </Link>
           </p>
           <p className="create-account__terms-and-conditions">
-            By creating an account, you have agreed to our <br />{" "}
+            By creating an account, you have agreed to our <br />{' '}
             <strong className="create-account__span-text underline-text">
               Terms
-            </strong>{" "}
-            and{" "}
+            </strong>{' '}
+            and{' '}
             <strong className="create-account__span-text underline-text ">
               conditions
             </strong>

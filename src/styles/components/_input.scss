@@ -1,0 +1,84 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  grid-row-gap: 8px;
+}
+
+.input-label {
+  font-family: Karla;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.117188px;
+  color: #0b2253;
+}
+
+.input {
+  height: 3.5rem;
+  background: #f7f9fb;
+  border-radius: 4px;
+  box-sizing: border-box;
+  border: none;
+  padding: 0 1rem;
+  font-family: Karla;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0b2253;
+
+  &::placeholder {
+    color: #6d7a98;
+  }
+
+  &:focus {
+    outline: 0;
+    border: 1px solid $primary;
+    border-radius: 4px;
+  }
+
+  &--error {
+    border: 1px solid #ca1b1b;
+  }
+}
+
+.input-password-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.5rem;
+  background: #f7f9fb;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  padding-right: 1rem;
+
+  .input {
+    height: 100%;
+    width: 100%;
+    background: none;
+
+    &:focus {
+      border: none;
+      padding: 0 1rem;
+    }
+  }
+
+  .input--error {
+    border: 1px solid $error;
+  }
+
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+}
+
+.input-error {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.117188px;
+  color: $error;
+}
