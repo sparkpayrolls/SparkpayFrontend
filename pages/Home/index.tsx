@@ -57,8 +57,8 @@ const Home: NextPage = () => {
               Focus on your business while we handle your Payroll.
             </h2>
             <p className="features__subtext">
-              Adipiscing tortor, pellentesque donec deaut accumsan nibh turpis
-              pellentesque donec deaut consectetur.
+              Harmonize and upscale your payroll management system for uptimum
+              performance.
             </p>
 
             <ul className="features__list">
