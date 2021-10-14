@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Inbox from "../../public/employee-inbox.svg";
+import EmployeeInfo from "../../dashboard-assets/employeeIcon.svg"
 
 const employeeTableDetails: NextPage =  () => {
   return (
@@ -33,7 +34,7 @@ const employeeTableDetails: NextPage =  () => {
             <th>Group</th>
             <th>Date Added</th>
           </tr>
-          {/* <tr className="employee-section__employeeData">
+          <tr className="employee-section__employeeData">
             <span>
               <input
               type="checkbox"
@@ -179,12 +180,12 @@ const employeeTableDetails: NextPage =  () => {
             <div className="employee-section__employeeImage ">
             <Image src={EmployeeInfo} alt="employee-image" />
             </div>
-          </tr> */}
+          </tr>
         </table>
-            <div className="employee-section__employee-inbox">
+            {/* <div className="employee-section__employee-inbox">
               <Image src={Inbox} />
               <p>No employee yet</p>
-            </div>
+            </div> */}
         <div className="employee-section__nextPages">
           <p>
             Showing <span className="employee">Page 1 of 10</span>
