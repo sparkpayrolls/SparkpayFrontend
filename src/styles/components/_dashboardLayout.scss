@@ -1,11 +1,16 @@
 .dashboardLayout {
   .dashboard-navigation {
+    display: none;
     position: fixed;
     width: 16rem;
     height: 100vh;
     background: #f8fafc;
     padding: 1.25rem 0 2rem;
     transition: all 500ms;
+
+    @media screen and (min-width: 992px) {
+      display: block;
+    }
 
     &__brand {
       margin: 0 2.25rem 3rem;
@@ -38,7 +43,8 @@
         transition: all 500ms;
       }
 
-      &:hover {
+      &:hover,
+      &.active {
         color: $primary;
         background: #eff6ff;
         border-radius: 0.25rem;

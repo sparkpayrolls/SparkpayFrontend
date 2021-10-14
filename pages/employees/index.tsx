@@ -2,7 +2,8 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Button } from '../../src/components/Button/Button';
-import DashBoardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
+import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
+import withAuth from 'src/helpers/HOC/withAuth';
 import SearchInput from '../../public/svgs/search.svg';
 import Filter from '../../public/svgs/filter.svg';
 import EmployeeInfo from '../../public/svgs/employeeIcon.svg';
@@ -11,7 +12,7 @@ import Plus from '../../public/svgs/add-fill.svg';
 
 const Employee: NextPage = () => {
   return (
-    <DashBoardLayout>
+    <DashboardLayout>
       <div className="employee-section">
         <Head>
           <title>Employee</title>
@@ -121,8 +122,8 @@ const Employee: NextPage = () => {
           </section>
         </div>
       </div>
-    </DashBoardLayout>
+    </DashboardLayout>
   );
 };
 
-export default Employee;
+export default withAuth(Employee);

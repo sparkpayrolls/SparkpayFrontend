@@ -1,4 +1,4 @@
-// import withAuth from 'src/helpers/HOC/withAuth';
+import withAuth from 'src/helpers/HOC/withAuth';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashboardLayout';
@@ -16,5 +16,4 @@ const Dashboard: NextPage = () => {
   );
 };
 
-// export default withAuth(Dashboard);
-export default Dashboard;
+export default withAuth(Dashboard);
