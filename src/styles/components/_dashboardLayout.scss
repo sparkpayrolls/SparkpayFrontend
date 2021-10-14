@@ -53,9 +53,8 @@
     padding: 0 1.25rem;
 
     @media screen and(min-width: 992px) {
+      padding: 0;
       padding-left: 16rem;
-      width: calc(100% - 16rem);
-      margin: 0 auto;
     }
   }
 }
