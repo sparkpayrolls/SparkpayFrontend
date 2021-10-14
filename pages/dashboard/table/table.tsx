@@ -1,10 +1,10 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import ProfileImage from "../../../dashboard-assets/profile.svg";
-import Dropdown from "../../../dashboard-assets/dropdown.svg"; 
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import ProfileImage from '../../../public/svgs/profile.svg';
+import Dropdown from '../../../public/svgs/dropdown.svg';
 
-import { Button } from "../../../components/Button/Button";
+import { Button } from '../../../components/Button/Button';
 
 const Table: NextPage = () => {
   return (
@@ -19,7 +19,7 @@ const Table: NextPage = () => {
           src={ProfileImage}
           className="dashboard-table__dashboardImage ml-5"
         />
-        <Image src={Dropdown}/>
+        <Image src={Dropdown} />
       </div>
       <div className="dashboard-table__head">
         <h1 className="dashboard-table__title">Dashboard</h1>
