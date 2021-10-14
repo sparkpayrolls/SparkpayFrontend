@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '../../../public/svgs/logo.svg';
+import avatar from '../../../public/images/avatar.png';
+import dropdown from '../../../public/svgs/dropdown.svg';
 
 // eslint-disable-next-line no-undef
-const DashBoardLayout: React.FC = ({ children }) => {
+const DashboardLayout: React.FC = ({ children }) => {
   return (
     <div className="dashboardLayout">
       <nav className="dashboard-navigation">
@@ -199,9 +201,19 @@ const DashBoardLayout: React.FC = ({ children }) => {
         </ul>
       </nav>
 
+      <div className="dashboardLayout__top-bar">
+        <span className="dashboardLayout__top-bar--name">Fluid Coins</span>
+        <div className="dashboardLayout__top-bar--avatar">
+          <Image src={avatar} alt=""></Image>
+        </div>
+        <button className="dashboardLayout__top-bar--dropdown">
+          <Image src={dropdown} alt=""></Image>
+        </button>
+      </div>
+
       <main className="dashboardLayout__body">{children}</main>
     </div>
   );
 };
 
-export default DashBoardLayout;
+export default DashboardLayout;
