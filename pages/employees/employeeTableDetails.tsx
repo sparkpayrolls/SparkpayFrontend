@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import EmployeeInfo from "../../dashboard-assets/employeeIcon.svg";
+import Inbox from "../../public/employee-inbox.svg";
 
-const employeeTableDetails = () => {
+const employeeTableDetails: NextPage =  () => {
   return (
     <div>
       <div className="employee-section">
@@ -22,84 +22,87 @@ const employeeTableDetails = () => {
                 className="employee-section__employee_Input"
                 value="checkinputOne"
               />
-              <th>Name</th>
+              <span className="employee-section__employee-name">
+                {' '}
+                <th>Name</th>
+              </span>
             </span>
             <th>Email Address</th>
-            <th>Amount(N)</th>
-            <th>Payment Method</th>
+            <th>Amount (₦) </th>
+            <th>Payout Method</th>
             <th>Group</th>
             <th>Date Added</th>
           </tr>
-          <tr className="employee-section__employeeData">
+          {/* <tr className="employee-section__employeeData">
             <span>
               <input
-                type="checkbox"
-                className="employee-section__employee_Input"
-                value="checkInputTwo"
+              type="checkbox"
+              className="employee-section__employee_Input"
+              value="checkInputTwo"
               />
               <td>Esther Howard</td>
             </span>
             <td>estherhoward@gmail.com</td>
             <td>₦ 120,000</td>
-            <td>First Bank Nig</td>
-            <td>334 7030 200</td>
-            <td>May 27, 2020 | 12:38 PM</td>
+            <td>Bank Account</td>
+            <td>Payroll group 1</td>
+            <td>May 27, 2020 | <span className="employee-section__employee_pay-time">12:38 PM</span> </td>
             <div className="employee-section__employeeImage ">
-              <Image src={EmployeeInfo} />
-            </div>
+              <Image src={EmployeeInfo} alt="employee-image" />
+              </div>
           </tr>
           <tr className="employee-section__employeeData">
             <span>
-              <input
+            <input
                 type="checkbox"
                 className="employee-section__employee_Input"
                 value="checkInputThree"
-              />
+                />
               <td>Esther Howard</td>
             </span>
             <td>estherhoward@gmail.com</td>
             <td>₦ 120,000</td>
-            <td>First Bank Nig</td>
-            <td>334 7030 200</td>
-            <td>May 27, 2020 | 12:38 PM</td>
+            <td>Bank Account</td>
+            <td>Payroll group 1</td>
+            <td>May 27, 2020  <span className="employee-section__employee_pay-time">12:38 PM</span></td>
             <div className="employee-section__employeeImage ">
-              <Image src={EmployeeInfo} />
+            <Image src={EmployeeInfo} alt="employee-image" />
             </div>
-          </tr>
+            </tr>
           <tr className="employee-section__employeeData">
-            <span>
+          <span>
               <input
-                type="checkbox"
+              type="checkbox"
                 className="employee-section__employee_Input"
                 value="checkInputFour"
-              />
+                />
               <td>Esther Howard</td>
-            </span>
+              </span>
             <td>estherhoward@gmail.com</td>
             <td>₦ 120,000</td>
-            <td>First Bank Nig</td>
-            <td>334 7030 200</td>
-            <td>May 27, 2020 | 12:38 PM</td>
+            <td>Bank Account</td>
+            <td>Payroll group 1</td>
+            <td>May 27, 2020 | <span className="employee-section__employee_pay-time">12:38 PM</span></td>
             <div className="employee-section__employeeImage ">
-              <Image src={EmployeeInfo} />
-            </div>
+              <Image src={EmployeeInfo} alt="employee-image" />
+              </div>
           </tr>
           <tr className="employee-section__employeeData">
-            <span>
+          <span>
               <input
-                type="checkbox"
-                className="employee-section__employee_Input"
+              type="checkbox"
+              className="employee-section__employee_Input"
                 value="checkInputFive"
-              />
+                />
               <td>Esther Howard</td>
-            </span>
+              </span>
             <td>estherhoward@gmail.com</td>
             <td>₦ 120,000</td>
-            <td>First Bank Nig</td>
-            <td>334 7030 200</td>
-            <td>May 27, 2020 | 12:38 PM</td>
+            <td>Bank Account</td>
+            <td>Payroll group 1</td>
+            <td>May 27, 2020 |  <span className="employee-section__employee_pay-time">12:38 PM</span></td>
             <div className="employee-section__employeeImage ">
-              <Image src={EmployeeInfo} />
+              <Image src={EmployeeInfo} alt="employee-image" />
             </div>
           </tr>
           <tr className="employee-section__employeeData">
@@ -113,17 +116,36 @@ const employeeTableDetails = () => {
             </span>
             <td>estherhoward@gmail.com</td>
             <td>₦ 120,000</td>
-            <td>First Bank Nig</td>
-            <td>334 7030 200</td>
-            <td>May 27, 2020 | 12:38 PM</td>
+            <td>Bank Account</td>
+            <td>Payroll group 1</td>
+            <td>May 27, 2020 |  <span className="employee-section__employee_pay-time">12:38 PM</span></td>
             <div className="employee-section__employeeImage ">
-              <Image src={EmployeeInfo} />
+              <Image src={EmployeeInfo} alt="employee-image" />
+            </div>
+            </tr>
+
+          <tr className="employee-section__employeeData">
+          <span>
+              <input
+                type="checkbox"
+                className="employee-section__employee_Input"
+                value="checkInputSix"
+              />
+              <td>Esther Howard</td>
+              </span>
+            <td>estherhoward@gmail.com</td>
+            <td>₦ 120,000</td>
+            <td>Bank Account</td>
+            <td>Payroll group 1</td>
+            <td>May 27, 2020 |  <span className="employee-section__employee_pay-time">12:38 PM</span></td>
+            <div className="employee-section__employeeImage ">
+              <Image src={EmployeeInfo} alt="employee-image" />
             </div>
           </tr>
 
           <tr className="employee-section__employeeData">
             <span>
-              <input
+            <input
                 type="checkbox"
                 className="employee-section__employee_Input"
                 value="checkInputSix"
@@ -132,52 +154,37 @@ const employeeTableDetails = () => {
             </span>
             <td>estherhoward@gmail.com</td>
             <td>₦ 120,000</td>
-            <td>First Bank Nig</td>
-            <td>334 7030 200</td>
-            <td>May 27, 2020 | 12:38 PM</td>
+            <td>Bank Account</td>
+            <td>Payroll group 1</td>
+            <td>May 27, 2020 | <span className="employee-section__employee_pay-time">12:38 PM</span> </td>
             <div className="employee-section__employeeImage ">
-              <Image src={EmployeeInfo} />
-            </div>
-          </tr>
+              <Image src={EmployeeInfo} alt="employee-image" />
+              </div>
+              </tr>
 
-          <tr className="employee-section__employeeData">
+              <tr className="employee-section__employeeData">
             <span>
               <input
-                type="checkbox"
+              type="checkbox"
                 className="employee-section__employee_Input"
                 value="checkInputSix"
-              />
+                />
               <td>Esther Howard</td>
-            </span>
+              </span>
             <td>estherhoward@gmail.com</td>
             <td>₦ 120,000</td>
             <td>First Bank Nig</td>
-            <td>334 7030 200</td>
-            <td>May 27, 2020 | 12:38 PM</td>
+            <td>Payroll group 1</td>
+            <td>May 27, 2020 |  <span className="employee-section__employee_pay-time">12:38 PM</span></td>
             <div className="employee-section__employeeImage ">
-              <Image src={EmployeeInfo} />
+            <Image src={EmployeeInfo} alt="employee-image" />
             </div>
-          </tr>
-
-          <tr className="employee-section__employeeData">
-            <span>
-              <input
-                type="checkbox"
-                className="employee-section__employee_Input"
-                value="checkInputSix"
-              />
-              <td>Esther Howard</td>
-            </span>
-            <td>estherhoward@gmail.com</td>
-            <td>₦ 120,000</td>
-            <td>First Bank Nig</td>
-            <td>334 7030 200</td>
-            <td>May 27, 2020 | 12:38 PM</td>
-            <div className="employee-section__employeeImage ">
-              <Image src={EmployeeInfo} />
-            </div>
-          </tr>
+          </tr> */}
         </table>
+            <div className="employee-section__employee-inbox">
+              <Image src={Inbox} />
+              <p>No employee yet</p>
+            </div>
         <div className="employee-section__nextPages">
           <p>
             Showing <span className="employee">Page 1 of 10</span>

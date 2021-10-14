@@ -17,7 +17,8 @@ const SearchEmployee: NextPage = () => {
         <div className="employee-section">
           <div className="employee-section__employeeSearch">
             <div className="employee-section__employeeHeader">
-              <p>30 Employee(s)</p>
+              {/* <p>30 Employee(s)</p> */}
+              <p>0 Employee(s)</p>
             </div>
             <div className="employee-section__searchInput">
               <div className="employee-section__searchIcon">
@@ -29,7 +30,7 @@ const SearchEmployee: NextPage = () => {
                   />
                 </div>
                 <div className="employee-section__searchImage">
-                  <Image src={SearchInput} />
+                  <Image src={SearchInput} alt="search-image" />
                 </div>
                 <div className="employee-section__searchIcon">
                   <div>
@@ -40,10 +41,10 @@ const SearchEmployee: NextPage = () => {
                     />
                   </div>
                   <div className="employee-section__searchImage">
-                    <Image src={Filter} />
+                    <Image src={Filter} alt="filter-image" />
                   </div>
                   <span className="employee-section__employeeInfo">
-                    <Image src={EmployeeInfo} />
+                    <Image src={EmployeeInfo} alt="info-image" />
                   </span>
                 </div>
               </div>
