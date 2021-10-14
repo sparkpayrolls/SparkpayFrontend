@@ -1,8 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import DashBoardLayout from './DashBoardLayout';
+import DashboardLayout from './DashboardLayout';
 
 it('renders correctly', () => {
-  const layout = renderer.create(<DashBoardLayout />).toJSON();
+  const layout = renderer.create(<DashboardLayout />).toJSON();
   expect(layout).toMatchSnapshot();
 });
