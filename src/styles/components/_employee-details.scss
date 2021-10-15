@@ -6,12 +6,12 @@ margin-left: 2rem;
  hr{
     border: 1px solid #F4F5F6;
     width :
-1250px
+1000px
   }
 &__employee-details-settings{
   display: flex;
   justify-content: space-between;
-  padding-top: 2.6rem;
+  // padding-top: 2.6rem;
 }
 &__employee-details-header{
   display: flex;
@@ -45,6 +45,7 @@ background: #FFFFFF;
 box-sizing: border-box;
 border-radius: 8px;
 border: 1px solid #EAEDF4;
+margin-bottom:10.1rem;
 }
 &__employee-settings-flex{
   padding-left:1.5rem;
