@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import Inbox from "../../public/employee-inbox.svg";
+// import Inbox from "../../public/employee-inbox.svg";
 import EmployeeInfo from "../../dashboard-assets/employeeIcon.svg"
 
 const employeeTableDetails: NextPage =  () => {

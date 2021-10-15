@@ -4,7 +4,7 @@ import Image from "next/image";
 import ProfileImage from "../../../dashboard-assets/profile.svg";
 import Dropdown from "../../../dashboard-assets/dropdown.svg"; 
 
-import { Button } from "../../../components/Button/Button";
+import { Button } from "../../../src/components/Button/Button";
 
 const Table: NextPage = () => {
   return (
@@ -30,6 +30,7 @@ const Table: NextPage = () => {
             onClick={() => {}}
             className="dashboard-table__submit-btn"
             primary
+            type="submit"
           />
         </div>
       </div>

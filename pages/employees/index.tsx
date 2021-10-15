@@ -17,7 +17,7 @@ const Employee: NextPage = () => {
           <div className=" employee-section__details">
             <AddEmployee />
             <SearchEmployee />
-            <EmployeeTableDetails/>
+          <EmployeeTableDetails />
           </div>
         </div>
       </div>

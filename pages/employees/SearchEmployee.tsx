@@ -43,9 +43,14 @@ const SearchEmployee: NextPage = () => {
                   <div className="employee-section__searchImage">
                     <Image src={Filter} alt="filter-image" />
                   </div>
-                  <span className="employee-section__employeeInfo">
+                  <button
+                    type="submit"
+                    className="employee-section__employeeInfo">
                     <Image src={EmployeeInfo} alt="info-image" />
-                  </span>
+                  </button>
+                  {/* <button className="employee-section__employeeInfo">
+                    <Image src={EmployeeInfo} alt="info-image" />
+                  </button> */}
                 </div>
               </div>
             </div>
