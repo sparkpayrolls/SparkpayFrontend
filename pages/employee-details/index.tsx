@@ -42,7 +42,7 @@ const EmployeeDetails: NextPage = () => {
               <p>July 20, 2021 </p>
             </div>
           </div>
-          <div className="employee-details__employee-settings-flex1">
+          <div className="employee-details__employee-settings-flex">
             <div>
               <p>Salary Amount</p>
               <p>₦ 210,000</p>
@@ -67,7 +67,7 @@ const EmployeeDetails: NextPage = () => {
             </div>
             <div>
               <p>Country Of Origin</p>
-              <p>Nigeria</p>
+              <p>estherhoward@gmail.com</p>
             </div>
           </div>
         </div>
