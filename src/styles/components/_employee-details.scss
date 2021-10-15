@@ -41,8 +41,9 @@ box-sizing: border-box;
 border-radius: 8px;
 }
 &__employee-settings-flex{
+  margin-left:24px;
   display:flex;
-  // grid-column-gap:12rem;
-  //   border-bottom: 1px solid #f7f9fb;
+  grid-column-gap:12rem;
+    border-bottom: 1px solid #f7f9fb;
 }
 }
