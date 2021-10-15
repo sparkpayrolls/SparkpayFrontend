@@ -26,27 +26,62 @@ const EmployeeDetails: NextPage = () => {
         <div className="employee-details__employee-settings-details">
           <div className="employee-details__employee-settings-flex">
             <div>
-              <p>Name</p>
-              <p>Esther Howard</p>
+              <p className="employee-details__employee-details-text">Name</p>
+              <p className="employee-details__employee-details-text-one">Esther Howard</p>
             </div>
             <div>
-              <p>Email Address</p>
-              <p>estherhoward@gmail.com</p>
+              <p className="employee-details__employee-details-text">Email Address</p>
+              <p className="employee-details__employee-details-text-one">estherhoward@gmail.com</p>
             </div>
             <div>
-              <p>Group</p>
-              <p>Payroll group 1</p>
+              <p className="employee-details__employee-details-text">Group</p>
+              <p className="employee-details__employee-details-text-one">Payroll group 1</p>
             </div>
             <div>
-              <p>Dated Created</p>
-              <p>July 20, 2021 </p>
-            </div>
+              <p className="employee-details__employee-details-text">Dated Created</p>
+              <p className="employee-details__employee-details-text-one">July 20, 2021 </p>
+            </div>   
           </div>
-          <div className="employee-details__employee-settings-flex">
+            <hr/>
+           <div className="employee-details__employee-settings-flex">
+            <div>
+              <p className="employee-details__employee-details-text">Salary Amount</p>
+              <p className="employee-details__employee-details-text-one">₦ 210,000</p>
+            </div>
+            <div >
+              <p className="employee-details__employee-details-text">Payment Method</p>
+              <p className="employee-details__employee-details-text-one">Bank Account</p>
+              <p className="employee-details__employee-details-text-one"></p>
+            </div>
+            <div>
+              <p className="employee-details__employee-details-text">Bank Name</p>
+              <p className="employee-details__employee-details-text-one">First Bank Nigeria</p>
+            </div>
+            <div>
+              <p className="employee-details__employee-details-text">Account Number</p>
+              <p className="employee-details__employee-details-text-one">0033000099</p>
+            </div>  
+          </div>
+            <hr/>
+
+           <div className="employee-details__employee-settings-flex">
+            <div>
+              <p className="employee-details__employee-details-text">Resident Country</p>
+              <p className="employee-details__employee-details-text-one">Nigeria</p>
+            </div>
+            <div>
+              <p className="employee-details__employee-details-text">Country Of Origin</p>
+              <p className="employee-details__employee-details-text-one">Nigeria</p>
+            </div>   
+          </div>
+            <hr/>
+
+          {/* <div className="employee-details__employee-settings-flex">
             <div>
               <p>Salary Amount</p>
               <p>₦ 210,000</p>
             </div>
+            
             <div>
               <p>Payment Method</p>
               <p>Bank Account</p>
@@ -59,8 +94,8 @@ const EmployeeDetails: NextPage = () => {
               <p>Account Number</p>
               <p>0033000099</p>
             </div>
-          </div>
-          <div className="employee-details__employee-settings-flex">
+          </div> */}
+          {/* <div className="employee-details__employee-settings-flex">
             <div>
               <p>Resident Country</p>
               <p>Nigeria</p>
@@ -69,7 +104,7 @@ const EmployeeDetails: NextPage = () => {
               <p>Country Of Origin</p>
               <p>estherhoward@gmail.com</p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
