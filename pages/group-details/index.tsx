@@ -97,7 +97,7 @@ function GroupDetails() {
                   </div>
                 </div>
                 <div className="group-details__user">
-                  <p className="group-details__name">opeyemi</p>
+                  <p className="group-details__name">emmanuel</p>
                   <div className="group-details__image-container">
                     <Image
                       src={removeicon}
