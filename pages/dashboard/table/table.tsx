@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import ProfileImage from '../../../public/svgs/profile.svg';
+// import ProfileImage from '../../../public/svgs/profile.svg';
 import Dropdown from '../../../public/svgs/dropdown.svg';
 
 import { Button } from '../../../src/components/Button/Button';
@@ -16,8 +16,9 @@ const Table: NextPage = () => {
       </Head>
       <div className="dashboard-table__profile">
         <Image
-          src={ProfileImage}
-          className="dashboard-table__dashboardImage ml-5" alt="profileImage"
+          src={/* ProfileImage */ Dropdown}
+          className="dashboard-table__dashboardImage ml-5"
+          alt="profileImage"
         />
         <Image src={Dropdown} alt="dropdown" />
       </div>
