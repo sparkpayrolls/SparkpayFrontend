@@ -54,7 +54,7 @@ const DashboardLayout: React.FC = ({ children }) => {
               <a
                 className={[
                   'dashboard-navigation__link',
-                  router.pathname === '/payroll' ? 'active' : '',
+                  router.pathname.includes('/payroll') ? 'active' : '',
                 ].join(' ')}
               >
                 <PayrollSvg />
@@ -67,7 +67,7 @@ const DashboardLayout: React.FC = ({ children }) => {
               <a
                 className={[
                   'dashboard-navigation__link',
-                  router.pathname === '/wallet-billings' ? 'active' : '',
+                  router.pathname.includes('/wallet-billings') ? 'active' : '',
                 ].join(' ')}
               >
                 <WalletBillingsSvg />
@@ -81,7 +81,7 @@ const DashboardLayout: React.FC = ({ children }) => {
               <a
                 className={[
                   'dashboard-navigation__link',
-                  router.pathname === '/admin-management' ? 'active' : '',
+                  router.pathname.includes('/admin-management') ? 'active' : '',
                 ].join(' ')}
               >
                 <AdminManagementSvg />
@@ -95,7 +95,9 @@ const DashboardLayout: React.FC = ({ children }) => {
               <a
                 className={[
                   'dashboard-navigation__link',
-                  router.pathname === '/organisation-setting' ? 'active' : '',
+                  router.pathname.includes('/organisation-setting')
+                    ? 'active'
+                    : '',
                 ].join(' ')}
               >
                 <OrganizationSettingsSvg />
@@ -109,7 +111,7 @@ const DashboardLayout: React.FC = ({ children }) => {
               <a
                 className={[
                   'dashboard-navigation__link',
-                  router.pathname === '/remittances' ? 'active' : '',
+                  router.pathname.includes('/remittances') ? 'active' : '',
                 ].join(' ')}
               >
                 <RemittancesSvg />
@@ -123,7 +125,7 @@ const DashboardLayout: React.FC = ({ children }) => {
               <a
                 className={[
                   'dashboard-navigation__link',
-                  router.pathname === '/audit-trail' ? 'active' : '',
+                  router.pathname.includes('/audit-trail') ? 'active' : '',
                 ].join(' ')}
               >
                 <AuditTrailSvg />
