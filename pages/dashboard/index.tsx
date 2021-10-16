@@ -1,7 +1,7 @@
 import withAuth from 'src/helpers/HOC/withAuth';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import DashboardLayout from 'src/layouts/dashboard-layout/DashboardLayout';
+import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 // import { toast } from 'react-toastify';
 
 const Dashboard: NextPage = () => {
