@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import ProfileImage from '../../../public/svgs/profile.svg';
+// import ProfileImage from '../../../public/svgs/profile.svg';
 import Dropdown from '../../../public/svgs/dropdown.svg';
 
-import { Button } from '../../../components/Button/Button';
+import { Button } from '../../../src/components/Button/Button';
 
 const Table: NextPage = () => {
   return (
@@ -16,10 +16,11 @@ const Table: NextPage = () => {
       </Head>
       <div className="dashboard-table__profile">
         <Image
-          src={ProfileImage}
+          src={/* ProfileImage */ Dropdown}
           className="dashboard-table__dashboardImage ml-5"
+          alt="profileImage"
         />
-        <Image src={Dropdown} />
+        <Image src={Dropdown} alt="dropdown" />
       </div>
       <div className="dashboard-table__head">
         <h1 className="dashboard-table__title">Dashboard</h1>
@@ -30,6 +31,7 @@ const Table: NextPage = () => {
             onClick={() => {}}
             className="dashboard-table__submit-btn"
             primary
+            type="submit"
           />
         </div>
       </div>

@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Button } from '../../src/components/Button/Button';
-import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
+import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
 import SearchInput from '../../public/svgs/search.svg';
 import Filter from '../../public/svgs/filter.svg';
