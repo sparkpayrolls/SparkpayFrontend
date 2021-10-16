@@ -1,9 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Logo from '../../../public/svgs/logo.svg';
+import avatar from '../../../public/images/avatar.png';
+import dropdown from '../../../public/svgs/dropdown.svg';
 
 // eslint-disable-next-line no-undef
-const DashBoardLayout: React.FC = ({ children }) => {
+const DashboardLayout: React.FC = ({ children }) => {
+  const router = useRouter();
+
+  const dashboardLink = '/dashboard' || '/';
+
   return (
     <div className="dashboardLayout">
       <nav className="dashboard-navigation">
@@ -15,8 +22,13 @@ const DashBoardLayout: React.FC = ({ children }) => {
 
         <ul className="dashboard-navigation__list">
           <li className="dashboard-navigation__list-item">
-            <Link href="#">
-              <a className="dashboard-navigation__link">
+            <Link href="/dashboard">
+              <a
+                className={[
+                  'dashboard-navigation__link',
+                  router.pathname === dashboardLink ? 'active' : '',
+                ].join(' ')}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -46,8 +58,13 @@ const DashBoardLayout: React.FC = ({ children }) => {
             </Link>
           </li>
           <li className="dashboard-navigation__list-item">
-            <Link href="#">
-              <a className="dashboard-navigation__link">
+            <Link href="/employees">
+              <a
+                className={[
+                  'dashboard-navigation__link',
+                  router.pathname === '/employees' ? 'active' : '',
+                ].join(' ')}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -67,8 +84,13 @@ const DashBoardLayout: React.FC = ({ children }) => {
             </Link>
           </li>
           <li className="dashboard-navigation__list-item">
-            <Link href="#">
-              <a className="dashboard-navigation__link">
+            <Link href="/payroll">
+              <a
+                className={[
+                  'dashboard-navigation__link',
+                  router.pathname === '/payroll' ? 'active' : '',
+                ].join(' ')}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -88,8 +110,13 @@ const DashBoardLayout: React.FC = ({ children }) => {
             </Link>
           </li>
           <li className="dashboard-navigation__list-item">
-            <Link href="#">
-              <a className="dashboard-navigation__link">
+            <Link href="/wallet-billings">
+              <a
+                className={[
+                  'dashboard-navigation__link',
+                  router.pathname === '/wallet-billings' ? 'active' : '',
+                ].join(' ')}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -110,8 +137,13 @@ const DashBoardLayout: React.FC = ({ children }) => {
           </li>
 
           <li className="dashboard-navigation__list-item">
-            <Link href="#">
-              <a className="dashboard-navigation__link">
+            <Link href="/admin-management">
+              <a
+                className={[
+                  'dashboard-navigation__link',
+                  router.pathname === '/admin-management' ? 'active' : '',
+                ].join(' ')}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -132,8 +164,13 @@ const DashBoardLayout: React.FC = ({ children }) => {
           </li>
 
           <li className="dashboard-navigation__list-item">
-            <Link href="#">
-              <a className="dashboard-navigation__link">
+            <Link href="/organisation-setting">
+              <a
+                className={[
+                  'dashboard-navigation__link',
+                  router.pathname === '/organisation-setting' ? 'active' : '',
+                ].join(' ')}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -154,8 +191,13 @@ const DashBoardLayout: React.FC = ({ children }) => {
           </li>
 
           <li className="dashboard-navigation__list-item">
-            <Link href="#">
-              <a className="dashboard-navigation__link">
+            <Link href="/remittances">
+              <a
+                className={[
+                  'dashboard-navigation__link',
+                  router.pathname === '/remittances' ? 'active' : '',
+                ].join(' ')}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -176,8 +218,13 @@ const DashBoardLayout: React.FC = ({ children }) => {
           </li>
 
           <li className="dashboard-navigation__list-item">
-            <Link href="#">
-              <a className="dashboard-navigation__link">
+            <Link href="/audit-trail">
+              <a
+                className={[
+                  'dashboard-navigation__link',
+                  router.pathname === '/audit-trail' ? 'active' : '',
+                ].join(' ')}
+              >
                 <svg
                   width="20"
                   height="20"
@@ -199,9 +246,19 @@ const DashBoardLayout: React.FC = ({ children }) => {
         </ul>
       </nav>
 
+      <div className="dashboardLayout__top-bar">
+        <span className="dashboardLayout__top-bar--name">Fluid Coins</span>
+        <div className="dashboardLayout__top-bar--avatar">
+          <Image src={avatar} alt=""></Image>
+        </div>
+        <button className="dashboardLayout__top-bar--dropdown">
+          <Image src={dropdown} alt=""></Image>
+        </button>
+      </div>
+
       <main className="dashboardLayout__body">{children}</main>
     </div>
   );
 };
 
-export default DashBoardLayout;
+export default DashboardLayout;

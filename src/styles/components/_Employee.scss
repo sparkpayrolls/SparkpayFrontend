@@ -1,0 +1,287 @@
+.employee-section {
+  padding-top: 0.25rem;
+
+  &__details {
+    @media screen and (min-width: 992px) {
+      margin-right: 32px;
+      margin-left: 32px;
+    }
+  }
+
+  &__profile {
+    display: flex;
+    justify-content: flex-end;
+    grid-column-gap: 0.5rem;
+    cursor: pointer;
+    margin-top: 22px;
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.25rem;
+  }
+
+  &__title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    color: #0e347e;
+    margin: 0;
+  }
+
+  &__employee-button {
+    grid-column-gap: 1rem;
+    display: flex;
+  }
+
+  &__submit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-gap: 0.5rem;
+    height: 44px;
+    font-size: 1rem;
+    padding: 0 1.25rem;
+  }
+
+  &__employee-inbox {
+    text-align: center;
+    margin-top: 92px;
+    margin-bottom: 200px;
+    p {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      text-align: center;
+      color: #0b2253;
+    }
+  }
+
+  &__dashboardImage {
+    margin-right: 0;
+    margin-left: auto;
+    display: block;
+  }
+  &__cardFlex {
+    display: flex;
+    grid-column-gap: 1.3rem;
+    cursor: pointer;
+    // justify-content: space-evenly;
+    // align-items: center;
+    margin-top: 5px;
+  }
+  &__cardDetails {
+    width: 264px;
+    height: 96px;
+    background: #f7f9fb;
+    border-radius: 12px;
+    padding-left: 15px;
+  }
+
+  &__number {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    color: #0b2253;
+    margin-top: 20px;
+  }
+
+  &__text {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: #6d7a98;
+    margin-top: -6px;
+  } //
+
+  &__employee-button1 {
+    height: 2.75rem;
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: $primary;
+    border: 1px solid $primary;
+    padding: 0 1.5rem;
+  }
+  //
+
+  &__employeeSearch {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+  &__employeeHeader {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0.25px;
+    margin-top: -5px;
+  }
+  &__searchInput {
+    display: flex;
+    // flex-direction: row;
+    grid-column-gap: 1.5rem;
+  }
+
+  &__search {
+    outline: none;
+    background: #ffffff;
+    border: 1px solid #d7dce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 384px;
+    height: 40px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    padding-left: 16px;
+  }
+
+  &__searchImage {
+    position: relative;
+    right: 30px;
+    top: 12px;
+  }
+  &__searchIcon {
+    display: flex;
+  }
+
+  &__filter-image {
+    position: relative;
+    left: -400px;
+  }
+
+  &__filter {
+    font-size: 14px;
+    width: 91px;
+    height: 40px;
+    background: #ffffff;
+    border: 1px solid #d7dce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding-left: 16px;
+  }
+
+  &__employeeInfo {
+    background: #ffffff;
+    border: 1px solid #d7dce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+    padding: 10px 20px 10px 15px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  th {
+    // border: 1px solid #dddddd;
+    text-align: left;
+    padding: 17px;
+    font-weight: 500;
+  }
+
+  td {
+    text-align: left;
+    padding: 17px;
+    border-bottom: 1px solid #f7f9fb;
+    padding-top: 30px;
+  }
+
+  &__employeeTitle {
+    background-color: #f7f9fb;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 16px;
+    color: #6d7a98;
+  }
+
+  &__employeeData {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #0b2253;
+    height: 40px;
+  }
+
+  &__employee_Input {
+    cursor: pointer;
+    margin-left: 16px;
+    outline: none;
+    font-size: 30px;
+    border: 1px solid #ddd;
+  }
+
+  &__employeeImage {
+    position: relative;
+    right: 35px;
+  }
+
+  &__nextPages {
+    display: flex;
+    justify-content: space-between;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    color: #6d7a98;
+    margin-top: 24px;
+    padding-left: 20px;
+  }
+
+  &__prev_next_pages {
+    display: flex;
+    flex-direction: row;
+    grid-column-gap: 0.9rem;
+    text-align: center;
+
+    :hover {
+      width: 21px;
+      height: 24px;
+      background: #edf1fd;
+      border-radius: 2px;
+      color: blue;
+    }
+  }
+
+  &__employee_pay-time {
+    color: #d7dce0;
+  }
+  &__pagination {
+    color: #0d0f11;
+  }
+  //   &__employeeName {
+  //     display: flex;
+  //     grid-column-gap: 0.5rem;
+  //     padding-left:20px;
+
+  //   }
+
+  //   &__employeeList{
+  //      display: flex;
+  //       margin-top: 20px;
+  //     font-style: normal;
+  //     font-size: 14px;
+  //     line-height: 16px;
+  //     color: #6d7a98;
+  //     display:flex;
+  //     justify-content:space-between;
+  //     // grid-column-gap: 3rem;
+  //   }
+  // &__hr{
+  //   border: 1px solid #F7F9FB;
+  // }
+}
