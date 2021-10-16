@@ -4,7 +4,7 @@ import Image from 'next/image';
 import ProfileImage from '../../../public/svgs/profile.svg';
 import Dropdown from '../../../public/svgs/dropdown.svg';
 
-import { Button } from '../../../components/Button/Button';
+import { Button } from '../../../src/components/Button/Button';
 
 const Table: NextPage = () => {
   return (
@@ -17,9 +17,9 @@ const Table: NextPage = () => {
       <div className="dashboard-table__profile">
         <Image
           src={ProfileImage}
-          className="dashboard-table__dashboardImage ml-5"
+          className="dashboard-table__dashboardImage ml-5" alt="profileImage"
         />
-        <Image src={Dropdown} />
+        <Image src={Dropdown} alt="dropdown" />
       </div>
       <div className="dashboard-table__head">
         <h1 className="dashboard-table__title">Dashboard</h1>
@@ -30,6 +30,7 @@ const Table: NextPage = () => {
             onClick={() => {}}
             className="dashboard-table__submit-btn"
             primary
+            type="submit"
           />
         </div>
       </div>
