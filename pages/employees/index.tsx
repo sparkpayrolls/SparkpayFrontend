@@ -1,16 +1,22 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import Image from 'next/image';
+import { useState } from 'react';
+import Head from 'next/head';
 import { Button } from '../../src/components/Button/Button';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
-import SearchInput from '../../public/svgs/search.svg';
-import Filter from '../../public/svgs/filter.svg';
-import EmployeeInfo from '../../public/svgs/employeeIcon.svg';
-import Inbox from '../../public/svgs/employee-inbox.svg';
 import Plus from '../../public/svgs/add-fill.svg';
+import EmployeeTab from './Tab/employee-tab';
+import EmployeeGroup from './Tab/employee-group';
 
 const Employee: NextPage = () => {
+   const [activeTab, setActiveTab] = useState("tab1");
+    const handleTab1 = () => {
+    setActiveTab("tab1");
+  };
+  const handleTab2 = () => {
+    setActiveTab("tab2");
+  };
   return (
     <DashboardLayout>
       <div className="employee-section">
@@ -43,83 +49,19 @@ const Employee: NextPage = () => {
               />
             </div>
           </div>
-
-          <div className="employee-section__employeeSearch">
-            <div className="employee-section__employeeHeader">
-              {/* <p>30 Employee(s)</p> */}
-              <p>0 Employee(s)</p>
+          <div className="employee-section__tabs">
+            {/* Tab nav */}
+            <ul className="employee-section__tab-nav">
+              <li className={activeTab === "tab1" ? "employee-section__active" : ""}
+              onClick={handleTab1}
+              >Employees</li>
+              <li className={activeTab === "tab2" ? "employee-section__active" : ""}
+              onClick={handleTab2}>Group</li>
+            </ul>
+          </div>  
+            <div className="employee-section__tab-content"> 
+           {activeTab === "tab1" ? <EmployeeTab /> : <EmployeeGroup />}
             </div>
-            <div className="employee-section__searchInput">
-              <div className="employee-section__searchIcon">
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Search by name"
-                    className="employee-section__search"
-                  />
-                </div>
-                <div className="employee-section__searchImage">
-                  <Image src={SearchInput} alt="search-image" />
-                </div>
-                <div className="employee-section__searchIcon">
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Filter"
-                      className="employee-section__filter"
-                    />
-                  </div>
-                  <div className="employee-section__searchImage">
-                    <Image src={Filter} alt="filter-image" />
-                  </div>
-                  <span className="employee-section__employeeInfo">
-                    <Image src={EmployeeInfo} alt="info-image" />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <section>
-            <table>
-              <tr className="employee-section__employeeTitle">
-                <span>
-                  <input
-                    type="checkbox"
-                    className="employee-section__employee_Input"
-                    value="checkinputOne"
-                  />
-                  <span className="employee-section__employee-name">
-                    {' '}
-                    <th>Name</th>
-                  </span>
-                </span>
-                <th>Email Address</th>
-                <th>Amount (₦) </th>
-                <th>Payout Method</th>
-                <th>Group</th>
-                <th>Date Added</th>
-              </tr>
-            </table>
-
-            <div className="employee-section__employee-inbox">
-              <Image src={Inbox} alt="inbox icon" />
-              <p>No employee yet</p>
-            </div>
-
-            <div className="employee-section__nextPages">
-              <p>
-                Showing <span className="employee">Page 1 of 10</span>
-              </p>
-
-              <div className="employee-section__prev_next_pages">
-                <p>Prev</p>
-                <p>1</p>
-                <p>2</p>
-                <p>Next</p>
-              </div>
-            </div>
-          </section>
         </div>
       </div>
     </DashboardLayout>
