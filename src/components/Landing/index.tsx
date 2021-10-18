@@ -75,7 +75,7 @@ export const Landing = () => {
               </li>
             </ul>
 
-            <Link href="/create-account">
+            <Link href="#">
               <a className="features__link">Get Started</a>
             </Link>
           </div>

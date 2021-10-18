@@ -31,7 +31,7 @@ const DefaultLayout: React.FC = ({ children }) => {
 
             <div className="navigation__list-section">
               <li className="navigation__list-item">
-                <Link href="/login">
+                <Link href="#">
                   <a className="navigation__link login">Log In</a>
                 </Link>
               </li>
