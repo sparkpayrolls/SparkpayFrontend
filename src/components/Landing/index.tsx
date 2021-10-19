@@ -1,13 +1,12 @@
 import { Button } from '@/components/Button/Button';
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import dashboard_preview from '../../public/svgs/group-33971.svg';
-import dashboard_preview2 from '../../public/svgs/frame-11825.svg';
+import dashboard_preview from '../../../public/svgs/group-33971.svg';
+import dashboard_preview2 from '../../../public/svgs/frame-11825.svg';
 import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
 
-const Home: NextPage = () => {
+export const Landing = () => {
   return (
     <DefaultLayout>
       <Head>
@@ -76,7 +75,7 @@ const Home: NextPage = () => {
               </li>
             </ul>
 
-            <Link href="/create-account">
+            <Link href="#">
               <a className="features__link">Get Started</a>
             </Link>
           </div>
@@ -89,5 +88,3 @@ const Home: NextPage = () => {
     </DefaultLayout>
   );
 };
-
-export default Home;
