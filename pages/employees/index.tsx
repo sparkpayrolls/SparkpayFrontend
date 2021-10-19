@@ -6,8 +6,8 @@ import { Button } from '../../src/components/Button/Button';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
 import Plus from '../../public/svgs/add-fill.svg';
-import EmployeeTab from './Tab/employee-tab';
-import EmployeeGroup from './Tab/employee-group';
+import EmployeeTab from './tab/employee-tab';
+import EmployeeGroup from './tab/employee-group';
 
 const Employee: NextPage = () => {
    const [activeTab, setActiveTab] = useState("tab1");
