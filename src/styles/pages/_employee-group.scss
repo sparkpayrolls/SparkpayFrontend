@@ -49,17 +49,21 @@
     justify-content: space-between;
   }
 
-  
-  &__searchinput-box{
+  &__searchinput-box {
     display: flex;
     justify-content: space-between;
     position: relative;
-    left: .7rem;
+    left: 0.7rem;
   }
 
   &__employee-group-cards {
     display: flex;
     justify-content: space-between;
+
+    @media only screen and (max-width: 768px) {
+      display: block; 
+      // grid-row-gap: 1.5rem;
+    }
   }
 
   &__section {
@@ -69,6 +73,10 @@
     border-radius: 8px;
     width: 360px;
     height: 178px;
+
+    @media only screen and (max-width: 768px) {
+      grid-row-gap: 1.5rem; 
+    }
   }
 
   &__section:hover {

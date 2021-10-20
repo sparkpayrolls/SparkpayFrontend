@@ -1,4 +1,4 @@
-import React from 'react';
+import type { NextPage } from 'next';
 import Image from 'next/image';
 import Head from 'next/head';
 import info_icon from '../../public/svgs/info-icon.svg';
@@ -10,7 +10,7 @@ import { Button } from '../../src/components/Button/Button';
 import SearchInput from '../../public/svgs/search.svg';
 import Plus from '../../public/svgs/add-fill.svg';
 
-function EmployeeGroup() {
+const EmployeeGroup: NextPage = () => {
   return (
     <div className="employee-group">
       <Head>

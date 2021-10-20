@@ -1,11 +1,11 @@
-import React from 'react';
+import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import removeicon from '../../public/svgs/remove-icon.svg';
 import addicon from '../../public/svgs/add-icon.svg';
 import backicon from '../../public/svgs/back-icon.svg';
 
-function GroupDetails() {
+const GroupDetails: NextPage = () =>{
   return (
     <div className="group-details">
       <Head>
