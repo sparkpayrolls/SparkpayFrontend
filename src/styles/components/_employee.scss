@@ -1,5 +1,6 @@
 .employee-section {
-  padding-top: 0.25rem;
+  margin-top:-1rem;
+  // padding-top: 0.25rem;
 
   &__details {
     @media screen and (min-width: 992px) {
@@ -169,10 +170,43 @@
     padding-left: 16px;
   }
 
+
+&__tab-nav {
+  padding: 1rem 1rem 0.7rem 1rem;
+  list-style: none;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.7s;
+  display: flex;
+  grid-column-gap:2rem;
+  margin-left:-12px;
+  margin-top:-20px;
+  border-bottom: 1px solid #DDE5EE;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+  
+  &__tab1{
+    border-bottom:2px solid green;
+  }
+}
+&__tabs{
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #E8F0F2;
+}
+
+&__active {
+  color: #1D4ED8;
+}
+
+&__employee-tab{
+margin-top:30px;
+}
   &__employeeInfo {
     cursor: pointer;
     background: #ffffff;
-    border: 1px solid #d7dce0;
     box-sizing: border-box;
     border-radius: 4px;
     width: 40px;
