@@ -1,6 +1,6 @@
 .employee-group {
   background-color: #fff;
-  margin: 24px 37px;
+  margin: 0px 37px;
 
   &__head {
     display: flex;
@@ -49,12 +49,11 @@
     justify-content: space-between;
   }
 
-  
-  &__searchinput-box{
+  &__searchinput-box {
     display: flex;
     justify-content: space-between;
     position: relative;
-    left: .7rem;
+    left: 0.7rem;
   }
 
   &__employee-group-cards {
@@ -67,7 +66,7 @@
     border: 1px solid #dde5ee;
     box-sizing: border-box;
     border-radius: 8px;
-    width: 360px;
+    width: 332px;
     height: 178px;
   }
 
@@ -134,7 +133,7 @@
   }
 
   &__group-images {
-    margin: -6px 0px 0px 0px;
+    margin: -.3rem 0rem 0rem 0rem;
     padding: 0;
   }
 
