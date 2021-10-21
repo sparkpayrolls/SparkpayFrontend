@@ -1,0 +1,16 @@
+.payroll-summary {
+  margin: 1.5rem 2.3rem;
+
+  &__btn-container {
+      display: flex;
+      justify-content: flex-end;
+  }
+
+  &__submit-btn {
+    grid-column-gap: 0.5rem;
+    height: 44px;
+    font-size: 1rem;
+    padding: 0 1.25rem;
+    width: 140px;
+  }
+}
