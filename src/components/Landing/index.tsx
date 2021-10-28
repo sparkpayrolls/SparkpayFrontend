@@ -1,12 +1,29 @@
 import { Button } from '@/components/Button/Button';
+import { useState, FormEvent } from 'react';
+import { toast } from 'react-toastify';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { $api } from 'src/api';
 import dashboard_preview from '../../../public/svgs/group-33971.svg';
 import dashboard_preview2 from '../../../public/svgs/frame-11825.svg';
 import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
 
 export const Landing = () => {
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await $api.joinWaitList(email);
+      toast.success('Successfully joined the wait list.');
+      setEmail('');
+    } catch (error) {
+      toast.error('Please try that again.');
+    }
+  };
+
   return (
     <DefaultLayout>
       <Head>
@@ -25,21 +42,24 @@ export const Landing = () => {
             and remitting statutory deductions.
           </p>
 
-          <div className="hero-section__join-list">
+          <form className="hero-section__join-list" onSubmit={handleSubmit}>
             <input
               type="email"
               name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
               className="hero-section__join-list--input"
               placeholder="Enter your email address"
             />
 
             <Button
               label="Join Waitlist"
-              type="button"
+              type="submit"
               onClick={() => {}}
               primary={true}
             />
-          </div>
+          </form>
         </section>
 
         <section className="app-preview">
