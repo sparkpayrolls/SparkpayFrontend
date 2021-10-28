@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Head from 'next/head';
 import Inbox from '../../public/svgs/employee-inbox.svg';
 import { Button } from '../../src/components/Button/Button';
-import Plus from '../../public/svgs/add-fill.svg';
 import BackIcon from '../../public/svgs/backicon.svg';
 
 const AddEmployee: NextPage = () => {

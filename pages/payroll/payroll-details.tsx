@@ -1,9 +1,7 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import Head from 'next/head';
-import { Button } from '../../src/components/Button/Button';
 import SuccessfulIcon from '../../public/svgs/successful.svg';
-
 import BackIcon from '../../public/svgs/backicon.svg';
 
 const payDetails: NextPage = () => {
