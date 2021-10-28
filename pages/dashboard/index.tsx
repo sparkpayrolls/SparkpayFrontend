@@ -34,14 +34,9 @@ const lineOptions = {
   scales: {
     y: {
       beginAtZero: true,
-      gridLines: {
-        drawBorder: false,
-      },
     },
   },
-  plugins: {
-    legend: false,
-  },
+  plugins: { legend: { display: false } },
 };
 
 const doughnutData = {
