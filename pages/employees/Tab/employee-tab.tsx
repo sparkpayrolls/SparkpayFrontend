@@ -14,7 +14,7 @@ const EmployeeTab: NextPage = () => {
       <Head>
         <title>Employee Tab</title>
       </Head>
-      <div className="employee-section">
+      <div className="payroll-section">
         <div className="employee-section__employee-tab">
            <div className="employee-section__employeeSearch">
             <div className="employee-section__employeeHeader">
