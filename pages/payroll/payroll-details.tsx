@@ -171,7 +171,7 @@ const payDetails: NextPage = () => {
               <td>₦ 120,000</td>
             </tr>
           <p className="payroll-details-section__payroll-cost-total">
-            Total Payroll Cost:{' '}
+            Total Payroll Cost:
             <span className="payroll-details-section__payroll-cost-amount">
               ₦ 120,000
             </span>
