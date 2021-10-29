@@ -24,9 +24,14 @@ $font-family-Rubik: "Rubik", sans-serif;
     justify-content: center;
     align-items: center;
     font-family: $font-family-Rubik;
-    margin: 34px auto 17px;
+    margin: 77px auto 17px;
     padding: 0 1rem;
     background: url("../../../public/svgs/hero-bg.svg") center no-repeat;
+
+    @media screen and (min-width: 992px) {
+      margin-top: 125px;
+    }
+
     &::after {
       content: url("../../../public/svgs/curly-arrow.svg");
       position: absolute;
@@ -50,27 +55,29 @@ $font-family-Rubik: "Rubik", sans-serif;
       position: relative;
       display: block;
       font-weight: 500;
-      font-size: 72px;
-      line-height: 80px;
+      font-size: 2.125rem;
+      line-height: 2.5rem;
       text-align: center;
       color: $blue-900;
-      margin-bottom: 3.5rem;
+      margin-bottom: 1.875rem;
+
+      @media screen and (min-width: 992px) {
+        font-size: 4.5rem;
+        line-height: 5rem;
+        margin-bottom: 3.5rem;
+      }
 
       &--em {
+        position: relative;
+
         &::after {
-          content: url("../../../public/svgs/vector.svg");
+          content: url("../../../public/svgs/arc-mobile.svg");
           position: absolute;
-          top: 79%;
-          right: 23%;
+          top: 40%;
+          left: 4%;
 
-          @media screen and (min-width: 463px) {
-            top: 69%;
-            right: 32%;
-          }
-
-          @media screen and (min-width: 644px) {
-            top: 39%;
-            right: 0;
+          @media screen and (min-width: 992px) {
+            content: url("../../../public/svgs/vector.svg");
           }
         }
       }
@@ -78,11 +85,17 @@ $font-family-Rubik: "Rubik", sans-serif;
 
     &__subtext {
       font-weight: normal;
-      font-size: 24px;
-      line-height: 34px;
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+
       text-align: center;
       color: #0b2253;
       margin: 0 auto;
+
+      @media screen and (min-width: 992px) {
+        font-size: 1.5rem;
+        line-height: 2.125rem;
+      }
 
       @media screen and (min-width: 1024px) {
         width: 50%;
@@ -99,7 +112,10 @@ $font-family-Rubik: "Rubik", sans-serif;
       padding: 0.375rem;
       width: 537px;
       max-width: 100%;
-      margin-bottom: 150px;
+      margin-bottom: 70px;
+      @media screen and (min-width: 1024px) {
+        margin-bottom: 150px;
+      }
 
       &--input {
         border: none;
@@ -116,6 +132,10 @@ $font-family-Rubik: "Rubik", sans-serif;
           outline: 0;
         }
       }
+
+      &--button {
+        min-width: 141px;
+      }
     }
   }
 
@@ -123,23 +143,28 @@ $font-family-Rubik: "Rubik", sans-serif;
     display: flex;
     justify-content: center;
 
-    margin: 0 1.25rem 139px;
+    margin: 0 1.25rem 70px;
 
-    @media screen and (min-width: 769px) {
-      width: 90%;
-      margin: 0 auto 139px;
+    @media screen and (min-width: 1024px) {
+      margin-bottom: 139px;
+    }
+
+    svg {
+      min-width: 425px;
+      height: auto;
     }
   }
 
   .features {
-    padding: 118px 0 141px 5%;
     background: #011456;
+    padding: 79px 0 96px 1.25rem;
     display: flex;
     flex-direction: column;
     align-items: center;
 
     @media screen and (min-width: 992px) {
       flex-direction: row;
+      padding: 118px 0 141px 5%;
     }
 
     @media screen and (min-width: 1800px) {
@@ -149,17 +174,29 @@ $font-family-Rubik: "Rubik", sans-serif;
     &__title {
       font-family: $font-family-Rubik;
       font-weight: 400;
-      font-size: 2.125rem;
-      line-height: 2.74rem;
+      font-size: 1.75rem;
+      line-height: 2.375rem;
       color: $white;
-      margin: 0 0 1.5rem;
+      margin: 0 0 1.25rem;
+
+      @media screen and (min-width: 992px) {
+        font-size: 2.125rem;
+        line-height: 2.74rem;
+        margin: 0 0 1.5rem;
+      }
     }
 
     &__subtext {
       font-size: 1.125rem;
-      line-height: 1.75rem;
+      line-height: 1.875rem;
       color: $white;
-      margin: 0 0 3.75rem;
+      margin: 0 0 3rem;
+
+      @media screen and (min-width: 992px) {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        margin: 0 0 3.75rem;
+      }
     }
 
     &__list {
@@ -167,18 +204,24 @@ $font-family-Rubik: "Rubik", sans-serif;
       padding: 0;
       display: flex;
       flex-direction: column;
-      grid-row-gap: 1.5rem;
-      margin-bottom: 42px;
+      // grid-row-gap: 1.5rem;
+      margin-bottom: 1rem;
     }
 
     &__list-item {
       display: flex;
       align-items: center;
       grid-column-gap: 0.75rem;
-      font-size: 1.25rem;
+      font-size: 1.125rem;
       line-height: 1.5rem;
       color: $white;
       list-style: none;
+      margin-bottom: 1.5rem;
+
+      @media screen and (min-width: 992px) {
+        font-size: 1.25rem;
+        line-height: 1.5rem;
+      }
 
       &::before {
         content: url("../../../public/svgs/feather_check-circle.svg");
@@ -200,6 +243,11 @@ $font-family-Rubik: "Rubik", sans-serif;
 
     &__image {
       margin-right: -120px;
+      margin-top: 2rem;
+
+      @media screen and (min-width: 992px) {
+        margin-top: unset;
+      }
     }
   }
 }
