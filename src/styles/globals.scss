@@ -13,6 +13,8 @@
 @import "./components/defaultLayout";
 @import "./components/employee-details";
 @import "./components/dashboardLayout";
+@import "./components/payroll-table";
+@import "./components/payroll-details";
 
 // PAGES
 @import "./pages/home";
@@ -21,7 +23,8 @@
 @import "./pages/forgot-password";
 @import "./pages/check-inbox";
 @import "./pages/reset-password";
-@import "./pages/verifyemail";
-@import "./pages/emailtemplate";
+@import "./pages/verify-email";
+@import "./pages/email-template";
 @import "./pages/employee-group";
-@import "./pages/group-details"
+@import "./pages/group-details";
+@import "./pages/dashboard";
