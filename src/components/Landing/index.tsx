@@ -29,7 +29,7 @@ export const Landing = () => {
       <Head>
         <title>SparkPay</title>
         <meta name="description" content="Sparkpay homepage" />
-        <link rel="icon" href="/favicon.ico" />
+        
       </Head>
 
       <main className="home">
