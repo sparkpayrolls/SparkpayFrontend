@@ -1,13 +1,12 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
-import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import SuccessfulIcon from '../../public/svgs/successful.svg';
 import BackIcon from '../../public/svgs/backicon.svg';
 
 // TODO please fix page styling
 const payDetails: NextPage = () => {
   return (
-    <DashboardLayout pageTitle="Payroll-details">
+    <>
       <div className=" payroll-details-section__payroll-details-settings">
         <div className=" payroll-details-section__back-icon">
           <Image src={BackIcon} alt="back-icon" />
@@ -178,7 +177,7 @@ const payDetails: NextPage = () => {
           </table>
         </section>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 
