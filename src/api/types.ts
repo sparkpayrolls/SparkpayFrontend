@@ -1,3 +1,15 @@
+export type PaginationMeta = {
+  total: number;
+  perPage: number;
+  pageCount: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  previousPage: null | number;
+  nextPage: null | number;
+};
+
 export type Response<T> = {
   code?: string;
 
@@ -5,17 +17,7 @@ export type Response<T> = {
 
   data: T;
 
-  meta?: {
-    total: number;
-    perPage: number;
-    pageCount: number;
-    page: number;
-    pagingCounter: number;
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-    previousPage: null | number;
-    nextPage: null | number;
-  };
+  meta?: PaginationMeta;
 };
 
 export type Document = {
