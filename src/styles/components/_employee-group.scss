@@ -1,6 +1,6 @@
 .employee-group {
   background-color: #fff;
-  margin: 0px 37px;
+  margin-top: 0.5rem;
 
   &__head {
     display: flex;
@@ -16,6 +16,13 @@
     line-height: 2rem;
     color: #0e347e;
     margin: 0;
+  }
+
+  &__more-menu {
+    background: unset;
+    border: unset;
+    cursor: pointer;
+    pointer-events: auto;
   }
 
   &__employee-button {
@@ -116,7 +123,8 @@
 
   &__employee-group-cards {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    grid-gap: 1.5rem;
   }
 
   &__section {
@@ -124,20 +132,23 @@
     border: 1px solid #dde5ee;
     box-sizing: border-box;
     border-radius: 8px;
-    width: 332px;
-    height: 178px;
-  }
+    width: 315px;
+    cursor: pointer;
+    padding: 1.125rem;
+    pointer-events: none;
 
-  &__section:hover {
-    background: #f7f9fb;
-    border: 1px solid #1d4ed8;
-    box-sizing: border-box;
-    border-radius: 8px;
+    &:hover {
+      background: #f7f9fb;
+      border: 1px solid #1d4ed8;
+      box-sizing: border-box;
+      border-radius: 8px;
+    }
   }
 
   &__content {
-    width: 90%;
-    margin: 10px auto;
+    // width: 90%;
+    // margin: 10px auto;
+    pointer-events: auto;
   }
 
   &__header-title {
@@ -167,6 +178,7 @@
   &__group-title {
     display: flex;
     justify-content: space-between;
+    pointer-events: none;
   }
   &__salary-title {
     font-size: 10px;
@@ -191,7 +203,7 @@
   }
 
   &__group-images {
-    margin: -.3rem 0rem 0rem 0rem;
+    margin: -0.3rem 0rem 0rem 0rem;
     padding: 0;
   }
 
