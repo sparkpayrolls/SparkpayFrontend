@@ -1,6 +1,6 @@
 // employee styles //
 
-.employee-section {
+.payroll-section {
   margin-top:-1rem;
   // padding-top: 0.25rem;
 
@@ -239,22 +239,37 @@ margin-top:30px;
     border-collapse: collapse;
     width: 100%;
     margin-top: 10px;
+    
   }
-
+  
   th {
+    
     // border: 1px solid #dddddd;
     text-align: left;
     padding: 17px;
     font-weight: 500;
   }
-
+  
   td {
     text-align: left;
-    padding: 20px;
+    padding:17px ;
     border-bottom: 1px solid #f7f9fb;
     padding-top: 30px;
   }
+  &__payroll-success-text{
+    font-family: Karla;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 16px;
+color: #27BE63;
+  }
 
+
+  &__payroll-success-image{
+  position:relative;
+  left:10px;
+  }
   &__employeeTitle {
     background-color: #f7f9fb;
     font-style: normal;
@@ -284,7 +299,7 @@ margin-top:30px;
 
   &__employeeImage {
     position: relative;
-    right: 8px;
+    right: 25px;
   }
 
   &__nextPages {
@@ -305,6 +320,7 @@ margin-top:30px;
     flex-direction: row;
     grid-column-gap: 0.9rem;
     text-align: center;
+    margin-bottom:4rem;
 
     :hover {
       width: 21px;
@@ -313,8 +329,9 @@ margin-top:30px;
       border-radius: 2px;
       color: blue;
     }
-  }
 
+  }
+  
   &__employee_pay-time {
     color: #d7dce0;
   }
@@ -369,6 +386,10 @@ margin-top:30px;
     padding: 0 1.25rem;
     margin-top:30px;
   }
+
+  	table { 
+		display: block; 
+	}
   }
 }
 
