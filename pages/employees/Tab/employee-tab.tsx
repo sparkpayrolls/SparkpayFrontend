@@ -7,7 +7,8 @@ import Head from 'next/head';
 // import Inbox from '../../../public/svgs/employee-inbox.svg';
 import { Table, TR } from './table.component';
 import { useCallback, useState, useEffect } from 'react';
-import { PaginationMeta } from 'src/api/types';
+import { Employee, PaginationMeta } from 'src/api/types';
+import { $api } from 'src/api';
 import { toast } from 'react-toastify';
 // import { toast } from 'react-toastify';
 
@@ -150,7 +151,7 @@ const getEmployees = (page = 1, perPage = 10, search = '') => {
 
 const EmployeeTabMini: NextPage = () => {
   const [selected, setSelected] = useState<string[]>([]);
-  const [employees, setEmployees] = useState<typeof emps>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
     total: 0,
     perPage: 10,
@@ -164,10 +165,14 @@ const EmployeeTabMini: NextPage = () => {
   });
 
   const refreshEmployees = useCallback(
-    (page = 1, perPage = 7, search = '') => {
-      const res = getEmployees(page, perPage, search);
+    // eslint-disable-next-line no-unused-vars
+    async (page = 1, perPage = 3, search = '') => {
+      // const res = getEmployees(page, perPage, search);
+      const res = await $api.employee.getEmployees(page, perPage);
       setEmployees(res.data);
-      setPaginationMeta(res.meta);
+      if (res.meta) {
+        setPaginationMeta(res.meta);
+      }
     },
     [setEmployees],
   );
@@ -206,6 +211,7 @@ const EmployeeTabMini: NextPage = () => {
           refresh={refreshEmployees}
           title={`(${paginationMeta.total}) Kings and Queens`}
           onFilterClick={() => toast.success('closest thing to a filter modal')}
+          isEmpty={!employees.length}
         >
           {() => {
             return (
@@ -226,14 +232,17 @@ const EmployeeTabMini: NextPage = () => {
                         setSelected([...selected, employee.id]);
                       }}
                     >
-                      <td>{employee.name}</td>
-                      <td>{employee.email}</td>
-                      <td>{employee.amount}</td>
-                      <td>{employee.payoutMethod}</td>
                       <td>
-                        {employee.groups.map((group) => group.name).join(', ')}
+                        {employee.firstname} {employee.lastname}
                       </td>
-                      <td>{employee.date}</td>
+                      <td>{employee.email}</td>
+                      <td>{employee.salary}</td>
+                      <td>{employee.payoutMethod?.name}</td>
+                      <td>Group Names</td>
+                      {/* <td>
+                        {employee.groups.map((group) => group.name).join(', ')}
+                      </td> */}
+                      <td>{employee.createdAt}</td>
                     </TR>
                   );
                 })}

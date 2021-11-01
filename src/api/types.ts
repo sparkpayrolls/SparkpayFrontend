@@ -77,3 +77,25 @@ export type PaginateParams = {
 
   all?: boolean;
 };
+
+export enum PayoutMethods {
+  'Bank Transfer' = 'Bank Transfer',
+}
+
+export type PayoutMethod = Document & {
+  name: PayoutMethods | keyof typeof PayoutMethods;
+  country: string;
+};
+
+export type Employee = Document & {
+  company: string;
+  firstname: string;
+  lastname: string;
+  salary: number;
+  email: string;
+  countryOfOrigin: string;
+  countryOfResidence: string;
+  payoutMethod?: PayoutMethod;
+  payoutMethodMeta: unknown;
+  salaryAddOns: unknown[];
+};

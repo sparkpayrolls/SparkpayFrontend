@@ -21,6 +21,7 @@ interface ITable {
   // eslint-disable-next-line no-unused-vars
   onSearch?: (_: string) => void;
   onFilterClick?: MouseEventHandler<HTMLButtonElement>;
+  isEmpty?: boolean;
 }
 
 interface ITR {
@@ -175,8 +176,9 @@ export const Table = (props: ITable) => {
 
         {props.children()}
       </table>
+      {props.isEmpty && <div>Empty state</div>}
 
-      {props.paginationMeta && (
+      {props.paginationMeta && !props.isEmpty && (
         <TablePagination {...props.paginationMeta} refresh={refresh} />
       )}
     </div>
