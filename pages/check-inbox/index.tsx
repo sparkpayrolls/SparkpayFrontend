@@ -94,7 +94,7 @@ const CheckInbox: NextPage = () => {
         <p className="check-inbox__subtext"> {message} </p>
         <Image
           src={inbox}
-          alt="Picture of the author"
+          alt="Picture of the inbox email"
           className="check-inbox__inbox-img"
         />
         <div>
@@ -105,5 +105,4 @@ const CheckInbox: NextPage = () => {
     </div>
   );
 };
-
 export default CheckInbox;
