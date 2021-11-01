@@ -1,6 +1,60 @@
 .employee-group {
   background-color: #fff;
-  margin: 24px 37px;
+  margin: 0px 37px;
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.25rem;
+  }
+
+  &__title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    color: #0e347e;
+    margin: 0;
+  }
+
+  &__employee-button {
+    grid-column-gap: 1rem;
+    display: flex;
+  }
+  &__employee-button1 {
+    background: #ffffff;
+    border: 1px solid #1d4ed8;
+    box-sizing: border-box;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    color: #1d4ed8;
+  }
+
+  &__submit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-gap: 0.5rem;
+    height: 44px;
+    font-size: 1rem;
+    padding: 0 1.25rem;
+  }
+
+  &__searchemployee {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__searchinput-box {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    left: 0.7rem;
+  }
 
   &__details {
     @media screen and (min-width: 992px) {
@@ -70,7 +124,7 @@
     border: 1px solid #dde5ee;
     box-sizing: border-box;
     border-radius: 8px;
-    width: 360px;
+    width: 332px;
     height: 178px;
   }
 
@@ -137,7 +191,7 @@
   }
 
   &__group-images {
-    margin: -6px 0px 0px 0px;
+    margin: -.3rem 0rem 0rem 0rem;
     padding: 0;
   }
 
