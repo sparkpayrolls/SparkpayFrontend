@@ -3,6 +3,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import backicon from '../../public/svgs/backicon.svg';
 import { Button } from '../../src/components/Button/Button';
+import calendar from "../../public/svgs/Calendar.svg"
+
 
 const PayrollSummary: NextPage = () => {
   return (
@@ -24,48 +26,78 @@ const PayrollSummary: NextPage = () => {
           />
         </div>
       </section>
-      <section className="payroll-summary__details">
-        <div className="payroll-summary__payroll-summary">
-          <h5>Summary (wallet balance ₦ 120,000) </h5>
+      <section className="payroll-summary__section">
+        <div className="payroll-summary__details">
+          <div className="payroll-summary__payroll-summary">
+            <h5 className="payroll-summary__summary-header">
+              Summary{' '}
+              <span className="payroll-summary__payroll-span-text">
+                (wallet balance ₦ 120,000)
+              </span>{' '}
+            </h5>
+            <hr />
+            <div className="payroll-summary__summary-options">
+              <p className="payroll-summary__payroll-option">Payroll Size</p>
+              <p className="payroll-summary__payroll-value">20</p>
+            </div>{' '}
+            <hr />
+            <div className="payroll-summary__summary-options">
+              <p className="payroll-summary__payroll-option">Unit Cost</p>
+              <p className="payroll-summary__payroll-value">₦ 50</p>
+            </div>{' '}
+            <hr />
+            <div className="payroll-summary__summary-options">
+              <p className="payroll-summary__payroll-option">Total Bonuses</p>
+              <p className="payroll-summary__payroll-value">₦ 500,000</p>
+            </div>{' '}
+            <hr />
+            <div className="payroll-summary__summary-options">
+              <p className="payroll-summary__payroll-option">Total Salary</p>
+              <p className="payroll-summary__payroll-value">₦ 500,000</p>
+            </div>{' '}
+            <hr />
+            <div className="payroll-summary__summary-options">
+              <p className="payroll-summary__payroll-option">Total Net</p>
+              <p className="payroll-summary__payroll-value">₦ 500,000</p>
+            </div>{' '}
+            <hr />
+            <div className="payroll-summary__summary-options">
+              <p className="payroll-summary__payroll-option">Total Texes</p>
+              <p className="payroll-summary__payroll-value">₦ 500,000</p>
+            </div>{' '}
+            <hr />
+            <div className="payroll-summary__summary-options">
+              <p className="payroll-summary__payroll-option">
+                Other Deductions Total
+              </p>
+              <p className="payroll-summary__payroll-value">₦ 500,000</p>
+            </div>{' '}
+            <hr />
+            <div className="payroll-summary__summary-options">
+              <p className="payroll-summary__payroll-total-cost">
+                Total Payroll Cost
+              </p>
+              <p className="payroll-summary__payroll-total-amount">₦ 500,000</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="payroll-summary__setpaydate">
+          <h5 className="payroll-summary__setpaydate-title">Set Paydate</h5>
+          <p className="payroll-summary__setpaydate-p">
+            Enter date for salary to be disbursed
+          </p>
           <hr />
-          <div>
-            <p>Payroll Size</p>
-            <h5>20</h5>
-          </div>{' '}
-          <hr />
-          <div>
-            <p>Unit Cost</p>
-            <h5>₦ 50</h5>
-          </div>{' '}
-          <hr />
-          <div>
-            <p>Total Bonuses</p>
-            <h5>₦ 500,000</h5>
-          </div>{' '}
-          <hr />
-          <div>
-            <p>Total Salary</p>
-            <h5>₦ 500,000</h5>
-          </div>{' '}
-          <hr />
-          <div>
-            <p>Total Net</p>
-            <h5>₦ 500,000</h5>
-          </div>{' '}
-          <hr />
-          <div>
-            <p>Total Texes</p>
-            <h5>₦ 500,000</h5>
-          </div>{' '}
-          <hr />
-          <div>
-            <p>Other Deductions Total</p>
-            <h5>₦ 500,000</h5>
-          </div>{' '}
-          <hr />
-          <div>
-            <p>Total Payroll Cost</p>
-            <h5>₦ 500,000</h5>
+          <div className="payroll-summary__setpay-calendar">
+            <p className="payroll-summary__paydate">Pay Date</p>
+            <div className="payroll-summary__calendar ">
+              <p className="payroll-summary__date">10/8/2021</p>
+              <Image
+                src={calendar}
+                alt="calendar-icon"
+                className="payroll-summary__calendar"
+              />
+            </div>
           </div>
         </div>
       </section>

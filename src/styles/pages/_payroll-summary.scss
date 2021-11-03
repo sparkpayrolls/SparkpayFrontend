@@ -1,9 +1,9 @@
 .payroll-summary {
-  margin: 1.5rem 2.3rem;
+  margin: 3rem 2.3rem;
 
   &__btn-container {
-      display: flex;
-      justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
   }
 
   &__submit-btn {
@@ -12,5 +12,117 @@
     font-size: 1rem;
     padding: 0 1.25rem;
     width: 140px;
+  }
+  &__details {
+    width: 460px;
+    height: 590.87px;
+    border: 1px solid #eaedf4;
+    box-sizing: border-box;
+    border-radius: 8px;
+    // padding: 2rem;
+  }
+  &__section {
+    display: flex;
+    margin-top: 0.8rem;
+  }
+  &__summary-header {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: #0e347e;
+    margin: 0;
+    padding: 0.9rem 0rem;
+  }
+  &__payroll-summary {
+    width: 92%;
+    margin: auto;
+  }
+  &__payroll-span-text {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 16px;
+    color: #6d7a98;
+  }
+  &__payroll-option {
+    font-size: 14px;
+    line-height: 16px;
+    color: #6d7a98;
+    margin: 0;
+    padding: 0;
+  }
+  &__payroll-total-cost {
+    margin: 0;
+    padding: 0;
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #6d7a98;
+  }
+  &__payroll-value {
+    font-size: 16px;
+    line-height: 16px;
+    color: #0b2253;
+    margin: 0;
+    padding: 0;
+  }
+  &__payroll-total-amount {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #0b2253;
+    margin: 0;
+    padding: 0;
+  }
+  hr {
+    border: 1px solid #eaedf4;
+  }
+  &__summary-options {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0rem;
+  }
+  &__setpaydate {
+    margin-left: 6rem;
+  }
+  &__setpaydate-title {
+    font-size: 18px;
+    line-height: 24px;
+    color: #0e347e;
+    margin: 0;
+    padding: 0;
+  }
+  &__setpaydate-p {
+    font-size: 14px;
+    line-height: 24px;
+    color: #6d7a98;
+    margin: 0.3rem 0 0 0;
+    padding: 0;
+  }
+
+  &__setpay-calendar {
+  }
+  &__calendar {
+    display: flex;
+    justify-content: space-between;
+    width: 420px;
+    height: 56px;
+    background: #f7f9fb;
+    border-radius: 4px;
+    padding: 0 1.2rem;
+    margin: 0.4rem 0 0 0;
+  }
+  &__paydate {
+    font-size: 14px;
+    line-height: 16px;
+    color: #6d7a98;
+    margin: 1.8rem 0 0 0;
+  }
+  &__date {
+    font-size: 16px;
+    line-height: 24px;
+    color: #0b2253;
   }
 }
