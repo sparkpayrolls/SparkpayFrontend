@@ -69,7 +69,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <PersistGate loading={null} persistor={persistor}>
           <Component {...pageProps} />
           <AuthManager />
-          <ToastContainer hideProgressBar={true} />
+          <ToastContainer hideProgressBar={true} autoClose={3000} />
         </PersistGate>
       </Provider>
     </>
