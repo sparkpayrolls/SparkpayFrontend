@@ -1,4 +1,4 @@
-import { Landing } from '@/components/Landing';
+import { Landing } from '@/components/Landing/Landing.component';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';

@@ -4,7 +4,7 @@ import Image from 'next/image';
 // import ProfileImage from '../../../public/svgs/profile.svg';
 import Dropdown from '../../../public/svgs/dropdown.svg';
 
-import { Button } from '../../../src/components/Button/Button';
+import { Button } from '../../../src/components/Button/Button.component';
 
 const Table: NextPage = () => {
   return (

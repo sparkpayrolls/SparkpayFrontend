@@ -1,4 +1,4 @@
-import { Button } from '@/components/Button/Button';
+import { Button } from '@/components/Button/Button.component';
 import { useState, FormEvent } from 'react';
 import { toast } from 'react-toastify';
 import Head from 'next/head';

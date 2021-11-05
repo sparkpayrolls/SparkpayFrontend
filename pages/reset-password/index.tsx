@@ -8,8 +8,8 @@ import { $api } from 'src/api';
 import { Util } from 'src/helpers/util';
 import { resetPasswordValidationSchema } from 'src/helpers/validation';
 import { useAppSelector } from 'src/redux/hooks';
-import { Button } from '../../src/components/Button/Button';
-import { Input } from '../../src/components/Input/Input';
+import { Button } from '../../src/components/Button/Button.component';
+import { Input } from '../../src/components/Input/Input.component';
 
 type IResetPassword = {
   password: string;
