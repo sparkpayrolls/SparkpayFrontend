@@ -1,3 +1,15 @@
+export type PaginationMeta = {
+  total: number;
+  perPage: number;
+  pageCount: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  previousPage: null | number;
+  nextPage: null | number;
+};
+
 export type Response<T> = {
   code?: string;
 
@@ -5,17 +17,7 @@ export type Response<T> = {
 
   data: T;
 
-  meta?: {
-    total: number;
-    perPage: number;
-    pageCount: number;
-    page: number;
-    pagingCounter: number;
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-    previousPage: null | number;
-    nextPage: null | number;
-  };
+  meta?: PaginationMeta;
 };
 
 export type Document = {
@@ -74,4 +76,26 @@ export type PaginateParams = {
   page?: number;
 
   all?: boolean;
+};
+
+export enum PayoutMethods {
+  'Bank Transfer' = 'Bank Transfer',
+}
+
+export type PayoutMethod = Document & {
+  name: PayoutMethods | keyof typeof PayoutMethods;
+  country: string;
+};
+
+export type Employee = Document & {
+  company: string;
+  firstname: string;
+  lastname: string;
+  salary: number;
+  email: string;
+  countryOfOrigin: string;
+  countryOfResidence: string;
+  payoutMethod?: PayoutMethod;
+  payoutMethodMeta: unknown;
+  salaryAddOns: unknown[];
 };

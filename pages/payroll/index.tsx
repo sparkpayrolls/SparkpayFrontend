@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
-import { Button } from '../../src/components/Button/Button';
+import { Button } from '../../src/components/Button/Button.component';
 import Plus from '../../public/svgs/add-fill.svg';
 import SearchInput from '../../public/svgs/search.svg';
 import Filter from '../../public/svgs/filter.svg';
