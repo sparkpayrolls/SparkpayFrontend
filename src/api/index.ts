@@ -19,8 +19,8 @@ export class $api {
 
   static employee = new EmployeeModule($api.$axios);
 
-  static async joinWaitList(email: string) {
-    await $api.$axios.post('/join-wait-list', { email });
+  static async joinWaitList(email: string, name: string) {
+    await $api.$axios.post('/join-wait-list', { email, name });
   }
 }
 

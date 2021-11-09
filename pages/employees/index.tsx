@@ -127,9 +127,10 @@ const EmployeeTab = () => {
           }}
           paginationMeta={paginationMeta}
           refresh={refreshEmployees}
-          title={`(${paginationMeta.total}) Kings and Queens`}
+          title={`${paginationMeta.total} Employee(s)`}
           onFilterClick={() => toast.success('closest thing to a filter modal')}
           isEmpty={!employees.length}
+          emptyStateText="No employee yet"
         >
           {() => {
             return (
@@ -153,7 +154,11 @@ const EmployeeTab = () => {
                       <td>
                         {employee.firstname} {employee.lastname}
                       </td>
-                      <td>{employee.email}</td>
+                      <td>
+                        <span className="email" title={employee.email}>
+                          {employee.email}
+                        </span>
+                      </td>
                       <td>{employee.salary}</td>
                       <td>{employee.payoutMethod?.name}</td>
                       <td>Group Names</td>
@@ -271,7 +276,7 @@ const EmployeePage: NextPage = () => {
               <Button
                 label={
                   <>
-                    <Image src={Plus} alt="plus icon"></Image> {'Add Employee'}
+                    <Image src={Plus} alt="plus icon" /> {'Add Employee'}
                   </>
                 }
                 onClick={() => {}}

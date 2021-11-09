@@ -1,6 +1,7 @@
 import { Button } from '@/components/Button/Button.component';
 import { useState, FormEvent } from 'react';
 import { toast } from 'react-toastify';
+import NiceModal from '@ebay/nice-modal-react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,19 +9,29 @@ import { $api } from 'src/api';
 // import dashboard_preview from '../../../public/svgs/dashboard-preview.svg';
 import dashboard_preview2 from '../../../public/svgs/frame-11825.svg';
 import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
+import { JoinWaitListModal } from '../Modals/JoinWaitListModal.component';
 
 export const Landing = () => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      await $api.joinWaitList(email);
-      toast.success('Successfully joined the wait list.');
+      setShowSpinner(true);
+      await $api.joinWaitList(email, name);
+      // toast.success('Successfully joined the wait list.');
+      NiceModal.show(JoinWaitListModal);
+      setName('');
       setEmail('');
     } catch (error) {
+      console.log(error);
+
       toast.error('Please try that again.');
+    } finally {
+      setShowSpinner(false);
     }
   };
 
@@ -29,14 +40,13 @@ export const Landing = () => {
       <Head>
         <title>SparkPay</title>
         <meta name="description" content="Sparkpay homepage" />
-        
       </Head>
 
       <main className="home">
         <section className="hero-section">
-          <caption className="hero-section__title">
+          <p className="hero-section__title">
             Payroll Made <span className="hero-section__title--em">Easy</span>
-          </caption>
+          </p>
           <p className="hero-section__subtext">
             A borderless management system that brings ease to creating payrolls
             and remitting statutory deductions.
@@ -44,13 +54,22 @@ export const Landing = () => {
 
           <form className="hero-section__join-list" onSubmit={handleSubmit}>
             <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="hero-section__join-list--input"
+              placeholder="Name"
+            />
+            <input
               type="email"
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               className="hero-section__join-list--input"
-              placeholder="Enter your email address"
+              placeholder="Email address"
             />
 
             <Button
@@ -59,6 +78,8 @@ export const Landing = () => {
               onClick={() => {}}
               primary={true}
               className="hero-section__join-list--button"
+              showSpinner={showSpinner}
+              showLabel={!showSpinner}
             />
           </form>
         </section>

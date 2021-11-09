@@ -1,7 +1,7 @@
 import React from 'react';
 import { NextPage } from 'next';
 
-import { Button } from '../../src/components/Button/Button';
+import { Button } from '../../src/components/Button/Button.component';
 
 const EmailTemplate: NextPage = () => {
   return (
