@@ -84,11 +84,10 @@ const EmployeeTab = () => {
   });
 
   const refreshEmployees = useCallback(
-    // eslint-disable-next-line no-unused-vars
     async (page = 1, perPage = 10, search = '') => {
       try {
         setIsLoading(true);
-        const res = await $api.employee.getEmployees(page, perPage);
+        const res = await $api.employee.getEmployees(page, perPage, search);
         setEmployees(res.data);
         if (res.meta) {
           setPaginationMeta(res.meta);
