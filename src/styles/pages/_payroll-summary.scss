@@ -1,6 +1,20 @@
 .payroll-summary {
-  margin: 3rem 2.3rem;
+  display: flex;
 
+  &__payroll-main {
+    width: 100%;
+    // margin-right: 2rem;
+    // margin-left: 2rem;
+  margin: 3.1rem 2rem;
+
+  }
+  &__payroll-sidebar {
+    width: 7rem;
+    height: 140vh;
+    background: #f8fafc;
+    // padding: 1.25rem 0 2rem;
+    // transition: all 500ms;
+  }
   &__btn-container {
     display: flex;
     justify-content: flex-end;

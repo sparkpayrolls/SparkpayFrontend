@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '../../../public/svgs/logo.svg';
-import menu from '../../../public/svgs/menu.svg';
+// import menu from '../../../public/svgs/menu.svg';
 
 // eslint-disable-next-line no-undef
 const DefaultLayout: React.FC = ({ children }) => {
@@ -44,9 +44,10 @@ const DefaultLayout: React.FC = ({ children }) => {
           </ul>
         </nav>
 
-        <button className="default-layout__menu-btn">
+        {/* //TODO Bring this back later  */}
+        {/* <button className="default-layout__menu-btn">
           <Image src={menu} alt="menu icon" />
-        </button>
+        </button> */}
       </header>
       {children}
       <footer className="default-layout__footer">

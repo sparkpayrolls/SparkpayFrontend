@@ -1,8 +1,8 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import React from "react";
-import Image from "next/image";
-import inbox from "../../public/inbox.svg";
+import { NextPage } from 'next';
+import Head from 'next/head';
+import React from 'react';
+import Image from 'next/image';
+import inbox from '../../public/svgs/inbox.svg';
 
 const VerifyEmail: NextPage = () => {
   return (
@@ -15,8 +15,8 @@ const VerifyEmail: NextPage = () => {
       <div className="verify-email__content">
         <h1 className="verify-email__title">Check Your Inbox</h1>
         <p className="verify-email__subtext">
-          {" "}
-          Email verification link has been sent to your inbox{" "}
+          {' '}
+          Email verification link has been sent to your inbox{' '}
         </p>
         <Image
           src={inbox}
