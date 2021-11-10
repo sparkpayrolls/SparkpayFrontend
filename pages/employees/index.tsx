@@ -84,10 +84,15 @@ const EmployeeTab = () => {
   });
 
   const refreshEmployees = useCallback(
-    async (page = 1, perPage = 10, search = '') => {
+    async (page = 1, perPage = 10, search = '', all = false) => {
       try {
         setIsLoading(true);
-        const res = await $api.employee.getEmployees(page, perPage, search);
+        const res = await $api.employee.getEmployees(
+          page,
+          perPage,
+          search,
+          all,
+        );
         setEmployees(res.data);
         if (res.meta) {
           setPaginationMeta(res.meta);

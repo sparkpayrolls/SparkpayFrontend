@@ -64,10 +64,12 @@ const TablePagination = (props: ITablePagination) => {
   const handlePerPageSelect = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     if (value === 'all') {
-      return refresh(props.page, props.perPage, true);
+      return refresh(1, props.perPage, true);
     }
+    const numberOfPages = Math.ceil(props.total / +value);
+    const newPage = props.page > numberOfPages ? numberOfPages : props.page;
 
-    refresh(props.page, +value);
+    refresh(newPage, +value);
   };
 
   return (
@@ -100,13 +102,13 @@ const TablePagination = (props: ITablePagination) => {
         >
           1
         </button>
-        {props.page - 4 > 0 && <button>...</button>}
-        {props.page - 3 > 0 && (
+        {props.page - 3 > 0 && <button>...</button>}
+        {props.page === props.pageCount && props.pageCount > 3 && (
           <button onClick={() => refresh(props.page - 2, props.perPage)}>
             {props.page - 2}
           </button>
         )}
-        {props.page - 2 > 0 && (
+        {props.page - 2 > 0 && props.page !== props.pageCount - 2 && (
           <button onClick={() => refresh(props.page - 1, props.perPage)}>
             {props.page - 1}
           </button>
@@ -114,17 +116,15 @@ const TablePagination = (props: ITablePagination) => {
         {props.page - 1 > 0 && props.page + 1 <= props.pageCount && (
           <button disabled>{props.page}</button>
         )}
-        {props.page + 2 <= props.pageCount && (
+        {props.page + 2 <= props.pageCount && props.page !== 3 && (
           <button onClick={() => refresh(props.page + 1, props.perPage)}>
             {props.page + 1}
           </button>
         )}
-        {props.page + 3 <= props.pageCount && (
-          <button onClick={() => refresh(props.page + 2, props.perPage)}>
-            {props.page + 2}
-          </button>
+        {props.page === 1 && props.pageCount > 3 && (
+          <button onClick={() => refresh(3, props.perPage)}>3</button>
         )}
-        {props.page + 4 <= props.pageCount && <button>...</button>}
+        {props.page + 3 <= props.pageCount && <button>...</button>}
         {props.pageCount !== 1 && (
           <button
             onClick={() => refresh(props.pageCount, props.perPage)}
