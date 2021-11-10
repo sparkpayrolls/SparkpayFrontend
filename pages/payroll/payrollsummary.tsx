@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import backicon from '../../public/svgs/backicon.svg';
-import { Button } from '../../src/components/Button/Button';
+import { Button } from '../../src/components/Button/Button.component';
 import calendar from "../../public/svgs/Calendar.svg";
 
 const PayrollSummary: NextPage = () => {

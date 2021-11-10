@@ -81,16 +81,8 @@
   &__head {
     display: flex;
     justify-content: space-between;
-<<<<<<< HEAD:src/styles/pages/_employee-group.scss
-
-    @media only screen and (max-width: 768px) {
-      display: block; 
-      // grid-row-gap: 1.5rem;
-    }
-=======
     align-items: center;
     margin-bottom: 2.25rem;
->>>>>>> 9ce05a03eeedda27adbd374d85c04739bc4169bf:src/styles/components/_employee-group.scss
   }
 
   &__title {
@@ -117,15 +109,6 @@
     border: 1px solid #1d4ed8;
     box-sizing: border-box;
     border-radius: 8px;
-<<<<<<< HEAD:src/styles/pages/_employee-group.scss
-    width: 360px;
-    height: 178px;
-
-    @media only screen and (max-width: 768px) {
-      grid-row-gap: 1.5rem; 
-    }
-=======
->>>>>>> 9ce05a03eeedda27adbd374d85c04739bc4169bf:src/styles/components/_employee-group.scss
   }
 
   &__submit-btn {
