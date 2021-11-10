@@ -98,4 +98,13 @@ export type Employee = Document & {
   payoutMethod?: PayoutMethod;
   payoutMethodMeta: unknown;
   salaryAddOns: unknown[];
+  groups: EmployeeGroup[];
+};
+
+export type Group = Document & {
+  name: string;
+};
+
+export type EmployeeGroup = Document & {
+  group: Group;
 };

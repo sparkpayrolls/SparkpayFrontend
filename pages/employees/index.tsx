@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import Plus from '../../public/svgs/add-fill.svg';
 import SearchInput from '../../public/svgs/search.svg';
 import avatar from '../../public/images/avatar-img.png';
+import moment from 'moment';
 
 // ! Dummy Data
 // const names = [
@@ -172,11 +173,17 @@ const EmployeeTab = () => {
                       </td>
                       <td>{employee.salary}</td>
                       <td>{employee.payoutMethod?.name}</td>
-                      <td>Group Names</td>
-                      {/* <td>
-                        {employee.groups.map((group) => group.name).join(', ')}
-                      </td> */}
-                      <td>{employee.createdAt}</td>
+                      <td>
+                        {employee.groups
+                          .map((employeeGroup) => employeeGroup.group.name)
+                          .join(', ')}
+                      </td>
+                      <td>
+                        {moment(employee.createdAt).format('MMM DD, YYYY')} |{' '}
+                        <span className="employee-section__employee_pay-time">
+                          {moment(employee.createdAt).format('hh:MM A')}
+                        </span>
+                      </td>
                     </TR>
                   );
                 })}
