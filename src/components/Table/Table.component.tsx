@@ -25,6 +25,7 @@ interface ITable {
   onFilterClick?: MouseEventHandler<HTMLButtonElement>;
   isEmpty?: boolean;
   emptyStateText?: string;
+  isLoading?: boolean;
 }
 
 interface ITR {
@@ -135,7 +136,11 @@ export const Table = (props: ITable) => {
   };
 
   return (
-    <div className="table-component">
+    <div
+      className={`table-component${
+        props.isLoading ? ' table-component--loading' : ''
+      }`}
+    >
       <div
         style={{
           paddingTop: '1rem',

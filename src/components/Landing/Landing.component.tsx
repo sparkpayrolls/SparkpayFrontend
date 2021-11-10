@@ -136,8 +136,8 @@ const DashboardPreviewSVG = () => {
       loader={(props) => `${src}?hehehe=${props.width}`}
       src={src}
       alt="dashboard-preview"
-      width={1000}
-      height={1000}
+      width={1008}
+      height={607}
     />
   );
 };
