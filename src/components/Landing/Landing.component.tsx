@@ -133,7 +133,7 @@ const DashboardPreviewSVG = () => {
 
   return (
     <Image
-      loader={(props) => `${src}?width=${props.width}`}
+      loader={(props) => `${src}?hehehe=${props.width}`}
       src={src}
       alt="dashboard-preview"
       width={1000}
