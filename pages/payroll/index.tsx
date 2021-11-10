@@ -1,0 +1,348 @@
+import type { NextPage } from 'next';
+import Image from 'next/image';
+import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
+import { Button } from '../../src/components/Button/Button.component';
+import Plus from '../../public/svgs/add-fill.svg';
+import SearchInput from '../../public/svgs/search.svg';
+import Filter from '../../public/svgs/filter.svg';
+import EmployeeInfo from '../../public/svgs/employeeIcon.svg';
+import SuccessfulIcon from '../../public/svgs/successful.svg';
+
+const payrollDetails: NextPage = () => {
+  return (
+    <DashboardLayout pageTitle="Payroll">
+      <div className="payroll-section">
+        <div className=" payroll-section__details">
+          <div className="payroll-section__head">
+            <h1 className="payroll-section__title">Payroll</h1>
+            <div className="payroll-section__employee-button">
+              <Button
+                label={
+                  <>
+                    <Image src={Plus} alt="plus icon"></Image>{' '}
+                    {'Create Payroll'}
+                  </>
+                }
+                onClick={() => {}}
+                className="payroll-section__submit-btn"
+                primary
+                type="submit"
+              />
+            </div>
+          </div>
+          <div className="payroll-section__employeeSearch">
+            <div className="payroll-section__employeeHeader">
+              {/* <p>30 Employee(s)</p> */}
+              <p>0 Payroll</p>
+            </div>
+            <div className="payroll-section__searchInput">
+              <div className="payroll-section__searchIcon">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Search by name"
+                    className="payroll-section__search"
+                  />
+                </div>
+                <div className="payroll-section__searchImage">
+                  <Image src={SearchInput} alt="search-image" />
+                </div>
+                <div className="payroll-section__searchIcon">
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Filter"
+                      className="payroll-section__filter"
+                    />
+                  </div>
+                  <div className="payroll-section__searchImage">
+                    <Image src={Filter} alt="filter-image" />
+                  </div>
+                  <span className="payroll-section__employeeInfo">
+                    <Image src={EmployeeInfo} alt="info-image" />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <section>
+            <table>
+              <tr className="payroll-section__employeeTitle">
+                <span>
+                  <input
+                    type="checkbox"
+                    className="payroll-section__employee_Input"
+                    value="checkinputOne"
+                  />
+                  <th>Group Name</th>
+                </span>
+                <th>Month</th>
+                <th>Amount (₦) </th>
+                <th>No. of Staff</th>
+                <th>Status</th>
+                <th>Payout Date</th>
+              </tr>
+              <tr className="payroll-section__employeeData">
+                <span>
+                  <input
+                    type="checkbox"
+                    className="payroll-section__employee_Input"
+                    value="checkInputTwo"
+                  />
+                  <td>Payroll Group Name 1</td>
+                </span>
+                <td>October</td>
+                <td>₦ 120,000</td>
+                <td>10</td>
+                <span>
+                  <span className="payroll-section__payroll-success-image">
+                    <Image src={SuccessfulIcon} alt="successful-icon" />
+                  </span>
+                  <td className="payroll-section__payroll-success-text">
+                    Successful
+                  </td>
+                </span>
+                <td>
+                  May 27, 2020 |{' '}
+                  <span className="payroll-section__employee_pay-time">
+                    12:38 PM
+                  </span>
+                </td>
+                <div className="payroll-section__employeeImage ">
+                  <Image src={EmployeeInfo} alt="employee-icon" />
+                </div>
+              </tr>
+              <tr className="payroll-section__employeeData">
+                <span>
+                  <input
+                    type="checkbox"
+                    className="payroll-section__employee_Input"
+                    value="checkInputThree"
+                  />
+                  <td>Payroll Group Name 1</td>
+                </span>
+                <td>October</td>
+                <td>₦ 120,000</td>
+                <td>4</td>
+                <span>
+                  <span className="payroll-section__payroll-success-image">
+                    <Image src={SuccessfulIcon} alt="successful-icon" />
+                  </span>
+                  <td className="payroll-section__payroll-success-text">
+                    Successful
+                  </td>
+                </span>
+                <td>
+                  May 27, 2020 |{' '}
+                  <span className="payroll-section__employee_pay-time">
+                    12:38 PM
+                  </span>
+                </td>
+                <div className="payroll-section__employeeImage ">
+                  <Image src={EmployeeInfo} alt="successful-icon" />
+                </div>
+              </tr>
+              <tr className="payroll-section__employeeData">
+                <span>
+                  <input
+                    type="checkbox"
+                    className="payroll-section__employee_Input"
+                    value="checkInputFour"
+                  />
+                  <td>Payroll Group Name 1</td>
+                </span>
+                <td>October</td>
+                <td>₦ 120,000</td>
+                <td>4</td>
+                <span>
+                  <span className="payroll-section__payroll-success-image">
+                    <Image src={SuccessfulIcon} alt="successful-icon" />
+                  </span>
+                  <td className="payroll-section__payroll-success-text">
+                    Successful
+                  </td>
+                </span>
+                <td>
+                  May 27, 2020 |{' '}
+                  <span className="payroll-section__employee_pay-time">
+                    12:38 PM
+                  </span>
+                </td>
+                <div className="payroll-section__employeeImage ">
+                  <Image src={EmployeeInfo} alt="employee-icon" />
+                </div>
+              </tr>
+              <tr className="payroll-section__employeeData">
+                <span>
+                  <input
+                    type="checkbox"
+                    className="payroll-section__employee_Input"
+                    value="checkInputFive"
+                  />
+                  <td>Payroll Group Name 1</td>
+                </span>
+                <td>October</td>
+                <td>₦ 120,000</td>
+                <td>10</td>
+                <span>
+                  <span className="payroll-section__payroll-success-image">
+                    <Image src={SuccessfulIcon} alt="successful-icon" />
+                  </span>
+                  <td className="payroll-section__payroll-success-text">
+                    Successful
+                  </td>
+                </span>
+                <td>
+                  May 27, 2020 |
+                  <span className="payroll-section__employee_pay-time">
+                    12:38 PM
+                  </span>
+                </td>
+                <div className="payroll-section__employeeImage ">
+                  <Image src={EmployeeInfo} alt="employee-icon" />
+                </div>
+              </tr>
+              <tr className="payroll-section__employeeData">
+                <span>
+                  <input
+                    type="checkbox"
+                    className="employee-section__employee_Input"
+                    value="checkInputSix"
+                  />
+                  <td>Payroll Group Name 1</td>
+                </span>
+                <td>October</td>
+                <td>₦ 120,000</td>
+                <td>4</td>
+                <span>
+                  <span className="payroll-section__payroll-success-image">
+                    <Image src={SuccessfulIcon} alt="successful-icon" />
+                  </span>
+                  <td className="payroll-section__payroll-success-text">
+                    Successful
+                  </td>
+                </span>
+                <td>
+                  May 27, 2020 |{' '}
+                  <span className="payroll-section__employee_pay-time">
+                    12:38 PM
+                  </span>
+                </td>
+                <div className="payroll-section__employeeImage ">
+                  <Image src={EmployeeInfo} alt="employee-icon" />
+                </div>
+              </tr>
+
+              <tr className="payroll-section__employeeData">
+                <span>
+                  <input
+                    type="checkbox"
+                    className="payroll-section__employee_Input"
+                    value="checkInputSix"
+                  />
+                  <td>Payroll Group Name 1</td>
+                </span>
+                <td>October</td>
+                <td>₦ 120,000</td>
+                <td>4</td>
+                <span>
+                  <span className="payroll-section__payroll-success-image">
+                    <Image src={SuccessfulIcon} alt="successful-icon" />
+                  </span>
+                  <td className="payroll-section__payroll-success-text">
+                    Successful
+                  </td>
+                </span>
+                <td>
+                  May 27, 2020 |
+                  <span className="payroll-section__employee_pay-time">
+                    12:38 PM
+                  </span>
+                </td>
+                <div className="payroll-section__employeeImage ">
+                  <Image src={EmployeeInfo} alt="employee-icon" />
+                </div>
+              </tr>
+
+              <tr className="payroll-section__employeeData">
+                <span>
+                  <input
+                    type="checkbox"
+                    className="payroll-section__employee_Input"
+                    value="checkInputSix"
+                  />
+                  <td>Payroll Group Name 1</td>
+                </span>
+                <td>October</td>
+                <td>₦ 120,000</td>
+                <td>4</td>
+                <span>
+                  <span className="payroll-section__payroll-success-image">
+                    <Image src={SuccessfulIcon} alt="successful-icon" />
+                  </span>
+                  <td className="payroll-section__payroll-success-text">
+                    Successful
+                  </td>
+                </span>
+                <td>
+                  May 27, 2020 |{' '}
+                  <span className="payroll-section__employee_pay-time">
+                    12:38 PM
+                  </span>
+                </td>
+                <div className="payroll-section__employeeImage ">
+                  <Image src={EmployeeInfo} alt="employee-icon" />
+                </div>
+              </tr>
+
+              <tr className="payroll-section__employeeData">
+                <span>
+                  <input
+                    type="checkbox"
+                    className="payroll-section__employee_Input"
+                    value="checkInputSix"
+                  />
+                  <td>Payroll Group Name 1</td>
+                </span>
+                <td>October</td>
+                <td>₦ 120,000</td>
+                <td>4</td>
+                <span>
+                  <span className="payroll-section__payroll-success-image">
+                    <Image src={SuccessfulIcon} alt="successful-icon" />
+                  </span>
+                  <td className="payroll-section__payroll-success-text">
+                    Successful
+                  </td>
+                </span>
+                <td>
+                  May 27, 2020 |{' '}
+                  <span className="payroll-section__employee_pay-time">
+                    12:38 PM
+                  </span>
+                </td>
+                <div className="payroll-section__employeeImage ">
+                  <Image src={EmployeeInfo} alt="employee-icon" />
+                </div>
+              </tr>
+            </table>
+
+            <div className="payroll-section__nextPages">
+              <p>
+                Showing <span className="employee">Page 1 of 10</span>
+              </p>
+              <div className="payroll-section__prev_next_pages">
+                <p>Prev</p>
+                <p>1</p>
+                <p>2</p>
+                <p>Next</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </DashboardLayout>
+  );
+};
+
+export default payrollDetails;

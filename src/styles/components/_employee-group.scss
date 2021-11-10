@@ -1,0 +1,213 @@
+.employee-group {
+  background-color: #fff;
+  margin-top: 0.5rem;
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.25rem;
+  }
+
+  &__title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    color: #0e347e;
+    margin: 0;
+  }
+
+  &__more-menu {
+    background: unset;
+    border: unset;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  &__employee-button {
+    grid-column-gap: 1rem;
+    display: flex;
+  }
+  &__employee-button1 {
+    background: #ffffff;
+    border: 1px solid #1d4ed8;
+    box-sizing: border-box;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    color: #1d4ed8;
+  }
+
+  &__submit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-gap: 0.5rem;
+    height: 44px;
+    font-size: 1rem;
+    padding: 0 1.25rem;
+  }
+
+  &__searchemployee {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__searchinput-box {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    left: 0.7rem;
+  }
+
+  &__details {
+    @media screen and (min-width: 992px) {
+      margin-right: 32px;
+      margin-left: 32px;
+    }
+  }
+
+  &__profile {
+    display: flex;
+    justify-content: flex-end;
+    grid-column-gap: 0.5rem;
+    cursor: pointer;
+    margin-top: 22p;
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.25rem;
+  }
+
+  &__title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    color: #0e347e;
+    margin: 0;
+  }
+
+  &__employee-button {
+    grid-column-gap: 1rem;
+    display: flex;
+  }
+
+  &__employee-button1 {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.01em;
+    color: #1d4ed8;
+    background: #ffffff;
+    border: 1px solid #1d4ed8;
+    box-sizing: border-box;
+    border-radius: 8px;
+  }
+
+  &__submit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-gap: 0.5rem;
+    height: 44px;
+    font-size: 1rem;
+    padding: 0 1.25rem;
+  }
+
+  &__employee-group-cards {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 1.5rem;
+  }
+
+  &__section {
+    background: #ffffff;
+    border: 1px solid #dde5ee;
+    box-sizing: border-box;
+    border-radius: 8px;
+    width: 315px;
+    cursor: pointer;
+    padding: 1.125rem;
+    pointer-events: none;
+
+    &:hover {
+      background: #f7f9fb;
+      border: 1px solid #1d4ed8;
+      box-sizing: border-box;
+      border-radius: 8px;
+    }
+  }
+
+  &__content {
+    // width: 90%;
+    // margin: 10px auto;
+    pointer-events: auto;
+  }
+
+  &__header-title {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 22px;
+    letter-spacing: 0.25px;
+    color: #1f6aec;
+    margin: 0;
+    padding: 0;
+  }
+  &__date-created-name {
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: -0.117188px;
+    color: #9da9b3;
+  }
+  &__date-time-created {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.01em;
+    color: #0b2253;
+    margin: 2px 0px;
+    padding: 0;
+  }
+
+  &__group-title {
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  &__salary-title {
+    font-size: 10px;
+    line-height: 12px;
+    letter-spacing: -0.117188px;
+    color: #6d7a98;
+  }
+
+  &__salary-amount-section {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__salary-amount {
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.25px;
+    color: #0e347e;
+  }
+
+  &__group-images {
+    margin: -0.3rem 0rem 0rem 0rem;
+    padding: 0;
+  }
+
+  hr {
+    border: 1px solid #dde5ee;
+  }
+}
