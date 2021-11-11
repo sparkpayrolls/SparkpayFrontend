@@ -1,4 +1,3 @@
-import type { NextPage } from 'next';
 import Image from 'next/image';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import { Button } from '../../src/components/Button/Button.component';
@@ -8,8 +7,8 @@ import Filter from '../../public/svgs/filter.svg';
 import EmployeeInfo from '../../public/svgs/employeeIcon.svg';
 import SuccessfulIcon from '../../public/svgs/successful.svg';
 
-const payrollDetails: NextPage = () => {
-  return (
+const payrollDetails = () => {
+ return(
     <DashboardLayout pageTitle="Payroll">
       <div className="payroll-section">
         <div className=" payroll-section__details">
@@ -341,8 +340,8 @@ const payrollDetails: NextPage = () => {
           </section>
         </div>
       </div>
-    </DashboardLayout>
+    </DashboardLayout> 
   );
-};
+  };
 
 export default payrollDetails;
