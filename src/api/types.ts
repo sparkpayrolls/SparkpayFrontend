@@ -99,6 +99,7 @@ export type Employee = Document & {
   payoutMethodMeta: unknown;
   salaryAddOns: unknown[];
   groups: EmployeeGroup[];
+  status: string;
 };
 
 export type Group = Document & {

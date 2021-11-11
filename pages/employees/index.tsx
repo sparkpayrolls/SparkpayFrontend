@@ -10,12 +10,12 @@ import withAuth from 'src/helpers/HOC/withAuth';
 import { Table, TR } from '../../src/components/Table/Table.component';
 import { Employee, PaginationMeta } from 'src/api/types';
 import { $api } from 'src/api';
-import { toast } from 'react-toastify';
 
 import Plus from '../../public/svgs/add-fill.svg';
 import SearchInput from '../../public/svgs/search.svg';
 import avatar from '../../public/images/avatar-img.png';
 import moment from 'moment';
+import { KebabMenu } from '@/components/KebabMenu/KebabMenu.component';
 
 // ! Dummy Data
 // const names = [
@@ -121,7 +121,7 @@ const EmployeeTab = () => {
             'Name',
             'Email Address',
             'Amount (₦)',
-            'Payout Method',
+            'Status',
             'Group',
             'Date Added',
           ]}
@@ -139,10 +139,19 @@ const EmployeeTab = () => {
           paginationMeta={paginationMeta}
           refresh={refreshEmployees}
           title={`${paginationMeta.total} Employee(s)`}
-          onFilterClick={() => toast.success('closest thing to a filter modal')}
+          onFilterClick={() => {}}
           isEmpty={!employees.length}
           emptyStateText="No employee yet"
           isLoading={isLoading}
+          kebabMenuItems={
+            selected.length
+              ? [
+                  { action() {}, value: 'Delete' },
+                  { action() {}, value: 'Activate' },
+                  { action() {}, value: 'Deactivate' },
+                ]
+              : []
+          }
         >
           {() => {
             return (
@@ -172,7 +181,7 @@ const EmployeeTab = () => {
                         </span>
                       </td>
                       <td>{employee.salary}</td>
-                      <td>{employee.payoutMethod?.name}</td>
+                      <td>{employee.status}</td>
                       <td>
                         {employee.groups
                           .map((employeeGroup) => employeeGroup.group.name)
@@ -182,7 +191,8 @@ const EmployeeTab = () => {
                         {moment(employee.createdAt).format('MMM DD, YYYY')} |{' '}
                         <span className="employee-section__employee_pay-time">
                           {moment(employee.createdAt).format('hh:MM A')}
-                        </span>
+                        </span>{' '}
+                        <KebabMenu items={[{ action() {}, value: 'Delete' }]} />
                       </td>
                     </TR>
                   );
