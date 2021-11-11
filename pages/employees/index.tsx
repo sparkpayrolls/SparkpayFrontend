@@ -230,7 +230,11 @@ const EmployeeGroup = () => {
                     alt="group-employee-image"
                     className="employee-image"
                   />
-                  <Image src={avatar} alt="" className="employee-image" />
+                  <Image
+                    src={avatar}
+                    className="employee-image"
+                    alt="group-employee-image"
+                  />
                   <Image
                     src={avatar}
                     alt="group-employee-image"
