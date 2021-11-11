@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spinner } from '../Spinner/Spinner';
+import { Spinner } from '../Spinner/Spinner.component';
 
 interface ButtonProps {
   /**
@@ -41,6 +41,11 @@ interface ButtonProps {
    * Should the button indicate loading
    */
   showSpinner?: boolean;
+
+  /**
+   * Should the button show loading
+   */
+  showLabel?: boolean;
 }
 
 /**
@@ -54,6 +59,7 @@ export const Button = ({
   label,
   className,
   showSpinner = false,
+  showLabel = true,
   ...props
 }: ButtonProps) => {
   const mode = primary ? 'button--primary' : 'button--secondary';
@@ -64,7 +70,7 @@ export const Button = ({
       style={{ backgroundColor }}
       {...props}
     >
-      {label}
+      {showLabel && label}
       {showSpinner ? <Spinner /> : null}
     </button>
   );

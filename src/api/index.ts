@@ -3,6 +3,7 @@ import axios from 'axios';
 import { config } from '../helpers/config';
 import { AuthModule } from './modules/auth.module';
 import { CountryModule } from './modules/country.module';
+import { EmployeeModule } from './modules/employee.module';
 import { UserModule } from './modules/user.profile';
 
 export class $api {
@@ -16,8 +17,10 @@ export class $api {
 
   static user = new UserModule($api.$axios);
 
-  static async joinWaitList(email: string) {
-    await $api.$axios.post('/join-wait-list', { email });
+  static employee = new EmployeeModule($api.$axios);
+
+  static async joinWaitList(email: string, name: string) {
+    await $api.$axios.post('/join-wait-list', { email, name });
   }
 }
 

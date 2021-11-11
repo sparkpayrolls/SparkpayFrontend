@@ -1,4 +1,4 @@
-import { Landing } from '@/components/Landing';
+import { Landing } from '@/components/Landing/Landing.component';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -7,7 +7,7 @@ import { $api } from 'src/api';
 // import withAuth from 'src/helpers/HOC/withAuth';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { commitUser } from 'src/redux/slices/user/user.slice';
-// import { Button } from '../src/components/Button/Button';
+// import { Button } from '../src/components/Button/Button.component';
 import Dashboard from './dashboard';
 
 // const Dashboard = withAuth(() => {
