@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import Image from 'next/image';
 import {
+  ChangeEvent,
   ChangeEventHandler,
   MouseEventHandler,
   PropsWithChildren,
@@ -11,20 +13,23 @@ import { Util } from 'src/helpers/util';
 import search_icon from '../../../public/svgs/search-icon.svg';
 
 interface ITable {
-  // eslint-disable-next-line no-unused-vars
   children: () => ReactElement;
   onCheckAllClick?: ChangeEventHandler<HTMLInputElement>;
   headerRow: string[];
   allChecked?: boolean;
   paginationMeta?: PaginationMeta;
-  // eslint-disable-next-line no-unused-vars
-  refresh?: (page?: number, perPage?: number, search?: string) => void;
+  refresh?: (
+    page?: number,
+    perPage?: number,
+    search?: string,
+    all?: boolean,
+  ) => void;
   title?: string;
-  // eslint-disable-next-line no-unused-vars
   onSearch?: (_: string) => void;
   onFilterClick?: MouseEventHandler<HTMLButtonElement>;
   isEmpty?: boolean;
   emptyStateText?: string;
+  isLoading?: boolean;
 }
 
 interface ITR {
@@ -33,8 +38,7 @@ interface ITR {
 }
 
 type ITablePagination = PaginationMeta & {
-  // eslint-disable-next-line no-unused-vars
-  refresh?: (page?: number, perPage?: number) => void;
+  refresh?: (page?: number, perPage?: number, all?: boolean) => void;
 };
 
 export const TR = (props: PropsWithChildren<ITR>) => {
@@ -53,8 +57,19 @@ export const TR = (props: PropsWithChildren<ITR>) => {
 };
 
 const TablePagination = (props: ITablePagination) => {
-  const refresh = (page: number) => {
-    props.refresh && props.refresh(page, props.perPage);
+  const refresh = (page: number, perPage: number, all?: boolean) => {
+    props.refresh && props.refresh(page, perPage, all);
+  };
+
+  const handlePerPageSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    if (value === 'all') {
+      return refresh(1, props.perPage, true);
+    }
+    const numberOfPages = Math.ceil(props.total / +value);
+    const newPage = props.page > numberOfPages ? numberOfPages : props.page;
+
+    refresh(newPage, +value);
   };
 
   return (
@@ -63,45 +78,56 @@ const TablePagination = (props: ITablePagination) => {
         <span>Showing</span> Page {props.page} of {props.pageCount}
       </div>
 
+      <div className="table-component__pagination--per-page">
+        <span>Items per page: </span>
+        <select onChange={handlePerPageSelect} name="per-page" id="per-page">
+          <option value="10">10</option>
+          <option value="100">100</option>
+          <option value="1000">1000</option>
+          <option value="all">All</option>
+        </select>
+      </div>
+
       <div className="table-component__pagination--btns">
         <button
           disabled={!props.hasPrevPage}
-          onClick={() => refresh(props.previousPage || 1)}
+          onClick={() => refresh(props.previousPage || 1, props.perPage)}
           className="prev"
         >
           Prev
         </button>
-        <button onClick={() => refresh(1)} disabled={props.page === 1}>
+        <button
+          onClick={() => refresh(1, props.perPage)}
+          disabled={props.page === 1}
+        >
           1
         </button>
-        {props.page - 4 > 0 && <button>...</button>}
-        {props.page - 3 > 0 && (
-          <button onClick={() => refresh(props.page - 2)}>
+        {props.page - 3 > 0 && <button>...</button>}
+        {props.page === props.pageCount && props.pageCount > 3 && (
+          <button onClick={() => refresh(props.page - 2, props.perPage)}>
             {props.page - 2}
           </button>
         )}
-        {props.page - 2 > 0 && (
-          <button onClick={() => refresh(props.page - 1)}>
+        {props.page - 2 > 0 && props.page !== props.pageCount - 2 && (
+          <button onClick={() => refresh(props.page - 1, props.perPage)}>
             {props.page - 1}
           </button>
         )}
         {props.page - 1 > 0 && props.page + 1 <= props.pageCount && (
           <button disabled>{props.page}</button>
         )}
-        {props.page + 2 <= props.pageCount && (
-          <button onClick={() => refresh(props.page + 1)}>
+        {props.page + 2 <= props.pageCount && props.page !== 3 && (
+          <button onClick={() => refresh(props.page + 1, props.perPage)}>
             {props.page + 1}
           </button>
         )}
-        {props.page + 3 <= props.pageCount && (
-          <button onClick={() => refresh(props.page + 2)}>
-            {props.page + 2}
-          </button>
+        {props.page === 1 && props.pageCount > 3 && (
+          <button onClick={() => refresh(3, props.perPage)}>3</button>
         )}
-        {props.page + 4 <= props.pageCount && <button>...</button>}
+        {props.page + 3 <= props.pageCount && <button>...</button>}
         {props.pageCount !== 1 && (
           <button
-            onClick={() => refresh(props.pageCount)}
+            onClick={() => refresh(props.pageCount, props.perPage)}
             disabled={props.page === props.pageCount}
           >
             {props.pageCount}
@@ -109,7 +135,7 @@ const TablePagination = (props: ITablePagination) => {
         )}
         <button
           className="next"
-          onClick={() => refresh(props.nextPage || 1)}
+          onClick={() => refresh(props.nextPage || 1, props.perPage)}
           disabled={!props.hasNextPage}
         >
           Next
@@ -120,7 +146,6 @@ const TablePagination = (props: ITablePagination) => {
 };
 
 const searchFunc = Util.debounce(
-  // eslint-disable-next-line no-unused-vars
   (func: (_?: number, _1?: number, _2?: string) => void, search: string) => {
     func(undefined, undefined, search);
   },
@@ -130,12 +155,16 @@ const searchFunc = Util.debounce(
 export const Table = (props: ITable) => {
   const [search, setSearch] = useState('');
 
-  const refresh = (page?: number, perPage?: number) => {
-    props.refresh && props.refresh(page, perPage, search);
+  const refresh = (page?: number, perPage?: number, all?: boolean) => {
+    props.refresh && props.refresh(page, perPage, search, all);
   };
 
   return (
-    <div className="table-component">
+    <div
+      className={`table-component${
+        props.isLoading ? ' table-component--loading' : ''
+      }`}
+    >
       <div
         style={{
           paddingTop: '1rem',

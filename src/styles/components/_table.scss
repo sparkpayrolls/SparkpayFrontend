@@ -83,6 +83,24 @@
     }
   }
 
+  &--loading {
+    table {
+      position: relative;
+
+      &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: auto;
+        content: '';
+        height: 3px;
+        background-color: #1d4ed8;
+        width: 100%;
+        animation: slide 3s infinite linear;
+      }
+    }
+  }
+
   table {
     border-collapse: collapse;
     width: 100%;
@@ -168,5 +186,19 @@
         }
       }
     }
+  }
+}
+
+@keyframes slide {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+    left: auto;
+    right: 0;
   }
 }

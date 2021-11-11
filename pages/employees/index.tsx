@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import Plus from '../../public/svgs/add-fill.svg';
 import SearchInput from '../../public/svgs/search.svg';
 import avatar from '../../public/images/avatar-img.png';
+import moment from 'moment';
 
 // ! Dummy Data
 // const names = [
@@ -69,6 +70,7 @@ import avatar from '../../public/images/avatar-img.png';
 
 const EmployeeTab = () => {
   const [selected, setSelected] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
     total: 0,
@@ -83,13 +85,22 @@ const EmployeeTab = () => {
   });
 
   const refreshEmployees = useCallback(
-    // eslint-disable-next-line no-unused-vars
-    async (page = 1, perPage = 3, search = '') => {
-      // const res = getEmployees(page, perPage, search);
-      const res = await $api.employee.getEmployees(page, perPage);
-      setEmployees(res.data);
-      if (res.meta) {
-        setPaginationMeta(res.meta);
+    async (page = 1, perPage = 10, search = '', all = false) => {
+      try {
+        setIsLoading(true);
+        const res = await $api.employee.getEmployees(
+          page,
+          perPage,
+          search,
+          all,
+        );
+        setEmployees(res.data);
+        if (res.meta) {
+          setPaginationMeta(res.meta);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        // error getting employees...
       }
     },
     [setEmployees],
@@ -131,6 +142,7 @@ const EmployeeTab = () => {
           onFilterClick={() => toast.success('closest thing to a filter modal')}
           isEmpty={!employees.length}
           emptyStateText="No employee yet"
+          isLoading={isLoading}
         >
           {() => {
             return (
@@ -161,11 +173,17 @@ const EmployeeTab = () => {
                       </td>
                       <td>{employee.salary}</td>
                       <td>{employee.payoutMethod?.name}</td>
-                      <td>Group Names</td>
-                      {/* <td>
-                        {employee.groups.map((group) => group.name).join(', ')}
-                      </td> */}
-                      <td>{employee.createdAt}</td>
+                      <td>
+                        {employee.groups
+                          .map((employeeGroup) => employeeGroup.group.name)
+                          .join(', ')}
+                      </td>
+                      <td>
+                        {moment(employee.createdAt).format('MMM DD, YYYY')} |{' '}
+                        <span className="employee-section__employee_pay-time">
+                          {moment(employee.createdAt).format('hh:MM A')}
+                        </span>
+                      </td>
                     </TR>
                   );
                 })}
