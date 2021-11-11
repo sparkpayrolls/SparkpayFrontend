@@ -1,5 +1,14 @@
 .payroll-details {
   margin: 3rem 2.3rem;
+  display: flex;
+
+  &__sidebar{
+    width: 7rem;
+    height: 140vh;
+    background: #F8FAFC;
+    // padding: 1.25rem 0 2rem;
+    // transition: all 500ms;
+  }
 
   &__title-container {
     display: flex;

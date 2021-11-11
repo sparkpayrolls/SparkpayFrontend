@@ -6,7 +6,7 @@ import avatar1 from '../../public/svgs/Avatar1.svg';
 import avatar2 from '../../public/svgs/Avatar2.svg';
 import avatar3 from '../../public/svgs/Avatar3.svg';
 import avatar4 from '../../public/svgs/Avatar4.svg';
-import { Button } from '../../src/components/Button/Button';
+import { Button } from '../../src/components/Button/Button.component'
 import SearchInput from '../../public/svgs/search.svg';
 import Plus from '../../public/svgs/add-fill.svg';
 

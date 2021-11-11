@@ -1,9 +1,25 @@
 .payroll-summary {
+  // margin: 3rem 2.3rem;
+
+  &__container {
+    display: flex;
+    margin: 0rem 0rem;
+  }
+  &__sidebar {
+    width: 7rem;
+    height: 140vh;
+    background: #f8fafc;
+    // padding: 1.25rem 0 2rem;
+    // transition: all 500ms;
+  }
+  &__content {
   margin: 3rem 2.3rem;
+
+  }
 
   &__btn-container {
     display: flex;
-    justify-content: flex-end;
+    // justify-content: flex-end;
   }
 
   &__submit-btn {
