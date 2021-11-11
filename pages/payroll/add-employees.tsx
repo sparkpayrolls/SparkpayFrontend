@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import Image from 'next/image';
 import Head from 'next/head';
 import Inbox from '../../public/svgs/employee-inbox.svg';
-import { Button } from '../../src/components/Button/Button';
+import { Button } from '../../src/components/Button/Button.component';
 import BackIcon from '../../public/svgs/backicon.svg';
 
 const AddEmployee: NextPage = () => {
