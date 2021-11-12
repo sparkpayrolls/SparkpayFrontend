@@ -82,3 +82,71 @@
   letter-spacing: -0.117188px;
   color: $error;
 }
+
+.multi-select-input {
+  label {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: -0.117188px;
+    color: #81909d;
+    margin-bottom: 8px;
+  }
+
+  .search-wrapper {
+    padding: 16px;
+    background: #f5f6fa;
+    border: 1px solid #1d4ed8;
+    box-sizing: border-box;
+    border-radius: 4px;
+  }
+
+  .optionListContainer {
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    padding: 4px;
+    margin-top: 4px;
+
+    .optionContainer {
+      background: #ffffff;
+      border: none;
+      .option {
+        background: #1d4fd800;
+        border: none;
+        mix-blend-mode: normal;
+        border-radius: 2px;
+        padding: 12px 8px;
+        font-family: Karla;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: -0.117188px;
+        color: #0b2253;
+
+        &.highlightOption {
+          color: #1d4fd8;
+          background: rgba(29, 79, 216, 0.05);
+        }
+      }
+    }
+  }
+}
+
+.range-input {
+  padding-bottom: 20px;
+
+  label {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: -0.117188px;
+    color: #81909d;
+    display: block;
+    margin-bottom: 24px;
+  }
+}

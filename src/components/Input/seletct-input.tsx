@@ -1,4 +1,6 @@
-import { DetailedHTMLProps, SelectHTMLAttributes } from 'react';
+import { DetailedHTMLProps, SelectHTMLAttributes, useState } from 'react';
+import Multiselect from 'multiselect-react-dropdown';
+import { IMultiSelect, IMultiSelectOptionItem } from '../types';
 
 type SelectOption = {
   value: string;
@@ -35,5 +37,36 @@ export const SelectInput = ({
       </select>
       {hasError && <span>{error}</span>}
     </>
+  );
+};
+
+export const MultiSelectInput = (props: IMultiSelect) => {
+  const [placeholder, setPlaceholder] = useState('Select');
+
+  const getHandlerFor = (toCall: 'onSelect' | 'onRemove') => (
+    selectedItems: IMultiSelectOptionItem[],
+    selectedItem: IMultiSelectOptionItem,
+  ) => {
+    // @ts-ignore
+    props[toCall] && props[toCall](selectedItems, selectedItem);
+    if (selectedItems.length) {
+      setPlaceholder('');
+    } else {
+      setPlaceholder('Select');
+    }
+  };
+
+  return (
+    <div className="multi-select-input">
+      <label>{props.label}</label>
+      <Multiselect
+        options={props.options}
+        onSelect={getHandlerFor('onSelect')}
+        onRemove={getHandlerFor('onRemove')}
+        displayValue={props.displayValue}
+        placeholder={placeholder}
+        selectedValues={props.selectedValues}
+      />
+    </div>
   );
 };

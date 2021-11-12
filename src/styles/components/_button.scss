@@ -7,16 +7,25 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
+  transition: background 0.2s ease-in-out;
 
   &--primary {
     color: #ffffff;
     background: $primary;
+
+    &:hover {
+      background: $primary-hover;
+    }
   }
 
   &--secondary {
     color: #333;
     background-color: transparent;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+
+    &:hover {
+      background: darken($color: #ffffff, $amount: 5);
+    }
   }
 
   &--small {

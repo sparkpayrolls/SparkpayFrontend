@@ -87,6 +87,16 @@ export type PayoutMethod = Document & {
   country: string;
 };
 
+export enum EmployeeStatus {
+  active = 'active',
+  deactivated = 'deactivated',
+}
+
+export const EmployeeStatuses: (
+  | EmployeeStatus
+  | keyof typeof EmployeeStatus
+)[] = Object.values(EmployeeStatus);
+
 export type Employee = Document & {
   company: string;
   firstname: string;
@@ -99,7 +109,7 @@ export type Employee = Document & {
   payoutMethodMeta: unknown;
   salaryAddOns: unknown[];
   groups: EmployeeGroup[];
-  status: string;
+  status: EmployeeStatus | keyof typeof EmployeeStatus;
 };
 
 export type Group = Document & {
