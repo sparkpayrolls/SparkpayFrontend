@@ -68,10 +68,12 @@ export const SelectInput = (props: ISelectInput) => {
     props.selected || {},
   );
   const [hasShownOptions, setHasShownOptions] = useState(false);
-  const [dropTop, setDropTop] = useState(false);
+  const [inputId] = useState(
+    `select-input-${Math.random().toString().substr(2, 5)}`,
+  );
+  const [dropTop, setDropTop] = useState(true);
   const { onBlur, actualValue, onChange } = props;
 
-  let inputId = `select-input-${Math.random().toString().substr(2, 5)}`;
   const className = classNames('select-input', {
     'select-input--open': showOptions,
     'select-input--dirty': !!Object.keys(selected).length,
@@ -147,15 +149,18 @@ export const SelectInput = (props: ISelectInput) => {
 
   useEffect(() => {
     const element = optionsRef.current;
-    if ((showOptions || !showOptions) && element) {
-      const height =
-        (element.parentElement?.offsetTop || 0) +
-        element.offsetTop +
-        element.offsetHeight;
-      if (height >= window.document.body.offsetHeight) {
-        setDropTop(true);
-      } else {
-        setDropTop(false);
+    if (showOptions) {
+      if (element) {
+        const height =
+          (element.parentElement?.offsetTop || 0) +
+          (element.parentElement?.offsetHeight || 0) +
+          element.offsetTop +
+          element.offsetHeight * 2;
+        if (height >= window.document.body.offsetHeight) {
+          setDropTop(true);
+        } else {
+          setDropTop(false);
+        }
       }
     }
   }, [optionsRef, showOptions]);
