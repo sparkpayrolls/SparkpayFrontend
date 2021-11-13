@@ -34,4 +34,8 @@ export class Util {
 
     return [first, ...rest].join('');
   }
+
+  static noop = () => {
+    /** noop */
+  };
 }
