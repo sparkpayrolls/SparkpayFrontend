@@ -52,11 +52,12 @@ export type ISelectOption = {
 export type ISelectInput = {
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
-  label: string;
+  label?: string;
   options: ISelectInputOptionItem[];
   error?: string;
   displayValue: string;
   actualValue: string;
-  name: string;
-  value: string;
+  name?: string;
+  value?: string;
+  selected?: ISelectInputOptionItem;
 };

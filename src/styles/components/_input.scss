@@ -239,7 +239,7 @@
     visibility: hidden;
     width: 100%;
     max-height: 12rem;
-    overflow-y: scroll;
+    overflow-y: auto;
     top: 50%;
     left: 0;
     right: 0;
@@ -311,6 +311,14 @@
   &--has-error {
     .select-input__options {
       margin-top: 16px;
+    }
+  }
+
+  &--drop-top {
+    .select-input__options {
+      top: auto;
+      bottom: 100%;
+      margin-bottom: 22px;
     }
   }
 }

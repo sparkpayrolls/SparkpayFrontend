@@ -62,28 +62,34 @@ const Option = (props: PropsWithChildren<ISelectOption>) => {
 export const SelectInput = (props: ISelectInput) => {
   const selectRef = useRef<HTMLSpanElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const optionsRef = useRef<HTMLSpanElement>(null);
   const [showOptions, setShowOptions] = useState(false);
-  const [selected, setSelected] = useState<ISelectInputOptionItem>({});
+  const [selected, setSelected] = useState<ISelectInputOptionItem>(
+    props.selected || {},
+  );
   const [hasShownOptions, setHasShownOptions] = useState(false);
-  const { onBlur, actualValue } = props;
+  const [dropTop, setDropTop] = useState(false);
+  const { onBlur, actualValue, onChange } = props;
 
   let inputId = `select-input-${Math.random().toString().substr(2, 5)}`;
   const className = classNames('select-input', {
     'select-input--open': showOptions,
     'select-input--dirty': !!Object.keys(selected).length,
     'select-input--has-error': !!props.error,
+    'select-input--drop-top': dropTop,
   });
 
   const handleOptionClick = (option: ISelectInputOptionItem) => {
     setSelected(option);
     setShowOptions(false);
-    triggerChangeEvent();
+    triggerChangeEvent(option);
   };
 
   const triggerInputEvent = useCallback(
-    (eventName: string) => {
+    (eventName: string, selectedI?: ISelectInputOptionItem) => {
+      const sel = selectedI || selected;
       if (inputRef.current) {
-        inputRef.current.value = (selected[actualValue] as string) || '';
+        inputRef.current.value = (sel[actualValue] as string) || '';
         const event = new Event(eventName);
         inputRef.current.dispatchEvent(event);
       }
@@ -91,14 +97,14 @@ export const SelectInput = (props: ISelectInput) => {
     [inputRef, selected, actualValue],
   );
 
-  const triggerChangeEvent = () => {
+  const triggerChangeEvent = (selected: ISelectInputOptionItem) => {
     if (inputRef.current) {
       inputRef.current.addEventListener('change', (event) => {
-        if (props.onChange) {
-          props.onChange(event as any);
+        if (onChange) {
+          onChange(event as any);
         }
       });
-      triggerInputEvent('change');
+      triggerInputEvent('change', selected);
     }
   };
 
@@ -139,9 +145,24 @@ export const SelectInput = (props: ISelectInput) => {
     };
   }, [selectRef]);
 
+  useEffect(() => {
+    const element = optionsRef.current;
+    if ((showOptions || !showOptions) && element) {
+      const height =
+        (element.parentElement?.offsetTop || 0) +
+        element.offsetTop +
+        element.offsetHeight;
+      if (height >= window.document.body.offsetHeight) {
+        setDropTop(true);
+      } else {
+        setDropTop(false);
+      }
+    }
+  }, [optionsRef, showOptions]);
+
   return (
     <span ref={selectRef} className={className} id={inputId}>
-      <label>{props.label}</label>
+      {props.label && <label>{props.label}</label>}
       <span
         className="select-input__selector"
         onClick={() => setShowOptions(!showOptions)}
@@ -180,6 +201,7 @@ export const SelectInput = (props: ISelectInput) => {
         role="listbox"
         id={`${inputId}_list`}
         className="select-input__options"
+        ref={optionsRef}
       >
         {props.options.map((value, index) => {
           return (

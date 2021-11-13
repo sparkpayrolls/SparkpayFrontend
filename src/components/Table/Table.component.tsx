@@ -11,6 +11,7 @@ import {
 import { PaginationMeta } from 'src/api/types';
 import { Util } from 'src/helpers/util';
 import search_icon from '../../../public/svgs/search-icon.svg';
+import { SelectInput } from '../Input/seletct-input';
 import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 
 interface ITable {
@@ -63,7 +64,7 @@ const TablePagination = (props: ITablePagination) => {
     props.refresh && props.refresh(page, perPage, all);
   };
 
-  const handlePerPageSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+  const handlePerPageSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     if (value === 'all') {
       return refresh(1, props.perPage, true);
@@ -80,14 +81,20 @@ const TablePagination = (props: ITablePagination) => {
         <span>Showing</span> Page {props.page} of {props.pageCount}
       </div>
 
-      <div className="table-component__pagination--per-page">
+      <div className="table-component__pagination--per-page d-flex align-items-center">
         <span>Items per page: </span>
-        <select onChange={handlePerPageSelect} name="per-page" id="per-page">
-          <option value="10">10</option>
-          <option value="100">100</option>
-          <option value="1000">1000</option>
-          <option value="all">All</option>
-        </select>
+        <SelectInput
+          options={[
+            { value: '10' },
+            { value: '100' },
+            { value: '1000' },
+            { value: 'all' },
+          ]}
+          displayValue="value"
+          actualValue="value"
+          onChange={handlePerPageSelect}
+          selected={{ value: String(props.perPage) }}
+        />
       </div>
 
       <div className="table-component__pagination--btns">
