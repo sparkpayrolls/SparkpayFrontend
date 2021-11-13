@@ -158,51 +158,6 @@
   }
 }
 
-// color codes
-$white: #ffffff !default;
-
-$maroon: #8e2318;
-$maroon-light: #fcf8f8;
-$gold: #f6c149;
-$gold-light: #fffcf6;
-
-// Border
-$border-radius: 0.25rem !default;
-$border-radius-sm: 0.8rem !default;
-$border-radius-lg: 1.6rem !default;
-$border-radius-pill: 50rem !default;
-$border-color: rgba(22, 22, 22, 0.2);
-
-// spacer variables
-$spacer: 1.6rem !default;
-$spacers: (
-  0: 0,
-  1: $spacer * 0.5,
-  // 8px
-  2: $spacer,
-  // 16px
-  3: $spacer * 1.5,
-  // 24px
-  4: $spacer * 2,
-  // 32px
-  5: $spacer * 2.5,
-  // 40px
-  6: $spacer * 3.5,
-  // 56px
-  7: $spacer * 4.5,
-  // 72px
-  8: $spacer * 5,
-  // 80px
-  9: $spacer * 6,
-  // 96px
-  10: $spacer * 7.5,
-  // 120px
-) !default;
-
-$select-spacer-x: map-get($spacers, 2);
-$select-spacer-y: map-get($spacers, 2) - 0.2rem;
-$select-radius: 8px;
-
 .select-input {
   position: relative;
   display: block;
