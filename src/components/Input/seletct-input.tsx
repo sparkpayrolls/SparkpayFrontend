@@ -1,5 +1,11 @@
 import classNames from 'classnames';
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import Multiselect from 'multiselect-react-dropdown';
 import {
   IMultiSelect,
@@ -59,6 +65,7 @@ export const SelectInput = (props: ISelectInput) => {
   const [showOptions, setShowOptions] = useState(false);
   const [selected, setSelected] = useState<ISelectInputOptionItem>({});
   const [hasShownOptions, setHasShownOptions] = useState(false);
+  const { onBlur, actualValue } = props;
 
   let inputId = `select-input-${Math.random().toString().substr(2, 5)}`;
   const className = classNames('select-input', {
@@ -73,6 +80,17 @@ export const SelectInput = (props: ISelectInput) => {
     triggerChangeEvent();
   };
 
+  const triggerInputEvent = useCallback(
+    (eventName: string) => {
+      if (inputRef.current) {
+        inputRef.current.value = (selected[actualValue] as string) || '';
+        const event = new Event(eventName);
+        inputRef.current.dispatchEvent(event);
+      }
+    },
+    [inputRef, selected, actualValue],
+  );
+
   const triggerChangeEvent = () => {
     if (inputRef.current) {
       inputRef.current.addEventListener('change', (event) => {
@@ -80,22 +98,30 @@ export const SelectInput = (props: ISelectInput) => {
           props.onChange(event as any);
         }
       });
-      inputRef.current.value = selected[props.actualValue] as string;
-      const event = new Event('change');
-      inputRef.current.dispatchEvent(event);
+      triggerInputEvent('change');
     }
   };
 
+  const triggerBlurEvent = useCallback(() => {
+    if (inputRef) {
+      inputRef.current?.addEventListener('blur', (event) => {
+        if (onBlur) {
+          onBlur(event as any);
+        }
+      });
+      triggerInputEvent('blur');
+    }
+  }, [inputRef, triggerInputEvent, onBlur]);
+
   useEffect(() => {
     if (!showOptions && hasShownOptions) {
-      inputRef.current?.focus();
-      inputRef.current?.blur();
+      triggerBlurEvent();
     }
 
     if (!hasShownOptions && showOptions) {
       setHasShownOptions(true);
     }
-  }, [inputRef, showOptions, hasShownOptions]);
+  }, [inputRef, showOptions, hasShownOptions, triggerBlurEvent]);
 
   useEffect(() => {
     const element = selectRef.current;
