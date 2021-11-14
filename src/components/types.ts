@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from 'react';
 import { InputRangeProps } from 'react-input-range';
-import { Employee } from 'src/api/types';
+import { Administrator, Employee } from 'src/api/types';
 
 /** MultiSelect Props */
 export type IMultiSelectOptionItem = Record<string, unknown>;
@@ -73,4 +73,18 @@ export type AddEmployee = {
 
 export type ISingleEmployeeUpload = {
   onDone?: (employee: Employee) => any;
+};
+
+/** Kebab Menus */
+export type IOrganizationMenu = {
+  companies: Administrator[];
+  onSelect: (company: Administrator, closeMenu: () => void) => any;
+};
+
+/** Common */
+export type IImageLoader = {
+  width?: string | number;
+  height?: string | number;
+  src: string;
+  alt?: string;
 };

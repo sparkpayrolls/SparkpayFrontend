@@ -119,3 +119,52 @@ export type Group = Document & {
 export type EmployeeGroup = Document & {
   group: Group;
 };
+
+export type Company = Document & {
+  name: string;
+  email: string;
+  phonenumber: string;
+  country: string | Country;
+  logo?: string;
+};
+
+export enum PermissionGroupEnum {
+  Company = 'Company',
+  Employee = 'Employee',
+  'Wallet & Billing' = 'Wallet & Billing',
+  Payroll = 'Payroll',
+  AuditTrail = 'AuditTrail',
+}
+
+export enum PermissionLevelEnum {
+  read = 'read',
+  write = 'write',
+}
+
+export type PermissionGroup =
+  | PermissionGroupEnum
+  | keyof typeof PermissionGroupEnum;
+export type PermissionLevel =
+  | PermissionLevelEnum
+  | keyof typeof PermissionLevelEnum;
+
+export type Permission = Document & {
+  group: PermissionGroup;
+  level: PermissionLevel;
+  description: string;
+};
+
+export type Role = Document & {
+  name: string;
+  company: string | Company;
+  permissions: string[] | Permission[];
+  description: string;
+};
+
+export type Administrator = Document & {
+  user: string | User;
+  role?: string | Role;
+  isRoot: boolean;
+  selected: boolean;
+  company: string | Company;
+};

@@ -3,9 +3,15 @@ import Link from 'next/link';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Logo from '../../../public/svgs/logo.svg';
-import avatar from '../../../public/images/avatar.png';
-import dropdown from '../../../public/svgs/dropdown.svg';
 import { ReactNode } from 'react';
+import { OrganizationsMenu } from '@/components/KebabMenu/KebabMenu.component';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
+import { IImageLoader } from '@/components/types';
+import { Administrator, Company } from 'src/api/types';
+import { HttpError } from 'src/api/repo/http.error';
+import { toast } from 'react-toastify';
+import { $api } from 'src/api';
+import { commitCompanies } from 'src/redux/slices/companies/companies.slice';
 
 interface Props {
   children?: ReactNode;
@@ -15,6 +21,29 @@ interface Props {
 // eslint-disable-next-line no-undef
 const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
   const router = useRouter();
+  const companies = useAppSelector((state) => state.companies);
+  const dispatch = useAppDispatch();
+
+  const handleSelect = async (
+    administrator: Administrator,
+    close: () => void,
+  ) => {
+    try {
+      const company = administrator.company as Company;
+      await $api.company.selectCompany(company.id);
+      close();
+      dispatch(
+        commitCompanies(
+          companies.map(({ id, ...others }) => {
+            return { id, ...others, selected: id === administrator.id };
+          }),
+        ),
+      );
+    } catch (error) {
+      const err = error as HttpError;
+      toast.error(`error selecting company - ${err.message}`);
+    }
+  };
 
   const dashboardLink = '/dashboard' || '/';
 
@@ -154,13 +183,7 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
         </nav>
 
         <div className="dashboardLayout__top-bar">
-          <span className="dashboardLayout__top-bar--name">Fluid Coins</span>
-          <div className="dashboardLayout__top-bar--avatar">
-            <Image src={avatar} alt=""></Image>
-          </div>
-          <button className="dashboardLayout__top-bar--dropdown">
-            <Image src={dropdown} alt=""></Image>
-          </button>
+          <OrganizationsMenu companies={companies} onSelect={handleSelect} />
         </div>
 
         <main className="dashboardLayout__body">{children}</main>
@@ -170,6 +193,18 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
 };
 
 export default DashboardLayout;
+
+export const ImageLoader = (props: IImageLoader) => {
+  return (
+    <Image
+      loader={(props) => `${props.src}?width=${props.width}`}
+      src={props.src}
+      alt={props.alt}
+      width={props.width}
+      height={props.height}
+    />
+  );
+};
 
 const DashboardSvg = () => (
   <svg
