@@ -19,6 +19,9 @@ import moment from 'moment';
 import { KebabMenu } from '@/components/KebabMenu/KebabMenu.component';
 import { EmployeeFilterModal } from '@/components/Modals/EmployeeFilterModal.component';
 import { IEmployeeFilter } from '@/components/types';
+import { AddEmployeeModal } from '@/components/Modals/AddEmployeeModal.component';
+import { HttpError } from 'src/api/repo/http.error';
+import { toast } from 'react-toastify';
 
 const EmployeeTab = () => {
   const [selected, setSelected] = useState<string[]>([]);
@@ -60,6 +63,46 @@ const EmployeeTab = () => {
     },
     [setEmployees, filter],
   );
+
+  const kebabHandler = (action: 'Delete' | 'Activate' | 'Deactivate') => {
+    switch (action) {
+      case 'Activate':
+      case 'Deactivate': {
+        return async (id: string | string[]) => {
+          try {
+            const ids = Array.isArray(id) ? id : [id];
+            setIsLoading(true);
+            await $api.employee.updateMultipleEmployeeStatuses(
+              ids,
+              action === 'Activate' ? 'active' : 'deactivated',
+            );
+            toast.success(`employee(s) ${action}d successfully`.toLowerCase());
+            refreshEmployees();
+          } catch (error) {
+            const err = error as HttpError;
+            toast.error(err.message);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+      }
+      default:
+        return async (id: string | string[]) => {
+          try {
+            const ids = Array.isArray(id) ? id : [id];
+            setIsLoading(true);
+            await $api.employee.removeMultipleEmployees(ids);
+            toast.success(`employee(s) deleted successfully`);
+            refreshEmployees();
+          } catch (error) {
+            const err = error as HttpError;
+            toast.error(err.message);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+    }
+  };
 
   useEffect(() => {
     refreshEmployees();
@@ -103,15 +146,17 @@ const EmployeeTab = () => {
           isEmpty={!employees.length}
           emptyStateText="No employee yet"
           isLoading={isLoading}
-          kebabMenuItems={
-            selected.length
-              ? [
-                  { action() {}, value: 'Delete' },
-                  { action() {}, value: 'Activate' },
-                  { action() {}, value: 'Deactivate' },
-                ]
-              : []
-          }
+          kebabMenuItems={[
+            { action: () => kebabHandler('Delete')(selected), value: 'Delete' },
+            {
+              action: () => kebabHandler('Activate')(selected),
+              value: 'Activate',
+            },
+            {
+              action: () => kebabHandler('Deactivate')(selected),
+              value: 'Deactivate',
+            },
+          ]}
         >
           {() => {
             return (
@@ -150,14 +195,34 @@ const EmployeeTab = () => {
                       <td>
                         <div className="d-flex justify-content-space-between align-items-center">
                           <div>
-                            {moment(employee.createdAt).format('MMM DD, YYYY')}{' '}
-                            |{' '}
+                            {moment(employee.createdAt).format(
+                              'MMM\xa0DD,\xa0YYYY',
+                            )}
+                            &nbsp;|&nbsp;
                             <span className="employee-section__employee_pay-time">
-                              {moment(employee.createdAt).format('hh:MM A')}
+                              {moment(employee.createdAt).format('hh:MM\xa0A')}
                             </span>
                           </div>
                           <KebabMenu
-                            items={[{ action() {}, value: 'Delete' }]}
+                            items={[
+                              {
+                                action: () =>
+                                  kebabHandler('Delete')(employee.id),
+                                value: 'Delete',
+                              },
+                              {
+                                action: () =>
+                                  kebabHandler(
+                                    employee.status === 'active'
+                                      ? 'Deactivate'
+                                      : 'Activate',
+                                  )(employee.id),
+                                value:
+                                  employee.status === 'active'
+                                    ? 'Deactivate'
+                                    : 'Activate',
+                              },
+                            ]}
                           />
                         </div>
                       </td>
@@ -274,7 +339,7 @@ const EmployeePage: NextPage = () => {
                     <Image src={Plus} alt="plus icon" /> {'Add Employee'}
                   </>
                 }
-                onClick={() => {}}
+                onClick={() => NiceModal.show(AddEmployeeModal)}
                 className="employee-section__submit-btn"
                 primary
                 type="submit"

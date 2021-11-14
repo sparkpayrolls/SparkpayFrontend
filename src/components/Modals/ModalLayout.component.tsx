@@ -1,4 +1,4 @@
-import { Modal } from 'antd';
+import { Drawer } from 'antd';
 import { useModal } from '@ebay/nice-modal-react';
 import { IModalLayout } from '../types';
 
@@ -6,14 +6,14 @@ export const ModalLayout = (props: IModalLayout) => {
   const modal = useModal();
 
   return (
-    <Modal
+    <Drawer
       visible={modal.visible}
-      onCancel={modal.hide}
-      afterClose={modal.remove}
+      onClose={modal.hide}
+      destroyOnClose
+      placement="right"
       className="modal-layout"
-      footer={null}
     >
-      <div className="modal-layout">
+      <div className="modal-layout__content">
         <div className="modal-layout__title-section">
           <p className="modal-layout__title-text">{props.title}</p>
           <button
@@ -33,7 +33,7 @@ export const ModalLayout = (props: IModalLayout) => {
           }
         </div>
       </div>
-    </Modal>
+    </Drawer>
   );
 };
 

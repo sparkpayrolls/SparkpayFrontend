@@ -312,6 +312,10 @@
     .select-input__options {
       margin-top: 16px;
     }
+
+    .select-input__selector {
+      border: 1px solid $red;
+    }
   }
 
   &--drop-top {

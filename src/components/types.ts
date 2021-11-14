@@ -8,6 +8,7 @@ import {
   ReactNode,
 } from 'react';
 import { InputRangeProps } from 'react-input-range';
+import { Employee } from 'src/api/types';
 
 /** MultiSelect Props */
 export type IMultiSelectOptionItem = Record<string, unknown>;
@@ -60,4 +61,16 @@ export type ISelectInput = {
   name?: string;
   value?: string;
   selected?: ISelectInputOptionItem;
+};
+
+/** AddEmployee */
+export type AddEmployee = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  salary: string;
+};
+
+export type ISingleEmployeeUpload = {
+  onDone?: (employee: Employee) => any;
 };

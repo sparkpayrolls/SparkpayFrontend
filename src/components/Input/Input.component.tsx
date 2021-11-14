@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ChangeEvent, FocusEvent, useState } from 'react';
+import { ChangeEvent, ChangeEventHandler, FocusEvent, useState } from 'react';
 import Image from 'next/image';
 import eye from '../../../public/svgs/eye.svg';
 import eye_off from '../../../public/svgs/eye-off.svg';
@@ -35,12 +35,7 @@ interface InputProps {
   /**
    * Input onChange function
    */
-  onChange: {
-    (e: ChangeEvent<any>): void;
-    <T = string | ChangeEvent<any>>(field: T): T extends ChangeEvent<any>
-      ? void
-      : (e: string | ChangeEvent<any>) => void;
-  };
+  onChange: ChangeEventHandler<HTMLInputElement>;
 
   /**
    * Input onBlur function when focus leaves input
@@ -59,6 +54,8 @@ interface InputProps {
    * Input error message
    */
   error?: string;
+
+  transformValue?: (val: string) => string;
 }
 
 /**
@@ -72,9 +69,20 @@ export const Input = ({
   className,
   hasError,
   error,
+  transformValue,
+  onChange,
   ...props
 }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [valueInternal, setValueInternal] = useState(value || '');
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (transformValue) {
+      event.target.value = transformValue(event.target.value);
+    }
+    onChange(event);
+    setValueInternal(event.target.value);
+  };
 
   return (
     <>
@@ -87,7 +95,8 @@ export const Input = ({
             type={type}
             className={['input', `${hasError ? 'input--error' : ''}`].join(' ')}
             name={name}
-            value={value}
+            value={valueInternal}
+            onChange={handleChange}
             {...props}
           />
 
@@ -108,7 +117,8 @@ export const Input = ({
               type={showPassword ? 'text' : 'password'}
               className="input"
               name={name}
-              value={value}
+              value={valueInternal}
+              onChange={handleChange}
               {...props}
             />
             <button
