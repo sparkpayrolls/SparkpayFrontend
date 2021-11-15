@@ -1,4 +1,6 @@
 .table-component {
+  padding-top: 24px;
+
   &__table-title {
     font-weight: bold;
     font-size: 18px;
@@ -96,7 +98,7 @@
         height: 3px;
         background-color: #1d4ed8;
         width: 100%;
-        animation: slide 3s infinite linear;
+        animation: slide 1s infinite linear;
       }
     }
   }
@@ -139,7 +141,9 @@
   &__pagination {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-top: 2rem;
+    padding-bottom: 0.5rem;
 
     &--page-summary {
       font-weight: normal;
@@ -183,6 +187,32 @@
           &:disabled {
             opacity: 0.5;
           }
+        }
+      }
+    }
+
+    &--per-page {
+      justify-content: flex-start;
+
+      > span {
+        display: block;
+        margin-right: 10px;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 24px;
+        letter-spacing: 0.4px;
+        color: #0b2253;
+      }
+
+      .select-input {
+        width: 5rem;
+
+        &__selector {
+          padding: 4px 8px;
+        }
+
+        &__option {
+          padding: 4px 8px;
         }
       }
     }

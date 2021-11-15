@@ -163,18 +163,15 @@ const CreateAccount: NextPage = () => {
                   />
 
                   <SelectInput
-                    options={countries.map((country) => ({
-                      value: country.id,
-                      text: country.name,
-                      ...country,
-                    }))}
+                    options={countries}
+                    displayValue="name"
+                    actualValue="id"
                     name="country"
                     value={values.country}
-                    onChange={(event) => handleChange(event)}
-                    onBlur={(event) => handleBlur(event)}
-                    error={errors.country}
-                    hasError={!!errors.country && touched.country}
-                    placeholder="Select Country"
+                    label="Select Country"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={(touched.country && errors.country) || ''}
                   />
 
                   <Input
