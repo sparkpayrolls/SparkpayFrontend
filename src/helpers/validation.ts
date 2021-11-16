@@ -31,3 +31,10 @@ export const resetPasswordValidationSchema = Yup.object().shape({
   password: format.password,
   confirmPassword: Yup.string().required('enter password again'),
 });
+
+export const singleEmployeeUploadValidationSchema = Yup.object().shape({
+  email: format.email,
+  firstname: format.firstname,
+  lastname: format.lastname,
+  salary: Yup.string().required('salary is required'),
+});

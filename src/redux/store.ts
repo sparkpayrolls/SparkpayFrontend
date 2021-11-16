@@ -19,12 +19,16 @@ import LoginReducer from '../../pages/login/loginSlice';
 import createAccountReducer from '../../pages/create-account/createAccountSlice';
 import CountriesReducer from './slices/countries/countries.slice';
 import UserReducer from './slices/user/user.slice';
+import AdministratorsReducer from './slices/administrators/administrators.slice';
+import CompaniesReducer from './slices/companies/companies.slice';
 
 const reducers = combineReducers({
   login: LoginReducer,
   createAccount: createAccountReducer,
   countries: CountriesReducer,
   user: UserReducer,
+  administrators: AdministratorsReducer,
+  companies: CompaniesReducer,
 });
 
 const persistConfig = {
