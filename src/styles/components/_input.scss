@@ -323,6 +323,16 @@
       top: auto;
       bottom: 100%;
       margin-bottom: 22px;
+      transform-origin: 100% 100%;
     }
+
+    .select-input__svg {
+      transform: rotate(0);
+    }
+  }
+}
+.select-input--open.select-input--drop-top {
+  .select-input__svg {
+    transform: rotate(180deg);
   }
 }
