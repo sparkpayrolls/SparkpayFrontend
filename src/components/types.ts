@@ -81,6 +81,17 @@ export type IOrganizationMenu = {
   onSelect: (company: Administrator, closeMenu: () => void) => any;
 };
 
+export type IProfileMenu = {
+  name: string;
+  role: string;
+  avatar?: string;
+  actions: {
+    action?: (close: () => void) => any;
+    name: string;
+    href?: string;
+  }[];
+};
+
 /** Common */
 export type IImageLoader = {
   width?: string | number;

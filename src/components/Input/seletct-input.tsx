@@ -226,7 +226,7 @@ export const SelectInput = (props: ISelectInput) => {
   );
 };
 
-const SelectInputSVG = () => (
+export const SelectInputSVG = () => (
   <svg
     width="12"
     height="8"

@@ -50,6 +50,8 @@ export type User = Document & {
   country: Country;
 
   emailVerified: boolean;
+
+  avatar?: string;
 };
 
 export type LoggedInUser = {
