@@ -27,7 +27,8 @@
   }
 }
 
-.single-employee-upload-form {
+.single-employee-upload-form,
+.create-organization-form {
   &__section:not(:last-child) {
     margin-bottom: $space-2;
   }

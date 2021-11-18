@@ -1,13 +1,15 @@
 import { Radio } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Company } from 'src/api/types';
 import { ImageLoader } from 'src/layouts/dashboard-layout/DashBoardLayout';
 import dropdown from '../../../public/svgs/dropdown.svg';
-import { IOrganizationMenu } from '../types';
+import { SelectInputSVG } from '../Input/seletct-input';
+import { IOrganizationMenu, IProfileMenu } from '../types';
 
-export type IKebabItem = { value: string; action: () => any };
+export type IKebabItem = { value: string; action?(): any; href?: string };
 export type IKebabMenu = {
   items: IKebabItem[];
 };
@@ -55,11 +57,13 @@ export const KebabMenu = (props: IKebabMenu) => {
             <li
               onClick={() => {
                 setIsActive(false);
-                item.action();
+                item.action && item.action();
               }}
               key={`kebabmenu-${i}`}
             >
-              {item.value}
+              <Link href={item.href || '#'}>
+                <a>{item.value}</a>
+              </Link>
             </li>
           );
         })}
@@ -149,25 +153,25 @@ export const OrganizationsMenu = ({
         {companies.map((a) => {
           const company = a.company as Company;
           return (
-            <li key={company.id} className="organization-menu__dropdown__item">
-              {!!company.logo && (
+            <li key={company?.id} className="organization-menu__dropdown__item">
+              {!!company?.logo && (
                 <div className="organization-menu__dropdown__item__logo">
                   <ImageLoader
                     width={30}
                     height={30}
-                    src={company.logo}
+                    src={company?.logo}
                     alt="company-logo"
                   />
                 </div>
               )}
-              {!company.logo && (
+              {!company?.logo && (
                 <div className="organization-menu__dropdown__item__initial">
-                  {company.name.charAt(0)}
+                  {company?.name?.charAt(0)}
                 </div>
               )}
 
               <span className="organization-menu__dropdown__item__name">
-                {company.name}
+                {company?.name}
               </span>
 
               <Radio
@@ -175,6 +179,97 @@ export const OrganizationsMenu = ({
                 checked={a.selected}
                 onClick={() => onSelect(a, () => setIsActive(false))}
               />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
+
+export const ProfileMenu = (props: IProfileMenu) => {
+  const [isActive, setIsActive] = useState(false);
+  const [id] = useState(
+    `organization-menu-${Math.ceil(Math.random() * 10000000)}`,
+  );
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const dropDownClassNames = classNames('profile-menu__dropdown', {
+    'profile-menu__dropdown--active': isActive,
+  });
+  const sevClassNames = classNames('profile-menu__trigger__drop-svg', {
+    'profile-menu__trigger__drop-svg--active': isActive,
+  });
+
+  const handleClick = useCallback(() => {
+    setIsActive(!isActive);
+  }, [setIsActive, isActive]);
+
+  useEffect(() => {
+    const element = menuRef.current;
+
+    if (element) {
+      const handleClickOutside = (event: MouseEvent) => {
+        // @ts-ignore
+        if (!event?.target?.closest(`#${element?.id}`)) {
+          setIsActive(false);
+        }
+      };
+      window.addEventListener('click', handleClickOutside);
+
+      return function unmount() {
+        window.removeEventListener('click', handleClickOutside);
+      };
+    }
+  }, [menuRef]);
+
+  return (
+    <div className="profile-menu" ref={menuRef} id={id}>
+      <div className="profile-menu__trigger" onClick={handleClick}>
+        {props.avatar && (
+          <div className="profile-menu__trigger__image">
+            <ImageLoader
+              src={props.avatar}
+              width={36}
+              height={36}
+              alt="avatar"
+            />
+          </div>
+        )}
+        {!props.avatar && (
+          <div className="profile-menu__trigger__initial">
+            {props.name.charAt(0)}
+          </div>
+        )}
+
+        <div className="profile-menu__trigger__identity">
+          <p className="profile-menu__trigger__identity__name">{props.name}</p>
+          <p className="profile-menu__trigger__identity__role">{props.role}</p>
+        </div>
+
+        <button className={sevClassNames}>
+          <SelectInputSVG />
+        </button>
+      </div>
+
+      <ul className={dropDownClassNames}>
+        {props.actions.map((action, i) => {
+          return (
+            <li
+              className="profile-menu__dropdown__item"
+              key={`${id}-options-${i}`}
+            >
+              <Link href={action.href || '#'}>
+                <a
+                  onClick={() => {
+                    if (action.action) {
+                      action.action(() => setIsActive(false));
+                    }
+                  }}
+                >
+                  {action.name}
+                </a>
+              </Link>
             </li>
           );
         })}

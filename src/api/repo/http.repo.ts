@@ -111,6 +111,12 @@ export class HttpRepository {
       if (typeof value === 'boolean') {
         return `${key}=${value ? 'true' : 'false'}`;
       }
+      if (typeof value === 'undefined') {
+        return '';
+      }
+      if (key === 'perPage') {
+        return `limit=${value}`;
+      }
 
       return `${key}=${value}`;
     });
