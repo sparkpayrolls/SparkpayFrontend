@@ -17,5 +17,5 @@ const Template: ComponentStory<typeof Spinner> = (args: any) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  color: '#fff',
+  color: '--green',
 };
