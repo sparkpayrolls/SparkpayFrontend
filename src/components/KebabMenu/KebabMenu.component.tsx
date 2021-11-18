@@ -176,7 +176,7 @@ export const OrganizationsMenu = ({
               </span>
 
               <Switch
-                loading={loading === company?.id}
+                loading={loading === company?.id || (!!loading && a.selected)}
                 checked={a.selected}
                 onClick={() => onSelect(a, () => setIsActive(false))}
                 className="organization-menu__dropdown__item__switch"
