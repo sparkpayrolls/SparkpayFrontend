@@ -46,9 +46,10 @@ const OrganizationSettings: NextPage = () => {
       try {
         setData({
           meta,
-          data: data.filter((d) => (d.company as Company).id === id),
+          data: data.filter((d) => (d.company as Company).id !== id),
         });
         await $api.company.deleteCompany(id);
+        getOrganizations(query);
         toast.success('company deleted successfully');
       } catch (error) {
         const err = error as HttpError;
