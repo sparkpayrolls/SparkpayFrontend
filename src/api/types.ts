@@ -136,6 +136,8 @@ export enum PermissionGroupEnum {
   'Wallet & Billing' = 'Wallet & Billing',
   Payroll = 'Payroll',
   AuditTrail = 'AuditTrail',
+  Remittance = 'Remittance',
+  Admin = 'Admin',
 }
 
 export enum PermissionLevelEnum {

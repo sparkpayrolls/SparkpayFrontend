@@ -204,7 +204,13 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
 }
 
 .profile-menu {
-  position: relative;
+  position: fixed;
+  left: 0;
+  width: 16rem;
+  bottom: 0;
+  border-top: 1px solid #dde5ee;
+  background: #f8fafc;
+  padding-bottom: 1rem;
 
   &__trigger {
     padding: 16px;

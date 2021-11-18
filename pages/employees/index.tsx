@@ -377,7 +377,7 @@ const EmployeePage: NextPage = () => {
   );
 };
 
-export default withAuth(EmployeePage);
+export default withAuth(EmployeePage, ['Employee', 'read']);
 
 const MoreMenuSVG = () => (
   <svg
