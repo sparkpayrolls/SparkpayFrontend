@@ -1,4 +1,4 @@
-import { Radio } from 'antd';
+import { Switch } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -75,6 +75,7 @@ export const KebabMenu = (props: IKebabMenu) => {
 export const OrganizationsMenu = ({
   companies,
   onSelect,
+  loading,
 }: IOrganizationMenu) => {
   const [isActive, setIsActive] = useState(false);
   const [id] = useState(
@@ -113,7 +114,7 @@ export const OrganizationsMenu = ({
   }
 
   const [selected] = companies.filter((company) => company.selected);
-  const selectedCompany = selected?.company as Company;
+  const selectedCompany = (selected || companies[0])?.company as Company;
 
   return (
     <div className="organization-menu" ref={menuRef} id={id}>
@@ -174,10 +175,11 @@ export const OrganizationsMenu = ({
                 {company?.name}
               </span>
 
-              <Radio
-                className="organization-menu__dropdown__item__radio"
+              <Switch
+                loading={loading === company?.id}
                 checked={a.selected}
                 onClick={() => onSelect(a, () => setIsActive(false))}
+                className="organization-menu__dropdown__item__switch"
               />
             </li>
           );

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Logo from '../../../public/svgs/logo.svg';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import {
   OrganizationsMenu,
   ProfileMenu,
@@ -14,8 +14,9 @@ import { Administrator, Company, Role } from 'src/api/types';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
-import { commitCompanies } from 'src/redux/slices/companies/companies.slice';
+import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { logOut } from 'src/redux/slices/user/user.slice';
+import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 interface Props {
   children?: ReactNode;
@@ -29,27 +30,28 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
   const selectedCompany = companies.find((company) => company.selected);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const [loadingCompanySelect, setLoadingCompanySelect] = useState('');
 
   const handleSelect = async (
     administrator: Administrator,
     close: () => void,
   ) => {
-    const clone = [...companies].map((comp) => ({ ...comp }));
     try {
-      close();
-      dispatch(
-        commitCompanies(
-          companies.map(({ id, ...others }) => {
-            return { id, ...others, selected: id === administrator.id };
-          }),
-        ),
-      );
       const company = administrator.company as Company;
-      await $api.company.selectCompany(company.id);
+      setLoadingCompanySelect(company.id);
+      if (administrator.selected) {
+        await $api.company.unselectCompany(company.id);
+        dispatch(commitAministrator(null));
+      } else {
+        await $api.company.selectCompany(company.id);
+      }
+      await refreshCompanies(dispatch);
     } catch (error) {
       const err = error as HttpError;
-      toast.error(`error selecting company - ${err.message}`);
-      dispatch(commitCompanies(clone));
+      toast.error(`error toggling company - ${err.message}`);
+    } finally {
+      setLoadingCompanySelect('');
+      setTimeout(close, 500);
     }
   };
 
@@ -210,7 +212,11 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
         </nav>
 
         <div className="dashboardLayout__top-bar">
-          <OrganizationsMenu companies={companies} onSelect={handleSelect} />
+          <OrganizationsMenu
+            companies={companies}
+            onSelect={handleSelect}
+            loading={loadingCompanySelect}
+          />
         </div>
 
         <main className="dashboardLayout__body">{children}</main>

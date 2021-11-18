@@ -81,6 +81,7 @@ export type ISingleEmployeeUpload = {
 export type IOrganizationMenu = {
   companies: Administrator[];
   onSelect: (company: Administrator, closeMenu: () => void) => any;
+  loading?: string;
 };
 
 export type IProfileMenu = {

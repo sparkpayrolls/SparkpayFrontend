@@ -56,9 +56,10 @@ const EmployeeTab = () => {
         if (res.meta) {
           setPaginationMeta(res.meta);
         }
-        setIsLoading(false);
       } catch (error) {
         // error getting employees...
+      } finally {
+        setIsLoading(false);
       }
     },
     [setEmployees, filter],

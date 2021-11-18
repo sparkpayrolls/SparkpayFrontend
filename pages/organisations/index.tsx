@@ -14,6 +14,8 @@ import { toast } from 'react-toastify';
 import { HttpError } from 'src/api/repo/http.error';
 import { CreateOrgnizationModal } from '@/components/Modals/CreateOrganizationModal.component';
 import withAuth from 'src/helpers/HOC/withAuth';
+import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import { useAppDispatch } from 'src/redux/hooks';
 
 const OrganizationSettings: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -22,6 +24,7 @@ const OrganizationSettings: NextPage = () => {
     meta: Util.getDefaultPaginationMeta({}),
   });
   const [query, setQuery] = useState({} as Record<string, any>);
+  const dispatch = useAppDispatch();
 
   const getOrganizations = useCallback(
     async (query: Record<string, any>) => {
@@ -84,9 +87,10 @@ const OrganizationSettings: NextPage = () => {
                   </>
                 }
                 onClick={() =>
-                  NiceModal.show(CreateOrgnizationModal).then(() =>
-                    getOrganizations(query),
-                  )
+                  NiceModal.show(CreateOrgnizationModal).then(() => {
+                    getOrganizations(query);
+                    refreshCompanies(dispatch);
+                  })
                 }
                 className="employee-section__submit-btn"
                 primary

@@ -149,8 +149,12 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
       align-items: center;
       justify-content: flex-start;
 
-      &__radio {
+      &__switch {
         margin-left: auto;
+
+        &.ant-switch-checked {
+          background-color: $green-600;
+        }
       }
 
       &__initial,
