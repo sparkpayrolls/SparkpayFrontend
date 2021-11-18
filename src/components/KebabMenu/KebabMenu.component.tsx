@@ -114,15 +114,15 @@ export const OrganizationsMenu = ({
   }
 
   const [selected] = companies.filter((company) => company.selected);
-  const selectedCompany = (selected || companies[0])?.company as Company;
+  const selectedCompany = selected?.company as Company;
 
   return (
     <div className="organization-menu" ref={menuRef} id={id}>
       <div className="organization-menu__trigger" onClick={handleClick}>
         <span className="organization-menu__trigger__name">
-          {selectedCompany?.name}
+          {selectedCompany?.name || 'Select Organisation'}
         </span>
-        {!!selectedCompany?.logo && (
+        {!!selectedCompany && !!selectedCompany?.logo && (
           <div className="organization-menu__trigger__logo">
             <ImageLoader
               src={selectedCompany?.logo}
@@ -132,7 +132,7 @@ export const OrganizationsMenu = ({
             />
           </div>
         )}
-        {!selectedCompany?.logo && (
+        {!!selectedCompany && !selectedCompany?.logo && (
           <div className="organization-menu__trigger__initial">
             {selectedCompany?.name?.charAt(0)}
           </div>
