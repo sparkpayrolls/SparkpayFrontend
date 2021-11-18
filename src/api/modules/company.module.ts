@@ -1,5 +1,5 @@
 import { HttpRepository } from '../repo/http.repo';
-import { Administrator } from '../types';
+import { Administrator, Company } from '../types';
 
 export class CompanyModule extends HttpRepository {
   async getCompanies() {
@@ -10,6 +10,25 @@ export class CompanyModule extends HttpRepository {
 
   async selectCompany(id: string) {
     const { data } = await this.put<Administrator>(`/companies/${id}/select`);
+
+    return data;
+  }
+
+  async getCompaniesPaginated(
+    query: Record<string, string | number | boolean>,
+  ) {
+    const queryString = this.parseQueryObject(query);
+    return this.get<Administrator[]>(`/companies/paginated${queryString}`);
+  }
+
+  async deleteCompany(id: string) {
+    await this.delete(`/companies/${id}`, {});
+  }
+
+  async createCompany(
+    company: Pick<Company, 'country' | 'email' | 'phonenumber' | 'name'>,
+  ) {
+    const { data } = await this.post<Company>('/companies', company);
 
     return data;
   }

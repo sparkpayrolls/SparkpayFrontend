@@ -9,7 +9,7 @@ import dropdown from '../../../public/svgs/dropdown.svg';
 import { SelectInputSVG } from '../Input/seletct-input';
 import { IOrganizationMenu, IProfileMenu } from '../types';
 
-export type IKebabItem = { value: string; action: () => any };
+export type IKebabItem = { value: string; action?(): any; href?: string };
 export type IKebabMenu = {
   items: IKebabItem[];
 };
@@ -57,11 +57,13 @@ export const KebabMenu = (props: IKebabMenu) => {
             <li
               onClick={() => {
                 setIsActive(false);
-                item.action();
+                item.action && item.action();
               }}
               key={`kebabmenu-${i}`}
             >
-              {item.value}
+              <Link href={item.href || '#'}>
+                <a>{item.value}</a>
+              </Link>
             </li>
           );
         })}
@@ -151,25 +153,25 @@ export const OrganizationsMenu = ({
         {companies.map((a) => {
           const company = a.company as Company;
           return (
-            <li key={company.id} className="organization-menu__dropdown__item">
-              {!!company.logo && (
+            <li key={company?.id} className="organization-menu__dropdown__item">
+              {!!company?.logo && (
                 <div className="organization-menu__dropdown__item__logo">
                   <ImageLoader
                     width={30}
                     height={30}
-                    src={company.logo}
+                    src={company?.logo}
                     alt="company-logo"
                   />
                 </div>
               )}
-              {!company.logo && (
+              {!company?.logo && (
                 <div className="organization-menu__dropdown__item__initial">
-                  {company.name.charAt(0)}
+                  {company?.name?.charAt(0)}
                 </div>
               )}
 
               <span className="organization-menu__dropdown__item__name">
-                {company.name}
+                {company?.name}
               </span>
 
               <Radio

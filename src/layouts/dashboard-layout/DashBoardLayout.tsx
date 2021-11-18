@@ -34,9 +34,8 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
     administrator: Administrator,
     close: () => void,
   ) => {
+    const clone = [...companies].map((comp) => ({ ...comp }));
     try {
-      const company = administrator.company as Company;
-      await $api.company.selectCompany(company.id);
       close();
       dispatch(
         commitCompanies(
@@ -45,9 +44,12 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
           }),
         ),
       );
+      const company = administrator.company as Company;
+      await $api.company.selectCompany(company.id);
     } catch (error) {
       const err = error as HttpError;
       toast.error(`error selecting company - ${err.message}`);
+      dispatch(commitCompanies(clone));
     }
   };
 
@@ -143,17 +145,15 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
             </li>
 
             <li className="dashboard-navigation__list-item">
-              <Link href="/organisation-setting">
+              <Link href="/organisations">
                 <a
                   className={[
                     'dashboard-navigation__link',
-                    router.pathname.includes('/organisation-setting')
-                      ? 'active'
-                      : '',
+                    router.pathname.includes('/organisations') ? 'active' : '',
                   ].join(' ')}
                 >
                   <OrganizationSettingsSvg />
-                  Organisation Setting
+                  Organisations
                 </a>
               </Link>
             </li>

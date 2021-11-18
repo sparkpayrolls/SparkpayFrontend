@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from 'react';
 import { InputRangeProps } from 'react-input-range';
-import { Administrator, Employee } from 'src/api/types';
+import { Administrator, Employee, PaginationMeta } from 'src/api/types';
 
 /** MultiSelect Props */
 export type IMultiSelectOptionItem = Record<string, unknown>;
@@ -61,6 +61,8 @@ export type ISelectInput = {
   name?: string;
   value?: string;
   selected?: ISelectInputOptionItem;
+  dropTop?: boolean;
+  loading?: boolean;
 };
 
 /** AddEmployee */
@@ -98,4 +100,21 @@ export type IImageLoader = {
   height?: string | number;
   src: string;
   alt?: string;
+};
+
+/** Table */
+export type IOrganizationTable = {
+  organizations: Administrator[];
+  paginationMeta: PaginationMeta;
+  getOrganizations(_: Record<string, unknown>): any;
+  deleteOrganisation(id: string): any;
+  loading?: boolean;
+};
+
+/** Create Organization */
+export type CreateOrganization = {
+  name: string;
+  email: string;
+  phonenumber: string;
+  country: string;
 };

@@ -5,6 +5,7 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
   position: relative;
   display: inline-block;
   box-sizing: border-box;
+  cursor: pointer;
 
   &__dropdown {
     background: #ffffff;
@@ -30,8 +31,14 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
       border-radius: 3px;
       cursor: pointer;
 
+      a {
+        color: inherit;
+        display: block;
+      }
+
       &:hover {
         background: #e7e5e5;
+        color: $blue;
         transition: background 0.2s ease-in-out;
       }
     }
