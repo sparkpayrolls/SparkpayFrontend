@@ -13,6 +13,7 @@ import { $api } from 'src/api';
 import { toast } from 'react-toastify';
 import { HttpError } from 'src/api/repo/http.error';
 import { CreateOrgnizationModal } from '@/components/Modals/CreateOrganizationModal.component';
+import withAuth from 'src/helpers/HOC/withAuth';
 
 const OrganizationSettings: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -108,4 +109,4 @@ const OrganizationSettings: NextPage = () => {
   );
 };
 
-export default OrganizationSettings;
+export default withAuth(OrganizationSettings);
