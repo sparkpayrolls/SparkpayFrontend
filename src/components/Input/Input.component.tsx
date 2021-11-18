@@ -3,6 +3,7 @@ import { ChangeEvent, ChangeEventHandler, FocusEvent, useState } from 'react';
 import Image from 'next/image';
 import eye from '../../../public/svgs/eye.svg';
 import eye_off from '../../../public/svgs/eye-off.svg';
+import { Spinner } from '../Spinner/Spinner.component';
 interface InputProps {
   /**
    * Input Placeholder contents
@@ -11,7 +12,7 @@ interface InputProps {
   /**
    * input type 'text' | 'email' | 'password'
    */
-  type: 'text' | 'email' | 'password';
+  type: 'text' | 'email' | 'password' | 'tel';
   /**
    * Input label content
    */
@@ -56,6 +57,8 @@ interface InputProps {
   error?: string;
 
   transformValue?: (val: string) => string;
+
+  loading?: boolean;
 }
 
 /**
@@ -91,14 +94,23 @@ export const Input = ({
           <label htmlFor={name} className="input-label">
             {label}
           </label>
-          <input
-            type={type}
-            className={['input', `${hasError ? 'input--error' : ''}`].join(' ')}
-            name={name}
-            value={valueInternal}
-            onChange={handleChange}
-            {...props}
-          />
+          <div className="input-container__input">
+            <input
+              type={type}
+              className={['input', `${hasError ? 'input--error' : ''}`].join(
+                ' ',
+              )}
+              name={name}
+              value={valueInternal}
+              onChange={handleChange}
+              {...props}
+            />
+            {props.loading && (
+              <div className="input-container__input__loader">
+                <Spinner color="--green" />
+              </div>
+            )}
+          </div>
 
           {hasError ? <span className="input-error">{error}</span> : null}
         </div>
@@ -125,12 +137,16 @@ export const Input = ({
               type="button"
               onClick={() => setShowPassword(!showPassword)}
             >
-              <Image
-                src={showPassword ? eye_off : eye}
-                alt="eye icon"
-                width="20"
-                height="20"
-              />
+              {!props.loading ? (
+                <Image
+                  src={showPassword ? eye_off : eye}
+                  alt="eye icon"
+                  width="20"
+                  height="20"
+                />
+              ) : (
+                <Spinner color="--green" />
+              )}
             </button>
           </div>
 

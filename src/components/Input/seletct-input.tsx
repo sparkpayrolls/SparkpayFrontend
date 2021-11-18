@@ -14,6 +14,7 @@ import {
   ISelectInputOptionItem,
   ISelectOption,
 } from '../types';
+import { Spinner } from '../Spinner/Spinner.component';
 
 export const MultiSelectInput = (props: IMultiSelect) => {
   const [placeholder, setPlaceholder] = useState('Select');
@@ -71,14 +72,13 @@ export const SelectInput = (props: ISelectInput) => {
   const [inputId] = useState(
     `select-input-${Math.random().toString().substr(2, 5)}`,
   );
-  const [dropTop, setDropTop] = useState(true);
-  const { onBlur, actualValue, onChange } = props;
+  const { onBlur, actualValue, onChange, loading } = props;
 
   const className = classNames('select-input', {
     'select-input--open': showOptions,
     'select-input--dirty': !!Object.keys(selected).length,
     'select-input--has-error': !!props.error,
-    'select-input--drop-top': dropTop,
+    'select-input--drop-top': props.dropTop,
   });
 
   const handleOptionClick = (option: ISelectInputOptionItem) => {
@@ -147,30 +147,12 @@ export const SelectInput = (props: ISelectInput) => {
     };
   }, [selectRef]);
 
-  useEffect(() => {
-    const element = optionsRef.current;
-    if (showOptions) {
-      if (element) {
-        const height =
-          (element.parentElement?.offsetTop || 0) +
-          (element.parentElement?.offsetHeight || 0) +
-          element.offsetTop +
-          element.offsetHeight * 2;
-        if (height >= window.document.body.offsetHeight) {
-          setDropTop(true);
-        } else {
-          setDropTop(false);
-        }
-      }
-    }
-  }, [optionsRef, showOptions]);
-
   return (
     <span ref={selectRef} className={className} id={inputId}>
       {props.label && <label>{props.label}</label>}
       <span
         className="select-input__selector"
-        onClick={() => setShowOptions(!showOptions)}
+        onClick={() => !loading && setShowOptions(!showOptions)}
       >
         <span className="select-input__search">
           <input
@@ -195,9 +177,16 @@ export const SelectInput = (props: ISelectInput) => {
         <span className="select-input__placeholder">
           {(selected[props.displayValue] as string) || 'Select'}
         </span>
-        <span className="select-input__svg">
-          <SelectInputSVG />
-        </span>
+        {!loading && (
+          <span className="select-input__svg">
+            <SelectInputSVG />
+          </span>
+        )}
+        {loading && (
+          <span className="select-input__svg">
+            <Spinner color="--green" />
+          </span>
+        )}
       </span>
       {!!props.error && (
         <span className="select-input__error-message">{props.error}</span>

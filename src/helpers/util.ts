@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { PaginationMeta } from 'src/api/types';
 import { DebouncedFunc } from './types';
 
 export class Util {
@@ -38,4 +39,19 @@ export class Util {
   static noop = () => {
     /** noop */
   };
+
+  static getDefaultPaginationMeta(_: Partial<PaginationMeta>): PaginationMeta {
+    return {
+      total: 0,
+      perPage: 10,
+      pageCount: 0,
+      page: 1,
+      pagingCounter: 1,
+      hasNextPage: false,
+      hasPrevPage: false,
+      previousPage: null,
+      nextPage: null,
+      ..._,
+    };
+  }
 }
