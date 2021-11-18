@@ -31,7 +31,6 @@ const payDetails: NextPage = () => {
             </p>
           </div>
         </div>
-      </div>
       <div className="payroll-details-section__payroll-settings-details">
         <div className="employee-details__employee-settings-flex">
           <div>
@@ -184,6 +183,7 @@ const payDetails: NextPage = () => {
         </section>
       </div>
     </div>
+                  </div>
   );
 };
 

@@ -11,7 +11,7 @@ import SuccessfulIcon from '../../public/svgs/successful.svg';
 
 const payrollDetails: NextPage = () => {
   return (
-    <DashboardLayout pageTitle="Payrol-page">
+    <DashboardLayout pageTitle="Payroll-page">
       <div className="payroll-section">
         <Head>
           <title>Payroll</title>

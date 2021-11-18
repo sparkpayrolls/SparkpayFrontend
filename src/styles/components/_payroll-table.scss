@@ -236,26 +236,26 @@ margin-top:30px;
     padding: 10px 20px 10px 15px;
   }
   table {
-    // border-collapse: collapse;
-    // width: 100%;
-    // margin-top: 10px;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
     
   }
   
   th {
     
-    // border: 1px solid #dddddd;
-    // text-align: left;
-    // padding: 17px;
-    // font-weight: 500;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 17px;
+    font-weight: 500;
   }
   
-  // td {
-  //   text-align: left;
-  //   padding:17px ;
-  //   border-bottom: 1px solid #f7f9fb;
-  //   padding-top: 30px;
-  // }
+  td {
+    text-align: left;
+    padding:17px ;
+    border-bottom: 1px solid #f7f9fb;
+    padding-top: 30px;
+  }
   &__payroll-success-text{
     font-family: Karla;
 font-style: normal;
