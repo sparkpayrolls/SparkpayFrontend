@@ -14,6 +14,12 @@ export class CompanyModule extends HttpRepository {
     return data;
   }
 
+  async unselectCompany(id: string) {
+    const { data } = await this.put<Administrator>(`/companies/${id}/unselect`);
+
+    return data;
+  }
+
   async getCompaniesPaginated(
     query: Record<string, string | number | boolean>,
   ) {
@@ -29,6 +35,12 @@ export class CompanyModule extends HttpRepository {
     company: Pick<Company, 'country' | 'email' | 'phonenumber' | 'name'>,
   ) {
     const { data } = await this.post<Company>('/companies', company);
+
+    return data;
+  }
+
+  async getCurrentCompany() {
+    const { data } = await this.get<Administrator>('/companies/current');
 
     return data;
   }

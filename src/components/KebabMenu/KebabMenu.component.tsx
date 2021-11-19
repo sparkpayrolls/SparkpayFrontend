@@ -1,4 +1,4 @@
-import { Radio } from 'antd';
+import { Switch } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -75,6 +75,7 @@ export const KebabMenu = (props: IKebabMenu) => {
 export const OrganizationsMenu = ({
   companies,
   onSelect,
+  loading,
 }: IOrganizationMenu) => {
   const [isActive, setIsActive] = useState(false);
   const [id] = useState(
@@ -119,9 +120,9 @@ export const OrganizationsMenu = ({
     <div className="organization-menu" ref={menuRef} id={id}>
       <div className="organization-menu__trigger" onClick={handleClick}>
         <span className="organization-menu__trigger__name">
-          {selectedCompany?.name}
+          {selectedCompany?.name || 'Select Organisation'}
         </span>
-        {!!selectedCompany?.logo && (
+        {!!selectedCompany && !!selectedCompany?.logo && (
           <div className="organization-menu__trigger__logo">
             <ImageLoader
               src={selectedCompany?.logo}
@@ -131,7 +132,7 @@ export const OrganizationsMenu = ({
             />
           </div>
         )}
-        {!selectedCompany?.logo && (
+        {!!selectedCompany && !selectedCompany?.logo && (
           <div className="organization-menu__trigger__initial">
             {selectedCompany?.name?.charAt(0)}
           </div>
@@ -174,10 +175,11 @@ export const OrganizationsMenu = ({
                 {company?.name}
               </span>
 
-              <Radio
-                className="organization-menu__dropdown__item__radio"
+              <Switch
+                loading={loading === company?.id || (!!loading && a.selected)}
                 checked={a.selected}
                 onClick={() => onSelect(a, () => setIsActive(false))}
+                className="organization-menu__dropdown__item__switch"
               />
             </li>
           );

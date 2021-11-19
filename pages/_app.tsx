@@ -15,11 +15,12 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
 import { commitUser } from 'src/redux/slices/user/user.slice';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 let persistor = persistStore(store);
 
 const AuthManager = () => {
-  const { user } = useAppSelector((state) => state);
+  const { user, companies } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -63,6 +64,12 @@ const AuthManager = () => {
       dispatch(commitUser(null));
     }
   }, [user, dispatch]);
+
+  useEffect(() => {
+    if (!!user && companies.some((company) => company.selected)) {
+      getCurrentAdministrator(dispatch);
+    }
+  }, [companies, user, dispatch]);
 
   return null;
 };

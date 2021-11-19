@@ -19,7 +19,7 @@ import LoginReducer from '../../pages/login/loginSlice';
 import createAccountReducer from '../../pages/create-account/createAccountSlice';
 import CountriesReducer from './slices/countries/countries.slice';
 import UserReducer from './slices/user/user.slice';
-import AdministratorsReducer from './slices/administrators/administrators.slice';
+import AdministratorReducer from './slices/administrator/administrator.slice';
 import CompaniesReducer from './slices/companies/companies.slice';
 
 const reducers = combineReducers({
@@ -27,7 +27,7 @@ const reducers = combineReducers({
   createAccount: createAccountReducer,
   countries: CountriesReducer,
   user: UserReducer,
-  administrators: AdministratorsReducer,
+  administrator: AdministratorReducer,
   companies: CompaniesReducer,
 });
 

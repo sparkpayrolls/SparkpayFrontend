@@ -56,9 +56,10 @@ const EmployeeTab = () => {
         if (res.meta) {
           setPaginationMeta(res.meta);
         }
-        setIsLoading(false);
       } catch (error) {
         // error getting employees...
+      } finally {
+        setIsLoading(false);
       }
     },
     [setEmployees, filter],
@@ -376,7 +377,7 @@ const EmployeePage: NextPage = () => {
   );
 };
 
-export default withAuth(EmployeePage);
+export default withAuth(EmployeePage, ['Employee', 'read']);
 
 const MoreMenuSVG = () => (
   <svg

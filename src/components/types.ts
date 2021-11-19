@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { NiceModalHandler } from '@ebay/nice-modal-react';
+import { NextRouter } from 'next/router';
 import {
   ChangeEventHandler,
   FocusEventHandler,
@@ -8,7 +9,13 @@ import {
   ReactNode,
 } from 'react';
 import { InputRangeProps } from 'react-input-range';
-import { Administrator, Employee, PaginationMeta } from 'src/api/types';
+import {
+  Administrator,
+  Employee,
+  PaginationMeta,
+  PermissionGroup,
+  PermissionLevel,
+} from 'src/api/types';
 
 /** MultiSelect Props */
 export type IMultiSelectOptionItem = Record<string, unknown>;
@@ -81,6 +88,7 @@ export type ISingleEmployeeUpload = {
 export type IOrganizationMenu = {
   companies: Administrator[];
   onSelect: (company: Administrator, closeMenu: () => void) => any;
+  loading?: string;
 };
 
 export type IProfileMenu = {
@@ -119,3 +127,15 @@ export type CreateOrganization = {
   country: string;
 };
 
+/** NavListItem */
+export type IDashboardNavigationListItem = {
+  router: NextRouter;
+  href: string;
+  match: string;
+  // eslint-disable-next-line no-undef
+  Icon: () => JSX.Element;
+  title: string;
+};
+
+/** Allowed Permissions */
+export type IAllowedPermissions = [PermissionGroup, PermissionLevel][];

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { PaginationMeta } from 'src/api/types';
+import { IAllowedPermissions } from '@/components/types';
+import { Administrator, PaginationMeta, Permission, Role } from 'src/api/types';
 import { DebouncedFunc } from './types';
 
 export class Util {
@@ -53,5 +54,26 @@ export class Util {
       nextPage: null,
       ..._,
     };
+  }
+
+  static canActivate(
+    allowedPermissions: IAllowedPermissions,
+    administrator: Administrator | null,
+  ) {
+    if (administrator?.isRoot) {
+      return true;
+    }
+
+    const role = administrator?.role as Role;
+    const permissions = role?.permissions as Permission[];
+
+    const canActivate = allowedPermissions.every(([group, level]) => {
+      return permissions?.some(
+        (permission) =>
+          permission.group === group && (level === level || level === 'write'),
+      );
+    });
+
+    return canActivate;
   }
 }

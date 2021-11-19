@@ -10,6 +10,7 @@ import { useCallback, useState, useEffect } from 'react';
 import { Table, TR } from '../../src/components/Table/Wallet.component';
 import { PaginationMeta } from 'src/api/types';
 import Wallet from '../../public/svgs/wallet bill.svg';
+import withAuth from 'src/helpers/HOC/withAuth';
 const WalletCard = ({ title, amount }: { title: string; amount: string }) => {
   return (
     <div>
@@ -212,7 +213,7 @@ const WalletBilling: NextPage = () => {
   );
 };
 
-export default WalletBilling;
+export default withAuth(WalletBilling, ['Wallet & Billing', 'read']);
 
 const SuccessSvg = () => (
   <svg
