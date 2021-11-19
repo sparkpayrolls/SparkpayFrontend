@@ -14,6 +14,7 @@ import Cookies from 'js-cookie';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
 import { commitUser } from 'src/redux/slices/user/user.slice';
+import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 
@@ -66,8 +67,11 @@ const AuthManager = () => {
   }, [user, dispatch]);
 
   useEffect(() => {
-    if (!!user && companies.some((company) => company.selected)) {
+    const companySelected = companies.some((company) => company.selected);
+    if (!!user && companySelected) {
       getCurrentAdministrator(dispatch);
+    } else {
+      dispatch(commitAministrator(null));
     }
   }, [companies, user, dispatch]);
 

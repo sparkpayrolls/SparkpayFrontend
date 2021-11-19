@@ -1,0 +1,95 @@
+.status-chip {
+  display: flex;
+  grid-column-gap: 0.25rem;
+  justify-content: flex-start;
+  align-items: center;
+
+  &__indicator {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    position: relative;
+
+    &::after {
+      content: '';
+      width: 0.375rem;
+      height: 0.375rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &__text {
+    font-family: $font-family-Karla;
+    font-size: 14px;
+    line-height: 16px;
+    text-transform: capitalize;
+    display: block;
+  }
+
+  &--completed,
+  &--successful,
+  &--active {
+    color: $green-600;
+
+    .status-chip__indicator {
+      background: $green-100;
+
+      &::after {
+        background: $green-600;
+      }
+    }
+  }
+
+  &--failed,
+  &--deactivated {
+    color: $red-600;
+
+    .status-chip__indicator {
+      background: $red-100;
+
+      &::after {
+        background: $red-600;
+      }
+    }
+  }
+
+  &--pending {
+    color: $orange-600;
+
+    .status-chip__indicator {
+      background: $orange-100;
+
+      &::after {
+        background: $orange-600;
+      }
+    }
+  }
+
+  &--processing {
+    color: $blue-600;
+
+    .status-chip__indicator {
+      background: $blue-100;
+
+      &::after {
+        background: $blue-600;
+      }
+    }
+  }
+
+  &--paused {
+    color: $gray-600;
+
+    .status-chip__indicator {
+      background: $gray-100;
+
+      &::after {
+        background: $gray-600;
+      }
+    }
+  }
+}

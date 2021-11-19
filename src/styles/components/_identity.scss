@@ -1,0 +1,41 @@
+.identity {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  grid-column-gap: 0.875rem;
+
+  &--reverse {
+    flex-direction: row-reverse;
+  }
+
+  &__name {
+    font-size: 0.875rem;
+    line-height: 1rem;
+    letter-spacing: -0.01em;
+    color: $black;
+  }
+
+  &__initial,
+  &__image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  &__initial {
+    background: $blue-800;
+    color: $white;
+    text-transform: uppercase;
+    font-family: $font-family-Karla;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__image {
+    img {
+      max-width: 100%;
+    }
+  }
+}

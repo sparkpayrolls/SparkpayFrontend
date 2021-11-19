@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { Company, Country, Role } from 'src/api/types';
-import { ImageLoader } from 'src/layouts/dashboard-layout/DashBoardLayout';
+import { Identity } from '../Identity/identity.component';
 import { KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IOrganizationTable } from '../types';
 import { Table } from './Table.component';
@@ -64,26 +64,13 @@ export const OrganizationTable = (props: IOrganizationTable) => {
                   <tr key={company?.id}>
                     <td>
                       <div className="organization-table__item">
-                        <div></div>
-                        {company?.logo && (
-                          <div className="organization-table__item__identity__logo">
-                            <ImageLoader
-                              src={company?.logo}
-                              width="32"
-                              height="32"
-                            />
-                          </div>
-                        )}
-
-                        {!company?.logo && (
-                          <div className="organization-table__item__identity__initial">
-                            {company?.name?.charAt(0)}
-                          </div>
-                        )}
-
-                        <div className="organization-table__item__identity__name">
-                          {company?.name}
-                        </div>
+                        <Identity
+                          image={company?.logo}
+                          imageHeight={32}
+                          imageWidth={32}
+                          initial={company?.name?.charAt(0)}
+                          name={company?.name}
+                        />
                       </div>
                     </td>
 
