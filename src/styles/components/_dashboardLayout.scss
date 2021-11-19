@@ -32,7 +32,9 @@
       padding-top: 6.25rem;
       padding-bottom: 5.875rem;
     }
-
+    &__list:hover {
+      overflow-y: auto;
+    }
     &__list-item {
       margin: 0 1rem;
     }
