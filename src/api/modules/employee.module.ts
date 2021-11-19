@@ -33,16 +33,13 @@ export class EmployeeModule extends HttpRepository {
     await this.delete('employees/delete', { employeeIds });
   }
 
-  async updateEmployeeStatus(
-    id: string,
-    status: EmployeeStatus | keyof typeof EmployeeStatus,
-  ) {
+  async updateEmployeeStatus(id: string, status: EmployeeStatus) {
     await this.put(`/employees/${id}/status`, { status });
   }
 
   async updateMultipleEmployeeStatuses(
     employeeIds: string[],
-    status: EmployeeStatus | keyof typeof EmployeeStatus,
+    status: EmployeeStatus,
   ) {
     await this.put(`/employees/status`, { employeeIds, status });
   }
