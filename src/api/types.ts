@@ -89,15 +89,18 @@ export type PayoutMethod = Document & {
   country: string;
 };
 
-export enum EmployeeStatus {
+export enum EmployeeStatusEnum {
   active = 'active',
   deactivated = 'deactivated',
 }
 
-export const EmployeeStatuses: (
-  | EmployeeStatus
-  | keyof typeof EmployeeStatus
-)[] = Object.values(EmployeeStatus);
+export type EmployeeStatus =
+  | EmployeeStatusEnum
+  | keyof typeof EmployeeStatusEnum;
+
+export const EmployeeStatuses: EmployeeStatus[] = Object.values(
+  EmployeeStatusEnum,
+);
 
 export type Employee = Document & {
   company: string;
@@ -111,7 +114,7 @@ export type Employee = Document & {
   payoutMethodMeta: unknown;
   salaryAddOns: unknown[];
   groups: EmployeeGroup[];
-  status: EmployeeStatus | keyof typeof EmployeeStatus;
+  status: EmployeeStatus;
 };
 
 export type Group = Document & {
@@ -171,4 +174,52 @@ export type Administrator = Document & {
   isRoot: boolean;
   selected: boolean;
   company: string | Company;
+};
+
+export enum PayrollStatusEnum {
+  pending = 'pending',
+  processing = 'processing',
+  completed = 'completed',
+  paused = 'paused',
+}
+
+export type PayrollStatus = PayrollStatusEnum | keyof typeof PayrollStatusEnum;
+
+export type RecentPayroll = {
+  status: PayrollStatus;
+  payDate: string;
+  company: {
+    country: {
+      currencySymbol: string;
+      id: string;
+    };
+    name: string;
+    id: string;
+    logo?: string;
+  };
+  totalAmount: number;
+  id: string;
+  size: number;
+};
+
+export type UserDashboardData = {
+  totalNumberOfEmployees: number;
+  recentPayrolls: RecentPayroll[];
+  totalNumberOfPayrolls: number;
+  totalNumberOfCompanies: number;
+};
+
+export type RecentTransaction = {
+  amount: number;
+  transactionMethod: string;
+  date: string;
+  meta: { description: string };
+  id: string;
+};
+
+export type OrganisationDashboardData = {
+  totalNumberOfPayrolls: number;
+  totalNumberOfEmployees: number;
+  totalPayrollBurden: number;
+  recentTransactions: RecentTransaction[];
 };

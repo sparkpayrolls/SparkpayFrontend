@@ -15,7 +15,6 @@ import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { logOut } from 'src/redux/slices/user/user.slice';
-import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { NavList } from './dashboard-navigation-list';
 
 interface Props {
@@ -26,21 +25,30 @@ interface Props {
 // eslint-disable-next-line no-undef
 const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
   const companies = useAppSelector((state) => state.companies);
-  const selectedCompany = companies.find((company) => company.selected);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const [loadingCompanySelect, setLoadingCompanySelect] = useState('');
 
-  const handleSelect = async (
-    administrator: Administrator,
-    close: () => void,
-  ) => {
+  const selectedCompany = companies.find((company) => company.selected);
+  const userRole = selectedCompany?.isRoot
+    ? 'Owner'
+    : (selectedCompany?.role as Role)?.name;
+  const profileMenuActions = [
+    { name: 'Profile', href: '/profile' },
+    {
+      name: 'Logout',
+      action() {
+        logOut(dispatch);
+      },
+    },
+  ];
+
+  const handleSelect = async (administrator: Administrator) => {
     try {
       const company = administrator.company as Company;
       setLoadingCompanySelect(company.id);
       if (administrator.selected) {
         await $api.company.unselectCompany(company.id);
-        dispatch(commitAministrator(null));
       } else {
         await $api.company.selectCompany(company.id);
       }
@@ -50,7 +58,6 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
       toast.error(`error toggling company - ${err.message}`);
     } finally {
       setLoadingCompanySelect('');
-      setTimeout(close, 500);
     }
   };
 
@@ -74,21 +81,9 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
           <div className="dashboard-navigation__profile">
             <ProfileMenu
               name={`${user?.firstname} ${user?.lastname}`}
-              role={
-                selectedCompany?.isRoot
-                  ? 'Owner'
-                  : (selectedCompany?.role as Role)?.name
-              }
+              role={userRole}
               avatar={user?.avatar}
-              actions={[
-                { name: 'Profile', href: '/profile' },
-                {
-                  name: 'Logout',
-                  action() {
-                    logOut(dispatch);
-                  },
-                },
-              ]}
+              actions={profileMenuActions}
             />
           </div>
         </nav>

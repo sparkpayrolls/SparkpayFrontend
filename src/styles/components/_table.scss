@@ -1,6 +1,4 @@
 .table-component {
-  padding-top: 24px;
-
   &__table-title {
     font-weight: bold;
     font-size: 18px;
@@ -123,7 +121,6 @@
   td {
     text-align: left;
     padding: 20px;
-    border-bottom: 1px solid #f7f9fb;
     font-weight: normal;
     font-size: 14px;
     line-height: 1rem;
@@ -136,6 +133,10 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+  }
+
+  tr {
+    border-bottom: 1px solid #f7f9fb;
   }
 
   &__pagination {
@@ -225,30 +226,11 @@
     align-items: center;
     justify-content: flex-start;
 
-    &__identity {
+    .identity {
       &__initial,
-      &__logo {
+      &__image {
         width: 32px;
         height: 32px;
-        border-radius: 50%;
-        overflow: hidden;
-        margin-right: 12px;
-      }
-
-      &__initial {
-        background: $blue-800;
-        color: $white;
-        text-transform: uppercase;
-        font-family: $font-family-Karla;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      &__logo {
-        img {
-          max-width: 100%;
-        }
       }
     }
 
