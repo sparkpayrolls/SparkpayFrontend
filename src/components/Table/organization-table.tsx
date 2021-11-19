@@ -20,7 +20,7 @@ interface ITable {
   headerRow: string[];
   allChecked?: boolean;
   paginationMeta?: PaginationMeta;
-  refresh?: (
+  refresh?: ( 
     page?: number,
     perPage?: number,
     search?: string,
