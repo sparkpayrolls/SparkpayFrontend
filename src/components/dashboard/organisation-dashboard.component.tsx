@@ -63,14 +63,14 @@ export const OrganisationDashboard = (props: {
         <DashboardCard
           Icon={PayrollCardSvg}
           value={data.totalNumberOfPayrolls}
-          title="Total number of Payrolls"
+          title="Payrolls"
           loading={loading}
         />
 
         <DashboardCard
           Icon={EmployeeCardSvg}
           value={data.totalNumberOfEmployees}
-          title="Total number of employees"
+          title="Employees"
           loading={loading}
         />
       </section>

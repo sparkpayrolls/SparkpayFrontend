@@ -37,7 +37,7 @@ export const UserDashboard = () => {
         <DashboardCard
           Icon={OrganisationCardSvg}
           value={data.totalNumberOfCompanies}
-          title="Total number of Organisations"
+          title="Organisations"
           loading={loading}
         />
 
@@ -45,14 +45,14 @@ export const UserDashboard = () => {
           Icon={PayrollCardSvg}
           value={data.totalNumberOfPayrolls}
           loading={loading}
-          title="Total number of Payrolls"
+          title="Payrolls"
         />
 
         <DashboardCard
           Icon={EmployeeCardSvg}
           value={data.totalNumberOfEmployees}
           loading={loading}
-          title="Total number of employees"
+          title="Employees"
         />
       </section>
 
