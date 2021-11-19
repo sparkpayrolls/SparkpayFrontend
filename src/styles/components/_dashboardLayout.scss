@@ -30,10 +30,12 @@
       margin: 0;
       list-style: none;
       max-height: 67vh;
-      overflow-y: auto;
+      overflow-y: hidden;
       padding-bottom: 10px;
     }
-
+  &__list:hover {
+     overflow-y:auto;
+    }
     &__list-item {
       margin: 0 1rem;
     }

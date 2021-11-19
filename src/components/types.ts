@@ -118,3 +118,4 @@ export type CreateOrganization = {
   phonenumber: string;
   country: string;
 };
+

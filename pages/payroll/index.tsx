@@ -115,7 +115,7 @@ const payrollDetails: NextPage = () => {
                   </span>
                 </td>
                 <div className="payroll-section__employeeImage ">
-                  <Image src={EmployeeInfo} />
+                  <Image src={EmployeeInfo} alt="employee-info"/>
                 </div>
               </tr>
               <tr className="payroll-section__employeeData">
@@ -145,7 +145,7 @@ const payrollDetails: NextPage = () => {
                   </span>
                 </td>
                 <div className="payroll-section__employeeImage ">
-                  <Image src={EmployeeInfo} />
+                  <Image src={EmployeeInfo} alt="employee-info" />
                 </div>
               </tr>
               <tr className="payroll-section__employeeData">
@@ -175,7 +175,7 @@ const payrollDetails: NextPage = () => {
                   </span>
                 </td>
                 <div className="payroll-section__employeeImage ">
-                  <Image src={EmployeeInfo} />
+                  <Image src={EmployeeInfo} alt="employee-info" />
                 </div>
               </tr>
               <tr className="payroll-section__employeeData">
@@ -205,7 +205,7 @@ const payrollDetails: NextPage = () => {
                   </span>
                 </td>
                 <div className="payroll-section__employeeImage ">
-                  <Image src={EmployeeInfo} />
+                  <Image src={EmployeeInfo} alt="employee-info"/>
                 </div>
               </tr>
               <tr className="payroll-section__employeeData">
@@ -235,7 +235,7 @@ const payrollDetails: NextPage = () => {
                   </span>
                 </td>
                 <div className="payroll-section__employeeImage ">
-                  <Image src={EmployeeInfo} />
+                  <Image src={EmployeeInfo} alt="employee-info" />
                 </div>
               </tr>
 
@@ -266,7 +266,7 @@ const payrollDetails: NextPage = () => {
                   </span>
                 </td>
                 <div className="payroll-section__employeeImage ">
-                  <Image src={EmployeeInfo} />
+                  <Image src={EmployeeInfo} alt="employee-info"/>
                 </div>
               </tr>
 
@@ -297,7 +297,7 @@ const payrollDetails: NextPage = () => {
                   </span>
                 </td>
                 <div className="payroll-section__employeeImage ">
-                  <Image src={EmployeeInfo} />
+                  <Image src={EmployeeInfo}  alt="employee-info"/>
                 </div>
               </tr>
 
@@ -328,7 +328,7 @@ const payrollDetails: NextPage = () => {
                   </span>
                 </td>
                 <div className="payroll-section__employeeImage ">
-                  <Image src={EmployeeInfo} />
+                  <Image src={EmployeeInfo} alt="employee-info" />
                 </div>
               </tr>
             </table>

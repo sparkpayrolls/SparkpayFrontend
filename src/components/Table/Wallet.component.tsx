@@ -1,16 +1,10 @@
-/* eslint-disable no-unused-vars */
-import Image from 'next/image';
 import {
   ChangeEvent,
   ChangeEventHandler,
-  MouseEventHandler,
   PropsWithChildren,
   ReactElement,
-  useState,
 } from 'react';
 import { PaginationMeta } from 'src/api/types';
-import { Util } from 'src/helpers/util';
-import search_icon from '../../../public/svgs/search-icon.svg';
 import { SelectInput } from '../Input/seletct-input';
 import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 
@@ -23,12 +17,12 @@ interface ITable {
   refresh?: (
     page?: number,
     perPage?: number,
-    search?: string,
+    // search?: string,
     all?: boolean,
   ) => void;
   title?: string;
   onSearch?: (_: string) => void;
-  onFilterClick?: MouseEventHandler<HTMLButtonElement>;
+  // onFilterClick?: MouseEventHandler<HTMLButtonElement>;
   isEmpty?: boolean;
   emptyStateText?: string;
   isLoading?: boolean;
@@ -45,18 +39,7 @@ type ITablePagination = PaginationMeta & {
 };
 
 export const TR = (props: PropsWithChildren<ITR>) => {
-  return (
-    <tr>
-      <th>
-        <input
-          type="checkbox"
-          checked={props.checked}
-          onChange={props.onChange}
-        />
-      </th>
-      {props.children}
-    </tr>
-  );
+  return <tr>{props.children}</tr>;
 };
 
 const TablePagination = (props: ITablePagination) => {
@@ -154,21 +137,88 @@ const TablePagination = (props: ITablePagination) => {
   );
 };
 
-const searchFunc = Util.debounce(
-  (func: (_?: number, _1?: number, _2?: string) => void, search: string) => {
-    func(undefined, undefined, search);
-  },
-  500,
-);
+// const searchFunc = Util.debounce(
+//   (func: (_?: number, _1?: number, _2?: string) => void, search: string) => {
+//     func(undefined, undefined, search);
+//   },
+//   500,
+// );
 
 export const Table = (props: ITable) => {
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
 
   const refresh = (page?: number, perPage?: number, all?: boolean) => {
-    props.refresh && props.refresh(page, perPage, search, all);
+    props.refresh && props.refresh(page, perPage, all);
   };
 
   return (
+    <div
+      className={`table-component${
+        props.isLoading ? ' table-component--loading' : ''
+      }`}
+    >
+      <div
+        style={{
+          paddingTop: '1rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 20,
+        }}
+      >
+        {/* {props.title && (
+          <p className="table-component__table-title">{props.title}</p>
+        )} */}
+
+        <div
+          style={{
+            minWidth: '45%',
+            display: 'flex',
+            gridColumnGap: 16,
+            alignItems: 'center',
+          }}
+        >
+          {/* <div className="table-component__search">
+            <input
+              type="search"
+              placeholder="Search by name"
+              className="table-component__search--input"
+              onChange={(event) => {
+                setSearch(event.target.value);
+                searchFunc(props.refresh || (() => {}), event.target.value);
+              }}
+            />
+            <Image src={search_icon} alt="search icon" />
+          </div> */}
+
+          {!!props.kebabMenuItems?.length && (
+            <button className="table-component__option-btn">
+              {/* <KebabMenuSVG /> */}
+              <KebabMenu items={props.kebabMenuItems} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <table>
+        <thead className="table-component__thead">
+          <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
+            {props.headerRow.map((item) => {
+              return <th key={item}>{item}</th>;
+            })}
+          </TR>
+        </thead>
+
+        {props.children()}
+      </table>
+      {props.isEmpty && (
+        <div className="table-component__empty-state">
+          <FileStorageSVG />
+          <span className="table-component__empty-state--text">
+            {props.emptyStateText ?? 'Empty state'}
+          </span>
+        </div>
+      )}
 
       {props.paginationMeta && !props.isEmpty && (
         <TablePagination {...props.paginationMeta} refresh={refresh} />

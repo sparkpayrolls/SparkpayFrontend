@@ -1,9 +1,9 @@
 @media(min-width:992px){
 
   .wallet-billing-page{  
-    margin-right:2rem;
-    margin-left:2rem;
-    margin-top:1.3rem;
+  width:97%;
+  margin:auto;
+  padding-top:3rem;
   
     &__wallet-header-title{
       font-family: Karla;
@@ -15,8 +15,8 @@
   color: #0E347E;
     }
 
-    &__wallet-amount-text{
-      font-family: Karla;
+&__wallet-amount-text{
+font-family: Karla;
 font-style: normal;
 font-weight: 600;
 font-size: 24px;
@@ -24,13 +24,8 @@ line-height: 24px;
 color: #FFFFFF;
 margin-top:0.5rem;
     }
-    // &__wallet-flex{
-    //   display:flex;
-    // margin-top:1.3rem;
-
-    // }
-
     &__wallet-cards{
+      width:100%;
       display:flex;
       margin-top:1.5rem;
 
@@ -69,7 +64,7 @@ margin-top:0.5rem;
         font-family: Karla;
 font-style: normal;
 font-weight: normal;
-font-size: 24px;
+font-size: 1.3rem;
 line-height: 24px;
 color: #0B2253;
 margin-top:0.5rem;
@@ -84,10 +79,27 @@ margin-top:0.5rem;
   &__wallet-yellow-image{
     position:relative;
     top:-15px;
-    left:200px
+    left:230px
     // right:200px;
   }
+  &__transaction-text{
+    font-family: Karla;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  color: #0E347E;
+  padding-top:3rem;
   }
 
+  &__status-text{
+    color:#27BE63 !important;
+  }
+
+  &__wallet-image{
+    position:relative;
+    right:8px;
+  }
+  }
 }  
 
