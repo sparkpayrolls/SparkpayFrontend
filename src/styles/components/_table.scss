@@ -98,7 +98,7 @@
         height: 3px;
         background-color: #1d4ed8;
         width: 100%;
-        animation: slide 1s infinite linear;
+        animation: slide 3s infinite linear;
       }
     }
   }
@@ -214,6 +214,50 @@
         &__option {
           padding: 4px 8px;
         }
+      }
+    }
+  }
+}
+
+.organization-table {
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    &__identity {
+      &__initial,
+      &__logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 12px;
+      }
+
+      &__initial {
+        background: $blue-800;
+        color: $white;
+        text-transform: uppercase;
+        font-family: $font-family-Karla;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      &__logo {
+        img {
+          max-width: 100%;
+        }
+      }
+    }
+
+    &__date-column {
+      &__date {
+        margin-right: 11px;
+      }
+      &__menu {
+        margin-left: auto;
       }
     }
   }

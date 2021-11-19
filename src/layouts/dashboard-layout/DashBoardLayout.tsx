@@ -4,14 +4,18 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Logo from '../../../public/svgs/logo.svg';
 import { ReactNode } from 'react';
-import { OrganizationsMenu } from '@/components/KebabMenu/KebabMenu.component';
+import {
+  OrganizationsMenu,
+  ProfileMenu,
+} from '@/components/KebabMenu/KebabMenu.component';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { IImageLoader } from '@/components/types';
-import { Administrator, Company } from 'src/api/types';
+import { Administrator, Company, Role } from 'src/api/types';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { commitCompanies } from 'src/redux/slices/companies/companies.slice';
+import { logOut } from 'src/redux/slices/user/user.slice';
 
 interface Props {
   children?: ReactNode;
@@ -22,15 +26,16 @@ interface Props {
 const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
   const router = useRouter();
   const companies = useAppSelector((state) => state.companies);
+  const selectedCompany = companies.find((company) => company.selected);
+  const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const handleSelect = async (
     administrator: Administrator,
     close: () => void,
   ) => {
+    const clone = [...companies].map((comp) => ({ ...comp }));
     try {
-      const company = administrator.company as Company;
-      await $api.company.selectCompany(company.id);
       close();
       dispatch(
         commitCompanies(
@@ -39,9 +44,12 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
           }),
         ),
       );
+      const company = administrator.company as Company;
+      await $api.company.selectCompany(company.id);
     } catch (error) {
       const err = error as HttpError;
       toast.error(`error selecting company - ${err.message}`);
+      dispatch(commitCompanies(clone));
     }
   };
 
@@ -137,17 +145,15 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
             </li>
 
             <li className="dashboard-navigation__list-item">
-              <Link href="/organisation-setting">
+              <Link href="/organisations">
                 <a
                   className={[
                     'dashboard-navigation__link',
-                    router.pathname.includes('/organisation-setting')
-                      ? 'active'
-                      : '',
+                    router.pathname.includes('/organisations') ? 'active' : '',
                   ].join(' ')}
                 >
                   <OrganizationSettingsSvg />
-                  Organisation Setting
+                  Organisations
                 </a>
               </Link>
             </li>
@@ -180,6 +186,27 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
               </Link>
             </li>
           </ul>
+
+          <div className="dashboard-navigation__profile">
+            <ProfileMenu
+              name={`${user?.firstname} ${user?.lastname}`}
+              role={
+                selectedCompany?.isRoot
+                  ? 'Owner'
+                  : (selectedCompany?.role as Role)?.name
+              }
+              avatar={user?.avatar}
+              actions={[
+                { name: 'Profile', href: '/profile' },
+                {
+                  name: 'Logout',
+                  action() {
+                    logOut(dispatch);
+                  },
+                },
+              ]}
+            />
+          </div>
         </nav>
 
         <div className="dashboardLayout__top-bar">

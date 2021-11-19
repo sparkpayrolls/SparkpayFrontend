@@ -25,7 +25,7 @@ export const refreshCompanies = async (dispatch: AppDispatch) => {
 
     dispatch(commitCompanies(companies));
   } catch (error) {
-    // error getting countries
+    // error getting companies
   }
 };
 

@@ -33,6 +33,7 @@ interface ITable {
   emptyStateText?: string;
   isLoading?: boolean;
   kebabMenuItems?: IKebabItem[];
+  isNotSelectable?: boolean;
 }
 
 interface ITR {
@@ -94,6 +95,7 @@ const TablePagination = (props: ITablePagination) => {
           actualValue="value"
           onChange={handlePerPageSelect}
           selected={{ value: String(props.perPage) }}
+          dropTop
         />
       </div>
 
@@ -208,12 +210,14 @@ export const Table = (props: ITable) => {
             <Image src={search_icon} alt="search icon" />
           </div>
 
-          <button
-            className="table-component__filter-btn"
-            onClick={props.onFilterClick}
-          >
-            <span>Filter</span> <FilterSVG />
-          </button>
+          {props.onFilterClick && (
+            <button
+              className="table-component__filter-btn"
+              onClick={props.onFilterClick}
+            >
+              <span>Filter</span> <FilterSVG />
+            </button>
+          )}
 
           {!!props.kebabMenuItems?.length && (
             <button className="table-component__option-btn">
@@ -226,11 +230,20 @@ export const Table = (props: ITable) => {
 
       <table>
         <thead className="table-component__thead">
-          <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
-            {props.headerRow.map((item) => {
-              return <th key={item}>{item}</th>;
-            })}
-          </TR>
+          {!props.isNotSelectable && (
+            <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
+              {props.headerRow.map((item) => {
+                return <th key={item}>{item}</th>;
+              })}
+            </TR>
+          )}
+          {props.isNotSelectable && (
+            <tr>
+              {props.headerRow.map((item) => {
+                return <th key={item}>{item}</th>;
+              })}
+            </tr>
+          )}
         </thead>
 
         {props.children()}
