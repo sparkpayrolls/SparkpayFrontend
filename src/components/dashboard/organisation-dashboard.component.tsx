@@ -48,7 +48,7 @@ export const OrganisationDashboard = (props: {
 
   useEffect(() => {
     getData();
-  }, [getData]);
+  }, [getData, props.administrator]);
 
   return (
     <>
