@@ -35,6 +35,18 @@ const AuthManager = () => {
         return config;
       });
 
+      $api.$axios.interceptors.response.use(
+        (res) => res,
+        (error) => {
+          if (error.response?.status === 401) {
+            Cookies.remove('auth_token');
+            dispatch(commitUser(null));
+          }
+
+          return Promise.reject(error);
+        },
+      );
+
       if (!isLoggedIn) {
         $api.user
           .getProfile()
