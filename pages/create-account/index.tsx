@@ -45,7 +45,9 @@ const CreateAccount: NextPage = () => {
     email: string,
     // eslint-disable-next-line no-unused-vars
     setErrors: (errors: FormikErrors<ISignUpForm>) => void,
+    setSubmitting: (isSubmitting: boolean) => void,
   ) => {
+    setSubmitting(true);
     try {
       if (email) {
         const isTaken = await $api.auth.emailTaken(email);
@@ -55,6 +57,8 @@ const CreateAccount: NextPage = () => {
       }
     } catch (error: any) {
       // error validating email
+    } finally {
+      setSubmitting(false);
     }
   }, 500);
 
@@ -117,6 +121,7 @@ const CreateAccount: NextPage = () => {
               handleSubmit,
               isSubmitting,
               setErrors,
+              setSubmitting,
             } = props;
             return (
               <form onSubmit={handleSubmit}>
@@ -153,28 +158,38 @@ const CreateAccount: NextPage = () => {
                     placeholder="Email Address"
                     name="email"
                     value={values.email}
+                    loading={isSubmitting}
                     onChange={(event: any) => {
-                      validateEmail(event.target.value, setErrors);
+                      validateEmail(
+                        event.target.value,
+                        setErrors,
+                        setSubmitting,
+                      );
                       handleChange(event);
                     }}
-                    onBlur={handleBlur}
+                    onBlur={(event: any) => {
+                      validateEmail(
+                        event.target.value,
+                        setErrors,
+                        setSubmitting,
+                      );
+                      handleBlur(event);
+                    }}
                     hasError={errors.email && touched.email}
                     error={errors.email}
                   />
 
                   <SelectInput
-                    options={countries.map((country) => ({
-                      value: country.id,
-                      text: country.name,
-                      ...country,
-                    }))}
+                    options={countries}
+                    displayValue="name"
+                    actualValue="id"
                     name="country"
                     value={values.country}
-                    onChange={(event) => handleChange(event)}
-                    onBlur={(event) => handleBlur(event)}
-                    error={errors.country}
-                    hasError={!!errors.country && touched.country}
-                    placeholder="Select Country"
+                    label="Select Country"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    loading={!countries.length}
+                    error={(touched.country && errors.country) || ''}
                   />
 
                   <Input
@@ -195,8 +210,8 @@ const CreateAccount: NextPage = () => {
                   label="Create Account"
                   className="create-account__submit-btn"
                   primary
-                  disabled={isSubmitting}
-                  showSpinner={loading}
+                  disabled={isSubmitting || !countries.length}
+                  showSpinner={loading || isSubmitting || !countries.length}
                 />
               </form>
             );

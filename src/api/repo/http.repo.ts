@@ -1,7 +1,8 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import { Stringifiable, stringifyUrl } from 'query-string';
 
-import { Response } from "../types";
-import { HttpError } from "./http.error";
+import { Response } from '../types';
+import { HttpError } from './http.error';
 
 export class HttpRepository {
   private $axios: AxiosInstance;
@@ -33,7 +34,7 @@ export class HttpRepository {
   async put<T>(
     url: string,
     body?: unknown,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Response<T>> {
     try {
       const { data } = await this.$axios.put(url, body, config);
@@ -47,7 +48,7 @@ export class HttpRepository {
   async post<T>(
     url: string,
     body?: unknown,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Response<T>> {
     try {
       const { data } = await this.$axios.post(url, body, config);
@@ -60,12 +61,16 @@ export class HttpRepository {
 
   async delete<T>(
     url: string,
-    config?: AxiosRequestConfig
+    data?: unknown,
+    config?: AxiosRequestConfig,
   ): Promise<Response<T>> {
     try {
-      const { data } = await this.$axios.delete(url, config);
+      const { data: d } = await this.$axios.delete(url, {
+        data,
+        ...(config || {}),
+      });
 
-      return data as Response<T>;
+      return d as Response<T>;
     } catch (error) {
       throw HttpError.parse(error as AxiosError);
     }
@@ -74,7 +79,7 @@ export class HttpRepository {
   async patch<T>(
     url: string,
     body?: unknown,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Response<T>> {
     try {
       const { data } = await this.$axios.patch(url, body, config);
@@ -87,7 +92,7 @@ export class HttpRepository {
 
   async options<T>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ): Promise<Response<T>> {
     try {
       const { data } = await this.$axios.options(url, config);
@@ -98,19 +103,13 @@ export class HttpRepository {
     }
   }
 
-  parseQueryObject(obj: Record<string, string | number | boolean>): string {
-    const entries = Object.entries(obj);
+  parseQueryObject(
+    query: Record<string, Stringifiable | Stringifiable[]>,
+  ): string {
+    /** convert perPage to limit */
+    query.limit = query.perPage;
+    delete query.perPage;
 
-    const parsed = entries.map((cur) => {
-      const [key, value] = cur;
-
-      if (typeof value === "boolean") {
-        return `${key}=${value ? "true" : "false"}`;
-      }
-
-      return `${key}=${value}`;
-    });
-
-    return `?${parsed.join("&")}`;
+    return stringifyUrl({ url: '', query });
   }
 }

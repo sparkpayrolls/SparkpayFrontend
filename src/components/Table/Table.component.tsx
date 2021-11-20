@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import Image from 'next/image';
 import {
+  ChangeEvent,
   ChangeEventHandler,
   MouseEventHandler,
   PropsWithChildren,
@@ -9,22 +11,30 @@ import {
 import { PaginationMeta } from 'src/api/types';
 import { Util } from 'src/helpers/util';
 import search_icon from '../../../public/svgs/search-icon.svg';
+import { SelectInput } from '../Input/seletct-input';
+import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 
 interface ITable {
-  // eslint-disable-next-line no-unused-vars
   children: () => ReactElement;
   onCheckAllClick?: ChangeEventHandler<HTMLInputElement>;
   headerRow: string[];
   allChecked?: boolean;
   paginationMeta?: PaginationMeta;
-  // eslint-disable-next-line no-unused-vars
-  refresh?: (page?: number, perPage?: number, search?: string) => void;
+  refresh?: (
+    page?: number,
+    perPage?: number,
+    search?: string,
+    all?: boolean,
+  ) => void;
   title?: string;
-  // eslint-disable-next-line no-unused-vars
   onSearch?: (_: string) => void;
   onFilterClick?: MouseEventHandler<HTMLButtonElement>;
   isEmpty?: boolean;
   emptyStateText?: string;
+  isLoading?: boolean;
+  kebabMenuItems?: IKebabItem[];
+  isNotSelectable?: boolean;
+  isNotSearchable?: boolean;
 }
 
 interface ITR {
@@ -33,8 +43,7 @@ interface ITR {
 }
 
 type ITablePagination = PaginationMeta & {
-  // eslint-disable-next-line no-unused-vars
-  refresh?: (page?: number, perPage?: number) => void;
+  refresh?: (page?: number, perPage?: number, all?: boolean) => void;
 };
 
 export const TR = (props: PropsWithChildren<ITR>) => {
@@ -53,8 +62,19 @@ export const TR = (props: PropsWithChildren<ITR>) => {
 };
 
 const TablePagination = (props: ITablePagination) => {
-  const refresh = (page: number) => {
-    props.refresh && props.refresh(page, props.perPage);
+  const refresh = (page: number, perPage: number, all?: boolean) => {
+    props.refresh && props.refresh(page, perPage, all);
+  };
+
+  const handlePerPageSelect = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value === 'all') {
+      return refresh(1, props.perPage, true);
+    }
+    const numberOfPages = Math.ceil(props.total / +value);
+    const newPage = props.page > numberOfPages ? numberOfPages : props.page;
+
+    refresh(newPage, +value);
   };
 
   return (
@@ -63,45 +83,63 @@ const TablePagination = (props: ITablePagination) => {
         <span>Showing</span> Page {props.page} of {props.pageCount}
       </div>
 
+      <div className="table-component__pagination--per-page d-flex align-items-center">
+        <span>Items per page: </span>
+        <SelectInput
+          options={[
+            { value: '10' },
+            { value: '100' },
+            { value: '1000' },
+            { value: 'all' },
+          ]}
+          displayValue="value"
+          actualValue="value"
+          onChange={handlePerPageSelect}
+          selected={{ value: String(props.perPage) }}
+          dropTop
+        />
+      </div>
+
       <div className="table-component__pagination--btns">
         <button
           disabled={!props.hasPrevPage}
-          onClick={() => refresh(props.previousPage || 1)}
+          onClick={() => refresh(props.previousPage || 1, props.perPage)}
           className="prev"
         >
           Prev
         </button>
-        <button onClick={() => refresh(1)} disabled={props.page === 1}>
+        <button
+          onClick={() => refresh(1, props.perPage)}
+          disabled={props.page === 1}
+        >
           1
         </button>
-        {props.page - 4 > 0 && <button>...</button>}
-        {props.page - 3 > 0 && (
-          <button onClick={() => refresh(props.page - 2)}>
+        {props.page - 3 > 0 && <button>...</button>}
+        {props.page === props.pageCount && props.pageCount > 3 && (
+          <button onClick={() => refresh(props.page - 2, props.perPage)}>
             {props.page - 2}
           </button>
         )}
-        {props.page - 2 > 0 && (
-          <button onClick={() => refresh(props.page - 1)}>
+        {props.page - 2 > 0 && props.page !== props.pageCount - 2 && (
+          <button onClick={() => refresh(props.page - 1, props.perPage)}>
             {props.page - 1}
           </button>
         )}
         {props.page - 1 > 0 && props.page + 1 <= props.pageCount && (
           <button disabled>{props.page}</button>
         )}
-        {props.page + 2 <= props.pageCount && (
-          <button onClick={() => refresh(props.page + 1)}>
+        {props.page + 2 <= props.pageCount && props.page !== 3 && (
+          <button onClick={() => refresh(props.page + 1, props.perPage)}>
             {props.page + 1}
           </button>
         )}
-        {props.page + 3 <= props.pageCount && (
-          <button onClick={() => refresh(props.page + 2)}>
-            {props.page + 2}
-          </button>
+        {props.page === 1 && props.pageCount > 3 && (
+          <button onClick={() => refresh(3, props.perPage)}>3</button>
         )}
-        {props.page + 4 <= props.pageCount && <button>...</button>}
+        {props.page + 3 <= props.pageCount && <button>...</button>}
         {props.pageCount !== 1 && (
           <button
-            onClick={() => refresh(props.pageCount)}
+            onClick={() => refresh(props.pageCount, props.perPage)}
             disabled={props.page === props.pageCount}
           >
             {props.pageCount}
@@ -109,7 +147,7 @@ const TablePagination = (props: ITablePagination) => {
         )}
         <button
           className="next"
-          onClick={() => refresh(props.nextPage || 1)}
+          onClick={() => refresh(props.nextPage || 1, props.perPage)}
           disabled={!props.hasNextPage}
         >
           Next
@@ -120,7 +158,6 @@ const TablePagination = (props: ITablePagination) => {
 };
 
 const searchFunc = Util.debounce(
-  // eslint-disable-next-line no-unused-vars
   (func: (_?: number, _1?: number, _2?: string) => void, search: string) => {
     func(undefined, undefined, search);
   },
@@ -130,66 +167,91 @@ const searchFunc = Util.debounce(
 export const Table = (props: ITable) => {
   const [search, setSearch] = useState('');
 
-  const refresh = (page?: number, perPage?: number) => {
-    props.refresh && props.refresh(page, perPage, search);
+  const refresh = (page?: number, perPage?: number, all?: boolean) => {
+    props.refresh && props.refresh(page, perPage, search, all);
   };
 
   return (
-    <div className="table-component">
-      <div
-        style={{
-          paddingTop: '1rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: 20,
-        }}
-      >
-        {props.title && (
-          <p className="table-component__table-title">{props.title}</p>
-        )}
-
+    <div
+      className={`table-component${
+        props.isLoading ? ' table-component--loading' : ''
+      }`}
+    >
+      {(!!props.title ||
+        !props.isNotSearchable ||
+        !!props.onFilterClick ||
+        !!props.kebabMenuItems?.length) && (
         <div
           style={{
-            minWidth: '45%',
+            paddingTop: '2.5rem',
             display: 'flex',
-            gridColumnGap: 16,
             alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 20,
           }}
         >
-          <div className="table-component__search">
-            <input
-              type="search"
-              placeholder="Search by name"
-              className="table-component__search--input"
-              onChange={(event) => {
-                setSearch(event.target.value);
-                searchFunc(props.refresh || (() => {}), event.target.value);
+          {props.title && (
+            <p className="table-component__table-title">{props.title}</p>
+          )}
+
+          {!props.isNotSearchable && (
+            <div
+              style={{
+                minWidth: '45%',
+                display: 'flex',
+                gridColumnGap: 16,
+                alignItems: 'center',
               }}
-            />
-            <Image src={search_icon} alt="search icon" />
-          </div>
+            >
+              <div className="table-component__search">
+                <input
+                  type="search"
+                  placeholder="Search by name"
+                  className="table-component__search--input"
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                    searchFunc(props.refresh || (() => {}), event.target.value);
+                  }}
+                />
+                <Image src={search_icon} alt="search icon" />
+              </div>
 
-          <button
-            className="table-component__filter-btn"
-            onClick={props.onFilterClick}
-          >
-            <span>Filter</span> <FilterSVG />
-          </button>
+              {props.onFilterClick && (
+                <button
+                  className="table-component__filter-btn"
+                  onClick={props.onFilterClick}
+                >
+                  <span>Filter</span> <FilterSVG />
+                </button>
+              )}
 
-          <button className="table-component__option-btn">
-            <KebabMenuSVG />
-          </button>
+              {!!props.kebabMenuItems?.length && (
+                <button className="table-component__option-btn">
+                  {/* <KebabMenuSVG /> */}
+                  <KebabMenu items={props.kebabMenuItems} />
+                </button>
+              )}
+            </div>
+          )}
         </div>
-      </div>
+      )}
 
       <table>
         <thead className="table-component__thead">
-          <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
-            {props.headerRow.map((item) => {
-              return <th key={item}>{item}</th>;
-            })}
-          </TR>
+          {!props.isNotSelectable && (
+            <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
+              {props.headerRow.map((item) => {
+                return <th key={item}>{item}</th>;
+              })}
+            </TR>
+          )}
+          {props.isNotSelectable && (
+            <tr>
+              {props.headerRow.map((item) => {
+                return <th key={item}>{item}</th>;
+              })}
+            </tr>
+          )}
         </thead>
 
         {props.children()}
@@ -198,7 +260,9 @@ export const Table = (props: ITable) => {
         <div className="table-component__empty-state">
           <FileStorageSVG />
           <span className="table-component__empty-state--text">
-            {props.emptyStateText ?? 'Empty state'}
+            {props.isLoading
+              ? 'Getting data'
+              : props.emptyStateText ?? 'No data'}
           </span>
         </div>
       )}
@@ -220,29 +284,6 @@ const FilterSVG = () => (
   >
     <path
       d="M3.11325 10.9998C3.25099 10.6095 3.50641 10.2715 3.84432 10.0324C4.18223 9.79327 4.58598 9.66488 4.99992 9.66488C5.41386 9.66488 5.81761 9.79327 6.15552 10.0324C6.49343 10.2715 6.74885 10.6095 6.88659 10.9998H13.6666V12.3332H6.88659C6.74885 12.7235 6.49343 13.0616 6.15552 13.3007C5.81761 13.5397 5.41386 13.6681 4.99992 13.6681C4.58598 13.6681 4.18223 13.5397 3.84432 13.3007C3.50641 13.0616 3.25099 12.7235 3.11325 12.3332H0.333252V10.9998H3.11325ZM7.11325 6.33318C7.25099 5.94282 7.50641 5.6048 7.84432 5.3657C8.18223 5.12661 8.58598 4.99821 8.99992 4.99821C9.41386 4.99821 9.81761 5.12661 10.1555 5.3657C10.4934 5.6048 10.7489 5.94282 10.8866 6.33318H13.6666V7.66651H10.8866C10.7489 8.05687 10.4934 8.39489 10.1555 8.63398C9.81761 8.87308 9.41386 9.00148 8.99992 9.00148C8.58598 9.00148 8.18223 8.87308 7.84432 8.63398C7.50641 8.39489 7.25099 8.05687 7.11325 7.66651H0.333252V6.33318H7.11325ZM3.11325 1.66651C3.25099 1.27615 3.50641 0.938133 3.84432 0.699036C4.18223 0.45994 4.58598 0.331543 4.99992 0.331543C5.41386 0.331543 5.81761 0.45994 6.15552 0.699036C6.49343 0.938133 6.74885 1.27615 6.88659 1.66651H13.6666V2.99984H6.88659C6.74885 3.3902 6.49343 3.72822 6.15552 3.96732C5.81761 4.20641 5.41386 4.33481 4.99992 4.33481C4.58598 4.33481 4.18223 4.20641 3.84432 3.96732C3.50641 3.72822 3.25099 3.3902 3.11325 2.99984H0.333252V1.66651H3.11325ZM4.99992 2.99984C5.17673 2.99984 5.3463 2.92961 5.47132 2.80458C5.59635 2.67956 5.66659 2.50999 5.66659 2.33318C5.66659 2.15637 5.59635 1.9868 5.47132 1.86177C5.3463 1.73675 5.17673 1.66651 4.99992 1.66651C4.82311 1.66651 4.65354 1.73675 4.52851 1.86177C4.40349 1.9868 4.33325 2.15637 4.33325 2.33318C4.33325 2.50999 4.40349 2.67956 4.52851 2.80458C4.65354 2.92961 4.82311 2.99984 4.99992 2.99984ZM8.99992 7.66651C9.17673 7.66651 9.3463 7.59627 9.47132 7.47125C9.59635 7.34622 9.66659 7.17665 9.66659 6.99984C9.66659 6.82303 9.59635 6.65346 9.47132 6.52844C9.3463 6.40342 9.17673 6.33318 8.99992 6.33318C8.82311 6.33318 8.65354 6.40342 8.52851 6.52844C8.40349 6.65346 8.33325 6.82303 8.33325 6.99984C8.33325 7.17665 8.40349 7.34622 8.52851 7.47125C8.65354 7.59627 8.82311 7.66651 8.99992 7.66651ZM4.99992 12.3332C5.17673 12.3332 5.3463 12.2629 5.47132 12.1379C5.59635 12.0129 5.66659 11.8433 5.66659 11.6665C5.66659 11.4897 5.59635 11.3201 5.47132 11.1951C5.3463 11.0701 5.17673 10.9998 4.99992 10.9998C4.82311 10.9998 4.65354 11.0701 4.52851 11.1951C4.40349 11.3201 4.33325 11.4897 4.33325 11.6665C4.33325 11.8433 4.40349 12.0129 4.52851 12.1379C4.65354 12.2629 4.82311 12.3332 4.99992 12.3332Z"
-      fill="#3A434B"
-    />
-  </svg>
-);
-
-const KebabMenuSVG = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M10 6C8.89543 6 8 5.10457 8 4C8 2.89543 8.89543 2 10 2C11.1046 2 12 2.89543 12 4C12 5.10457 11.1046 6 10 6Z"
-      fill="#3A434B"
-    />
-    <path
-      d="M10 12C8.89543 12 8 11.1046 8 10C8 8.89543 8.89543 8 10 8C11.1046 8 12 8.89543 12 10C12 11.1046 11.1046 12 10 12Z"
-      fill="#3A434B"
-    />
-    <path
-      d="M10 18C8.89543 18 8 17.1046 8 16C8 14.8954 8.89543 14 10 14C11.1046 14 12 14.8954 12 16C12 17.1046 11.1046 18 10 18Z"
       fill="#3A434B"
     />
   </svg>

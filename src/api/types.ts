@@ -50,6 +50,8 @@ export type User = Document & {
   country: Country;
 
   emailVerified: boolean;
+
+  avatar?: string;
 };
 
 export type LoggedInUser = {
@@ -87,6 +89,19 @@ export type PayoutMethod = Document & {
   country: string;
 };
 
+export enum EmployeeStatusEnum {
+  active = 'active',
+  deactivated = 'deactivated',
+}
+
+export type EmployeeStatus =
+  | EmployeeStatusEnum
+  | keyof typeof EmployeeStatusEnum;
+
+export const EmployeeStatuses: EmployeeStatus[] = Object.values(
+  EmployeeStatusEnum,
+);
+
 export type Employee = Document & {
   company: string;
   firstname: string;
@@ -98,4 +113,113 @@ export type Employee = Document & {
   payoutMethod?: PayoutMethod;
   payoutMethodMeta: unknown;
   salaryAddOns: unknown[];
+  groups: EmployeeGroup[];
+  status: EmployeeStatus;
+};
+
+export type Group = Document & {
+  name: string;
+};
+
+export type EmployeeGroup = Document & {
+  group: Group;
+};
+
+export type Company = Document & {
+  name: string;
+  email: string;
+  phonenumber: string;
+  country: string | Country;
+  logo?: string;
+};
+
+export enum PermissionGroupEnum {
+  Company = 'Company',
+  Employee = 'Employee',
+  'Wallet & Billing' = 'Wallet & Billing',
+  Payroll = 'Payroll',
+  AuditTrail = 'AuditTrail',
+  Remittance = 'Remittance',
+  Admin = 'Admin',
+}
+
+export enum PermissionLevelEnum {
+  read = 'read',
+  write = 'write',
+}
+
+export type PermissionGroup =
+  | PermissionGroupEnum
+  | keyof typeof PermissionGroupEnum;
+export type PermissionLevel =
+  | PermissionLevelEnum
+  | keyof typeof PermissionLevelEnum;
+
+export type Permission = Document & {
+  group: PermissionGroup;
+  level: PermissionLevel;
+  description: string;
+};
+
+export type Role = Document & {
+  name: string;
+  company: string | Company;
+  permissions: string[] | Permission[];
+  description: string;
+};
+
+export type Administrator = Document & {
+  user: string | User;
+  role?: string | Role;
+  isRoot: boolean;
+  selected: boolean;
+  company: string | Company;
+};
+
+export enum PayrollStatusEnum {
+  pending = 'pending',
+  processing = 'processing',
+  completed = 'completed',
+  paused = 'paused',
+}
+
+export type PayrollStatus = PayrollStatusEnum | keyof typeof PayrollStatusEnum;
+
+export type RecentPayroll = {
+  status: PayrollStatus;
+  payDate: string;
+  company: {
+    country: {
+      currencySymbol: string;
+      id: string;
+    };
+    name: string;
+    id: string;
+    logo?: string;
+  };
+  totalAmount: number;
+  id: string;
+  size: number;
+};
+
+export type UserDashboardData = {
+  totalNumberOfEmployees: number;
+  recentPayrolls: RecentPayroll[];
+  totalNumberOfPayrolls: number;
+  totalNumberOfCompanies: number;
+};
+
+export type RecentTransaction = {
+  amount: number;
+  transactionMethod: string;
+  date: string;
+  meta: { description: string };
+  id: string;
+};
+
+export type OrganisationDashboardData = {
+  totalNumberOfPayrolls: number;
+  totalNumberOfEmployees: number;
+  totalPayrollBurden: number;
+  recentTransactions: RecentTransaction[];
 };

@@ -14,20 +14,37 @@ import Cookies from 'js-cookie';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
 import { commitUser } from 'src/redux/slices/user/user.slice';
+import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
+import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 let persistor = persistStore(store);
 
 const AuthManager = () => {
-  const { user } = useAppSelector((state) => state);
+  const { user, companies } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
-
+    const isLoggedIn = !!user;
     if (authToken) {
-      const isLoggedIn = !!user;
+      $api.$axios.interceptors.request.use((config) => {
+        config.headers.Authorization = `Bearer ${authToken}`;
 
-      $api.$axios.defaults.headers.Authorization = `Bearer ${authToken}`;
+        return config;
+      });
+
+      $api.$axios.interceptors.response.use(
+        (res) => res,
+        (error) => {
+          if (error.response?.status === 401) {
+            Cookies.remove('auth_token');
+            dispatch(commitUser(null));
+          }
+
+          return Promise.reject(error);
+        },
+      );
 
       if (!isLoggedIn) {
         $api.user
@@ -39,22 +56,24 @@ const AuthManager = () => {
             // error logging in...
             Cookies.remove('auth_token');
           });
+      } else {
+        refreshCompanies(dispatch);
       }
     }
 
-    const authinterceptor = $api.$axios.interceptors.response.use((res) => {
-      if (res.status === 401) {
-        Cookies.remove('auth_token');
-        dispatch(commitUser(null));
-      }
-
-      return res;
-    });
-
-    return () => {
-      $api.$axios.interceptors.response.eject(authinterceptor);
-    };
+    if (!authToken && isLoggedIn) {
+      dispatch(commitUser(null));
+    }
   }, [user, dispatch]);
+
+  useEffect(() => {
+    const companySelected = companies.some((company) => company.selected);
+    if (!!user && companySelected) {
+      getCurrentAdministrator(dispatch);
+    } else {
+      dispatch(commitAministrator(null));
+    }
+  }, [companies, user, dispatch]);
 
   return null;
 };
@@ -70,8 +89,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <NiceModal.Provider>
-            <Component {...pageProps} />
             <AuthManager />
+            <Component {...pageProps} />
             <ToastContainer hideProgressBar={true} autoClose={3000} />
           </NiceModal.Provider>
         </PersistGate>

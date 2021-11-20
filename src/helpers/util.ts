@@ -1,10 +1,14 @@
-import { DebouncedFunc } from "./types";
+/* eslint-disable no-unused-vars */
+import { IAllowedPermissions } from '@/components/types';
+import { Administrator, PaginationMeta, Permission, Role } from 'src/api/types';
+import { DebouncedFunc } from './types';
 
 export class Util {
   static debounce<T extends (...args: any) => any>(
     func: T,
-    wait: number
+    wait: number,
   ): DebouncedFunc<T> {
+    // eslint-disable-next-line no-undef
     let timer: NodeJS.Timeout;
     let shouldInvoke = false;
 
@@ -22,5 +26,54 @@ export class Util {
     };
 
     return debounced as T;
+  }
+
+  static capitalize(txt: string) {
+    let [first, ...rest] = txt.split('');
+    if (first) {
+      first = first.toUpperCase();
+    }
+
+    return [first, ...rest].join('');
+  }
+
+  static noop = () => {
+    /** noop */
+  };
+
+  static getDefaultPaginationMeta(_: Partial<PaginationMeta>): PaginationMeta {
+    return {
+      total: 0,
+      perPage: 10,
+      pageCount: 0,
+      page: 1,
+      pagingCounter: 1,
+      hasNextPage: false,
+      hasPrevPage: false,
+      previousPage: null,
+      nextPage: null,
+      ..._,
+    };
+  }
+
+  static canActivate(
+    allowedPermissions: IAllowedPermissions,
+    administrator: Administrator | null,
+  ) {
+    if (administrator?.isRoot) {
+      return true;
+    }
+
+    const role = administrator?.role as Role;
+    const permissions = role?.permissions as Permission[];
+
+    const canActivate = allowedPermissions.every(([group, level]) => {
+      return permissions?.some(
+        (permission) =>
+          permission.group === group && (level === level || level === 'write'),
+      );
+    });
+
+    return canActivate;
   }
 }

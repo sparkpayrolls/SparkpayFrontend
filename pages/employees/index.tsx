@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { NextPage } from 'next';
+import NiceModal from '@ebay/nice-modal-react';
 
 import { useCallback, useState, useEffect } from 'react';
 import { Button } from '../../src/components/Button/Button.component';
@@ -10,65 +11,21 @@ import withAuth from 'src/helpers/HOC/withAuth';
 import { Table, TR } from '../../src/components/Table/Table.component';
 import { Employee, PaginationMeta } from 'src/api/types';
 import { $api } from 'src/api';
-import { toast } from 'react-toastify';
 
 import Plus from '../../public/svgs/add-fill.svg';
 import SearchInput from '../../public/svgs/search.svg';
 import avatar from '../../public/images/avatar-img.png';
-
-// ! Dummy Data
-// const names = [
-//   { firstname: 'Tomike', lastname: 'Peter' },
-//   { firstname: 'Christianah', lastname: 'Peter' },
-//   { firstname: 'Opeyemi', lastname: 'Peter' },
-//   { firstname: 'Emmanuel', lastname: 'Menyaga' },
-//   { firstname: 'Ojonugwa', lastname: 'Alikali' },
-// ];
-
-// const emps = new Array(200).fill(null).map(() => {
-//   const name = names[Math.floor(names.length * Math.random())];
-
-//   return {
-//     id: String(Math.random() * 1000000),
-//     name: `${name.firstname} ${name.lastname}`,
-//     email: `${name.firstname.toLowerCase()}@sparkpayhq.com`,
-//     amount: Number((Math.random() * 1000000).toFixed(2)).toLocaleString(),
-//     payoutMethod: 'Bank Transfer',
-//     date: new Date().toISOString(),
-//     groups: [{ name: 'Group 1' }, { name: 'Group 2' }],
-//   };
-// });
-
-// const getEmployees = (page = 1, perPage = 10, search = '') => {
-//   let empClone = emps;
-//   if (search) {
-//     empClone = empClone.filter((emp) => {
-//       return new RegExp(search, 'gi').test(emp.name);
-//     });
-//   }
-
-//   const pageCount = Math.ceil((empClone.length || 1) / perPage);
-//   const hasPrevPage = page > 1 && empClone.length >= 1;
-//   const hasNextPage = page < pageCount;
-
-//   return {
-//     data: empClone.slice((page - 1) * perPage, perPage * page),
-//     meta: {
-//       total: empClone.length,
-//       perPage,
-//       pageCount,
-//       page,
-//       pagingCounter: 1,
-//       hasNextPage,
-//       hasPrevPage,
-//       previousPage: hasPrevPage ? page - 1 : null,
-//       nextPage: hasNextPage ? page + 1 : null,
-//     },
-//   };
-// };
+import moment from 'moment';
+import { KebabMenu } from '@/components/KebabMenu/KebabMenu.component';
+import { EmployeeFilterModal } from '@/components/Modals/EmployeeFilterModal.component';
+import { IEmployeeFilter } from '@/components/types';
+import { AddEmployeeModal } from '@/components/Modals/AddEmployeeModal.component';
+import { HttpError } from 'src/api/repo/http.error';
+import { toast } from 'react-toastify';
 
 const EmployeeTab = () => {
   const [selected, setSelected] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
     total: 0,
@@ -81,19 +38,72 @@ const EmployeeTab = () => {
     previousPage: null,
     nextPage: null,
   });
+  const [filter, setFilter] = useState<IEmployeeFilter>({});
 
   const refreshEmployees = useCallback(
-    // eslint-disable-next-line no-unused-vars
-    async (page = 1, perPage = 3, search = '') => {
-      // const res = getEmployees(page, perPage, search);
-      const res = await $api.employee.getEmployees(page, perPage);
-      setEmployees(res.data);
-      if (res.meta) {
-        setPaginationMeta(res.meta);
+    async (page = 1, perPage = 10, search = '', all = false) => {
+      try {
+        setIsLoading(true);
+        const res = await $api.employee.getEmployees(
+          page,
+          perPage,
+          search,
+          all,
+          filter.salaryRange,
+          filter.status,
+        );
+        setEmployees(res.data);
+        if (res.meta) {
+          setPaginationMeta(res.meta);
+        }
+      } catch (error) {
+        // error getting employees...
+      } finally {
+        setIsLoading(false);
       }
     },
-    [setEmployees],
+    [setEmployees, filter],
   );
+
+  const kebabHandler = (action: 'Delete' | 'Activate' | 'Deactivate') => {
+    switch (action) {
+      case 'Activate':
+      case 'Deactivate': {
+        return async (id: string | string[]) => {
+          try {
+            const ids = Array.isArray(id) ? id : [id];
+            setIsLoading(true);
+            await $api.employee.updateMultipleEmployeeStatuses(
+              ids,
+              action === 'Activate' ? 'active' : 'deactivated',
+            );
+            toast.success(`employee(s) ${action}d successfully`.toLowerCase());
+            refreshEmployees();
+          } catch (error) {
+            const err = error as HttpError;
+            toast.error(err.message);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+      }
+      default:
+        return async (id: string | string[]) => {
+          try {
+            const ids = Array.isArray(id) ? id : [id];
+            setIsLoading(true);
+            await $api.employee.removeMultipleEmployees(ids);
+            toast.success(`employee(s) deleted successfully`);
+            refreshEmployees();
+          } catch (error) {
+            const err = error as HttpError;
+            toast.error(err.message);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+    }
+  };
 
   useEffect(() => {
     refreshEmployees();
@@ -110,7 +120,7 @@ const EmployeeTab = () => {
             'Name',
             'Email Address',
             'Amount (₦)',
-            'Payout Method',
+            'Status',
             'Group',
             'Date Added',
           ]}
@@ -128,9 +138,26 @@ const EmployeeTab = () => {
           paginationMeta={paginationMeta}
           refresh={refreshEmployees}
           title={`${paginationMeta.total} Employee(s)`}
-          onFilterClick={() => toast.success('closest thing to a filter modal')}
+          onFilterClick={() =>
+            NiceModal.show(EmployeeFilterModal, {
+              filter,
+              onFilter: setFilter,
+            })
+          }
           isEmpty={!employees.length}
           emptyStateText="No employee yet"
+          isLoading={isLoading}
+          kebabMenuItems={[
+            { action: () => kebabHandler('Delete')(selected), value: 'Delete' },
+            {
+              action: () => kebabHandler('Activate')(selected),
+              value: 'Activate',
+            },
+            {
+              action: () => kebabHandler('Deactivate')(selected),
+              value: 'Deactivate',
+            },
+          ]}
         >
           {() => {
             return (
@@ -160,12 +187,46 @@ const EmployeeTab = () => {
                         </span>
                       </td>
                       <td>{employee.salary}</td>
-                      <td>{employee.payoutMethod?.name}</td>
-                      <td>Group Names</td>
-                      {/* <td>
-                        {employee.groups.map((group) => group.name).join(', ')}
-                      </td> */}
-                      <td>{employee.createdAt}</td>
+                      <td>{employee.status}</td>
+                      <td>
+                        {employee.groups
+                          .map((employeeGroup) => employeeGroup.group.name)
+                          .join(', ')}
+                      </td>
+                      <td>
+                        <div className="d-flex justify-content-space-between align-items-center">
+                          <div>
+                            {moment(employee.createdAt).format(
+                              'MMM\xa0DD,\xa0YYYY',
+                            )}
+                            &nbsp;|&nbsp;
+                            <span className="employee-section__employee_pay-time">
+                              {moment(employee.createdAt).format('hh:MM\xa0A')}
+                            </span>
+                          </div>
+                          <KebabMenu
+                            items={[
+                              {
+                                action: () =>
+                                  kebabHandler('Delete')(employee.id),
+                                value: 'Delete',
+                              },
+                              {
+                                action: () =>
+                                  kebabHandler(
+                                    employee.status === 'active'
+                                      ? 'Deactivate'
+                                      : 'Activate',
+                                  )(employee.id),
+                                value:
+                                  employee.status === 'active'
+                                    ? 'Deactivate'
+                                    : 'Activate',
+                              },
+                            ]}
+                          />
+                        </div>
+                      </td>
                     </TR>
                   );
                 })}
@@ -279,7 +340,7 @@ const EmployeePage: NextPage = () => {
                     <Image src={Plus} alt="plus icon" /> {'Add Employee'}
                   </>
                 }
-                onClick={() => {}}
+                onClick={() => NiceModal.show(AddEmployeeModal)}
                 className="employee-section__submit-btn"
                 primary
                 type="submit"
@@ -316,7 +377,7 @@ const EmployeePage: NextPage = () => {
   );
 };
 
-export default withAuth(EmployeePage);
+export default withAuth(EmployeePage, ['Employee', 'read']);
 
 const MoreMenuSVG = () => (
   <svg
