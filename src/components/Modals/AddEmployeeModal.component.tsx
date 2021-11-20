@@ -42,7 +42,12 @@ const AddEmployeeForm = ({ modal }: { modal: NiceModalHandler }) => {
       </div>
 
       {uploadType === 'singleUpload' && (
-        <SingleEmployeeUpload onDone={() => modal.hide()} />
+        <SingleEmployeeUpload
+          onDone={(employee) => {
+            modal.resolve(employee);
+            setTimeout(modal.hide, 100);
+          }}
+        />
       )}
     </div>
   );

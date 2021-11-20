@@ -1,4 +1,11 @@
 .table-component {
+  &__tool-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
   &__table-title {
     font-weight: bold;
     font-size: 18px;
@@ -243,6 +250,10 @@
       }
     }
   }
+}
+
+.employee-table {
+  margin-top: 1.5rem;
 }
 
 @keyframes slide {

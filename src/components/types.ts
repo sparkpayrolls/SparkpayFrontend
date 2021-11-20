@@ -121,6 +121,27 @@ export type IOrganizationTable = {
   loading?: boolean;
 };
 
+export type IGetEmployees = (
+  page?: number,
+  perPage?: number,
+  search?: string,
+  all?: boolean,
+  filter?: Record<string, any>,
+) => any;
+
+export type IEmployeeTable = {
+  employees: Employee[];
+  paginationMeta: PaginationMeta;
+  getEmployees: IGetEmployees;
+  onFilter(): any;
+  loading: boolean;
+  administrator: Administrator;
+  onDelete(id: string | string[]): any;
+  onStatusToggle(
+    action: 'Activate' | 'Delete' | 'Deactivate',
+  ): (id: string | string[]) => any;
+};
+
 /** Create Organization */
 export type CreateOrganization = {
   name: string;
@@ -174,4 +195,19 @@ export type IStatusChip = {
 /** TransactionMethod */
 export type ITransactionMethod = {
   method: string;
+};
+
+/** Tabs */
+export type IEmployeeTab = {
+  administrator: Administrator | null;
+  loading?: boolean;
+  employees: Employee[];
+  paginationMeta: PaginationMeta;
+  refreshEmployees: IGetEmployees;
+};
+
+export type ITab = {
+  default?: string;
+  active?: string;
+  onChange?(activeKey: string): any;
 };

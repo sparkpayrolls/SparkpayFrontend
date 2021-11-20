@@ -181,15 +181,7 @@ export const Table = (props: ITable) => {
         !props.isNotSearchable ||
         !!props.onFilterClick ||
         !!props.kebabMenuItems?.length) && (
-        <div
-          style={{
-            paddingTop: '2.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 20,
-          }}
-        >
+        <div className="table-component__tool-bar">
           {props.title && (
             <p className="table-component__table-title">{props.title}</p>
           )}
