@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import { HttpError } from 'src/api/repo/http.error';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { CreateOrganisationButton } from '@/components/Button/create-organisation-button.component';
+import { useAppDispatch } from 'src/redux/hooks';
+import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 
 const OrganizationSettings: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -18,6 +20,7 @@ const OrganizationSettings: NextPage = () => {
     meta: Util.getDefaultPaginationMeta({}),
   });
   const [query, setQuery] = useState({} as Record<string, any>);
+  const dispatch = useAppDispatch();
 
   const getOrganizations = useCallback(
     async (query: Record<string, any>) => {
@@ -47,6 +50,7 @@ const OrganizationSettings: NextPage = () => {
         });
         await $api.company.deleteCompany(id);
         getOrganizations(query);
+        refreshCompanies(dispatch);
         toast.success('company deleted successfully');
       } catch (error) {
         const err = error as HttpError;

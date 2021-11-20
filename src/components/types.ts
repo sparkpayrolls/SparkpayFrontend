@@ -13,10 +13,12 @@ import {
   Administrator,
   Employee,
   EmployeeStatus,
+  OrganisationDashboardData,
   PaginationMeta,
   PayrollStatus,
   PermissionGroup,
   PermissionLevel,
+  UserDashboardData,
 } from 'src/api/types';
 
 /** MultiSelect Props */
@@ -210,4 +212,18 @@ export type ITab = {
   default?: string;
   active?: string;
   onChange?(activeKey: string): any;
+};
+
+/** Dashboard */
+export type IUserDashboard = {
+  data: UserDashboardData;
+  getData(): any;
+  loading?: boolean;
+};
+
+export type IOrganisationDashboard = {
+  data: OrganisationDashboardData;
+  getData(): any;
+  loading?: boolean;
+  administrator: Administrator;
 };

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { $api } from 'src/api';
+import { HttpError } from 'src/api/repo/http.error';
 import { Administrator as IAdministrator } from 'src/api/types';
 import { AppDispatch } from 'src/redux/store';
 
@@ -22,7 +23,10 @@ export const getCurrentAdministrator = async (dispatch: AppDispatch) => {
 
     dispatch(commitAministrator(admin));
   } catch (error) {
-    // ....
+    const err = error as HttpError;
+    if (err.status === 403) {
+      dispatch(commitAministrator(null));
+    }
   }
 };
 

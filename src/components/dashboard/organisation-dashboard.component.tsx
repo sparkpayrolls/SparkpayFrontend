@@ -1,16 +1,11 @@
 import Link from 'next/link';
 import { EmployeeCardSvg, PayrollBurdenCardSvg, PayrollCardSvg } from '../svg';
 import { DashboardCard } from './dashboard-card.component';
-import {
-  Administrator,
-  Company,
-  Country,
-  OrganisationDashboardData,
-} from 'src/api/types';
-import { useCallback, useEffect, useState } from 'react';
-import { $api } from 'src/api';
+import { Company, Country } from 'src/api/types';
+import { useEffect } from 'react';
 import { OrganisationDashboardTable } from '../Table/organisation-dashboard-table.component';
 import withPermission from 'src/helpers/HOC/withPermission';
+import { IOrganisationDashboard } from '../types';
 
 const ViewMoreButton = withPermission(() => (
   <Link href="/wallet">
@@ -18,37 +13,16 @@ const ViewMoreButton = withPermission(() => (
   </Link>
 ));
 
-export const OrganisationDashboard = (props: {
-  administrator: Administrator;
-}) => {
-  const [data, setData] = useState<OrganisationDashboardData>({
-    recentTransactions: [],
-    totalNumberOfEmployees: 0,
-    totalNumberOfPayrolls: 0,
-    totalPayrollBurden: 0,
-  });
-  const [loading, setLoading] = useState(false);
+export const OrganisationDashboard = (props: IOrganisationDashboard) => {
+  const { administrator, getData, loading, data } = props;
 
   const company = props.administrator.company as Company;
   const country = company?.country as Country;
   const currency = country.currencySymbol;
 
-  const getData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await $api.dashboard.getCompanyDashboardData();
-
-      setData(data);
-    } catch (error) {
-      // ...
-    } finally {
-      setLoading(false);
-    }
-  }, [setData]);
-
   useEffect(() => {
     getData();
-  }, [getData, props.administrator]);
+  }, [getData, administrator]);
 
   return (
     <>
@@ -83,7 +57,7 @@ export const OrganisationDashboard = (props: {
         </div>
 
         <OrganisationDashboardTable
-          loading={loading}
+          loading={!!loading}
           recentTransactions={data.recentTransactions}
           currency={currency}
         />
