@@ -144,25 +144,11 @@ export const OrganizationsMenu = ({
           const company = a.company as Company;
           return (
             <li key={company?.id} className="organization-menu__dropdown__item">
-              {!!company?.logo && (
-                <div className="organization-menu__dropdown__item__logo">
-                  <ImageLoader
-                    width={30}
-                    height={30}
-                    src={company?.logo}
-                    alt="company-logo"
-                  />
-                </div>
-              )}
-              {!company?.logo && (
-                <div className="organization-menu__dropdown__item__initial">
-                  {company?.name?.charAt(0)}
-                </div>
-              )}
-
-              <span className="organization-menu__dropdown__item__name">
-                {company?.name}
-              </span>
+              <Identity
+                name={company?.name}
+                initial={company?.name?.charAt(0)}
+                image={company?.logo}
+              />
 
               <Switch
                 loading={loading === company?.id || (!!loading && a.selected)}
