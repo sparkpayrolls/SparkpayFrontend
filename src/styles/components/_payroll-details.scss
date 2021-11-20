@@ -1,12 +1,20 @@
 .payroll-details-section {
-  margin-right: 2rem;
-  margin-left: 2rem;
+   display: flex;
+   
+   &__payroll-details-settings {
+       width:100%;
+    margin-right: 2rem;
+    margin-left: 2rem;   
+  }
 
-  // &__payroll-details-settings {
-  //   display: flex;
-  //   justify-content: space-between;
-  // }
-
+ 
+  &__payroll-details-sidebar{
+    width: 7rem;
+    height: 140vh;
+    background: #f8fafc;
+    // padding: 1.25rem 0 2rem;
+    // transition: all 500ms;
+  } 
   &__payroll-details-header {
     display: flex;
     justify-content: space-between;

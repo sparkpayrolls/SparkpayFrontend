@@ -1,0 +1,105 @@
+@media(min-width:992px){
+
+  .wallet-billing-page{  
+  width:97%;
+  margin:auto;
+  padding-top:3rem;
+  
+    &__wallet-header-title{
+      font-family: Karla;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  color: #0E347E;
+    }
+
+&__wallet-amount-text{
+font-family: Karla;
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 24px;
+color: #FFFFFF;
+margin-top:0.5rem;
+    }
+    &__wallet-cards{
+      width:100%;
+      display:flex;
+      margin-top:1.5rem;
+
+    }
+    
+      &__wallet-amount{
+        padding:32px 24px 32px 24px;
+      display:flex;
+      justify-content:space-between;
+      width: 459px;
+    height: 112px;
+    background: #130F26;
+    border-radius: 8px;
+
+      }
+      &__wallet-text{
+        color:#D7DCE0;
+        margin-left:-8rem;
+      }
+    
+      &__payroll-update-text{
+        color:#D7DCE0;
+        margin-left:1rem;
+        
+      }
+      &__payroll-update{
+        padding:32px 24px 32px 24px;
+        margin-left:32px;
+        display:flex;
+        width: 637px;
+    height: 112px;
+    background: #F7F9FB;
+    border-radius: 8px;
+      }
+      &__payroll-date-text{
+        font-family: Karla;
+font-style: normal;
+font-weight: normal;
+font-size: 1.3rem;
+line-height: 24px;
+color: #0B2253;
+margin-top:0.5rem;
+      }
+
+  &__wallet-purple-image{
+    position:relative;
+    top:-35px;
+    // left:10px;
+  }
+
+  &__wallet-yellow-image{
+    position:relative;
+    top:-15px;
+    left:230px
+    // right:200px;
+  }
+  &__transaction-text{
+    font-family: Karla;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  color: #0E347E;
+  padding-top:3rem;
+  }
+
+  &__status-text{
+    color:#27BE63 !important;
+  }
+
+  &__wallet-image{
+    position:relative;
+    right:8px;
+  }
+  }
+}  
+

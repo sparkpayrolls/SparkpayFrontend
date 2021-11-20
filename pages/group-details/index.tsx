@@ -23,7 +23,9 @@ const GroupDetails: NextPage = () =>{
             />
             <h5 className="group-details__group-detail-title">Group Details</h5>
           </div>
-          <button className="group-details__edit-details-btn">Edit Details</button>
+          <button className="group-details__edit-details-btn">
+            Edit Details
+          </button>
         </div>
         <div className="group-details__group-details-property">
           <div className="group-details__group-details-property-section">
@@ -87,43 +89,71 @@ const GroupDetails: NextPage = () =>{
                 <div className="group-details__user">
                   <p className="group-details__name">opeyemi</p>
                   <div className="group-details__image-container">
-                    <Image src={removeicon} className="group-details__remove-icon" />
+                    <Image
+                      src={removeicon}
+                      className="group-details__remove-icon"
+                      alt="removeicon"
+                    />
                   </div>
                 </div>
                 <div className="group-details__user">
                   <p className="group-details__name">opeyemi</p>
                   <div className="group-details__image-container">
-                    <Image src={removeicon} className="group-details__remove-icon" />
+                    <Image
+                      src={removeicon}
+                      className="group-details__remove-icon"
+                      alt="removeicon"
+                    />
                   </div>
                 </div>{' '}
                 <div className="group-details__user">
                   <p className="group-details__name">opeyemi</p>
                   <div className="group-details__image-container">
-                    <Image src={removeicon} className="group-details__remove-icon" />
+                    <Image
+                      src={removeicon}
+                      className="group-details__remove-icon"
+                      alt="removeicon"
+                    />
                   </div>
                 </div>
                 <div className="group-details__user">
                   <p className="group-details__name">opeyemi</p>
                   <div className="group-details__image-container">
-                    <Image src={removeicon} className="group-details__remove-icon" />
+                    <Image
+                      src={removeicon}
+                      className="group-details__remove-icon"
+                      alt="removeicon"
+                    />
                   </div>
                 </div>{' '}
                 <div className="group-details__user">
                   <p className="group-details__name">opeyemi</p>
                   <div className="group-details__image-container">
-                    <Image src={removeicon} className="group-details__remove-icon" />
+                    <Image
+                      src={removeicon}
+                      className="group-details__remove-icon"
+                      alt="removeicon"
+                    />
                   </div>
                 </div>{' '}
                 <div className="group-details__user">
                   <p className="group-details__name">opeyemi</p>
                   <div className="group-details__image-container">
-                    <Image src={removeicon} className="group-details__remove-icon" />
+                    <Image
+                      src={removeicon}
+                      className="group-details__remove-icon"
+                      alt="removeicon"
+                    />
                   </div>
                 </div>{' '}
                 <div className="group-details__user">
                   <p className="group-details__name">opeyemi</p>
                   <div className="group-details__image-container">
-                    <Image src={removeicon} className="group-details__remove-icon" />
+                    <Image
+                      src={removeicon}
+                      className="group-details__remove-icon"
+                      alt="removeicon"
+                    />
                   </div>
                 </div>{' '}
               </div>
