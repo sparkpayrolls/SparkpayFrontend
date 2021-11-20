@@ -12,7 +12,9 @@ import { InputRangeProps } from 'react-input-range';
 import {
   Administrator,
   Employee,
+  EmployeeStatus,
   PaginationMeta,
+  PayrollStatus,
   PermissionGroup,
   PermissionLevel,
 } from 'src/api/types';
@@ -133,9 +135,43 @@ export type IDashboardNavigationListItem = {
   href: string;
   match: string;
   // eslint-disable-next-line no-undef
-  Icon: () => JSX.Element;
+  Icon(): JSX.Element;
   title: string;
 };
 
 /** Allowed Permissions */
 export type IAllowedPermissions = [PermissionGroup, PermissionLevel][];
+
+/** Button */
+export type ICreateOrganisationButton = {
+  onCreate?(): any;
+};
+
+/** Dashboard */
+export type IDashboardCard = {
+  value: string | number;
+  title: string;
+  // eslint-disable-next-line no-undef
+  Icon(): JSX.Element;
+  loading?: boolean;
+};
+
+/** Identity */
+export type IIdentity = {
+  name?: string;
+  image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  type?: 'reverse';
+  initial?: string;
+};
+
+/** Statuschip */
+export type IStatusChip = {
+  status: PayrollStatus | EmployeeStatus;
+};
+
+/** TransactionMethod */
+export type ITransactionMethod = {
+  method: string;
+};
