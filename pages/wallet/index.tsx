@@ -59,7 +59,7 @@ const WalletBilling: NextPage = () => {
 
   useEffect(() => {
     getWallet();
-  }, [getWallet]);
+  }, [getWallet, administrator]);
 
   return (
     <DashboardLayout pageTitle="Wallet & billing">
