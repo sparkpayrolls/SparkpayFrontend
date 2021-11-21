@@ -223,3 +223,21 @@ export type OrganisationDashboardData = {
   totalPayrollBurden: number;
   recentTransactions: RecentTransaction[];
 };
+
+export type CompanyWallet = Document & {
+  company: string | Company;
+  balance: number;
+};
+
+export type WalletTransactionStatus = 'successful' | 'failed';
+
+export type WalletTransaction = Document & {
+  wallet: string | CompanyWallet;
+  status: WalletTransactionStatus;
+  amount: number;
+  transactionMethod: string;
+  balance: number;
+  date: string;
+  meta?: Record<string, unknown>;
+  reference: string;
+};
