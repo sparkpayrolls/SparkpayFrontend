@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Billing from '../../../public/svgs/Billing.svg';
+import Billing from '../../../public/svgs/billing.svg';
 
 export const PayrollUpdateCard = ({ payrollDate }: { payrollDate: string }) => {
   return (
