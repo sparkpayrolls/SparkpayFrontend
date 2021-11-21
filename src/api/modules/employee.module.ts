@@ -2,17 +2,9 @@ import { HttpRepository } from '../repo/http.repo';
 import { Employee, EmployeeStatus } from '../types';
 
 export class EmployeeModule extends HttpRepository {
-  async getEmployees(
-    page = 1,
-    perPage = 7,
-    search = '',
-    all = false,
-    salaryRange = '',
-    status = '',
-  ) {
-    const res = await this.get<Employee[]>(
-      `/employees?limit=${perPage}&page=${page}&search=${search}&all=${all}&salaryRange=${salaryRange}&status=${status}`,
-    );
+  async getEmployees(params: Record<string, any>) {
+    const query = this.parseQueryObject(params);
+    const res = await this.get<Employee[]>(`/employees${query}`);
 
     return res;
   }
@@ -33,16 +25,13 @@ export class EmployeeModule extends HttpRepository {
     await this.delete('employees/delete', { employeeIds });
   }
 
-  async updateEmployeeStatus(
-    id: string,
-    status: EmployeeStatus | keyof typeof EmployeeStatus,
-  ) {
+  async updateEmployeeStatus(id: string, status: EmployeeStatus) {
     await this.put(`/employees/${id}/status`, { status });
   }
 
   async updateMultipleEmployeeStatuses(
     employeeIds: string[],
-    status: EmployeeStatus | keyof typeof EmployeeStatus,
+    status: EmployeeStatus,
   ) {
     await this.put(`/employees/status`, { employeeIds, status });
   }

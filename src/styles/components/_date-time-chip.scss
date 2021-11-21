@@ -1,0 +1,10 @@
+.date-time-chip {
+  font-family: $font-family-Karla;
+  font-size: 14px;
+  line-height: 16px;
+  color: $black;
+
+  &__time {
+    color: #9da9b3;
+  }
+}

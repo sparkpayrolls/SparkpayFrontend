@@ -34,6 +34,7 @@ interface ITable {
   isLoading?: boolean;
   kebabMenuItems?: IKebabItem[];
   isNotSelectable?: boolean;
+  isNotSearchable?: boolean;
 }
 
 interface ITR {
@@ -176,57 +177,56 @@ export const Table = (props: ITable) => {
         props.isLoading ? ' table-component--loading' : ''
       }`}
     >
-      <div
-        style={{
-          paddingTop: '1rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: 20,
-        }}
-      >
-        {props.title && (
-          <p className="table-component__table-title">{props.title}</p>
-        )}
-
-        <div
-          style={{
-            minWidth: '45%',
-            display: 'flex',
-            gridColumnGap: 16,
-            alignItems: 'center',
-          }}
-        >
-          <div className="table-component__search">
-            <input
-              type="search"
-              placeholder="Search by name"
-              className="table-component__search--input"
-              onChange={(event) => {
-                setSearch(event.target.value);
-                searchFunc(props.refresh || (() => {}), event.target.value);
-              }}
-            />
-            <Image src={search_icon} alt="search icon" />
-          </div>
-
-          {props.onFilterClick && (
-            <button
-              className="table-component__filter-btn"
-              onClick={props.onFilterClick}
-            >
-              <span>Filter</span> <FilterSVG />
-            </button>
+      {(!!props.title ||
+        !props.isNotSearchable ||
+        !!props.onFilterClick ||
+        !!props.kebabMenuItems?.length) && (
+        <div className="table-component__tool-bar">
+          {props.title && (
+            <p className="table-component__table-title">{props.title}</p>
           )}
 
-          {!!props.kebabMenuItems?.length && (
-            <button className="table-component__option-btn">
-              {/* <KebabMenuSVG /> */}
-              <KebabMenu items={props.kebabMenuItems} />
-            </button>
+          {!props.isNotSearchable && (
+            <div
+              style={{
+                minWidth: '45%',
+                display: 'flex',
+                gridColumnGap: 16,
+                alignItems: 'center',
+              }}
+            >
+              <div className="table-component__search">
+                <input
+                  type="search"
+                  placeholder="Search by name"
+                  className="table-component__search--input"
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                    searchFunc(props.refresh || (() => {}), event.target.value);
+                  }}
+                />
+                <Image src={search_icon} alt="search icon" />
+              </div>
+
+              {props.onFilterClick && (
+                <button
+                  className="table-component__filter-btn"
+                  onClick={props.onFilterClick}
+                >
+                  <span>Filter</span> <FilterSVG />
+                </button>
+              )}
+
+              {!!props.kebabMenuItems?.length && (
+                <button className="table-component__option-btn">
+                  {/* <KebabMenuSVG /> */}
+                  <KebabMenu items={props.kebabMenuItems} />
+                </button>
+              )}
+            </div>
           )}
         </div>
-      </div>
+      )}
 
       <table>
         <thead className="table-component__thead">
@@ -252,7 +252,9 @@ export const Table = (props: ITable) => {
         <div className="table-component__empty-state">
           <FileStorageSVG />
           <span className="table-component__empty-state--text">
-            {props.emptyStateText ?? 'Empty state'}
+            {props.isLoading
+              ? 'Getting data'
+              : props.emptyStateText ?? 'No data'}
           </span>
         </div>
       )}

@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import { Stringifiable, stringifyUrl } from 'query-string';
 
 import { Response } from '../types';
 import { HttpError } from './http.error';
@@ -102,25 +103,13 @@ export class HttpRepository {
     }
   }
 
-  parseQueryObject(obj: Record<string, string | number | boolean>): string {
-    const entries = Object.entries(obj);
+  parseQueryObject(
+    query: Record<string, Stringifiable | Stringifiable[]>,
+  ): string {
+    /** convert perPage to limit */
+    query.limit = query.perPage;
+    delete query.perPage;
 
-    const parsed = entries.map((cur) => {
-      const [key, value] = cur;
-
-      if (typeof value === 'boolean') {
-        return `${key}=${value ? 'true' : 'false'}`;
-      }
-      if (typeof value === 'undefined') {
-        return '';
-      }
-      if (key === 'perPage') {
-        return `limit=${value}`;
-      }
-
-      return `${key}=${value}`;
-    });
-
-    return `?${parsed.join('&')}`;
+    return stringifyUrl({ url: '', query });
   }
 }

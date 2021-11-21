@@ -37,9 +37,10 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
   ) => {
     try {
       helpers.setSubmitting(true);
-      await $api.company.createCompany(values);
+      const company = await $api.company.createCompany(values);
       toast.success('Organization created successfully');
-      modal.hide();
+      modal.resolve(company);
+      setTimeout(modal.hide, 100);
     } catch (error) {
       const err = error as HttpError;
       if (err.errors && Object.keys(err.errors).length) {

@@ -1,4 +1,4 @@
-import { Radio } from 'antd';
+import { Switch } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,6 +6,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Company } from 'src/api/types';
 import { ImageLoader } from 'src/layouts/dashboard-layout/DashBoardLayout';
 import dropdown from '../../../public/svgs/dropdown.svg';
+import { Identity } from '../Identity/identity.component';
 import { SelectInputSVG } from '../Input/seletct-input';
 import { IOrganizationMenu, IProfileMenu } from '../types';
 
@@ -75,6 +76,7 @@ export const KebabMenu = (props: IKebabMenu) => {
 export const OrganizationsMenu = ({
   companies,
   onSelect,
+  loading,
 }: IOrganizationMenu) => {
   const [isActive, setIsActive] = useState(false);
   const [id] = useState(
@@ -118,24 +120,12 @@ export const OrganizationsMenu = ({
   return (
     <div className="organization-menu" ref={menuRef} id={id}>
       <div className="organization-menu__trigger" onClick={handleClick}>
-        <span className="organization-menu__trigger__name">
-          {selectedCompany?.name}
-        </span>
-        {!!selectedCompany?.logo && (
-          <div className="organization-menu__trigger__logo">
-            <ImageLoader
-              src={selectedCompany?.logo}
-              width={30}
-              height={30}
-              alt="company-logo"
-            />
-          </div>
-        )}
-        {!selectedCompany?.logo && (
-          <div className="organization-menu__trigger__initial">
-            {selectedCompany?.name?.charAt(0)}
-          </div>
-        )}
+        <Identity
+          name={selectedCompany?.name || 'Select Organisation'}
+          initial={selectedCompany?.name?.charAt(0)}
+          image={selectedCompany?.logo}
+          type="reverse"
+        />
         <button className="organization-menu__trigger__drop-svg">
           <Image src={dropdown} alt="down-arrow" />
         </button>
@@ -154,30 +144,17 @@ export const OrganizationsMenu = ({
           const company = a.company as Company;
           return (
             <li key={company?.id} className="organization-menu__dropdown__item">
-              {!!company?.logo && (
-                <div className="organization-menu__dropdown__item__logo">
-                  <ImageLoader
-                    width={30}
-                    height={30}
-                    src={company?.logo}
-                    alt="company-logo"
-                  />
-                </div>
-              )}
-              {!company?.logo && (
-                <div className="organization-menu__dropdown__item__initial">
-                  {company?.name?.charAt(0)}
-                </div>
-              )}
+              <Identity
+                name={company?.name}
+                initial={company?.name?.charAt(0)}
+                image={company?.logo}
+              />
 
-              <span className="organization-menu__dropdown__item__name">
-                {company?.name}
-              </span>
-
-              <Radio
-                className="organization-menu__dropdown__item__radio"
+              <Switch
+                loading={loading === company?.id || (!!loading && a.selected)}
                 checked={a.selected}
                 onClick={() => onSelect(a, () => setIsActive(false))}
+                className="organization-menu__dropdown__item__switch"
               />
             </li>
           );

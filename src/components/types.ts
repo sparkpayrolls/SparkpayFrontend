@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { NiceModalHandler } from '@ebay/nice-modal-react';
+import { NextRouter } from 'next/router';
 import {
   ChangeEventHandler,
   FocusEventHandler,
@@ -8,7 +9,17 @@ import {
   ReactNode,
 } from 'react';
 import { InputRangeProps } from 'react-input-range';
-import { Administrator, Employee, PaginationMeta } from 'src/api/types';
+import {
+  Administrator,
+  Employee,
+  EmployeeStatus,
+  OrganisationDashboardData,
+  PaginationMeta,
+  PayrollStatus,
+  PermissionGroup,
+  PermissionLevel,
+  UserDashboardData,
+} from 'src/api/types';
 
 /** MultiSelect Props */
 export type IMultiSelectOptionItem = Record<string, unknown>;
@@ -81,6 +92,7 @@ export type ISingleEmployeeUpload = {
 export type IOrganizationMenu = {
   companies: Administrator[];
   onSelect: (company: Administrator, closeMenu: () => void) => any;
+  loading?: string;
 };
 
 export type IProfileMenu = {
@@ -111,10 +123,107 @@ export type IOrganizationTable = {
   loading?: boolean;
 };
 
+export type IGetEmployees = (
+  page?: number,
+  perPage?: number,
+  search?: string,
+  all?: boolean,
+  filter?: Record<string, any>,
+) => any;
+
+export type IEmployeeTable = {
+  employees: Employee[];
+  paginationMeta: PaginationMeta;
+  getEmployees: IGetEmployees;
+  onFilter(): any;
+  loading: boolean;
+  administrator: Administrator;
+  onDelete(id: string | string[]): any;
+  onStatusToggle(
+    action: 'Activate' | 'Delete' | 'Deactivate',
+  ): (id: string | string[]) => any;
+};
+
 /** Create Organization */
 export type CreateOrganization = {
   name: string;
   email: string;
   phonenumber: string;
   country: string;
+};
+
+/** NavListItem */
+export type IDashboardNavigationListItem = {
+  router: NextRouter;
+  href: string;
+  match: string;
+  // eslint-disable-next-line no-undef
+  Icon(): JSX.Element;
+  title: string;
+};
+
+/** Allowed Permissions */
+export type IAllowedPermissions = [PermissionGroup, PermissionLevel][];
+
+/** Button */
+export type ICreateOrganisationButton = {
+  onCreate?(): any;
+};
+
+/** Dashboard */
+export type IDashboardCard = {
+  value: string | number;
+  title: string;
+  // eslint-disable-next-line no-undef
+  Icon(): JSX.Element;
+  loading?: boolean;
+};
+
+/** Identity */
+export type IIdentity = {
+  name?: string;
+  image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  type?: 'reverse';
+  initial?: string;
+};
+
+/** Statuschip */
+export type IStatusChip = {
+  status: PayrollStatus | EmployeeStatus;
+};
+
+/** TransactionMethod */
+export type ITransactionMethod = {
+  method: string;
+};
+
+/** Tabs */
+export type IEmployeeTab = {
+  administrator: Administrator | null;
+  loading?: boolean;
+  employees: Employee[];
+  paginationMeta: PaginationMeta;
+  refreshEmployees: IGetEmployees;
+};
+
+export type ITab = {
+  default?: string;
+  active?: string;
+  onChange?(activeKey: string): any;
+};
+
+/** Dashboard */
+export type IUserDashboard = {
+  data: UserDashboardData;
+  getData(): any;
+  loading?: boolean;
+};
+
+export type IOrganisationDashboard = {
+  data: OrganisationDashboardData;
+  getData(): any;
+  loading?: boolean;
+  administrator: Administrator;
 };
