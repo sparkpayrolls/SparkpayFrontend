@@ -6,7 +6,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { $api } from 'src/api';
-// import dashboard_preview from '../../../public/svgs/dashboard-preview.svg';
 import dashboard_preview2 from '../../../public/svgs/frame-11825.svg';
 import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
 import { JoinWaitListModal } from '../Modals/JoinWaitListModal.component';
@@ -22,7 +21,6 @@ export const Landing = () => {
     try {
       setShowSpinner(true);
       await $api.joinWaitList(email, name);
-      // toast.success('Successfully joined the wait list.');
       NiceModal.show(JoinWaitListModal);
       setName('');
       setEmail('');
@@ -129,15 +127,15 @@ export const Landing = () => {
 
 const DashboardPreviewSVG = () => {
   const src =
-    'https://res.cloudinary.com/djhmpr0bv/image/upload/v1636552573/qk8fcorqicnrjayzk9hs.svg';
+    'https://res.cloudinary.com/djhmpr0bv/image/upload/v1637412387/zuvqnjek7ljv9iwyvpdc.png';
 
   return (
     <Image
       loader={(props) => `${src}?hehehe=${props.width}`}
       src={src}
       alt="dashboard-preview"
-      width={1008}
-      height={607}
+      width={1224}
+      height={668}
     />
   );
 };
