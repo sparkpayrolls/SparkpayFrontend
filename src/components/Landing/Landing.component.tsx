@@ -1,5 +1,5 @@
 import { Button } from '@/components/Button/Button.component';
-import { useState, FormEvent, Component } from 'react';
+import { useState, FormEvent } from 'react';
 import { toast } from 'react-toastify';
 import NiceModal from '@ebay/nice-modal-react';
 import Head from 'next/head';
