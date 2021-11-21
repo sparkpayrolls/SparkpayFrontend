@@ -25,7 +25,7 @@ export const JoinWaitListModal = NiceModal.create(() => {
 
         <div className="JoinWaitListModal__text">
           <h4 className="JoinWaitListModal__title">
-            Get your friends onboard
+            Thanks, Boss! Welcome to bliss.
             <span
               style={{ display: 'block', width: '12%', marginLeft: '0.5rem' }}
             >
@@ -33,8 +33,8 @@ export const JoinWaitListModal = NiceModal.create(() => {
             </span>
           </h4>
           <p className="JoinWaitListModal__subtext">
-            Like what we are building? Then go ahead and gift your friends early
-            access
+            Henceforth, we do the work and you do the smile. Kindly check your
+            inbox, We just sent you an email.
           </p>
 
           <div className="JoinWaitListModal__share">

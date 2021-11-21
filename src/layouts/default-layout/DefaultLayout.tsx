@@ -14,7 +14,7 @@ const DefaultLayout: React.FC = ({ children }) => {
           </a>
         </Link>
 
-        <nav className="navigation">
+        {/* <nav className="navigation">
           <ul className="navigation__list">
             <div className="navigation__list-section">
               <li className="navigation__list-item">
@@ -42,7 +42,7 @@ const DefaultLayout: React.FC = ({ children }) => {
               </li>
             </div>
           </ul>
-        </nav>
+        </nav> */}
 
         {/* //TODO Bring this back later  */}
         {/* <button className="default-layout__menu-btn">

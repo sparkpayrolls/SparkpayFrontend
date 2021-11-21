@@ -1,5 +1,5 @@
 import { Button } from '@/components/Button/Button.component';
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, Component } from 'react';
 import { toast } from 'react-toastify';
 import NiceModal from '@ebay/nice-modal-react';
 import Head from 'next/head';
@@ -50,7 +50,11 @@ export const Landing = () => {
             and remitting statutory deductions.
           </p>
 
-          <form className="hero-section__join-list" onSubmit={handleSubmit}>
+          <form
+            className="hero-section__join-list"
+            id="waitlist-form"
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
               name="name"
@@ -92,7 +96,7 @@ export const Landing = () => {
               Focus on your business while we handle your Payroll.
             </h2>
             <p className="features__subtext">
-              Harmonize and upscale your payroll management system for uptimum
+              Harmonize and upscale your payroll management system for optimum
               performance.
             </p>
 
@@ -104,14 +108,14 @@ export const Landing = () => {
                 Tax remittances and pension.
               </li>
               <li className="features__list-item">
-                Subgroup employees for specialised benefits.
+                Subgroup employees for specialized benefits.
               </li>
               <li className="features__list-item">
                 Easy setup and navigation.
               </li>
             </ul>
 
-            <Link href="#">
+            <Link data-scroll href="#waitlist-form">
               <a className="features__link">Get Started</a>
             </Link>
           </div>

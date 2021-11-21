@@ -1,6 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,500;1,400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,500;1,400&display=swap');
 
-$font-family-Rubik: "Rubik", sans-serif;
+$font-family-Rubik: 'Rubik', sans-serif;
 
 @mixin spacing {
   padding: 0 1.25rem;
@@ -15,6 +15,9 @@ $font-family-Rubik: "Rubik", sans-serif;
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
 .home {
   .hero-section {
     // @include spacing;
@@ -26,14 +29,14 @@ $font-family-Rubik: "Rubik", sans-serif;
     font-family: $font-family-Rubik;
     margin: 77px auto 17px;
     padding: 0 1rem;
-    background: url("../../../public/svgs/hero-bg.svg") center no-repeat;
+    background: url('../../../public/svgs/hero-bg.svg') center no-repeat;
 
     @media screen and (min-width: 992px) {
       margin-top: 125px;
     }
 
     &::after {
-      content: url("../../../public/svgs/curly-arrow.svg");
+      content: url('../../../public/svgs/curly-arrow.svg');
       position: absolute;
       bottom: 25%;
       right: 0;
@@ -71,13 +74,13 @@ $font-family-Rubik: "Rubik", sans-serif;
         position: relative;
 
         &::after {
-          content: url("../../../public/svgs/arc-mobile.svg");
+          content: url('../../../public/svgs/arc-mobile.svg');
           position: absolute;
           top: 40%;
           left: 4%;
 
           @media screen and (min-width: 992px) {
-            content: url("../../../public/svgs/vector.svg");
+            content: url('../../../public/svgs/vector.svg');
           }
         }
       }
@@ -239,7 +242,7 @@ $font-family-Rubik: "Rubik", sans-serif;
       }
 
       &::before {
-        content: url("../../../public/svgs/feather_check-circle.svg");
+        content: url('../../../public/svgs/feather_check-circle.svg');
         width: 1.125rem;
         height: 1.125rem;
       }
