@@ -52,7 +52,6 @@ export const Landing = () => {
 
           <form
             className="hero-section__join-list"
-            id="waitlist-form"
             onSubmit={handleSubmit}
           >
             <input
