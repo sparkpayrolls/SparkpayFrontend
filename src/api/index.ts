@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { config } from '../helpers/config';
 import { AuthModule } from './modules/auth.module';
+import { CompanyWalletModule } from './modules/company-wallet.module';
 import { CompanyModule } from './modules/company.module';
 import { CountryModule } from './modules/country.module';
 import { DashboardModule } from './modules/dashboard.module';
@@ -24,6 +25,8 @@ export class $api {
   static company = new CompanyModule($api.$axios);
 
   static dashboard = new DashboardModule($api.$axios);
+
+  static companyWallet = new CompanyWalletModule(this.$axios);
 
   static async joinWaitList(email: string, name: string) {
     await $api.$axios.post('/join-wait-list', { email, name });

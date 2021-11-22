@@ -92,4 +92,11 @@ export class Util {
 
     return country?.currencySymbol;
   }
+
+  static formatMoneyNumber(val: number) {
+    const [num, dec] = val.toFixed(2).split('.');
+    const withComma = (+num).toLocaleString();
+
+    return `${withComma}.${dec}`;
+  }
 }

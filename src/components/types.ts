@@ -19,6 +19,8 @@ import {
   PermissionGroup,
   PermissionLevel,
   UserDashboardData,
+  WalletTransaction,
+  WalletTransactionStatus,
 } from 'src/api/types';
 
 /** MultiSelect Props */
@@ -144,6 +146,19 @@ export type IEmployeeTable = {
   ): (id: string | string[]) => any;
 };
 
+export type ITransactionTable = {
+  transactions: WalletTransaction[];
+  meta: PaginationMeta;
+  getTransactions(
+    page?: number,
+    perPage?: number,
+    search?: string,
+    all?: boolean,
+  ): any;
+  loading?: boolean;
+  administrator: Administrator | null;
+};
+
 /** Create Organization */
 export type CreateOrganization = {
   name: string;
@@ -191,7 +206,7 @@ export type IIdentity = {
 
 /** Statuschip */
 export type IStatusChip = {
-  status: PayrollStatus | EmployeeStatus;
+  status: PayrollStatus | EmployeeStatus | WalletTransactionStatus;
 };
 
 /** TransactionMethod */
