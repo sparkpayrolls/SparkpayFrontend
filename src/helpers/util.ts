@@ -1,6 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { IAllowedPermissions } from '@/components/types';
-import { Administrator, PaginationMeta, Permission, Role } from 'src/api/types';
+import {
+  Administrator,
+  Company,
+  Country,
+  PaginationMeta,
+  Permission,
+  Role,
+} from 'src/api/types';
 import { DebouncedFunc } from './types';
 
 export class Util {
@@ -75,5 +82,21 @@ export class Util {
     });
 
     return canActivate;
+  }
+
+  static getCurrencySymbolFromAdministrator(
+    administrator: Administrator | null,
+  ) {
+    const company = administrator?.company as Company;
+    const country = company?.country as Country;
+
+    return country?.currencySymbol;
+  }
+
+  static formatMoneyNumber(val: number) {
+    const [num, dec] = val.toFixed(2).split('.');
+    const withComma = (+num).toLocaleString();
+
+    return `${withComma}.${dec}`;
   }
 }

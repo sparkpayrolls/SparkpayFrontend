@@ -1,31 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-import { $api } from 'src/api';
-import { UserDashboardData } from 'src/api/types';
+import { useEffect } from 'react';
 import { EmployeeCardSvg, OrganisationCardSvg, PayrollCardSvg } from '../svg';
 import { UserDashboardTable } from '../Table/user-dashboard-table.component';
+import { IUserDashboard } from '../types';
 import { DashboardCard } from './dashboard-card.component';
 
-export const UserDashboard = () => {
-  const [data, setData] = useState<UserDashboardData>({
-    totalNumberOfCompanies: 0,
-    recentPayrolls: [],
-    totalNumberOfEmployees: 0,
-    totalNumberOfPayrolls: 0,
-  });
-  const [loading, setLoading] = useState(false);
-
-  const getData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await $api.dashboard.getUserDashboardData();
-
-      setData(data);
-    } catch (error) {
-      // ...
-    } finally {
-      setLoading(false);
-    }
-  }, [setData]);
+export const UserDashboard = (props: IUserDashboard) => {
+  const { getData, loading, data } = props;
 
   useEffect(() => {
     getData();
@@ -61,7 +41,7 @@ export const UserDashboard = () => {
           <h3 className="transactions__title">Recent Payrolls</h3>
         </div>
 
-        <UserDashboardTable loading={loading} data={data.recentPayrolls} />
+        <UserDashboardTable loading={!!loading} data={data.recentPayrolls} />
       </section>
     </>
   );

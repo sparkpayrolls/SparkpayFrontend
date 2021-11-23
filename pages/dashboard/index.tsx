@@ -5,9 +5,56 @@ import { CreateOrganisationButton } from '@/components/Button/create-organisatio
 import { useAppSelector } from 'src/redux/hooks';
 import { UserDashboard } from '@/components/dashboard/user-dashboard.component';
 import { OrganisationDashboard } from '@/components/dashboard/organisation-dashboard.component';
+import { useCallback, useState } from 'react';
+import { OrganisationDashboardData, UserDashboardData } from 'src/api/types';
+import { $api } from 'src/api';
 
 const Dashboard: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
+  const [loading, setLoading] = useState(false);
+  const [userDashboardData, setUserDashboardData] = useState<UserDashboardData>(
+    {
+      totalNumberOfCompanies: 0,
+      recentPayrolls: [],
+      totalNumberOfEmployees: 0,
+      totalNumberOfPayrolls: 0,
+    },
+  );
+  const [
+    organisationDashboardData,
+    setOrganisationDashboardData,
+  ] = useState<OrganisationDashboardData>({
+    recentTransactions: [],
+    totalNumberOfEmployees: 0,
+    totalNumberOfPayrolls: 0,
+    totalPayrollBurden: 0,
+  });
+
+  const getUserDashboardData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await $api.dashboard.getUserDashboardData();
+
+      setUserDashboardData(data);
+    } catch (error) {
+      // ...
+    } finally {
+      setLoading(false);
+    }
+  }, [setUserDashboardData]);
+
+  const getOrganisationDashboardData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await $api.dashboard.getCompanyDashboardData();
+
+      setOrganisationDashboardData(data);
+    } catch (error) {
+      // ...
+    } finally {
+      setLoading(false);
+    }
+  }, [setOrganisationDashboardData]);
 
   return (
     <DashboardLayout pageTitle="Dashboard">
@@ -15,13 +62,24 @@ const Dashboard: NextPage = () => {
         <div className="dashboard__top-bar">
           <h2 className="dashboard__title">Dashboard</h2>
 
-          {!administrator && <CreateOrganisationButton />}
+          {!administrator && (
+            <CreateOrganisationButton onCreate={getUserDashboardData} />
+          )}
         </div>
 
         {!administrator ? (
-          <UserDashboard />
+          <UserDashboard
+            getData={getUserDashboardData}
+            loading={loading}
+            data={userDashboardData}
+          />
         ) : (
-          <OrganisationDashboard administrator={administrator} />
+          <OrganisationDashboard
+            getData={getOrganisationDashboardData}
+            loading={loading}
+            data={organisationDashboardData}
+            administrator={administrator}
+          />
         )}
       </div>
     </DashboardLayout>

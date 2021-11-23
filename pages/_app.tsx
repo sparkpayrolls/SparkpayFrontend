@@ -17,6 +17,7 @@ import { commitUser } from 'src/redux/slices/user/user.slice';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
+import { AxiosError } from 'axios';
 
 let persistor = persistStore(store);
 
@@ -73,6 +74,17 @@ const AuthManager = () => {
     } else {
       dispatch(commitAministrator(null));
     }
+
+    $api.$axios.interceptors.response.use(
+      (res) => res,
+      (error: AxiosError) => {
+        if (error.response?.status === 403) {
+          refreshCompanies(dispatch);
+        }
+
+        return Promise.reject(error);
+      },
+    );
   }, [companies, user, dispatch]);
 
   return null;
