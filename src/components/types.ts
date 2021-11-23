@@ -258,3 +258,44 @@ export type IOrganisationDashboard = {
   loading?: boolean;
   administrator: Administrator;
 };
+
+export type IOnSearch = (value: string) => any;
+
+export type ISearchInput = {
+  placeholder?: string;
+  value?: string;
+  onSearch?(value: string): any;
+};
+
+export type ITableLayout = {
+  // eslint-disable-next-line no-undef
+  title?: string | JSX.Element;
+  onSearch?(value: string): any;
+  onFilter?(): any;
+  buttons?: {
+    href?: string;
+    label: string;
+    action?(): any;
+    primary?: boolean;
+  }[];
+  menuItems?: IKebabItem[];
+};
+
+export type ICheckboxTableColumn = {
+  element: 'td' | 'th';
+};
+
+export type IPagination = {
+  refresh?(query: Record<string, any>): any;
+  meta?: Pick<
+    PaginationMeta,
+    | 'perPage'
+    | 'total'
+    | 'page'
+    | 'pageCount'
+    | 'hasNextPage'
+    | 'hasPrevPage'
+    | 'previousPage'
+    | 'nextPage'
+  >;
+};
