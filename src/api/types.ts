@@ -241,3 +241,33 @@ export type WalletTransaction = Document & {
   meta?: Record<string, unknown>;
   reference: string;
 };
+
+export enum ProRateMonthEnum {
+  January = 'January',
+  February = 'February',
+  March = 'March',
+  April = 'April',
+  May = 'May',
+  June = 'June',
+  July = 'July',
+  August = 'August',
+  September = 'September',
+  October = 'October',
+  November = 'November',
+  December = 'December',
+}
+
+export const ProRateMonths = Object.values(ProRateMonthEnum);
+
+export type ProRateMonth = ProRateMonthEnum | keyof typeof ProRateMonthEnum;
+
+export type Payroll = Document & {
+  proRateMonth: ProRateMonth;
+  company: string | Company;
+  status?: PayrollStatus;
+  totalAmount: number;
+  fee: number;
+  payDate: string;
+  employees?: unknown[];
+  size?: number;
+};

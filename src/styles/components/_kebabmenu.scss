@@ -24,7 +24,6 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
 
     li {
       display: block;
-      padding: 15px 8px;
       white-space: pre;
       box-sizing: border-box;
       text-align: left;
@@ -34,6 +33,7 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
       a {
         color: inherit;
         display: block;
+        padding: 15px 8px;
       }
 
       &:hover {

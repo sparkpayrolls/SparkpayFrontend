@@ -228,36 +228,38 @@ export const Table = (props: ITable) => {
         </div>
       )}
 
-      <table>
-        <thead className="table-component__thead">
-          {!props.isNotSelectable && (
-            <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
-              {props.headerRow.map((item) => {
-                return <th key={item}>{item}</th>;
-              })}
-            </TR>
-          )}
-          {props.isNotSelectable && (
-            <tr>
-              {props.headerRow.map((item) => {
-                return <th key={item}>{item}</th>;
-              })}
-            </tr>
-          )}
-        </thead>
+      <div className="table-component__table-container">
+        <table>
+          <thead className="table-component__thead">
+            {!props.isNotSelectable && (
+              <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
+                {props.headerRow.map((item) => {
+                  return <th key={item}>{item}</th>;
+                })}
+              </TR>
+            )}
+            {props.isNotSelectable && (
+              <tr>
+                {props.headerRow.map((item) => {
+                  return <th key={item}>{item}</th>;
+                })}
+              </tr>
+            )}
+          </thead>
 
-        {props.children()}
-      </table>
-      {props.isEmpty && (
-        <div className="table-component__empty-state">
-          <FileStorageSVG />
-          <span className="table-component__empty-state--text">
-            {props.isLoading
-              ? 'Getting data'
-              : props.emptyStateText ?? 'No data'}
-          </span>
-        </div>
-      )}
+          {props.children()}
+        </table>
+        {props.isEmpty && (
+          <div className="table-component__empty-state">
+            <FileStorageSVG />
+            <span className="table-component__empty-state--text">
+              {props.isLoading
+                ? 'Getting data'
+                : props.emptyStateText ?? 'No data'}
+            </span>
+          </div>
+        )}
+      </div>
 
       {props.paginationMeta && !props.isEmpty && (
         <TablePagination {...props.paginationMeta} refresh={refresh} />

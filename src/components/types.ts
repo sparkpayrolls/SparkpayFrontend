@@ -15,6 +15,7 @@ import {
   EmployeeStatus,
   OrganisationDashboardData,
   PaginationMeta,
+  Payroll,
   PayrollStatus,
   PermissionGroup,
   PermissionLevel,
@@ -22,6 +23,7 @@ import {
   WalletTransaction,
   WalletTransactionStatus,
 } from 'src/api/types';
+import { IKebabItem } from './KebabMenu/KebabMenu.component';
 
 /** MultiSelect Props */
 export type IMultiSelectOptionItem = Record<string, unknown>;
@@ -157,6 +159,20 @@ export type ITransactionTable = {
   ): any;
   loading?: boolean;
   administrator: Administrator | null;
+};
+
+export type IPayrollTable = {
+  administrator: Administrator | null;
+  meta: PaginationMeta;
+  payrolls: Payroll[];
+  loading: boolean;
+  getPayrolls(
+    page?: number,
+    perPage?: number,
+    search?: string,
+    all?: boolean,
+  ): any;
+  kebabMenuItems(payroll: Payroll): IKebabItem[];
 };
 
 /** Create Organization */
