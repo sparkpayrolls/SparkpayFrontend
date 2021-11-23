@@ -11,6 +11,11 @@ import { Table, TR } from '../../src/components/Table/Wallet.component';
 import { PaginationMeta } from 'src/api/types';
 import Wallet from '../../public/svgs/wallet bill.svg';
 import withAuth from 'src/helpers/HOC/withAuth';
+// import NiceModal from '@ebay/nice-modal-react';
+// import { AddEmployeeModal } from '@/components/Modals/AddEmployeeModal.component';
+
+// import { WalletBillingModal } from '@/components/Modals/WalletBillingModal.component';
+
 const WalletCard = ({ title, amount }: { title: string; amount: string }) => {
   return (
     <div>
@@ -25,8 +30,9 @@ const WalletCard = ({ title, amount }: { title: string; amount: string }) => {
         <div>
           <Button
             label={<>{'Fund Wallet'}</>}
-            onClick={() => {}}
+            // onClick={() => NiceModal.show(WalletBillingModal)}
             className="employee-section__submit-btn"
+
             primary
             type="submit"
           />

@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { NextPage } from 'next';
 import NiceModal from '@ebay/nice-modal-react';
-
 import { useCallback, useState, useEffect } from 'react';
 import { Button } from '../../src/components/Button/Button.component';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';

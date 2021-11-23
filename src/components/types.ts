@@ -129,6 +129,11 @@ export type CreateOrganization = {
   country: string;
 };
 
+
+/** Wallet Billing */
+export type WalletBilling = {
+  amount: string;
+}
 /** NavListItem */
 export type IDashboardNavigationListItem = {
   router: NextRouter;
