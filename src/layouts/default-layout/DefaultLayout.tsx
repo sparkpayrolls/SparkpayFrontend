@@ -7,14 +7,14 @@ import Logo from '../../../public/svgs/logo.svg';
 const DefaultLayout: React.FC = ({ children }) => {
   return (
     <>
-      <header className="default-layout__header">
+      <header className="default-layout__header" id="top">
         <Link href="/">
           <a className="default-layout__header-brand">
             <Image src={Logo} alt="" />
           </a>
         </Link>
 
-        <nav className="navigation">
+        {/* <nav className="navigation">
           <ul className="navigation__list">
             <div className="navigation__list-section">
               <li className="navigation__list-item">
@@ -42,7 +42,7 @@ const DefaultLayout: React.FC = ({ children }) => {
               </li>
             </div>
           </ul>
-        </nav>
+        </nav> */}
 
         {/* //TODO Bring this back later  */}
         {/* <button className="default-layout__menu-btn">

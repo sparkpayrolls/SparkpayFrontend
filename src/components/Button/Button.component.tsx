@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Spinner } from '../Spinner/Spinner.component';
 
 interface ButtonProps {
@@ -46,6 +47,10 @@ interface ButtonProps {
    * Should the button show loading
    */
   showLabel?: boolean;
+
+  element?: 'a';
+
+  href?: string;
 }
 
 /**
@@ -60,9 +65,28 @@ export const Button = ({
   className,
   showSpinner = false,
   showLabel = true,
+  element,
+  href,
   ...props
 }: ButtonProps) => {
   const mode = primary ? 'button--primary' : 'button--secondary';
+
+  if (element === 'a' && href) {
+    return (
+      <Link href={href}>
+        <a
+          type={type}
+          className={['button', `button--${size}`, mode, className].join(' ')}
+          style={{ backgroundColor }}
+          {...props}
+        >
+          {showLabel && label}
+          {showSpinner ? <Spinner /> : null}
+        </a>
+      </Link>
+    );
+  }
+
   return (
     <button
       type={type}

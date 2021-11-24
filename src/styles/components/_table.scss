@@ -108,9 +108,14 @@
     }
   }
 
+  &__table-container {
+    width: 100%;
+    overflow-y: auto;
+  }
+
   table {
     border-collapse: collapse;
-    width: 100%;
+    min-width: 100%;
     margin-top: 10px;
   }
 
@@ -262,6 +267,219 @@
 
 .employee-table {
   margin-top: 1.5rem;
+}
+
+.table-layout {
+  &__top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 24px;
+
+    &__actions {
+      margin-left: auto;
+      display: flex;
+      grid-column-gap: 1rem;
+
+      &__options-button {
+        display: inline-flex;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d7dce0;
+        border-radius: 4px;
+        background: none;
+        align-items: center;
+        justify-content: flex-start;
+        max-height: 40px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  &__container {
+    width: 100%;
+    overflow-y: auto;
+  }
+}
+
+.table {
+  &--loading {
+    position: relative;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: auto;
+      content: '';
+      height: 3px;
+      background-color: #1d4ed8;
+      width: 100%;
+      animation: slide 3s infinite linear;
+    }
+  }
+
+  border-collapse: collapse;
+  min-width: 100%;
+
+  thead {
+    background: #f7f9fb;
+  }
+
+  th {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1rem;
+    color: #6d7a98;
+    text-align: left;
+    padding: 17px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  td {
+    text-align: left;
+    padding: 20px;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1rem;
+    color: #0b2253;
+    white-space: nowrap;
+  }
+
+  tr {
+    border-bottom: 1px solid #f7f9fb;
+  }
+}
+
+.checkbox-table-column {
+  white-space: nowrap;
+  &__checkbox {
+    margin-right: 0.875rem;
+    vertical-align: middle;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__summary {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.4px;
+    color: #0b2253;
+
+    span {
+      color: #6d7a98;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    grid-column-gap: 0.5rem;
+
+    button {
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 1.5rem;
+      letter-spacing: 0.4px;
+      color: #6d7a98;
+      background: unset;
+      border: unset;
+      border-radius: 2px;
+      padding: 0 0.5rem;
+      cursor: pointer;
+
+      &:disabled {
+        color: #1d4ed8;
+        background: #edf1fd;
+        cursor: auto;
+      }
+
+      &.prev,
+      &.next {
+        color: #6d7a98;
+        background: unset;
+
+        &:disabled {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
+  &__per-page {
+    justify-content: flex-start;
+
+    > span {
+      display: block;
+      margin-right: 10px;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 24px;
+      letter-spacing: 0.4px;
+      color: #0b2253;
+    }
+
+    .select-input {
+      width: 5rem;
+
+      &__selector {
+        padding: 4px 8px;
+      }
+
+      &__option {
+        padding: 4px 8px;
+      }
+    }
+  }
+}
+
+.table-empty-state {
+  display: flex;
+  width: 100%;
+  height: 57vh;
+  max-height: 512px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__text {
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #0b2253;
+    margin-top: 0.5rem;
+  }
+}
+
+.input-table-column {
+  display: block;
+  position: relative;
+  min-width: 176px;
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1.125rem;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 1.5rem 1rem;
+    border: 1px solid transparent;
+    outline: none;
+  }
+}
+
+.payroll-create-table {
+  td {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
 
 @keyframes slide {
