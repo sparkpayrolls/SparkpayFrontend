@@ -7,7 +7,7 @@ import fi_chevrons_right from '../../../public/svgs/fi_chevrons-right.svg';
 export const JoinWaitListModal = NiceModal.create(() => {
   const modal = useModal();
 
-  const shareUrl = 'http://github.com';
+  const shareUrl = 'http://www.sparkpayhq.com/';
   const title = 'SparkPay';
   return (
     <Modal

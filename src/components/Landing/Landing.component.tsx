@@ -6,8 +6,10 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { $api } from 'src/api';
-import dashboard_preview from '../../../public/svgs/dashboard-preview.svg';
-// import dashboard_preview2 from '../../../public/svgs/frame-11825.svg';
+// import dashboard_preview from '../../../public/svgs/dashboard-preview.svg';
+import dashboard_preview2 from '../../../public/svgs/frame-11825.svg';
+import herosectionimg from '../../../public/svgs/hero-section-img.svg';
+// import test from '../../../public/images/test.png';
 import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
 import { JoinWaitListModal } from '../Modals/JoinWaitListModal.component';
 
@@ -85,7 +87,8 @@ export const Landing = () => {
         </section>
 
         <section className="app-preview">
-          <DashboardPreviewSVG />
+          {/* <DashboardPreviewSVG /> */}
+          <Image src={herosectionimg} alt="dashboard preview" />
         </section>
 
         <section className="features">
@@ -119,7 +122,7 @@ export const Landing = () => {
           </div>
 
           <div className="features__image">
-            <Image src={dashboard_preview} alt="dashboard preview" />
+            <Image src={dashboard_preview2} alt="dashboard preview" />
           </div>
         </section>
       </main>
@@ -127,17 +130,17 @@ export const Landing = () => {
   );
 };
 
-const DashboardPreviewSVG = () => {
-  const src =
-    'https://res.cloudinary.com/djhmpr0bv/image/upload/v1636552573/qk8fcorqicnrjayzk9hs.svg';
+// const DashboardPreviewSVG = () => {
+//   const src =
+//     'https://res.cloudinary.com/djhmpr0bv/image/upload/v1636552573/qk8fcorqicnrjayzk9hs.svg';
 
-  return (
-    <Image
-      loader={(props) => `${src}?hehehe=${props.width}`}
-      src={src}
-      alt="dashboard-preview"
-      width={1008}
-      height={607}
-    />
-  );
-};
+//   return (
+//     <Image
+//       loader={(props) => `${src}?hehehe=${props.width}`}
+//       src={src}
+//       alt="dashboard-preview"
+//       width={1300}
+//       height={607}
+//     />
+//   );
+// };
