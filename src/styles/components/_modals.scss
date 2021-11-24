@@ -249,5 +249,95 @@
         line-height: 16px;
       }
     }
+
+   
+  }
+}
+
+.fund-wallet-modal{
+  &__backIcon{
+    display:flex;
+    grid-column-gap: 0.7rem;
+    cursor:pointer;
+  }
+  &__back-text{
+    font-size: 0.9rem;
+line-height: 16px;
+color: #0B2253;
+font-weight: 500;
+  }
+
+  &__fund-card{
+ display: flex;
+ justify-content: space-between;
+width: 400px;
+height: 112px;
+background: #F7F9FB;
+border-radius: 4px;
+  }
+
+  &__fund-amount{
+    margin-top: 2rem;
+  }
+
+  &__fund-transfer-text{
+font-family: Karla;
+font-style: normal;
+font-weight: normal;
+font-size: 0.8rem;
+line-height: 24px;
+color: #6D7A98;
+  }
+
+  &__fund-title-text{
+    padding: 1.4rem 0 1.4rem 1.4rem;
+  }
+
+  &__fund-bank-copy-image{
+    margin:2rem 1.4rem 0 0;
+    display:flex;
+    grid-column-gap: 0.5rem;
+    cursor:pointer;
+  }
+  &__fund-bank-copy-text{
+   margin-top: 1.8rem;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 16px;
+color: #0F42A4;
+  }
+
+  &__fund-title-title{
+    font-size: 14px;
+line-height: 16px;
+color: rgba(22, 42, 86, 0.6);
+  }
+
+  &__fund-amount-transfer{
+    font-weight: 600;
+font-size: 24px;
+line-height: 24px;
+color: #162A56;
+padding-top:8px;
+  }
+
+  &__fund-bank-transfer{
+    font-family: Karla;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 16px;
+color: #162A56;
+padding-top:8px;
+  }
+
+  &__fund-bank-expire{
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #6D7A98;
+    padding-top:2rem;
   }
 }
