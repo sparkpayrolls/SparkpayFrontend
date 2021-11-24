@@ -7,6 +7,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { $api } from 'src/api';
 import dashboard_preview2 from '../../../public/svgs/frame-11825.svg';
+import herosectionimg from '../../../public/svgs/hero-section-img.svg';
+// import test from '../../../public/images/test.png';
 import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
 import { JoinWaitListModal } from '../Modals/JoinWaitListModal.component';
 
@@ -86,7 +88,8 @@ export const Landing = () => {
         </section>
 
         <section className="app-preview">
-          <DashboardPreviewSVG />
+          {/* <DashboardPreviewSVG /> */}
+          <Image src={herosectionimg} alt="dashboard preview" />
         </section>
 
         <section className="features">
@@ -128,17 +131,17 @@ export const Landing = () => {
   );
 };
 
-const DashboardPreviewSVG = () => {
-  const src =
-    'https://res.cloudinary.com/djhmpr0bv/image/upload/v1637412387/zuvqnjek7ljv9iwyvpdc.png';
+// const DashboardPreviewSVG = () => {
+//   const src =
+//     'https://res.cloudinary.com/djhmpr0bv/image/upload/v1637412387/zuvqnjek7ljv9iwyvpdc.png';
 
-  return (
-    <Image
-      loader={(props) => `${src}?hehehe=${props.width}`}
-      src={src}
-      alt="dashboard-preview"
-      width={1224}
-      height={668}
-    />
-  );
-};
+//   return (
+//     <Image
+//       loader={(props) => `${src}?hehehe=${props.width}`}
+//       src={src}
+//       alt="dashboard-preview"
+//       width={1224}
+//       height={668}
+//     />
+//   );
+// };
