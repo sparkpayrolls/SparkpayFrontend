@@ -15,6 +15,7 @@ import {
   EmployeeStatus,
   OrganisationDashboardData,
   PaginationMeta,
+  Payroll,
   PayrollStatus,
   PermissionGroup,
   PermissionLevel,
@@ -22,6 +23,7 @@ import {
   WalletTransaction,
   WalletTransactionStatus,
 } from 'src/api/types';
+import { IKebabItem } from './KebabMenu/KebabMenu.component';
 
 /** MultiSelect Props */
 export type IMultiSelectOptionItem = Record<string, unknown>;
@@ -159,6 +161,20 @@ export type ITransactionTable = {
   administrator: Administrator | null;
 };
 
+export type IPayrollTable = {
+  administrator: Administrator | null;
+  meta: PaginationMeta;
+  payrolls: Payroll[];
+  loading: boolean;
+  getPayrolls(
+    page?: number,
+    perPage?: number,
+    search?: string,
+    all?: boolean,
+  ): any;
+  kebabMenuItems(payroll: Payroll): IKebabItem[];
+};
+
 /** Create Organization */
 export type CreateOrganization = {
   name: string;
@@ -246,4 +262,45 @@ export type IOrganisationDashboard = {
   getData(): any;
   loading?: boolean;
   administrator: Administrator;
+};
+
+export type IOnSearch = (value: string) => any;
+
+export type ISearchInput = {
+  placeholder?: string;
+  value?: string;
+  onSearch?(value: string): any;
+};
+
+export type ITableLayout = {
+  // eslint-disable-next-line no-undef
+  title?: string | JSX.Element;
+  onSearch?(value: string): any;
+  onFilter?(): any;
+  buttons?: {
+    href?: string;
+    label: string;
+    action?(): any;
+    primary?: boolean;
+  }[];
+  menuItems?: IKebabItem[];
+};
+
+export type ICheckboxTableColumn = {
+  element: 'td' | 'th';
+};
+
+export type IPagination = {
+  refresh?(query: Record<string, any>): any;
+  meta?: Pick<
+    PaginationMeta,
+    | 'perPage'
+    | 'total'
+    | 'page'
+    | 'pageCount'
+    | 'hasNextPage'
+    | 'hasPrevPage'
+    | 'previousPage'
+    | 'nextPage'
+  >;
 };

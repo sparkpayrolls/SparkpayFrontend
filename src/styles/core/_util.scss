@@ -19,3 +19,10 @@
 .padding-right-space-1 {
   padding-right: $space-1;
 }
+.sr-only {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  position: fixed;
+  left: -100vw;
+}

@@ -99,4 +99,8 @@ export class Util {
 
     return `${withComma}.${dec}`;
   }
+
+  static formatNumber(val: number) {
+    return Util.formatMoneyNumber(val).split('.')[0];
+  }
 }

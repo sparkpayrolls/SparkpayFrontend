@@ -46,3 +46,24 @@
     padding: 12px 24px;
   }
 }
+
+.filter-button {
+  display: inline-flex;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d7dce0;
+  border-radius: 4px;
+  background: none;
+  align-items: center;
+  justify-content: flex-start;
+  max-height: 40px;
+  cursor: pointer;
+
+  span {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &__text {
+    margin-right: 0.6rem;
+  }
+}

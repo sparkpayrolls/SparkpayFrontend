@@ -26,6 +26,8 @@
 @import './components/transaction-chip';
 @import './components/date-time-chip';
 @import './components/tab';
+@import './components/dashboard-layout-v2';
+@import './components/wallet-balance-chip';
 
 // PAGES
 @import './pages/home';
@@ -39,3 +41,4 @@
 @import './pages/group-details';
 @import './pages/dashboard';
 @import './pages/organisation-sett';
+@import './pages/create-payroll';

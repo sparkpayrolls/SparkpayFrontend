@@ -11,6 +11,7 @@ import {
 import { PaginationMeta } from 'src/api/types';
 import { Util } from 'src/helpers/util';
 import search_icon from '../../../public/svgs/search-icon.svg';
+import { Button } from '../Button/Button.component';
 import { SelectInput } from '../Input/seletct-input';
 import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 
@@ -35,6 +36,12 @@ interface ITable {
   kebabMenuItems?: IKebabItem[];
   isNotSelectable?: boolean;
   isNotSearchable?: boolean;
+  buttons?: {
+    href?: string;
+    label: string;
+    action?(): any;
+    primary?: boolean;
+  }[];
 }
 
 interface ITR {
@@ -225,39 +232,58 @@ export const Table = (props: ITable) => {
               )}
             </div>
           )}
+          {props.buttons && (
+            <div className="table-component__buttons">
+              {props.buttons?.map((button, i) => {
+                return (
+                  <Button
+                    key={`${button.label}-${i}`}
+                    label={button.label}
+                    type="button"
+                    element={button.href ? 'a' : undefined}
+                    href={button.href}
+                    onClick={button.action ? button.action : undefined}
+                    primary={button.primary}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
-      <table>
-        <thead className="table-component__thead">
-          {!props.isNotSelectable && (
-            <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
-              {props.headerRow.map((item) => {
-                return <th key={item}>{item}</th>;
-              })}
-            </TR>
-          )}
-          {props.isNotSelectable && (
-            <tr>
-              {props.headerRow.map((item) => {
-                return <th key={item}>{item}</th>;
-              })}
-            </tr>
-          )}
-        </thead>
+      <div className="table-component__table-container">
+        <table>
+          <thead className="table-component__thead">
+            {!props.isNotSelectable && (
+              <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
+                {props.headerRow.map((item) => {
+                  return <th key={item}>{item}</th>;
+                })}
+              </TR>
+            )}
+            {props.isNotSelectable && (
+              <tr>
+                {props.headerRow.map((item) => {
+                  return <th key={item}>{item}</th>;
+                })}
+              </tr>
+            )}
+          </thead>
 
-        {props.children()}
-      </table>
-      {props.isEmpty && (
-        <div className="table-component__empty-state">
-          <FileStorageSVG />
-          <span className="table-component__empty-state--text">
-            {props.isLoading
-              ? 'Getting data'
-              : props.emptyStateText ?? 'No data'}
-          </span>
-        </div>
-      )}
+          {props.children()}
+        </table>
+        {props.isEmpty && (
+          <div className="table-component__empty-state">
+            <FileStorageSVG />
+            <span className="table-component__empty-state--text">
+              {props.isLoading
+                ? 'Getting data'
+                : props.emptyStateText ?? 'No data'}
+            </span>
+          </div>
+        )}
+      </div>
 
       {props.paginationMeta && !props.isEmpty && (
         <TablePagination {...props.paginationMeta} refresh={refresh} />
