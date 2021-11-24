@@ -11,7 +11,7 @@ import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 
-export const AddEmployeeModal = NiceModal.create(() => {
+export const AddEmployeeModal = NiceModal.create(() => { 
   return (
     <ModalLayout title="Add Employee">
       {(modal) => {
