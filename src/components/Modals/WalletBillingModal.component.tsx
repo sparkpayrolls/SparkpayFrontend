@@ -14,7 +14,7 @@ import {
 } from '../types';
 import { fundWalletValidationSchema } from 'src/helpers/validation';
 import { config } from '../../helpers/config';
-import { Company, Country, User } from 'src/api/types';
+import { Company, Country } from 'src/api/types';
 import { Util } from 'src/helpers/util';
 
 export const WalletBillingModal = NiceModal.create(
@@ -42,9 +42,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
 
   const triggerPaystackNGCheckout = (amount: number, channels: string[]) => {
-    const user = administrator.user as User;
-
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       // @ts-ignore
       const handler = PaystackPop.setup({
         key: config.paystackKey,
@@ -54,11 +52,11 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
         channels,
         metadata: {
           companyId: company.id,
-          userId: user.id,
+          userId: administrator.user,
           chargeType: 'wallet-topup',
         },
         callback: resolve,
-        onClose: resolve,
+        onClose: () => reject(new Error()),
       });
 
       handler.openIframe();
