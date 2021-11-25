@@ -15,6 +15,8 @@ import {
   EmployeeStatus,
   OrganisationDashboardData,
   PaginationMeta,
+  PaymentMethod,
+  PaymentMethodName,
   Payroll,
   PayrollStatus,
   PermissionGroup,
@@ -90,6 +92,7 @@ export type AddEmployee = {
 
 export type ISingleEmployeeUpload = {
   onDone?: (employee: Employee) => any;
+  administrator: Administrator;
 };
 
 /** Kebab Menus */
@@ -183,11 +186,11 @@ export type CreateOrganization = {
   country: string;
 };
 
-
 /** Wallet Billing */
 export type WalletBilling = {
   amount: string;
-}
+  channel: PaymentMethodName;
+};
 /** NavListItem */
 export type IDashboardNavigationListItem = {
   router: NextRouter;
@@ -303,4 +306,23 @@ export type IPagination = {
     | 'previousPage'
     | 'nextPage'
   >;
+};
+
+export type IWalletBillingForm = {
+  modal: NiceModalHandler;
+  administrator: Administrator;
+  paymentMethods: PaymentMethod[];
+};
+
+export type IWalletBillingModal = {
+  administrator: Administrator;
+  paymentMethods: PaymentMethod[];
+};
+
+export type IWalletCard = {
+  title: string;
+  amount: string;
+  administrator: Administrator;
+  refreshBalance(): any;
+  paymentMethods: PaymentMethod[];
 };

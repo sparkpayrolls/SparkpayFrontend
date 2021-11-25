@@ -47,6 +47,7 @@ export const createOrganizationValidationSchema = Yup.object().shape({
   phonenumber: format.phonenumber,
 });
 
-export const walletBillingValidationSchema = Yup.object().shape({
+export const fundWalletValidationSchema = Yup.object().shape({
   amount: Yup.string().required('amount is required'),
+  channel: Yup.string().required('select payment method'),
 });

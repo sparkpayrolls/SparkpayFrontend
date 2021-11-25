@@ -271,3 +271,11 @@ export type Payroll = Document & {
   employees?: unknown[];
   size?: number;
 };
+
+export type PaymentMethodName = 'Bank Transfer' | 'Card';
+
+export type PaymentMethod = Document & {
+  provider: string;
+  name: PaymentMethodName;
+  country: string | Country;
+};
