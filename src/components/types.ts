@@ -11,6 +11,8 @@ import {
 import { InputRangeProps } from 'react-input-range';
 import {
   Administrator,
+  Audit,
+  AuditAction,
   Employee,
   EmployeeStatus,
   OrganisationDashboardData,
@@ -230,7 +232,11 @@ export type IIdentity = {
 
 /** Statuschip */
 export type IStatusChip = {
-  status: PayrollStatus | EmployeeStatus | WalletTransactionStatus;
+  status:
+    | PayrollStatus
+    | EmployeeStatus
+    | WalletTransactionStatus
+    | AuditAction;
 };
 
 /** TransactionMethod */
@@ -287,10 +293,18 @@ export type ITableLayout = {
     primary?: boolean;
   }[];
   menuItems?: IKebabItem[];
+  searchPlaceholder?: string;
 };
 
 export type ICheckboxTableColumn = {
   element: 'td' | 'th';
+  checked?: boolean;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+};
+
+export type IMenuTableColumn = {
+  element: 'td' | 'th';
+  items: IKebabItem[];
 };
 
 export type IPagination = {
@@ -325,4 +339,11 @@ export type IWalletCard = {
   administrator: Administrator;
   refreshBalance(): any;
   paymentMethods: PaymentMethod[];
+};
+
+export type IAuditTable = {
+  logs: Audit[];
+  getLogs(params: Record<string, any>): any;
+  meta: PaginationMeta;
+  loading: boolean;
 };

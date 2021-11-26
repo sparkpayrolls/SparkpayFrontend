@@ -16,7 +16,7 @@ export const DateTimeChip = ({
       </span>
       {'\xa0'}|{'\xa0'}
       <span className="date-time-chip__time">
-        {moment(date).format(timeFormat ?? 'HH:MM\xa0A')}
+        {moment(date).format(timeFormat ?? 'hh:mm\xa0A')}
       </span>
     </span>
   );

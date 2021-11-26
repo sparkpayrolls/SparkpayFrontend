@@ -279,3 +279,21 @@ export type PaymentMethod = Document & {
   name: PaymentMethodName;
   country: string | Country;
 };
+
+export enum AuditActionEnum {
+  CREATE = 'CREATE',
+  EDIT = 'EDIT',
+  LOGIN = 'LOGIN',
+  DELETE = 'DELETE',
+}
+
+export type AuditAction = AuditActionEnum | keyof typeof AuditActionEnum;
+
+export type Audit = Document & {
+  company: string | Company;
+  actionBy: string | User;
+  action: AuditAction;
+  description: string;
+  role: string;
+  meta?: unknown;
+};

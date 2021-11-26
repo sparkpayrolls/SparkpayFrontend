@@ -21,7 +21,11 @@ export const CheckboxTableColumn = (
     <ElementWrapper element={props.element}>
       <span className="checkbox-table-column">
         <span className="checkbox-table-column__checkbox">
-          <input type="checkbox" />
+          <input
+            onChange={props.onChange}
+            checked={props.checked}
+            type="checkbox"
+          />
         </span>
         <span className="checkbox-table-column__content">{props.children}</span>
       </span>
