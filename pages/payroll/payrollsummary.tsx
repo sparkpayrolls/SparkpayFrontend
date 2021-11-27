@@ -5,6 +5,7 @@ import backicon from '../../public/svgs/backicon.svg';
 import { Button } from '../../src/components/Button/Button.component';
 import calendar from "../../public/svgs/Calendar.svg";
 
+
 const PayrollSummary: NextPage = () => {
   return (
     <div className="payroll-summary">
@@ -105,6 +106,7 @@ const PayrollSummary: NextPage = () => {
           </div>
         </section>
       </main>
+     
     </div>
   );
 };

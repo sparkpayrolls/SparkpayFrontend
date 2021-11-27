@@ -7,16 +7,26 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
+  transition: background 0.2s ease-in-out;
 
   &--primary {
     color: #ffffff;
     background: $primary;
+
+    cursor: pointer;
+    &:hover:not(:disabled) {
+      background: $primary-hover;
+    }
   }
 
   &--secondary {
     color: #333;
     background-color: transparent;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+
+    &:hover:not(:disabled) {
+      background: darken($color: #ffffff, $amount: 5);
+    }
   }
 
   &--small {
@@ -34,5 +44,26 @@
   &--large {
     font-size: 16px;
     padding: 12px 24px;
+  }
+}
+
+.filter-button {
+  display: inline-flex;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d7dce0;
+  border-radius: 4px;
+  background: none;
+  align-items: center;
+  justify-content: flex-start;
+  max-height: 40px;
+  cursor: pointer;
+
+  span {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &__text {
+    margin-right: 0.6rem;
   }
 }

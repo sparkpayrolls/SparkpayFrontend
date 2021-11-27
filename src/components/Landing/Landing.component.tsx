@@ -6,8 +6,9 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { $api } from 'src/api';
-// import dashboard_preview from '../../../public/svgs/dashboard-preview.svg';
 import dashboard_preview2 from '../../../public/svgs/frame-11825.svg';
+import herosectionimg from '../../../public/svgs/hero-section-img.svg';
+// import test from '../../../public/images/test.png';
 import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
 import { JoinWaitListModal } from '../Modals/JoinWaitListModal.component';
 
@@ -22,7 +23,6 @@ export const Landing = () => {
     try {
       setShowSpinner(true);
       await $api.joinWaitList(email, name);
-      // toast.success('Successfully joined the wait list.');
       NiceModal.show(JoinWaitListModal);
       setName('');
       setEmail('');
@@ -36,7 +36,7 @@ export const Landing = () => {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout >
       <Head>
         <title>SparkPay</title>
         <meta name="description" content="Sparkpay homepage" />
@@ -52,7 +52,10 @@ export const Landing = () => {
             and remitting statutory deductions.
           </p>
 
-          <form className="hero-section__join-list" onSubmit={handleSubmit}>
+          <form
+            className="hero-section__join-list"
+            onSubmit={handleSubmit}
+          >
             <input
               type="text"
               name="name"
@@ -85,7 +88,8 @@ export const Landing = () => {
         </section>
 
         <section className="app-preview">
-          <DashboardPreviewSVG />
+          {/* <DashboardPreviewSVG /> */}
+          <Image src={herosectionimg} alt="dashboard preview" />
         </section>
 
         <section className="features">
@@ -94,7 +98,7 @@ export const Landing = () => {
               Focus on your business while we handle your Payroll.
             </h2>
             <p className="features__subtext">
-              Harmonize and upscale your payroll management system for uptimum
+              Harmonize and upscale your payroll management system for optimum
               performance.
             </p>
 
@@ -106,14 +110,14 @@ export const Landing = () => {
                 Tax remittances and pension.
               </li>
               <li className="features__list-item">
-                Subgroup employees for specialised benefits.
+                Subgroup employees for specialized benefits.
               </li>
               <li className="features__list-item">
                 Easy setup and navigation.
               </li>
             </ul>
 
-            <Link href="#">
+            <Link data-scroll href="#top">
               <a className="features__link">Get Started</a>
             </Link>
           </div>
@@ -127,17 +131,17 @@ export const Landing = () => {
   );
 };
 
-const DashboardPreviewSVG = () => {
-  const src =
-    'https://res.cloudinary.com/djhmpr0bv/image/upload/v1636552573/qk8fcorqicnrjayzk9hs.svg';
+// const DashboardPreviewSVG = () => {
+//   const src =
+//     'https://res.cloudinary.com/djhmpr0bv/image/upload/v1637412387/zuvqnjek7ljv9iwyvpdc.png';
 
-  return (
-    <Image
-      loader={(props) => `${src}?hehehe=${props.width}`}
-      src={src}
-      alt="dashboard-preview"
-      width={1008}
-      height={607}
-    />
-  );
-};
+//   return (
+//     <Image
+//       loader={(props) => `${src}?hehehe=${props.width}`}
+//       src={src}
+//       alt="dashboard-preview"
+//       width={1224}
+//       height={668}
+//     />
+//   );
+// };
