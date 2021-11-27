@@ -6,6 +6,20 @@ import { NextPage } from 'next';
 import withAuth from 'src/helpers/HOC/withAuth';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 
+
+export const TotalCard = ({
+amount,
+} :{
+  amount:string;
+}) => {
+return(
+<div className="create-payroll-page__totals__items-background">
+  <div>
+    <p>{amount}</p>
+  </div>
+</div>
+);
+}
 const CreatePayroll: NextPage = () => {
   return (
     <DashboardLayoutV2 title="Create payroll" href="/payroll">
@@ -34,19 +48,20 @@ const CreatePayroll: NextPage = () => {
                 <td>
                   <span className="input-table-column">
                     <input type="text" className="input-table-column__input" />
-                <td>₦ 120,000</td>   
                     <span className="input-table-column__icon">
                 <EditSVG/>                
                     </span>
                   </span>
                 </td>
 
+                {/* <td>₦ 120,000</td> */}
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
-                {/* <td>₦ 120,000</td> */}</tr>
+                {/* <td>₦ 120,000</td> */}
+                </tr>
                 </tbody>
           </table>
              
@@ -55,25 +70,40 @@ const CreatePayroll: NextPage = () => {
         <div className="create-payroll-page__totals">         
           <div className="create-payroll-page__totals__items">
             <div className="create-payroll-page__totals__items__item">
-              Total
+            {/* <TotalCard
+            amount="Total"
+            />  */}
+              <p>Total</p>
+            </div>      
+            <div className="create-payroll-page__totals__items__item">
+            <TotalCard
+            amount="120,000"
+            />
             </div>
             <div className="create-payroll-page__totals__items__item">
-              ₦ 120,000
+            <TotalCard
+            amount="120,000"
+            />
             </div>
             <div className="create-payroll-page__totals__items__item">
-              ₦ 120,000
+              <TotalCard
+            amount="120,000"
+            />
             </div>
             <div className="create-payroll-page__totals__items__item">
-              ₦ 120,000
+             <TotalCard
+            amount="120,000"
+            />
             </div>
             <div className="create-payroll-page__totals__items__item">
-              ₦ 120,000
+            <TotalCard
+            amount="120,000"
+            />
             </div>
             <div className="create-payroll-page__totals__items__item">
-              ₦ 120,000
-            </div>
-            <div className="create-payroll-page__totals__items__item">
-              ₦ 120,000
+              <TotalCard
+            amount="120,000"
+            />
             </div>
           </div>
         </div>
