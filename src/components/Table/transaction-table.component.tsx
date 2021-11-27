@@ -5,7 +5,7 @@ import { StatusChip } from '../StatusChip/status-chip.component';
 import { TransactionMethod } from '../TransactionMethod/transaction-method.component';
 import { ITransactionTable } from '../types';
 import { Table } from './Table.component';
-
+ 
 export const TransactionTable = (props: ITransactionTable) => {
   const { loading, administrator, getTransactions, transactions, meta } = props;
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);

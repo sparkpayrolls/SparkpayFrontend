@@ -101,7 +101,7 @@ export const navListItems = (
     match: '/audit',
     router,
     title: 'Audit\xa0Trail',
-    permissions: [],
+    permissions: [['AuditTrail', 'read']],
   },
 ];
 

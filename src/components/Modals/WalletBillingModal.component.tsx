@@ -1,70 +1,194 @@
+/* eslint-disable no-undef */
 import React from 'react';
+import Head from 'next/head';
 import NiceModal from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
 import { Radio } from 'antd';
-import { Formik, FormikProps } from 'formik';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { Input } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
-import { WalletBilling } from '../types';
-import { FundDetailsModal } from './FundDetailsModal.component';
-export const WalletBillingModal = NiceModal.create(() => {
-  return (
-    <ModalLayout title="Fund Wallet">
-      {() => {
-        return <WalletBillingForm />;
-      }}
-    </ModalLayout>
-  );
-});
+import {
+  IWalletBillingForm,
+  IWalletBillingModal,
+  WalletBilling,
+} from '../types';
+import { fundWalletValidationSchema } from 'src/helpers/validation';
+import { config } from '../../helpers/config';
+import { Company, Country } from 'src/api/types';
+import { Util } from 'src/helpers/util';
 
-const WalletBillingForm = () => {
+export const WalletBillingModal = NiceModal.create(
+  (props: IWalletBillingModal) => {
+    return (
+      <ModalLayout title="Fund Wallet">
+        {(modal) => {
+          return (
+            <WalletBillingForm
+              modal={modal}
+              administrator={props.administrator}
+              paymentMethods={props.paymentMethods}
+            />
+          );
+        }}
+      </ModalLayout>
+    );
+  },
+);
+
+const WalletBillingForm = (props: IWalletBillingForm) => {
+  const { administrator, modal, paymentMethods } = props;
+  const company = administrator.company as Company;
+  const country = company.country as Country;
+  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
+
+  const triggerPaystackNGCheckout = (amount: number, channels: string[]) => {
+    return new Promise((resolve, reject) => {
+      // @ts-ignore
+      const handler = PaystackPop.setup({
+        key: config.paystackKey,
+        email: company.email,
+        amount: amount * 100,
+        currency: 'NGN',
+        channels,
+        metadata: {
+          companyId: company.id,
+          userId: administrator.user,
+          chargeType: 'wallet-topup',
+        },
+        callback: resolve,
+        onClose: () => reject(new Error()),
+      });
+
+      handler.openIframe();
+    });
+  };
+
+  const handleNigeriaSubmit = (
+    values: WalletBilling,
+    helpers: FormikHelpers<WalletBilling>,
+  ) => {
+    const amount = +values.amount;
+    if (amount < 100) {
+      helpers.setErrors({
+        amount: `amount must be at least ${currency} 100`,
+      });
+      helpers.setSubmitting(false);
+      return;
+    }
+    let channel: string;
+    switch (values.channel) {
+      case 'Bank Transfer': {
+        channel = 'bank';
+        break;
+      }
+      default:
+        channel = 'card';
+    }
+
+    triggerPaystackNGCheckout(amount, [channel])
+      .then(() => {
+        modal.resolve(true);
+        setTimeout(modal.hide, 100);
+      })
+      .catch(() => helpers.setSubmitting(false));
+  };
+
+  const handleSubmit = (
+    values: WalletBilling,
+    helpers: FormikHelpers<WalletBilling>,
+  ) => {
+    helpers.setSubmitting(true);
+    values.amount = values.amount.replace(/[^0-9]/gi, '');
+
+    switch (country.name) {
+      case 'Nigeria': {
+        handleNigeriaSubmit(values, helpers);
+        break;
+      }
+      default:
+        console.log(`unsupported country - ${country.name}`);
+    }
+  };
+
   return (
     <div className="add-employee-modal">
-      <div className="add-employee-modal__upload-type-input">
-        <label>Select Payment Method</label>
-        <Radio.Group
-          name="uploadType"
-          className="add-employee-modal__upload-type-input__radio-group"
-        >
-          <Radio value="card">card</Radio>
-          <Radio value="bank Transfer">Bank Transfer</Radio>
-        </Radio.Group>
-      </div>
+      <Head>
+        <script src="https://js.paystack.co/v1/inline.js" defer></script>
+      </Head>
 
       <Formik
         initialValues={{
           amount: '',
+          // @ts-ignore
+          channel: '',
         }}
-        onSubmit={(...args) => {
-          console.log(args);
-        }}
-        //   // validationSchema={singleEmployeeUploadValidationSchema}
+        onSubmit={handleSubmit}
+        validationSchema={fundWalletValidationSchema}
       >
         {(props: FormikProps<WalletBilling>) => {
-          const { handleChange, handleSubmit } = props;
+          const {
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            errors,
+            touched,
+            handleBlur,
+          } = props;
           return (
             <form
               onSubmit={handleSubmit}
               className="single-employee-upload-form"
               autoComplete="off"
             >
+              <div className="add-employee-modal__upload-type-input">
+                <label>Select Payment Method</label>
+                <Radio.Group
+                  name="channel"
+                  onChange={handleChange}
+                  className="add-employee-modal__upload-type-input__radio-group"
+                >
+                  {paymentMethods.map((paymentMethod) => {
+                    return (
+                      <Radio key={paymentMethod.id} value={paymentMethod.name}>
+                        {paymentMethod.name}
+                      </Radio>
+                    );
+                  })}
+                </Radio.Group>
+              </div>
+
               <div className="single-employee-upload-form__section">
                 <Input
                   type="text"
-                  label=" Amount (₦)"
-                  placeholder=" Amount (₦)"
-                  name="salary"
+                  label={`Amount (${currency})`}
+                  placeholder={`Amount (${currency})`}
+                  name="amount"
+                  transformValue={(val) => {
+                    const valTransformed = +val.replace(/[^0-9]/gi, '');
+                    if (!valTransformed) return '';
+
+                    return `${currency} ${valTransformed.toLocaleString()}`;
+                  }}
                   onChange={handleChange}
+                  onBlur={handleBlur}
+                  hasError={
+                    (errors.amount && touched.amount) ||
+                    (errors.channel && touched.channel)
+                  }
+                  error={[errors.amount, errors.channel]
+                    .filter((e) => !!e)
+                    .join(' and ')}
                 />
               </div>
 
               <div className="form__submit-button">
                 <Button
-                  onClick={() => NiceModal.show(FundDetailsModal)}
                   type="submit"
                   label="Proceed"
                   className="form__submit-button form__submit-button--full-width"
                   primary
+                  showSpinner={isSubmitting}
+                  disabled={isSubmitting}
                 />
               </div>
             </form>

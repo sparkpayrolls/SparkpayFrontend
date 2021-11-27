@@ -73,7 +73,7 @@ const EmployeePage: NextPage = () => {
   };
 
   const onAddEmployee = () => {
-    NiceModal.show(AddEmployeeModal).then(() => {
+    NiceModal.show(AddEmployeeModal, { administrator }).then(() => {
       const { page, perPage, search, all, filter } = employeeQuery;
       getEmployees(page, perPage, search, all, filter);
     });
