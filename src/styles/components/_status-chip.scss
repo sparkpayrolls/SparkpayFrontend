@@ -32,7 +32,8 @@
 
   &--completed,
   &--successful,
-  &--active {
+  &--active,
+  &--CREATE {
     color: $green-600;
 
     .status-chip__indicator {
@@ -45,7 +46,8 @@
   }
 
   &--failed,
-  &--deactivated {
+  &--deactivated,
+  &--DELETE {
     color: $red-600;
 
     .status-chip__indicator {
@@ -57,7 +59,8 @@
     }
   }
 
-  &--pending {
+  &--pending,
+  &--EDIT {
     color: $orange-600;
 
     .status-chip__indicator {
@@ -69,7 +72,8 @@
     }
   }
 
-  &--processing {
+  &--processing,
+  &--LOGIN {
     color: $blue-600;
 
     .status-chip__indicator {

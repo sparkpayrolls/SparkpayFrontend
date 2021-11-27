@@ -9,6 +9,8 @@ import { DashboardModule } from './modules/dashboard.module';
 import { EmployeeModule } from './modules/employee.module';
 import { UserModule } from './modules/user.profile';
 import { PayrollModule } from './modules/payroll.module';
+import { PaymentModule } from './modules/payment.module';
+import { AuditModule } from './modules/audit.module';
 
 export class $api {
   static $axios = axios.create({
@@ -30,6 +32,10 @@ export class $api {
   static companyWallet = new CompanyWalletModule(this.$axios);
 
   static payroll = new PayrollModule(this.$axios);
+
+  static payment = new PaymentModule(this.$axios);
+
+  static audit = new AuditModule(this.$axios);
 
   static async joinWaitList(email: string, name: string) {
     await $api.$axios.post('/join-wait-list', { email, name });

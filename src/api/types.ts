@@ -271,3 +271,29 @@ export type Payroll = Document & {
   employees?: unknown[];
   size?: number;
 };
+
+export type PaymentMethodName = 'Bank Transfer' | 'Card';
+
+export type PaymentMethod = Document & {
+  provider: string;
+  name: PaymentMethodName;
+  country: string | Country;
+};
+
+export enum AuditActionEnum {
+  CREATE = 'CREATE',
+  EDIT = 'EDIT',
+  LOGIN = 'LOGIN',
+  DELETE = 'DELETE',
+}
+
+export type AuditAction = AuditActionEnum | keyof typeof AuditActionEnum;
+
+export type Audit = Document & {
+  company: string | Company;
+  actionBy: string | User;
+  action: AuditAction;
+  description: string;
+  role: string;
+  meta?: unknown;
+};

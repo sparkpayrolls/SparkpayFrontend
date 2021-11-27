@@ -10,18 +10,33 @@ import { AddEmployee, ISingleEmployeeUpload } from '../types';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
+import { Administrator } from 'src/api/types';
+import { Util } from 'src/helpers/util';
 
-export const AddEmployeeModal = NiceModal.create(() => { 
-  return (
-    <ModalLayout title="Add Employee">
-      {(modal) => {
-        return <AddEmployeeForm modal={modal} />;
-      }}
-    </ModalLayout>
-  );
-});
+export const AddEmployeeModal = NiceModal.create(
+  (props: { administrator: Administrator }) => {
+    return (
+      <ModalLayout title="Add Employee">
+        {(modal) => {
+          return (
+            <AddEmployeeForm
+              modal={modal}
+              administrator={props.administrator}
+            />
+          );
+        }}
+      </ModalLayout>
+    );
+  },
+);
 
-const AddEmployeeForm = ({ modal }: { modal: NiceModalHandler }) => {
+const AddEmployeeForm = ({
+  modal,
+  administrator,
+}: {
+  modal: NiceModalHandler;
+  administrator: Administrator;
+}) => {
   const [uploadType, setUploadType] = useState<'singleUpload' | 'bulkUpload'>(
     'singleUpload',
   );
@@ -47,6 +62,7 @@ const AddEmployeeForm = ({ modal }: { modal: NiceModalHandler }) => {
             modal.resolve(employee);
             setTimeout(modal.hide, 100);
           }}
+          administrator={administrator}
         />
       )}
     </div>
@@ -54,7 +70,9 @@ const AddEmployeeForm = ({ modal }: { modal: NiceModalHandler }) => {
 };
 
 const SingleEmployeeUpload = (props: ISingleEmployeeUpload) => {
-  const { onDone } = props;
+  const { onDone, administrator } = props;
+
+  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const handleSubmit = async (
     values: AddEmployee,
     helpers: FormikHelpers<AddEmployee>,
@@ -156,8 +174,8 @@ const SingleEmployeeUpload = (props: ISingleEmployeeUpload) => {
             <div className="single-employee-upload-form__section">
               <Input
                 type="text"
-                label="Salary Amount (₦)"
-                placeholder="Salary Amount (₦)"
+                label={`Salary Amount (${currency})`}
+                placeholder={`Salary Amount (${currency})`}
                 name="salary"
                 value={values.salary}
                 onChange={handleChange}
@@ -168,7 +186,7 @@ const SingleEmployeeUpload = (props: ISingleEmployeeUpload) => {
                   const valTransformed = +val.replace(/[^0-9]/gi, '');
                   if (!valTransformed) return '';
 
-                  return `₦ ${valTransformed.toLocaleString()}`;
+                  return `${currency} ${valTransformed.toLocaleString()}`;
                 }}
               />
             </div>

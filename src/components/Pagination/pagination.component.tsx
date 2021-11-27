@@ -88,7 +88,7 @@ export const Pagination = (props: IPagination) => {
         {page + 3 <= pageCount && <button>...</button>}
         {pageCount !== 1 && (
           <button
-            onClick={() => refresh({ pageCount, perPage })}
+            onClick={() => refresh({ page: pageCount, perPage })}
             disabled={page === pageCount}
           >
             {pageCount}

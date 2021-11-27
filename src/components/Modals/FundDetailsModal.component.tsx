@@ -63,6 +63,7 @@ const FundDetailsForm = () => {
       <Formik
         initialValues={{
           amount: '',
+          channel: 'Bank Transfer',
         }}
         onSubmit={(...args) => {
           console.log(args);

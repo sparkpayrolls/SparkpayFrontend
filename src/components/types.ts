@@ -11,10 +11,14 @@ import {
 import { InputRangeProps } from 'react-input-range';
 import {
   Administrator,
+  Audit,
+  AuditAction,
   Employee,
   EmployeeStatus,
   OrganisationDashboardData,
   PaginationMeta,
+  PaymentMethod,
+  PaymentMethodName,
   Payroll,
   PayrollStatus,
   PermissionGroup,
@@ -90,6 +94,7 @@ export type AddEmployee = {
 
 export type ISingleEmployeeUpload = {
   onDone?: (employee: Employee) => any;
+  administrator: Administrator;
 };
 
 /** Kebab Menus */
@@ -183,11 +188,11 @@ export type CreateOrganization = {
   country: string;
 };
 
-
 /** Wallet Billing */
 export type WalletBilling = {
   amount: string;
-}
+  channel: PaymentMethodName;
+};
 /** NavListItem */
 export type IDashboardNavigationListItem = {
   router: NextRouter;
@@ -227,7 +232,11 @@ export type IIdentity = {
 
 /** Statuschip */
 export type IStatusChip = {
-  status: PayrollStatus | EmployeeStatus | WalletTransactionStatus;
+  status:
+    | PayrollStatus
+    | EmployeeStatus
+    | WalletTransactionStatus
+    | AuditAction;
 };
 
 /** TransactionMethod */
@@ -284,10 +293,18 @@ export type ITableLayout = {
     primary?: boolean;
   }[];
   menuItems?: IKebabItem[];
+  searchPlaceholder?: string;
 };
 
 export type ICheckboxTableColumn = {
   element: 'td' | 'th';
+  checked?: boolean;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+};
+
+export type IMenuTableColumn = {
+  element: 'td' | 'th';
+  items: IKebabItem[];
 };
 
 export type IPagination = {
@@ -303,4 +320,30 @@ export type IPagination = {
     | 'previousPage'
     | 'nextPage'
   >;
+};
+
+export type IWalletBillingForm = {
+  modal: NiceModalHandler;
+  administrator: Administrator;
+  paymentMethods: PaymentMethod[];
+};
+
+export type IWalletBillingModal = {
+  administrator: Administrator;
+  paymentMethods: PaymentMethod[];
+};
+
+export type IWalletCard = {
+  title: string;
+  amount: string;
+  administrator: Administrator;
+  refreshBalance(): any;
+  paymentMethods: PaymentMethod[];
+};
+
+export type IAuditTable = {
+  logs: Audit[];
+  getLogs(params: Record<string, any>): any;
+  meta: PaginationMeta;
+  loading: boolean;
 };

@@ -14,7 +14,14 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
         )}
 
         <div className="table-layout__top-bar__actions">
-          {props.onSearch && <SearchInput onSearch={props.onSearch} />}
+          {(props.onSearch || props.searchPlaceholder) && (
+            <div className="table-layout__top-bar__actions__search">
+              <SearchInput
+                placeholder={props.searchPlaceholder}
+                onSearch={props.onSearch}
+              />
+            </div>
+          )}
 
           {props.onFilter && <FilterButton onClick={props.onFilter} />}
 

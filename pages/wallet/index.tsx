@@ -3,7 +3,14 @@ import { NextPage } from 'next';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { Util } from 'src/helpers/util';
-import { CompanyWallet, WalletTransaction } from 'src/api/types';
+import {
+  Administrator,
+  CompanyWallet,
+  WalletTransaction,
+  PaymentMethod,
+  Country,
+  Company,
+} from 'src/api/types';
 import { $api } from 'src/api';
 import { useAppSelector } from 'src/redux/hooks';
 import { TransactionTable } from '@/components/Table/transaction-table.component';
@@ -18,6 +25,8 @@ const WalletBilling: NextPage = () => {
   const [wallet, setWallet] = useState<CompanyWallet | null>(null);
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
   const [loading, setLoading] = useState(false);
+  const [lastQuery, setLastQuery] = useState<Record<string, any>>({});
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
 
   const getTransactions = useCallback(
@@ -35,6 +44,7 @@ const WalletBilling: NextPage = () => {
         });
         setTransactionMeta(meta as any);
         setTransactions(data);
+        setLastQuery({ page, perPage, search, all });
       } catch (error) {
         //....
       } finally {
@@ -57,9 +67,35 @@ const WalletBilling: NextPage = () => {
     }
   }, [setWallet]);
 
+  const getPaymentMethods = useCallback(async () => {
+    try {
+      setLoading(true);
+      const company = administrator?.company as Company;
+      const country = company?.country as Country;
+      const paymentMethods = await $api.payment.getPaymentMethods(country.id);
+
+      setPaymentMethods(paymentMethods);
+    } catch (error) {
+      // ...
+    } finally {
+      setLoading(false);
+    }
+  }, [setPaymentMethods, administrator]);
+
+  const refreshAfterFund = () => {
+    getWallet();
+    getTransactions(
+      lastQuery.page,
+      lastQuery.perPage,
+      lastQuery.search,
+      lastQuery.all,
+    );
+  };
+
   useEffect(() => {
     getWallet();
-  }, [getWallet, administrator]);
+    getPaymentMethods();
+  }, [getWallet, administrator, getPaymentMethods]);
 
   return (
     <DashboardLayout pageTitle="Wallet & billing">
@@ -76,8 +112,11 @@ const WalletBilling: NextPage = () => {
             amount={`${currency}${Util.formatMoneyNumber(
               wallet?.balance ?? 0,
             )}`}
+            administrator={administrator as Administrator}
+            refreshBalance={refreshAfterFund}
+            paymentMethods={paymentMethods}
           />
-          <PayrollUpdateCard payrollDate="Next payroll date is on the 27, may" />
+          <PayrollUpdateCard payrollDate="A rich person is not one who has the most but the one who needs the least." />
         </div>
         <TransactionTable
           getTransactions={getTransactions}
