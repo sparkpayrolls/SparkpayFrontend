@@ -49,9 +49,9 @@ const CreatePayroll: NextPage = () => {
                   <span className="input-table-column">
                     <input type="text" className="input-table-column__input" />
                     <span className="input-table-column__icon">
-                <EditSVG/>                
+                 <span><EditSVG/> </span>                
                     </span>
-                  </span>
+                   </span>
                 </td>
 
                 {/* <td>₦ 120,000</td> */}

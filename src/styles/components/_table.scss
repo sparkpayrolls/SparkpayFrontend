@@ -470,10 +470,10 @@
   min-width: 176px;
 
   &__icon {
-    position: relative;
+    position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 2rem;
+    right: 3rem;
   }
 
   &__input {
