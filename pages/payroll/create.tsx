@@ -8,13 +8,16 @@ import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2
 
 
 export const TotalCard = ({
+  title,
 amount,
 } :{
+  title:string;
   amount:string;
 }) => {
 return(
 <div className="create-payroll-page__totals__items-background">
   <div>
+  <p>{title}</p>   
     <p>{amount}</p>
   </div>
 </div>
@@ -47,20 +50,19 @@ const CreatePayroll: NextPage = () => {
                 </CheckboxTableColumn>
                 <td>
                   <span className="input-table-column">
-                    <input type="text" className="input-table-column__input" />
-                    <span className="input-table-column__icon">
-                 <span><EditSVG/> </span>                
+                  <span className="input-table-column__icon">
+                  <span><EditSVG/> </span>                
+                  <input type="text" className="input-table-column__input" />
                     </span>
                    </span>
                 </td>
 
-                {/* <td>₦ 120,000</td> */}
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
-                {/* <td>₦ 120,000</td> */}
+                <td>₦ 120,000</td>
                 </tr>
                 </tbody>
           </table>
@@ -68,40 +70,40 @@ const CreatePayroll: NextPage = () => {
         </TableLayout>
 
         <div className="create-payroll-page__totals">         
-          <div className="create-payroll-page__totals__items">
-            <div className="create-payroll-page__totals__items__item">
-            {/* <TotalCard
-            amount="Total"
-            />  */}
-              <p>Total</p>
-            </div>      
+          <div className="create-payroll-page__totals__items">  
             <div className="create-payroll-page__totals__items__item">
             <TotalCard
+            title="Total"
             amount="120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
             <TotalCard
+            title="Total"
             amount="120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
               <TotalCard
+            title="Total"
             amount="120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
              <TotalCard
+            title="Total"
             amount="120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
             <TotalCard
+            title="Total"
             amount="120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
               <TotalCard
+            title="Total"
             amount="120,000"
             />
             </div>
