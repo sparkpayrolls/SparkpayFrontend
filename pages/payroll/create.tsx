@@ -70,7 +70,7 @@ const CreatePayroll: NextPage = () => {
 
         <div className="create-payroll-page__totals">         
           <div className="create-payroll-page__totals__items">  
-            <div className="create-payroll-page__totals__items__item1">
+            <div className="create-payroll-page__totals__items__first-card">
             <TotalCard
             title="Total Salary Amount"
             amount="₦ 120,000"
