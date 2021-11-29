@@ -183,7 +183,7 @@
   max-width: 100%;
 
   label {
-    font-family: K$font-family-Karla;
+    font-family: $font-family-Karla;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -379,6 +379,84 @@
 
     &:focus {
       border: 1px solid $primary;
+    }
+  }
+}
+
+.date-picker {
+  display: inline-block;
+  width: 384px;
+
+  &__container {
+    position: relative;
+    background: #f7f9fb;
+    display: block;
+    width: 100%;
+  }
+
+  &__label {
+    font-family: $font-family-Karla;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: -0.117188px;
+    color: #6d7a98;
+    margin-bottom: 8px;
+    display: block;
+    transition: color 0.3s;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 16px;
+    outline: none;
+    box-shadow: none;
+    border-color: transparent;
+    border-radius: 4px;
+    background: transparent;
+
+    &:hover {
+      border-color: transparent;
+    }
+
+    &.ant-picker-focused {
+      border-color: $primary;
+    }
+  }
+
+  &__calendar {
+    display: block;
+    position: absolute;
+    right: 16px;
+    top: 16px;
+  }
+
+  &__error {
+    font-family: $font-family-Karla;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -0.117188px;
+    color: #ca1b1b;
+    margin-top: 8px;
+    display: block;
+  }
+
+  .anticon-calendar {
+    display: none;
+  }
+
+  &--active {
+    .date-picker__label {
+      color: $black;
+    }
+  }
+
+  &--error {
+    .date-picker__input {
+      border-color: $red;
     }
   }
 }

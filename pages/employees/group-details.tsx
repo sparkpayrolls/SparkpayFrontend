@@ -125,7 +125,7 @@ function GroupDetails() {
                       <Image
                         src={removeicon}
                         className="group-details__remove-icon"
-                        alt="group-details-image"
+                        alt="group-detail-image"
                       />
                     </div>
                   </div>

@@ -393,3 +393,4 @@ const PayrollDetails: NextPage = () => {
 };
 
 export default PayrollDetails;
+

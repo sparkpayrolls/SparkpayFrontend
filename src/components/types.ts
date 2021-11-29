@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { NiceModalHandler } from '@ebay/nice-modal-react';
+import { Moment } from 'moment';
 import { NextRouter } from 'next/router';
 import {
   ChangeEventHandler,
@@ -346,4 +347,17 @@ export type IAuditTable = {
   getLogs(params: Record<string, any>): any;
   meta: PaginationMeta;
   loading: boolean;
+};
+
+export type IDatePicker = {
+  error?: string;
+  onChange?(value: Moment | null, dateString: string): void;
+  onBlur?: FocusEventHandler<HTMLInputElement>;
+  value?: Moment | null;
+  name?: string;
+  placeholder?: string;
+  label?: string;
+  loading?: boolean;
+  disabled?: boolean;
+  className?: string;
 };

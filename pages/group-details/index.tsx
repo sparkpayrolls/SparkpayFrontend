@@ -5,7 +5,7 @@ import removeicon from '../../public/svgs/remove-icon.svg';
 import addicon from '../../public/svgs/add-icon.svg';
 import backicon from '../../public/svgs/back-icon.svg';
 
-const GroupDetails: NextPage = () =>{
+const GroupDetails: NextPage = () => {
   return (
     <div className="group-details">
       <Head>
@@ -112,11 +112,10 @@ const GroupDetails: NextPage = () =>{
                     <Image
                       src={removeicon}
                       className="group-details__remove-icon"
+                      // alt="group-details-image"
                       alt="removeicon"
                     />
                   </div>
-                </div>
-                <div className="group-details__user">
                   <p className="group-details__name">opeyemi</p>
                   <div className="group-details__image-container">
                     <Image
@@ -142,11 +141,10 @@ const GroupDetails: NextPage = () =>{
                     <Image
                       src={removeicon}
                       className="group-details__remove-icon"
+                      // alt="group-details-image"
                       alt="removeicon"
                     />
-                  </div>
-                </div>{' '}
-                <div className="group-details__user">
+                  </div>{' '}
                   <p className="group-details__name">opeyemi</p>
                   <div className="group-details__image-container">
                     <Image
