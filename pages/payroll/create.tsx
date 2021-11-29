@@ -1,4 +1,4 @@
-import { EditSVG } from '@/components/svg';
+// import { EditSVG } from '@/components/svg';
 import { CheckboxTableColumn } from '@/components/Table/check-box-table-col.component';
 import { TableLayout } from '@/components/Table/table-layout.component';
 import { WalletBalanceChip } from '@/components/WalletBalanceChip/wallet-balance-chip.component';
@@ -8,14 +8,17 @@ import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2
 
 
 export const TotalCard = ({
+  title,
 amount,
 } :{
+  title:string;
   amount:string;
 }) => {
 return(
 <div className="create-payroll-page__totals__items-background">
   <div>
-    <p>{amount}</p>
+  <p>{title}</p>   
+    <p className="create-payroll-page__totals__items__amount">{amount}</p>
   </div>
 </div>
 );
@@ -45,22 +48,20 @@ const CreatePayroll: NextPage = () => {
                 <CheckboxTableColumn element="td">
                   Opeyemi PeterS
                 </CheckboxTableColumn>
-                <td>
+                {/* <td>
                   <span className="input-table-column">
-                    <input type="text" className="input-table-column__input" />
-                    <span className="input-table-column__icon">
-                 <span><EditSVG/> </span>                
+                  <span className="input-table-column__icon">
+                  <span><EditSVG/> </span>                
+                  <input type="text" className="input-table-column__input" />
                     </span>
                    </span>
-                </td>
-
-                {/* <td>₦ 120,000</td> */}
+                </td> */}
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
-                {/* <td>₦ 120,000</td> */}
+                <td>₦ 120,000</td>
                 </tr>
                 </tbody>
           </table>
@@ -68,41 +69,41 @@ const CreatePayroll: NextPage = () => {
         </TableLayout>
 
         <div className="create-payroll-page__totals">         
-          <div className="create-payroll-page__totals__items">
-            <div className="create-payroll-page__totals__items__item">
-            {/* <TotalCard
-            amount="Total"
-            />  */}
-              <p>Total</p>
-            </div>      
-            <div className="create-payroll-page__totals__items__item">
+          <div className="create-payroll-page__totals__items">  
+            <div className="create-payroll-page__totals__items__first-card">
             <TotalCard
-            amount="120,000"
+            title="Total Salary Amount"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
             <TotalCard
-            amount="120,000"
+            title="Total Net Amount"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
               <TotalCard
-            amount="120,000"
+            title="Total Bonus Amount"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
              <TotalCard
-            amount="120,000"
+            title="Total Amount Taxed"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
             <TotalCard
-            amount="120,000"
+            title="Total Pension Amount"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
               <TotalCard
-            amount="120,000"
+            title="Total Other Deductions"
+            amount="₦ 120,000"
             />
             </div>
           </div>

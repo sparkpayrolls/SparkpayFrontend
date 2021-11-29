@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import wallet from '/public/images/wallet.png';
+import wallet from '/public/svgs/wallet.svg';
 import card from '/public/images/credit-card.png';
 import cryptocurrency from '/public/images/cryptocurrency.png';
 import { ITransactionMethod } from '../types';
