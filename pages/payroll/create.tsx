@@ -1,4 +1,4 @@
-import { EditSVG } from '@/components/svg';
+// import { EditSVG } from '@/components/svg';
 import { CheckboxTableColumn } from '@/components/Table/check-box-table-col.component';
 import { TableLayout } from '@/components/Table/table-layout.component';
 import { WalletBalanceChip } from '@/components/WalletBalanceChip/wallet-balance-chip.component';
@@ -18,7 +18,7 @@ return(
 <div className="create-payroll-page__totals__items-background">
   <div>
   <p>{title}</p>   
-    <p>{amount}</p>
+    <p className="create-payroll-page__totals__items__amount">{amount}</p>
   </div>
 </div>
 );
@@ -48,15 +48,14 @@ const CreatePayroll: NextPage = () => {
                 <CheckboxTableColumn element="td">
                   Opeyemi PeterS
                 </CheckboxTableColumn>
-                <td>
+                {/* <td>
                   <span className="input-table-column">
                   <span className="input-table-column__icon">
                   <span><EditSVG/> </span>                
                   <input type="text" className="input-table-column__input" />
                     </span>
                    </span>
-                </td>
-
+                </td> */}
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
                 <td>₦ 120,000</td>
@@ -71,40 +70,40 @@ const CreatePayroll: NextPage = () => {
 
         <div className="create-payroll-page__totals">         
           <div className="create-payroll-page__totals__items">  
-            <div className="create-payroll-page__totals__items__item">
+            <div className="create-payroll-page__totals__items__item1">
             <TotalCard
-            title="Total"
-            amount="120,000"
+            title="Total Salary Amount"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
             <TotalCard
-            title="Total"
-            amount="120,000"
+            title="Total Net Amount"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
               <TotalCard
-            title="Total"
-            amount="120,000"
+            title="Total Bonus Amount"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
              <TotalCard
-            title="Total"
-            amount="120,000"
+            title="Total Amount Taxed"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
             <TotalCard
-            title="Total"
-            amount="120,000"
+            title="Total Pension Amount"
+            amount="₦ 120,000"
             />
             </div>
             <div className="create-payroll-page__totals__items__item">
               <TotalCard
-            title="Total"
-            amount="120,000"
+            title="Total Other Deductions"
+            amount="₦ 120,000"
             />
             </div>
           </div>
