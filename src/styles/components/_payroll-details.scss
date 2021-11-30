@@ -1,29 +1,8 @@
 .payroll-details-section {
-   display: flex;
-   
-   &__payroll-details-settings {
-       width:100%;
-    margin-right: 2rem;
-    margin-left: 2rem;   
-  }
-
- 
-  &__payroll-details-sidebar{
-    width: 7rem;
-    height: 140vh;
-    background: #f8fafc;
-    // padding: 1.25rem 0 2rem;
-    // transition: all 500ms;
-  } 
   &__payroll-details-header {
     display: flex;
     justify-content: space-between;
     margin-top: -10px;
-    // margin-top: 0.5rem;
-  }
-
-  &__back-icon {
-    margin-top: 3.4rem;
   }
 
   &__payroll-header {
@@ -32,6 +11,7 @@
     font-size: 1.75rem;
     line-height: 2rem;
     color: #0e347e;
+    padding-top:2rem;
   }
 
   &__payroll-wallet {
@@ -66,7 +46,7 @@
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid #eaedf4;
-    margin-bottom: 10.1rem;
+    margin-top:1.8rem;
   }
   &__employee-status {
     display: flex;
