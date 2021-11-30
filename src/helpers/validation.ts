@@ -51,3 +51,8 @@ export const fundWalletValidationSchema = Yup.object().shape({
   amount: Yup.string().required('amount is required'),
   channel: Yup.string().required('select payment method'),
 });
+
+export const savePayrollValidationSchema = Yup.object().shape({
+  payDate: Yup.string().required('pay date is required'),
+  proRateMonth: Yup.string().required('select a pro rate month'),
+});

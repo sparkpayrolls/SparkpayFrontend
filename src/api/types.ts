@@ -384,3 +384,13 @@ export type ProcessPayrollPayload = {
   excludedEmployeeIds?: string[] | null;
   proRateMonth: string;
 };
+
+export type PayrollSummary = {
+  fee: number;
+  totalNetSalaries: number;
+  totalSalaries: number;
+  totalBonus: number;
+  totalDeduction: number;
+  payrollSize: number;
+  totalAmount: number;
+};
