@@ -16,7 +16,7 @@ const DashboardLayoutV2 = (
         <div className="dashboard-layout-v2__content">
           {props.href && !props.action && (
             <Link href={props.href}>
-              <a href="" className="dashboard-layout-v2__content__back-button">
+              <a className="dashboard-layout-v2__content__back-button">
                 <BackSVG />
               </a>
             </Link>

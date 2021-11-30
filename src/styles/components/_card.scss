@@ -1,0 +1,44 @@
+.total-card {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  padding: 0.5rem;
+  font-family: $font-family-Karla;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  align-items: flex-start;
+  white-space: nowrap;
+
+  &__title,
+  &__value {
+    display: block;
+    padding: 0.5rem;
+    width: 100%;
+    text-align: left;
+  }
+
+  &__content {
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  &--secondary {
+    background: $gray-100;
+
+    .total-card__content {
+      background: $white;
+    }
+  }
+
+  &--primary {
+    color: $white;
+    background: $blue-900;
+
+    .total-card__content {
+      background: $blue;
+    }
+  }
+}

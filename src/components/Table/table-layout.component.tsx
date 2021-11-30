@@ -31,16 +31,14 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
             </button>
           )}
 
-          {props.buttons?.map((button, i) => {
+          {props.buttons?.map(({ href, action, ...spread }, i) => {
             return (
               <Button
-                key={`${button.label}-${i}`}
-                label={button.label}
-                type="button"
-                element={button.href ? 'a' : undefined}
-                href={button.href}
-                onClick={button.action ? button.action : undefined}
-                primary={button.primary}
+                key={`table-layout-button-${i}`}
+                element={href ? 'a' : undefined}
+                href={href}
+                onClick={action ? action : undefined}
+                {...spread}
               />
             );
           })}

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { EmployeeCardSvg, OrganisationCardSvg, PayrollCardSvg } from '../svg';
 import { UserDashboardTable } from '../Table/user-dashboard-table.component';
 import { IUserDashboard } from '../types';
-import { DashboardCard } from './dashboard-card.component';
+import { DashboardCard } from '../Card/dashboard-card.component';
 
 export const UserDashboard = (props: IUserDashboard) => {
   const { getData, loading, data } = props;

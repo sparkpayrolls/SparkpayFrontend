@@ -5,9 +5,12 @@ import { Moment } from 'moment';
 import { NextRouter } from 'next/router';
 import {
   ChangeEventHandler,
+  DetailedHTMLProps,
   FocusEventHandler,
   MouseEventHandler,
+  ReactElement,
   ReactNode,
+  TableHTMLAttributes,
 } from 'react';
 import { InputRangeProps } from 'react-input-range';
 import {
@@ -29,6 +32,51 @@ import {
   WalletTransactionStatus,
 } from 'src/api/types';
 import { IKebabItem } from './KebabMenu/KebabMenu.component';
+
+export interface ITable {
+  children: () => ReactElement;
+  onCheckAllClick?: ChangeEventHandler<HTMLInputElement>;
+  headerRow: string[];
+  allChecked?: boolean;
+  paginationMeta?: PaginationMeta;
+  refresh?: (
+    page?: number,
+    perPage?: number,
+    search?: string,
+    all?: boolean,
+  ) => void;
+  title?: string;
+  onSearch?: (_: string) => void;
+  onFilterClick?: MouseEventHandler<HTMLButtonElement>;
+  isEmpty?: boolean;
+  emptyStateText?: string;
+  isLoading?: boolean;
+  kebabMenuItems?: IKebabItem[];
+  isNotSelectable?: boolean;
+  isNotSearchable?: boolean;
+  buttons?: {
+    href?: string;
+    label: string;
+    action?(): any;
+    primary?: boolean;
+  }[];
+}
+
+export interface ITR {
+  checked?: boolean;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+}
+
+export type ITablePagination = PaginationMeta & {
+  refresh?: (page?: number, perPage?: number, all?: boolean) => void;
+};
+
+export type ITablev2 = DetailedHTMLProps<
+  TableHTMLAttributes<HTMLTableElement>,
+  HTMLTableElement
+> & {
+  loading?: boolean;
+};
 
 /** MultiSelect Props */
 export type IMultiSelectOptionItem = Record<string, unknown>;
@@ -287,12 +335,10 @@ export type ITableLayout = {
   title?: string | JSX.Element;
   onSearch?(value: string): any;
   onFilter?(): any;
-  buttons?: {
+  buttons?: (ButtonProps & {
     href?: string;
-    label: string;
     action?(): any;
-    primary?: boolean;
-  }[];
+  })[];
   menuItems?: IKebabItem[];
   searchPlaceholder?: string;
 };
@@ -361,3 +407,63 @@ export type IDatePicker = {
   disabled?: boolean;
   className?: string;
 };
+
+export type ITotalCard = {
+  loading?: boolean;
+  title: string;
+  value: string;
+  type?: 'primary' | 'secondary';
+};
+
+export interface ButtonProps {
+  /**
+   * Is this the principal call to action on the page?
+   */
+  primary?: boolean;
+  /**
+   * What background color to use
+   */
+  backgroundColor?: string;
+  /**
+   * How large should the button be?
+   */
+  size?: 'small' | 'medium' | 'large';
+  /**
+   * Button contents
+   */
+  label: string | ReactElement;
+
+  /**
+   * Button type 'button' | 'submit'
+   */
+  type: 'button' | 'submit';
+  /**
+   * Optional click handler
+   */
+  onClick?: () => void;
+  /**
+   * Custom css className
+   */
+  className?: string;
+
+  /**
+   * Should the button be disabled
+   */
+  disabled?: boolean;
+
+  /**
+   * Should the button indicate loading
+   */
+  showSpinner?: boolean;
+
+  /**
+   * Should the button show loading
+   */
+  showLabel?: boolean;
+
+  element?: 'a';
+
+  href?: string;
+
+  title?: string;
+}

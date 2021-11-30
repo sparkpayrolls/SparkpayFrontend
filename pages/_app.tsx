@@ -18,11 +18,12 @@ import { commitAministrator } from 'src/redux/slices/administrator/administrator
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { AxiosError } from 'axios';
+import { Company } from 'src/api/types';
 
 let persistor = persistStore(store);
 
 const AuthManager = () => {
-  const { user, companies } = useAppSelector((state) => state);
+  const { user, companies, administrator } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -57,8 +58,6 @@ const AuthManager = () => {
             // error logging in...
             Cookies.remove('auth_token');
           });
-      } else {
-        refreshCompanies(dispatch);
       }
     }
 
@@ -68,10 +67,17 @@ const AuthManager = () => {
   }, [user, dispatch]);
 
   useEffect(() => {
-    const companySelected = companies.some((company) => company.selected);
-    if (!!user && companySelected) {
+    refreshCompanies(dispatch);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const companySelected = companies.find((company) => company.selected);
+    const company = administrator?.company as Company;
+    const selectedCompany = companySelected?.company as Company;
+    if (selectedCompany && company?.id !== selectedCompany?.id) {
       getCurrentAdministrator(dispatch);
-    } else {
+    }
+    if (!selectedCompany) {
       dispatch(commitAministrator(null));
     }
 
@@ -85,7 +91,7 @@ const AuthManager = () => {
         return Promise.reject(error);
       },
     );
-  }, [companies, user, dispatch]);
+  }, [companies, administrator, dispatch]);
 
   return null;
 };

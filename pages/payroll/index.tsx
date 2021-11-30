@@ -137,7 +137,8 @@ const PayrollDetails: NextPage = () => {
                     {'Create Payroll'}
                   </>
                 }
-                onClick={() => {}}
+                element="a"
+                href="/payroll/create"
                 className="payroll-section__submit-btn"
                 primary
                 type="submit"

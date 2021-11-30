@@ -1,57 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Spinner } from '../Spinner/Spinner.component';
-
-interface ButtonProps {
-  /**
-   * Is this the principal call to action on the page?
-   */
-  primary?: boolean;
-  /**
-   * What background color to use
-   */
-  backgroundColor?: string;
-  /**
-   * How large should the button be?
-   */
-  size?: 'small' | 'medium' | 'large';
-  /**
-   * Button contents
-   */
-  label: string | React.ReactElement;
-
-  /**
-   * Button type 'button' | 'submit'
-   */
-  type: 'button' | 'submit';
-  /**
-   * Optional click handler
-   */
-  onClick?: () => void;
-  /**
-   * Custom css className
-   */
-  className?: string;
-
-  /**
-   * Should the button be disabled
-   */
-  disabled?: boolean;
-
-  /**
-   * Should the button indicate loading
-   */
-  showSpinner?: boolean;
-
-  /**
-   * Should the button show loading
-   */
-  showLabel?: boolean;
-
-  element?: 'a';
-
-  href?: string;
-}
+import { ButtonProps } from '../types';
 
 /**
  * Primary UI component for user interaction

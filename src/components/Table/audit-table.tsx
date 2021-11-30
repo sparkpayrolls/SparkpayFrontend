@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { useState } from 'react';
 import { User } from 'src/api/types';
 import { DateTimeChip } from '../DateTimeChip/date-time-chip';
@@ -10,6 +9,7 @@ import { IAuditTable } from '../types';
 import { CheckboxTableColumn } from './check-box-table-col.component';
 import { MenuTableColumn } from './menu-table-col.component';
 import { TableLayout } from './table-layout.component';
+import { TableV2 } from './Table.component';
 
 export const AuditTable = (props: IAuditTable) => {
   const { logs, meta, getLogs, loading } = props;
@@ -20,9 +20,6 @@ export const AuditTable = (props: IAuditTable) => {
     !!selected.length && logs.every((log) => selected.includes(log.id));
   const shouldPaginate = meta.total > 10;
   const isEmpty = logs.length <= 0;
-  const tableClassnames = classNames('audit-table__table table', {
-    'table--loading': loading,
-  });
 
   const toggleSelectAll = () => {
     if (allSelected) {
@@ -56,7 +53,7 @@ export const AuditTable = (props: IAuditTable) => {
         menuItems={[]}
         searchPlaceholder="Search by name"
       >
-        <table className={tableClassnames}>
+        <TableV2 className="audit-table__table" loading={loading}>
           <thead>
             <tr>
               <CheckboxTableColumn
@@ -104,7 +101,7 @@ export const AuditTable = (props: IAuditTable) => {
               );
             })}
           </tbody>
-        </table>
+        </TableV2>
       </TableLayout>
       {isEmpty && (
         <TableEmptyState
