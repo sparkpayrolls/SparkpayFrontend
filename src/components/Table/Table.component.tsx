@@ -1,57 +1,13 @@
 /* eslint-disable no-unused-vars */
+import classNames from 'classnames';
 import Image from 'next/image';
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  MouseEventHandler,
-  PropsWithChildren,
-  ReactElement,
-  useState,
-} from 'react';
-import { PaginationMeta } from 'src/api/types';
+import { ChangeEvent, PropsWithChildren, useState } from 'react';
 import { Util } from 'src/helpers/util';
 import search_icon from '../../../public/svgs/search-icon.svg';
 import { Button } from '../Button/Button.component';
 import { SelectInput } from '../Input/seletct-input';
-import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
-
-interface ITable {
-  children: () => ReactElement;
-  onCheckAllClick?: ChangeEventHandler<HTMLInputElement>;
-  headerRow: string[];
-  allChecked?: boolean;
-  paginationMeta?: PaginationMeta;
-  refresh?: (
-    page?: number,
-    perPage?: number,
-    search?: string,
-    all?: boolean,
-  ) => void;
-  title?: string;
-  onSearch?: (_: string) => void;
-  onFilterClick?: MouseEventHandler<HTMLButtonElement>;
-  isEmpty?: boolean;
-  emptyStateText?: string;
-  isLoading?: boolean;
-  kebabMenuItems?: IKebabItem[];
-  isNotSelectable?: boolean;
-  isNotSearchable?: boolean;
-  buttons?: {
-    href?: string;
-    label: string;
-    action?(): any;
-    primary?: boolean;
-  }[];
-}
-
-interface ITR {
-  checked?: boolean;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
-}
-
-type ITablePagination = PaginationMeta & {
-  refresh?: (page?: number, perPage?: number, all?: boolean) => void;
-};
+import { KebabMenu } from '../KebabMenu/KebabMenu.component';
+import { ITable, ITablePagination, ITablev2, ITR } from '../types';
 
 export const TR = (props: PropsWithChildren<ITR>) => {
   return (
@@ -352,3 +308,13 @@ const FileStorageSVG = () => (
     </defs>
   </svg>
 );
+
+export const TableV2 = (props: PropsWithChildren<ITablev2>) => {
+  const { loading, className, ...tableProps } = props;
+
+  const tableClass = classNames('table', className, {
+    'table--loading': loading,
+  });
+
+  return <table className={tableClass} {...tableProps} />;
+};

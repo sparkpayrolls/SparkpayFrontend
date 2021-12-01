@@ -103,4 +103,16 @@ export class Util {
   static formatNumber(val: number) {
     return Util.formatMoneyNumber(val).split('.')[0];
   }
+
+  static sum(vals: number[]) {
+    return vals.reduce((acc, cur) => acc + cur, 0);
+  }
+
+  static getQueryArrayValue(val: string | string[] | undefined) {
+    if (!val) {
+      return [];
+    }
+
+    return Array.isArray(val) ? val : [val];
+  }
 }

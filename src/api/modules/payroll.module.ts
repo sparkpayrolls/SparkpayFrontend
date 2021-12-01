@@ -1,5 +1,10 @@
 import { HttpRepository } from '../repo/http.repo';
-import { Payroll } from '../types';
+import {
+  CompanyWallet,
+  Payroll,
+  PayrollEmployee,
+  ProcessPayrollPayload,
+} from '../types';
 
 export class PayrollModule extends HttpRepository {
   async getPayrolls(params: Record<string, any>) {
@@ -21,6 +26,21 @@ export class PayrollModule extends HttpRepository {
 
   async deletePayroll(id: string) {
     const { data } = await this.delete<Payroll>(`/payrolls/${id}`);
+
+    return data;
+  }
+
+  async getCompanyWallet() {
+    const { data } = await this.get<CompanyWallet>('/payrolls/wallet');
+
+    return data;
+  }
+
+  async processPayroll(payload: ProcessPayrollPayload) {
+    const { data } = await this.post<PayrollEmployee[]>(
+      '/payrolls/process',
+      payload,
+    );
 
     return data;
   }

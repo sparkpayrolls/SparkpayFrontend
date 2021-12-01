@@ -297,3 +297,90 @@ export type Audit = Document & {
   role: string;
   meta?: unknown;
 };
+
+export enum PayrollEmployeePayoutStatusEnum {
+  pending = 'pending',
+  processing = 'processing',
+  failed = 'failed',
+  successful = 'successful',
+}
+
+export enum SalaryAddOnTypeEnum {
+  deduction = 'deduction',
+  bonus = 'bonus',
+}
+
+export enum SalaryAddOnStatusEnum {
+  active = 'active',
+  disabled = 'disabled',
+}
+
+export enum SalaryAddOnPayrollCycleEnum {
+  all = 'all',
+  first = 'first',
+  second = 'second',
+}
+
+export enum SalaryAddOnFrequencyEnum {
+  recurring = 'recurring',
+  once = 'once',
+}
+
+export type SalaryAddOnFrequency =
+  | SalaryAddOnFrequencyEnum
+  | keyof typeof SalaryAddOnFrequencyEnum;
+
+export type SalaryAddOnPayrollCycle =
+  | SalaryAddOnPayrollCycleEnum
+  | keyof typeof SalaryAddOnPayrollCycleEnum;
+
+export type SalaryAddOnStatus =
+  | SalaryAddOnStatusEnum
+  | keyof typeof SalaryAddOnStatusEnum;
+
+export type SalaryAddOnType =
+  | SalaryAddOnTypeEnum
+  | keyof typeof SalaryAddOnTypeEnum;
+
+export type PayrollEmployeePayoutStatus =
+  | PayrollEmployeePayoutStatusEnum
+  | keyof typeof PayrollEmployeePayoutStatusEnum;
+
+export type SalaryAddOn = Document & {
+  name: string;
+  description?: string;
+  entity?: string | Employee | Group;
+  type: SalaryAddOnType;
+  status?: SalaryAddOnStatus;
+  amount: number;
+  meta?: unknown;
+  payrollCycle?: SalaryAddOnPayrollCycle;
+  frequency?: SalaryAddOnFrequency;
+  addonMonths: string[];
+};
+
+export type Addon = {
+  addonId: string | SalaryAddOn;
+  name: string;
+  description: string;
+  amount: number;
+  meta?: unknown;
+};
+
+export type PayrollEmployee = Document & {
+  salary: number;
+  employee: string | Employee;
+  payroll: string | Payroll;
+  netSalary: number;
+  transfer: string | unknown;
+  payoutStatus?: PayrollEmployeePayoutStatus;
+  deductions?: Addon[];
+  bonuses?: Addon[];
+  remark?: string;
+};
+
+export type ProcessPayrollPayload = {
+  employeeIds?: string[] | null;
+  excludedEmployeeIds?: string[] | null;
+  proRateMonth: string;
+};
