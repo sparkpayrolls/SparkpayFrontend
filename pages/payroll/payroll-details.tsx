@@ -1,7 +1,10 @@
 import type { NextPage } from 'next';
+import { TableLayout } from '@/components/Table/table-layout.component';
 import Image from 'next/image';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
+import SuccessfulIcon from '../../public/svgs/successful.svg';
 import BackIcon from '../../public/svgs/backicon.svg';
+import { CheckboxTableColumn } from '@/components/Table/check-box-table-col.component';
 
 export const SinglePayroll =({
   title,
@@ -62,13 +65,48 @@ const payDetails: NextPage = () => {
           title="Month"
           details="October"
           />
-          <SinglePayroll
+          <div>
+         <p>hello</p>
+           <Image src={SuccessfulIcon} alt="successful-icon" />
+          </div>
+         
+          {/* <SinglePayroll
           title="Status"
           details="Successful"
-          />
+          /> */}
        </div>
       </div>
       <p>llohe</p>
+       <TableLayout
+        >
+          <table className="table payroll-create-table">
+            <thead>
+              <tr>
+                <CheckboxTableColumn element="th">Name</CheckboxTableColumn>
+                <th>Salary (₦)</th>
+                <th>Net Amount (₦) </th>
+                <th>Bonus Amount (₦)  </th>
+                <th>Amount Taxed (₦)  </th>
+                <th>Pension Amount (₦) </th>
+                <th>Other Deductions (₦) </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <CheckboxTableColumn element="td">
+                Name here
+                </CheckboxTableColumn>
+                <td>₦ 120,000</td>
+                <td>₦ 120,000</td>
+                <td>₦ 120,000</td>
+                <td>₦ 120,000</td>
+                <td>₦ 120,000</td>
+                <td>₦ 120,000</td>
+                </tr>
+                </tbody>
+          </table>
+             
+        </TableLayout>
       </div>
       </div>
     </DashboardLayoutV2>
