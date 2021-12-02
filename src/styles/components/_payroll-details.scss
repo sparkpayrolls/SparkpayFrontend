@@ -11,7 +11,7 @@
     font-size: 1.75rem;
     line-height: 2rem;
     color: #0e347e;
-    padding-top:2rem;
+    padding-top:1.5rem;
   }
 
   &__payroll-wallet {
@@ -89,6 +89,7 @@
     font-size: 1.25rem;
     line-height: 32px;
     color: #0e347e;
+    margin-top:3rem;
   }
 
   &__payroll-sum-total {
@@ -153,6 +154,30 @@
     padding:1rem 0rem 0rem 3rem;
     font-size:1rem;
     color: #0B2253;
+  }
+ &__successful-image{
+  margin-top:13px;
+ }
+  &__successful-icon{
+    display:flex;
+    grid-column-gap: 0.2rem;
+    margin-top:-10px;
+  }
+
+  &__successful-text{
+    margin-top:13px;
+    color:#27BE63;
+    font-size: 14px;
+  }
+
+  &__status-text{
+    font-size:1rem;
+    color: #9DA9B3;
+    margin-top:2.3rem;
+
+  }
+  &__month-text{
+    margin-top:1rem;
   }
 }
 
