@@ -59,6 +59,32 @@ const Login: NextPage = () => {
                 // loading={!countries.length}
                 // error={(touched.country && errors.country) || ''}
               />
+
+              <SelectInput
+                options={countries}
+                displayValue="name"
+                actualValue="id"
+                name="country"
+                // value={values.country}
+                label="Country of Residence"
+                // onChange={handleChange}
+                // onBlur={handleBlur}
+                // loading={!countries.length}
+                // error={(touched.country && errors.country) || ''}
+              />
+
+              <SelectInput
+                options={countries}
+                displayValue="name"
+                actualValue="id"
+                name="country"
+                // value={values.country}
+                label="Country of Residence"
+                // onChange={handleChange}
+                // onBlur={handleBlur}
+                // loading={!countries.length}
+                // error={(touched.country && errors.country) || ''}
+              />
               <Input
                 type="email"
                 label="Account Number"
@@ -68,13 +94,6 @@ const Login: NextPage = () => {
               />
             </div>
 
-            <Input
-              type="password"
-              label="Password"
-              placeholder="password"
-              //   onChange={handleChange}
-              name="password"
-            />
           </div>
           <Button
             label="Submit"
