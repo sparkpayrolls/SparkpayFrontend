@@ -3,6 +3,7 @@ import {
   CompanyWallet,
   Payroll,
   PayrollEmployee,
+  PayrollSummary,
   ProcessPayrollPayload,
 } from '../types';
 
@@ -41,6 +42,21 @@ export class PayrollModule extends HttpRepository {
       '/payrolls/process',
       payload,
     );
+
+    return data;
+  }
+
+  async getSummary(payload: ProcessPayrollPayload) {
+    const { data } = await this.post<PayrollSummary>(
+      '/payrolls/summary',
+      payload,
+    );
+
+    return data;
+  }
+
+  async createPayroll(payload: { payDate: string } & ProcessPayrollPayload) {
+    const { data } = await this.post<Payroll>('/payrolls', payload);
 
     return data;
   }

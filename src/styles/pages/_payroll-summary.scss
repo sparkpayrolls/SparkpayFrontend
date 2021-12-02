@@ -1,164 +1,105 @@
 .payroll-summary {
-  // margin: 3rem 2.3rem;
-  display: flex;
-
-  &__container {
+  &__button {
     display: flex;
-    margin: 0rem 0rem;
-  }
-  &__sidebar {
-    width: 7rem;
-    height: 140vh;
-    background: #f8fafc;
-    // padding: 1.25rem 0 2rem;
-    // transition: all 500ms;
-  }
-  &__content {
-  margin: 3rem 2.3rem;
-
+    justify-content: flex-end;
+    margin-bottom: 1rem;
   }
 
-  &__header-section {
+  &__main {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    grid-column-gap: 9%;
+    grid-row-gap: 5.125rem;
   }
 
-  &__payroll-main {
+  &__form {
     width: 100%;
-    // margin-right: 2rem;
-    // margin-left: 2rem;
-  margin: 3.1rem 2rem;
+    max-width: 420px;
 
-  }
-  &__payroll-sidebar {
-    width: 7rem;
-    height: 140vh;
-    background: #f8fafc;
-    // padding: 1.25rem 0 2rem;
-    // transition: all 500ms;
-  }
-  &__btn-container {
-    display: flex;
-    // justify-content: flex-end;
-  }
+    &__header {
+      display: flex;
+      flex-direction: column;
+      grid-row-gap: 4px;
+      font-family: $font-family-Karla;
+      font-style: normal;
+      padding-bottom: 0.8125rem;
+      border-bottom: 1px solid #eaedf4;
 
-  &__submit-btn {
-    grid-column-gap: 0.5rem;
-    height: 44px;
-    font-size: 1rem;
-    padding: 0 1.25rem;
-    width: 140px;
-  }
-  &__details {
-    width: 460px;
-    height: 590.87px;
-    border: 1px solid #eaedf4;
-    box-sizing: border-box;
-    border-radius: 8px;
-    // padding: 2rem;
-  }
-  &__section {
-    display: flex;
-    margin-top: 0.8rem;
-  }
-  &__summary-header {
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 32px;
-    letter-spacing: -0.01em;
-    color: #0e347e;
-    margin: 0;
-    padding: 0.9rem 0rem;
-  }
-  &__payroll-summary {
-    width: 92%;
-    margin: auto;
-  }
-  &__payroll-span-text {
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 16px;
-    color: #6d7a98;
-  }
-  &__payroll-option {
-    font-size: 14px;
-    line-height: 16px;
-    color: #6d7a98;
-    margin: 0;
-    padding: 0;
-  }
-  &__payroll-total-cost {
-    margin: 0;
-    padding: 0;
-    font-family: Karla;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 24px;
-    color: #6d7a98;
-  }
-  &__payroll-value {
-    font-size: 16px;
-    line-height: 16px;
-    color: #0b2253;
-    margin: 0;
-    padding: 0;
-  }
-  &__payroll-total-amount {
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
-    color: #0b2253;
-    margin: 0;
-    padding: 0;
-  }
-  hr {
-    border: 1px solid #eaedf4;
-  }
-  &__summary-options {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem 0rem;
-  }
-  &__setpaydate {
-    margin-left: 6rem;
-  }
-  &__setpaydate-title {
-    font-size: 18px;
-    line-height: 24px;
-    color: #0e347e;
-    margin: 0;
-    padding: 0;
-  }
-  &__setpaydate-p {
-    font-size: 14px;
-    line-height: 24px;
-    color: #6d7a98;
-    margin: 0.3rem 0 0 0;
-    padding: 0;
-  }
+      &__title {
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        color: #0e347e;
+      }
 
-  &__setpay-calendar {
+      &__sub-title {
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 24px;
+        color: #6d7a98;
+      }
+    }
+
+    &__input {
+      margin-top: 1.875rem;
+    }
   }
-  &__calendar {
-    display: flex;
-    justify-content: space-between;
-    width: 420px;
-    height: 56px;
-    background: #f7f9fb;
-    border-radius: 4px;
-    padding: 0 1.2rem;
-    margin: 0.4rem 0 0 0;
-  }
-  &__paydate {
-    font-size: 14px;
-    line-height: 16px;
-    color: #6d7a98;
-    margin: 1.8rem 0 0 0;
-  }
-  &__date {
-    font-size: 16px;
-    line-height: 24px;
-    color: #0b2253;
+}
+
+.summary-table {
+  width: 100%;
+  max-width: 444px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #eaedf4;
+
+  &__row {
+    &:not(:first-child) {
+      padding-top: 1rem;
+      border-top: 1px solid #eaedf4;
+    }
+    &:not(:last-child) {
+      border-bottom: 1px solid #eaedf4;
+      padding-bottom: 1rem;
+    }
+
+    &__item {
+      font-family: $font-family-Karla;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0 0.5rem;
+
+      &__title {
+        color: #6d7a98;
+      }
+
+      &__value {
+        color: #0b2253;
+        font-size: 16px;
+      }
+
+      &--large {
+        &__title {
+          font-weight: 600;
+          font-size: 18px;
+          line-height: 24px;
+        }
+
+        &__value {
+          font-weight: 600;
+          font-size: 20px;
+          line-height: 24px;
+        }
+      }
+    }
   }
 }
