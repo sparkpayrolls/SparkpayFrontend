@@ -31,7 +31,7 @@ const PayDetails: NextPage = () => {
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const [apiCalls] = useState(0);
   const totals: Record<string, number> = {
-    'Total Salary Amount': 1,
+    'Total Salary Amount': 0,
     'Total Net Salary': 0,
   };
   const loading = apiCalls > 0;
@@ -124,6 +124,7 @@ const PayDetails: NextPage = () => {
           </table>
              
         </TableLayout>
+          </div>
          <div className="create-payroll-page__totals">
             <div className="create-payroll-page__totals__items">
               {Object.keys(totals).map((key, i) => {
@@ -138,7 +139,6 @@ const PayDetails: NextPage = () => {
                 );
               })}
             </div>
-          </div>
       </div>
     </DashboardLayoutV2>
   );
