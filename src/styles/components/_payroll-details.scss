@@ -1,29 +1,8 @@
 .payroll-details-section {
-   display: flex;
-   
-   &__payroll-details-settings {
-       width:100%;
-    margin-right: 2rem;
-    margin-left: 2rem;   
-  }
-
- 
-  &__payroll-details-sidebar{
-    width: 7rem;
-    height: 140vh;
-    background: #f8fafc;
-    // padding: 1.25rem 0 2rem;
-    // transition: all 500ms;
-  } 
   &__payroll-details-header {
     display: flex;
     justify-content: space-between;
     margin-top: -10px;
-    // margin-top: 0.5rem;
-  }
-
-  &__back-icon {
-    margin-top: 3.4rem;
   }
 
   &__payroll-header {
@@ -32,6 +11,7 @@
     font-size: 1.75rem;
     line-height: 2rem;
     color: #0e347e;
+    padding-top:1.5rem;
   }
 
   &__payroll-wallet {
@@ -61,12 +41,12 @@
   }
 
   &__payroll-settings-details {
-    height: 11.25rem;
+    height: 11.2rem;
     background: #ffffff;
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid #eaedf4;
-    margin-bottom: 10.1rem;
+    margin-top:1rem;
   }
   &__employee-status {
     display: flex;
@@ -109,6 +89,7 @@
     font-size: 1.25rem;
     line-height: 32px;
     color: #0e347e;
+    margin-top:2rem;
   }
 
   &__payroll-sum-total {
@@ -173,6 +154,30 @@
     padding:1rem 0rem 0rem 3rem;
     font-size:1rem;
     color: #0B2253;
+  }
+ &__successful-image{
+  margin-top:13px;
+ }
+  &__successful-icon{
+    display:flex;
+    grid-column-gap: 0.2rem;
+    margin-top:-10px;
+  }
+
+  &__successful-text{
+    margin-top:13px;
+    color:#27BE63;
+    font-size: 14px;
+  }
+
+  &__status-text{
+    font-size:1rem;
+    color: #9DA9B3;
+    margin-top:2.3rem;
+
+  }
+  &__month-text{
+    margin-top:1rem;
   }
 }
 
