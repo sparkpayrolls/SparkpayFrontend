@@ -345,3 +345,42 @@
     }
   }
 }
+
+
+//employee-list-styles
+
+.employee-list-section{
+&__employee-button-section{
+  display:flex;
+}
+
+&__submit-btn{
+  display:flex;
+  grid-column-gap:1rem;
+}
+
+&__employee-add-row{
+  display:flex;
+  grid-column-gap:0.5rem;
+  margin-right:1.5rem;
+}
+&__employee-add-row-text{
+  font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+color: #1D4ED8;
+margin-top:0.7rem;
+}
+&__employee-add-row-image{
+  margin-top:-5px !important;
+}
+
+&__employee-delete-image{
+  margin-top:10px !important;
+  margin-right:1.5rem !important;
+}
+&__employee-list-table{
+margin-top:18px;
+}
+}
