@@ -132,3 +132,34 @@ const EmployeePage: NextPage = () => {
 };
 
 export default withAuth(EmployeePage, ['Employee', 'read']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
