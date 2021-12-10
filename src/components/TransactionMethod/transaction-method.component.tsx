@@ -17,7 +17,7 @@ const MethodImage = ({ method }: Pick<ITransactionMethod, 'method'>) => {
   }
   if (new RegExp('^bank$', 'gi').test(method)) {
     return <Image src={bank} alt="" />
-  };
+  }
 };
 
 export const TransactionMethod = (props: ITransactionMethod) => {
