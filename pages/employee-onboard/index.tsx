@@ -7,8 +7,6 @@ import { useAppSelector } from 'src/redux/hooks';
 import { SelectInput } from '../../src/components/Input/seletct-input';
 import { useRouter } from 'next/router';
 
-
-
 const EmployeeOnboard: NextPage = () => {
   const { user, countries } = useAppSelector((state) => state);
   const paymentOptions = [
@@ -23,15 +21,14 @@ const EmployeeOnboard: NextPage = () => {
     { name: 'GT Bank Plc', id: 'GTB' },
     { name: 'United Bank for Africa', id: 'UBA' },
     { name: 'Access Bank', id: 'Access' },
-    { name: 'Sterling Bank', id: 'Sterling' }
-
+    { name: 'Sterling Bank', id: 'Sterling' },
   ];
   const router = useRouter();
 
-     if (user) {
-       router.replace('/');
-       return null;
-     }
+  if (user) {
+    router.replace('/');
+    return null;
+  }
 
   return (
     <div className="employee-onboard">
@@ -61,20 +58,20 @@ const EmployeeOnboard: NextPage = () => {
                 // loading={!countries.length}
                 // error={(touched.country && errors.country) || ''}
               />
-              </div>
+            </div>
 
-              <SelectInput
-                options={countries}
-                displayValue="name"
-                actualValue="id"
-                name="country"
-                // value={values.country}
-                label="Country of Residence"
-                // onChange={handleChange}
-                // onBlur={handleBlur}
-                // loading={!countries.length}
-                // error={(touched.country && errors.country) || ''}
-              />
+            <SelectInput
+              options={countries}
+              displayValue="name"
+              actualValue="id"
+              name="country"
+              // value={values.country}
+              label="Country of Residence"
+              // onChange={handleChange}
+              // onBlur={handleBlur}
+              // loading={!countries.length}
+              // error={(touched.country && errors.country) || ''}
+            />
 
             <SelectInput
               options={paymentOptions}
@@ -123,14 +120,7 @@ const EmployeeOnboard: NextPage = () => {
           </p>
         </div>
       </div>
-      
     </div>
   );
 };
-
 export default EmployeeOnboard;
-
-
-
-
-
