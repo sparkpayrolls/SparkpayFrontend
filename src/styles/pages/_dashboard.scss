@@ -11,6 +11,10 @@
     margin: 0 0 1.125rem;
   }
 
+    ::-webkit-scrollbar {
+    width: 12px;
+}
+
   &__title {
     font-weight: 500;
     font-size: 1.75rem;

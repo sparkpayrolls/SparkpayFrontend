@@ -142,6 +142,17 @@ html {
   scroll-behavior: smooth;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+   border-radius: 10px;
+  // outline: 1px solid slategrey;
+}
 * {
   box-sizing: border-box;
 }

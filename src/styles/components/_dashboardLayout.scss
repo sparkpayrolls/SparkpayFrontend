@@ -7,7 +7,7 @@
     background: #f8fafc;
     transition: all 500ms;
     overflow-y: auto;
-
+    
     @media screen and (min-width: 992px) {
       display: block;
     }
@@ -31,10 +31,12 @@
       overflow-y: hidden;
       padding-top: 6.25rem;
       padding-bottom: 5.875rem;
+
+       &__list:hover {
+      overflow-y:auto;
     }
-    &__list:hover {
-      overflow-y: auto;
     }
+   
     &__list-item {
       margin: 0 1rem;
     }
