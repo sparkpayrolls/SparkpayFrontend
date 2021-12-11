@@ -383,4 +383,27 @@ margin-top:0.7rem;
 &__employee-list-table{
 margin-top:18px;
 }
+
+&__employee-list-image{
+  margin-left:40px;
+  cursor:pointer;
+}
+
+&__employee-input{
+// background: #FFFFFF;
+border:none;
+border-radius: 4px;
+  width:80%;
+  outline: 0;
+  cursor:pointer;
+  height:30px;
+}
+
+input:focus
+{
+    border-bottom: 2px solid #e5e5e5;
+    // box-shadow: 0 0 3px #1670BE;
+    // outline-offset: 0px;
+    // outline: none;
+}
 }
