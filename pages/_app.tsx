@@ -29,8 +29,9 @@ const AuthManager = () => {
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
     const isLoggedIn = !!user;
+    let tokenInterceptor: number;
     if (authToken) {
-      $api.$axios.interceptors.request.use((config) => {
+      tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${authToken}`;
 
         return config;
@@ -64,11 +65,15 @@ const AuthManager = () => {
     if (!authToken && isLoggedIn) {
       dispatch(commitUser(null));
     }
+
+    return () => {
+      $api.$axios.interceptors.request.eject(tokenInterceptor);
+    };
   }, [user, dispatch]);
 
   useEffect(() => {
     refreshCompanies(dispatch);
-  }, [dispatch]);
+  }, [user, dispatch]);
 
   useEffect(() => {
     const companySelected = companies.find((company) => company.selected);

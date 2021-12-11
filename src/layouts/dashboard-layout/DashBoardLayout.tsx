@@ -16,6 +16,8 @@ import { $api } from 'src/api';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { logOut } from 'src/redux/slices/user/user.slice';
 import { NavList } from './dashboard-navigation-list';
+import { useRouter } from 'next/router';
+import { Util } from 'src/helpers/util';
 
 interface Props {
   children?: ReactNode;
@@ -27,6 +29,7 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
   const companies = useAppSelector((state) => state.companies);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const [loadingCompanySelect, setLoadingCompanySelect] = useState('');
 
   const selectedCompany = companies.find((company) => company.selected);
@@ -39,6 +42,7 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
       name: 'Logout',
       action() {
         logOut(dispatch);
+        Util.redirectToLogin(router);
       },
     },
   ];
