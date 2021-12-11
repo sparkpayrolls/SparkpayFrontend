@@ -217,6 +217,7 @@ const PayDetails: NextPage = () => {
                     {headerRow.map((row) => {
                       return <th key={row}>{row}</th>;
                     })}
+                    <th>Payout Status</th>
                   </tr>
                 </thead>
                 <tbody>
