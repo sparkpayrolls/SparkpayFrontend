@@ -61,25 +61,25 @@ const EmployeeList: NextPage = () => {
               <CheckboxTableColumn element="td">
                <input type="text" className="employee-list-section__employee-input"/>
                 <span className="employee-list-section__employee-list-image">
-                  <Image src={EditIcon} />
+                  <Image src={EditIcon} alt="edit-icon" />
                 </span>
               </CheckboxTableColumn>
               <td>
                <input type="text" className="employee-list-section__employee-input"/>
                 <span className="employee-list-section__employee-list-image">
-                  <Image src={EditIcon} />
+                  <Image src={EditIcon} alt="edit-icon" />
                 </span>
               </td>
               <td>
                <input type="text" className="employee-list-section__employee-input"/>               
                 <span className="employee-list-section__employee-list-image">
-                  <Image src={EditIcon} />
+                  <Image src={EditIcon} alt="edit-icon" />
                 </span>
               </td>
               <td>
                <input type="text" className="employee-list-section__employee-input"/>               
                 <span className="employee-list-section__employee-list-image">
-                  <Image src={EditIcon} />                 
+                  <Image src={EditIcon} alt="edit-icon" />                 
                 </span>
                 <KebabMenuSVG/>
               </td>
