@@ -18,6 +18,7 @@ import {
   Employee,
   Payroll,
   PayrollEmployee,
+  PayrollEmployeePayoutStatus,
   PayrollStatus,
 } from 'src/api/types';
 import { HttpError } from 'src/api/repo/http.error';
@@ -259,6 +260,13 @@ const PayDetails: NextPage = () => {
                             )}
                           </td>
                         </IF>
+                        <td>
+                          <StatusChip
+                            status={
+                              e.payoutStatus as PayrollEmployeePayoutStatus
+                            }
+                          />
+                        </td>
                       </tr>
                     );
                   })}
