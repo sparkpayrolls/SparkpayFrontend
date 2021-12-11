@@ -153,7 +153,9 @@ const CreatePayroll: NextPage = () => {
           title={
             <WalletBalanceChip
               title="Payroll"
-              balance={`${currency} ${Util.formatMoneyNumber(walletBalance)}`}
+              balance={walletBalance}
+              currency={currency}
+              loading={loading && walletBalance <= 0}
             />
           }
           buttons={
@@ -276,7 +278,7 @@ const CreatePayroll: NextPage = () => {
                     key={key}
                     loading={loading}
                     title={key}
-                    type={i === 1 ? 'primary' : 'secondary'}
+                    type={i === 0 ? 'primary' : 'secondary'}
                     value={`${currency} ${Util.formatMoneyNumber(totals[key])}`}
                   />
                 );
