@@ -29,7 +29,9 @@ const DashboardLayoutV2 = (
               <BackSVG />
             </button>
           )}
-          {props.children}
+          <div className="dashboard-layout-v2__content__child">
+            {props.children}
+          </div>
         </div>
       </div>
     </>

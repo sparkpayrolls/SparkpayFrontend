@@ -60,4 +60,15 @@ export class PayrollModule extends HttpRepository {
 
     return data;
   }
+
+  async getById(id: string) {
+    const { data } = await this.get<Payroll>(`/payrolls/${id}`);
+
+    return data;
+  }
+
+  async getPayrollEmployees(id: string, params: Record<string, any> = {}) {
+    const query = this.parseQueryObject(params);
+    return this.get<PayrollEmployee[]>(`/payrolls/${id}/employees${query}`);
+  }
 }

@@ -95,7 +95,9 @@ const PayrollSummaryPage: NextPage = () => {
             <div className="summary-table__row">
               <WalletBalanceChip
                 title="Summary"
-                balance={`${currency} ${Util.formatMoneyNumber(walletBalance)}`}
+                balance={walletBalance}
+                currency={currency}
+                loading={loading && walletBalance <= 0}
               />
             </div>
 
@@ -229,7 +231,7 @@ const PayrollSummaryPage: NextPage = () => {
                   excludedEmployeeIds,
                 });
                 toast.success(`payroll created - ${payroll.id}`);
-                router.push('/payroll');
+                router.push(`/payroll/${payroll.id}`);
               } catch (error) {
                 const err = error as HttpError;
                 if (err.status === 422) {

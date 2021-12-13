@@ -27,6 +27,7 @@ const PayrollDetails: NextPage = () => {
       setLoading(true);
       await $api.payroll.pausePendingPayroll(id);
       toast.success('payroll paused successfully');
+      getPayrolls();
     } catch (error) {
       const err = error as HttpError;
       toast.error(err.message);
@@ -40,6 +41,7 @@ const PayrollDetails: NextPage = () => {
       setLoading(true);
       await $api.payroll.resumePausedPayroll(id);
       toast.success('payroll resumed successfully');
+      getPayrolls();
     } catch (error) {
       const err = error as HttpError;
       toast.error(err.message);
@@ -53,6 +55,7 @@ const PayrollDetails: NextPage = () => {
       setLoading(true);
       await $api.payroll.deletePayroll(id);
       toast.success('payroll deleted successfully');
+      getPayrolls();
     } catch (error) {
       const err = error as HttpError;
       toast.error(err.message);

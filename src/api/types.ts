@@ -108,8 +108,7 @@ export type Employee = Document & {
   lastname: string;
   salary: number;
   email: string;
-  countryOfOrigin: string;
-  countryOfResidence: string;
+  country: string | Country;
   payoutMethod?: PayoutMethod;
   payoutMethodMeta: unknown;
   salaryAddOns: unknown[];

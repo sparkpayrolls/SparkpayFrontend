@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { IAllowedPermissions } from '@/components/types';
+import { NextRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 import {
   Administrator,
   Company,
@@ -114,5 +116,13 @@ export class Util {
     }
 
     return Array.isArray(val) ? val : [val];
+  }
+
+  static redirectToLogin(router: NextRouter) {
+    const url = stringifyUrl({
+      url: '/login',
+      query: { goto: router.pathname },
+    });
+    router.replace(url);
   }
 }
