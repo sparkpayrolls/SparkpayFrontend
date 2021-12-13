@@ -61,19 +61,6 @@ const EmployeeOnboard: NextPage = () => {
             </div>
 
             <SelectInput
-              options={countries}
-              displayValue="name"
-              actualValue="id"
-              name="country"
-              // value={values.country}
-              label="Country of Residence"
-              // onChange={handleChange}
-              // onBlur={handleBlur}
-              // loading={!countries.length}
-              // error={(touched.country && errors.country) || ''}
-            />
-
-            <SelectInput
               options={paymentOptions}
               displayValue="name"
               actualValue="id"
