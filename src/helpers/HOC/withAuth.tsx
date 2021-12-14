@@ -19,11 +19,7 @@ function withAuth<T>(
 
       // If there is no access token we redirect to "/" page.
       if (!isLoggedIn) {
-        const url = stringifyUrl({
-          url: '/login',
-          query: { goto: Router.pathname },
-        });
-        Router.replace(url);
+        Util.redirectToLogin(Router);
         return null;
       }
 

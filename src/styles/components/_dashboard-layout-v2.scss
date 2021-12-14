@@ -13,7 +13,6 @@
     padding-top: 3.4rem;
     padding-left: 2rem;
     padding-right: 2rem;
-    overflow-y: auto;
 
     &__back-button {
       text-decoration: none;
@@ -21,10 +20,16 @@
       margin: 0;
       line-height: 1;
       margin-bottom: 1.5rem;
+      max-height: 1rem;
       background: none;
       border: none;
       cursor: pointer;
       padding: 0;
+    }
+
+    &__child {
+      overflow-y: auto;
+      height: calc(100% - 2.5rem);
     }
 
     @media screen and (max-width: 1024px) {

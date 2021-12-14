@@ -473,3 +473,14 @@ export interface ButtonProps {
 
   title?: string;
 }
+
+export interface IElementWrapper {
+  element: string;
+  className?: string;
+}
+
+export type IText = Record<string, unknown> & {
+  element: 'span' | 'p';
+  text: string;
+  className?: string;
+};
