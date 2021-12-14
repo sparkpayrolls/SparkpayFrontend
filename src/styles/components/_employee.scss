@@ -355,15 +355,24 @@
 }
 
 &__submit-btn{
-  display:flex;
-  grid-column-gap:1rem;
+    height: 44px;
+  background-color:white;
+color: #1D4ED8;
+:hover{
+    height: 44px;
+  background-color:white !important;
+color: #1D4ED8;
 }
+}
+
 
 &__employee-add-row{
   display:flex;
   grid-column-gap:0.5rem;
-  margin-right:1.5rem;
+  margin-right:1rem;
+  cursor:pointer;
 }
+
 &__employee-add-row-text{
   font-style: normal;
 font-weight: 500;
@@ -378,7 +387,6 @@ margin-top:0.7rem;
 
 &__employee-delete-image{
   margin-top:10px !important;
-  margin-right:1.5rem !important;
 }
 &__employee-list-table{
 margin-top:18px;

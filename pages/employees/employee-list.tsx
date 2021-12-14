@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
-import PlusSvg from '../../public/svgs/add-icon.svg';
+import { EmployeePlusSvg } from '@/components/svg';
+// import PlusSvg from '../../public/svgs/add-icon.svg';
 import { Button } from '../../src/components/Button/Button.component';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 import BackIcon from '../../public/svgs/backicon.svg';
@@ -8,6 +9,8 @@ import DeleteIcon from '../../public/svgs/Delete.svg';
 import { CheckboxTableColumn } from '@/components/Table/check-box-table-col.component';
 import { TableV2 } from '@/components/Table/Table.component';
 import EditIcon from '@../../public/svgs/edit-icon.svg';
+// import { Input } from '../../src/components/Input/Input.component';
+import withAuth from 'src/helpers/HOC/withAuth';
 
 
 
@@ -29,14 +32,19 @@ const EmployeeList: NextPage = () => {
               <Image src={DeleteIcon} alt="back-icon" />
             </div>
             <div className="employee-list-section__employee-add-row">
-              <Image
-                src={PlusSvg}
-                alt="plus-svg"
-                className="employee-list-section__employee-add-row-image"
-              />
-              <p className="employee-list-section__employee-add-row-text">
-                Add Row
-              </p>
+               <Button
+                label={
+                  <>
+                    <EmployeePlusSvg />
+                    &nbsp;{'Add\xa0Row'}
+                  </>
+                }
+              onClick={() => {}}
+              className="employee-list-section__submit-btn"
+              primary
+              type="submit"
+            />
+             
             </div>
             <Button
               label={<>{'Proceed'}</>}
@@ -90,7 +98,7 @@ const EmployeeList: NextPage = () => {
     </DashboardLayoutV2>
   );
 };
-export default EmployeeList;
+export default withAuth(EmployeeList);
 
 
 const KebabMenuSVG = () => (

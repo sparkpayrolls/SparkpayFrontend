@@ -56,3 +56,10 @@ export const savePayrollValidationSchema = Yup.object().shape({
   payDate: Yup.string().required('pay date is required'),
   proRateMonth: Yup.string().required('select a pro rate month'),
 });
+
+export const employeeListValidationSchema=Yup.object().shape({
+  firstname:format.firstname,
+  lastname:format.lastname,
+  email:format.email,
+  salary:Yup.string().required('salary amount is required')
+})

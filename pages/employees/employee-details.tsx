@@ -3,7 +3,6 @@ import type { NextPage } from 'next';
 import Image from 'next/image';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
-
 import BackIcon from '../../public/svgs/backicon.svg';
 
 const EmployeeDetails: NextPage = () => {

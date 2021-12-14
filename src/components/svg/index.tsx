@@ -159,6 +159,20 @@ export const PlusSvg = () => (
   </svg>
 );
 
+export const EmployeePlusSvg = () => (
+  <svg
+    width="14"
+    height="24"
+    viewBox="0 0 14 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M6 11V5.4C6 5.17909 6.17909 5 6.4 5H7.6C7.82091 5 8 5.17909 8 5.4V11H13.6C13.8209 11 14 11.1791 14 11.4V12.6C14 12.8209 13.8209 13 13.6 13H8V18.6C8 18.8209 7.82091 19 7.6 19H6.4C6.17909 19 6 18.8209 6 18.6V13H0.4C0.179086 13 0 12.8209 0 12.6V11.4C0 11.1791 0.179086 11 0.4 11H6Z"
+      fill="blue"
+    />
+  </svg>
+);
 export const OrganisationCardSvg = () => (
   <svg
     width="28"

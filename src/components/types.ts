@@ -292,7 +292,13 @@ export type IStatusChip = {
 export type ITransactionMethod = {
   method: string;
 };
-
+/** AddEmployeeList */
+export type AddEmployeeList = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  salary: string;
+};
 /** Tabs */
 export type IEmployeeTab = {
   administrator: Administrator | null;
