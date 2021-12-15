@@ -236,12 +236,15 @@ export type CreateOrganization = {
   phonenumber: string;
   country: string;
 };
+
+/** Employee Onboard */
 export type EmployeeOnboarding = {
   country: string;
   payoutMethod: string;
   bankName: string;
   accountNumber: string;
 };
+
 
 /** Wallet Billing */
 export type WalletBilling = {

@@ -59,7 +59,15 @@ const EmployeeOnboard: NextPage = () => {
           }}
         >
           {(props: FormikProps<EmployeeOnboarding>) => {
-            const { handleChange, handleSubmit } = props;
+            const {
+              handleChange,
+              handleSubmit,
+              handleBlur,
+              values,
+              errors,
+              touched,
+            } = props;
+
             return (
               <form
                 onSubmit={handleSubmit}
@@ -73,12 +81,12 @@ const EmployeeOnboard: NextPage = () => {
                       displayValue="name"
                       actualValue="id"
                       name="country"
-                      // value={values.country}
+                      value={values.country}
                       label="Country of Origin"
-                      // onChange={handleChange}
-                      // onBlur={handleBlur}
-                      // loading={!countries.length}
-                      // error={(touched.country && errors.country) || ''}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      loading={!countries.length}
+                      error={(touched.country && errors.country) || ''}
                     />
                   </div>
 
@@ -86,33 +94,37 @@ const EmployeeOnboard: NextPage = () => {
                     options={paymentOptions}
                     displayValue="name"
                     actualValue="id"
-                    name="Payout Method"
-                    // value={values.country}
+                    name="payoutMethod"
+                    value={values.payoutMethod}
                     label="Payout Method"
-                    // onChange={handleChange}
-                    // onBlur={handleBlur}
-                    // loading={!countries.length}
-                    // error={(touched.country && errors.country) || ''}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    loading={!paymentOptions.length}
+                    error={(touched.payoutMethod && errors.payoutMethod) || ''}
                   />
 
                   <SelectInput
                     options={BankNames}
                     displayValue="name"
                     actualValue="id"
-                    name="country"
-                    // value={values.country}
+                    name="bankName"
+                    value={values.bankName}
                     label="Bank Name"
-                    // onChange={handleChange}
-                    // onBlur={handleBlur}
-                    // loading={!countries.length}
-                    // error={(touched.country && errors.country) || ''}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    loading={!BankNames.length}
+                    error={(touched.bankName && errors.bankName) || ''}
                   />
                   <Input
                     type="tel"
                     label="Account Number"
                     placeholder="account number"
-                    name=""
+                    value={values.accountNumber}
+                    name="accountNumber"
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    hasError={errors.accountNumber && touched.accountNumber}
+                    error={errors.accountNumber}
                   />
                 </div>
                 <Button
