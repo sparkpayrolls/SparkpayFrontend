@@ -3,9 +3,12 @@ import Head from 'next/head';
 import React from 'react';
 import { Button } from '../../src/components/Button/Button.component';
 import { Input } from '../../src/components/Input/Input.component';
+import { Formik, FormikProps } from 'formik';
 import { useAppSelector } from 'src/redux/hooks';
 import { SelectInput } from '../../src/components/Input/seletct-input';
 import { useRouter } from 'next/router';
+import { EmployeeOnboardingValidationSchema } from 'src/helpers/validation';
+import { EmployeeOnboarding } from '@/components/types';
 
 const EmployeeOnboard: NextPage = () => {
   const { user, countries } = useAppSelector((state) => state);
@@ -29,7 +32,9 @@ const EmployeeOnboard: NextPage = () => {
     router.replace('/');
     return null;
   }
-
+  // const handleSubmit = () => {
+  //   console.log('values got submitted');
+  // };
   return (
     <div className="employee-onboard">
       <Head>
@@ -43,64 +48,90 @@ const EmployeeOnboard: NextPage = () => {
           {' '}
           Enter your details to complete your onboarding{' '}
         </p>
-        <form>
-          <div className="employee-onboard__form-input-section">
-            <div className="employee-onboard__form-grid">
-              <SelectInput
-                options={countries}
-                displayValue="name"
-                actualValue="id"
-                name="country"
-                // value={values.country}
-                label="Country of Origin"
-                // onChange={handleChange}
-                // onBlur={handleBlur}
-                // loading={!countries.length}
-                // error={(touched.country && errors.country) || ''}
-              />
-            </div>
+        <Formik
+          initialValues={{
+            country: '',
+            payoutMethod: '',
+            bankName: '',
+            accountNumber: '',
+          }}
+          validationSchema={EmployeeOnboardingValidationSchema}
+          onSubmit={(values) => {
+            console.log(values);
+          }}
+        >
+          {(props: FormikProps<EmployeeOnboarding>) => {
+            const {
+              handleChange,
+              handleSubmit,
+             
+            } = props;
+            return (
+              <form
+                onSubmit={handleSubmit}
+                className="create-organization-form"
+                autoComplete="off"
+              >
+                <div className="employee-onboard__form-input-section">
+                  <div className="employee-onboard__form-grid">
+                    <SelectInput
+                      options={countries}
+                      displayValue="name"
+                      actualValue="id"
+                      name="country"
+                      // value={values.country}
+                      label="Country of Origin"
+                      // onChange={handleChange}
+                      // onBlur={handleBlur}
+                      // loading={!countries.length}
+                      // error={(touched.country && errors.country) || ''}
+                    />
+                  </div>
 
-            <SelectInput
-              options={paymentOptions}
-              displayValue="name"
-              actualValue="id"
-              name="Payout Method"
-              // value={values.country}
-              label="Payout Method"
-              // onChange={handleChange}
-              // onBlur={handleBlur}
-              // loading={!countries.length}
-              // error={(touched.country && errors.country) || ''}
-            />
+                  <SelectInput
+                    options={paymentOptions}
+                    displayValue="name"
+                    actualValue="id"
+                    name="Payout Method"
+                    // value={values.country}
+                    label="Payout Method"
+                    // onChange={handleChange}
+                    // onBlur={handleBlur}
+                    // loading={!countries.length}
+                    // error={(touched.country && errors.country) || ''}
+                  />
 
-            <SelectInput
-              options={BankNames}
-              displayValue="name"
-              actualValue="id"
-              name="country"
-              // value={values.country}
-              label="Bank Name"
-              // onChange={handleChange}
-              // onBlur={handleBlur}
-              // loading={!countries.length}
-              // error={(touched.country && errors.country) || ''}
-            />
-            <Input
-              type="tel"
-              label="Account Number"
-              placeholder="account number"
-              name=""
-              // onChange={}
-            />
-          </div>
-          <Button
-            label="Submit"
-            type="submit"
-            onClick={() => {}}
-            className="employee-onboard__submit-btn"
-            primary
-          />
-        </form>
+                  <SelectInput
+                    options={BankNames}
+                    displayValue="name"
+                    actualValue="id"
+                    name="country"
+                    // value={values.country}
+                    label="Bank Name"
+                    // onChange={handleChange}
+                    // onBlur={handleBlur}
+                    // loading={!countries.length}
+                    // error={(touched.country && errors.country) || ''}
+                  />
+                  <Input
+                    type="tel"
+                    label="Account Number"
+                    placeholder="account number"
+                    name=""
+                    onChange={handleChange}
+                  />
+                </div>
+                <Button
+                  label="Submit"
+                  type="submit"
+                  onClick={() => {}}
+                  className="employee-onboard__submit-btn"
+                  primary
+                />
+              </form>
+            );
+          }}
+        </Formik>
         <div className="employee-onboard__sign-up">
           <p className="employee-onboard__sign-up-text">
             Please ensure your details are correct before submitting.
