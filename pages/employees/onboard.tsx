@@ -68,7 +68,6 @@ const EmployeeOnboard: NextPage = () => {
               values,
               errors,
               touched,
-              isSubmitting,
             } = props;
             return (
               <form
