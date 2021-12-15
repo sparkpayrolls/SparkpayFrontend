@@ -5,7 +5,7 @@ import bank from '/public/images/bank.png';
 import cryptocurrency from '/public/images/cryptocurrency.png';
 import { ITransactionMethod } from '../types';
 
-const MethodImage = ({ method }: Pick<ITransactionMethod, 'method'>) => {
+ const MethodImage = ({ method }: Pick<ITransactionMethod, 'method'>) => {
   if (new RegExp('^wallet$', 'gi').test(method)) {
     return <Image src={wallet} alt="" />;
   }
@@ -17,7 +17,9 @@ const MethodImage = ({ method }: Pick<ITransactionMethod, 'method'>) => {
   }
   if (new RegExp('^bank$', 'gi').test(method)) {
     return <Image src={bank} alt="" className="bank-svg" />;
-  }
+   }
+   
+   return null;
 };
 
 export const TransactionMethod = (props: ITransactionMethod) => {

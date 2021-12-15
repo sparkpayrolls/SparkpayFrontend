@@ -236,12 +236,6 @@ export type CreateOrganization = {
   phonenumber: string;
   country: string;
 };
-export type EmployeeOnboarding = {
-  country: string;
-  payoutMethod: string;
-  bankName: string;
-  accountNumber: string;
-};
 
 /** Employee Onboard */
 export type EmployeeOnboarding = {
