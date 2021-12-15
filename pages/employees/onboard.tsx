@@ -1,17 +1,19 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '../../src/components/Button/Button.component';
 import { Input } from '../../src/components/Input/Input.component';
 import { Formik, FormikProps } from 'formik';
-import { useAppSelector } from 'src/redux/hooks';
+import { useAppSelector, useAppDispatch } from 'src/redux/hooks';
+import { getCountries } from 'src/redux/slices/countries/countries.slice';
 import { SelectInput } from '../../src/components/Input/seletct-input';
-import { useRouter } from 'next/router';
 import { EmployeeOnboardingValidationSchema } from 'src/helpers/validation';
 import { EmployeeOnboarding } from '@/components/types';
 
 const EmployeeOnboard: NextPage = () => {
-  const { user, countries } = useAppSelector((state) => state);
+  const { countries } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
+
   const paymentOptions = [
     { name: 'Bank', id: 'bank' },
     { name: 'Card', id: 'card' },
@@ -26,15 +28,11 @@ const EmployeeOnboard: NextPage = () => {
     { name: 'Access Bank', id: 'Access' },
     { name: 'Sterling Bank', id: 'Sterling' },
   ];
-  const router = useRouter();
 
-  if (user) {
-    router.replace('/');
-    return null;
-  }
-  // const handleSubmit = () => {
-  //   console.log('values got submitted');
-  // };
+  useEffect(() => {
+    getCountries(dispatch);
+  }, [dispatch]);
+
   return (
     <div className="employee-onboard">
       <Head>
@@ -69,6 +67,7 @@ const EmployeeOnboard: NextPage = () => {
               errors,
               touched,
             } = props;
+
             return (
               <form
                 onSubmit={handleSubmit}
