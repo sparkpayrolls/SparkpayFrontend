@@ -32,6 +32,9 @@ const EmployeeOnboard: NextPage = () => {
     router.replace('/');
     return null;
   }
+  // const handleSubmit = () => {
+  //   console.log('values got submitted');
+  // };
   return (
     <div className="employee-onboard">
       <Head>
@@ -60,14 +63,16 @@ const EmployeeOnboard: NextPage = () => {
           {(props: FormikProps<EmployeeOnboarding>) => {
             const {
               handleChange,
+              handleSubmit,
               handleBlur,
               values,
               errors,
               touched,
+              isSubmitting,
             } = props;
             return (
               <form
-                
+                onSubmit={handleSubmit}
                 className="create-organization-form"
                 autoComplete="off"
               >
