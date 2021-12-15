@@ -236,6 +236,12 @@ export type CreateOrganization = {
   phonenumber: string;
   country: string;
 };
+export type EmployeeOnboarding = {
+  country: string;
+  payoutMethod: string;
+  bankName: string;
+  accountNumber: string;
+};
 
 /** Employee Onboard */
 export type EmployeeOnboarding = {
@@ -476,3 +482,14 @@ export interface ButtonProps {
 
   title?: string;
 }
+
+export interface IElementWrapper {
+  element: string;
+  className?: string;
+}
+
+export type IText = Record<string, unknown> & {
+  element: 'span' | 'p';
+  text: string;
+  className?: string;
+};
