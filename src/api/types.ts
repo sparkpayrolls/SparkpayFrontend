@@ -80,13 +80,18 @@ export type PaginateParams = {
   all?: boolean;
 };
 
-export enum PayoutMethods {
+export enum PayoutMethodNameEnum {
   'Bank Transfer' = 'Bank Transfer',
 }
 
+export type PayoutMethodName =
+  | PayoutMethodNameEnum
+  | keyof typeof PayoutMethodNameEnum;
+
 export type PayoutMethod = Document & {
-  name: PayoutMethods | keyof typeof PayoutMethods;
-  country: string;
+  name: PayoutMethodName;
+  provider: string;
+  country: string | Country;
 };
 
 export enum EmployeeStatusEnum {
@@ -392,4 +397,10 @@ export type PayrollSummary = {
   totalDeduction: number;
   payrollSize: number;
   totalAmount: number;
+};
+
+export type Bank = Document & {
+  name: string;
+  meta?: unknown;
+  country: string | Country;
 };

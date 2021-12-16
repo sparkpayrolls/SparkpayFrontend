@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { NiceModalHandler } from '@ebay/nice-modal-react';
+import { FormikHelpers } from 'formik';
 import { Moment } from 'moment';
 import { NextRouter } from 'next/router';
 import {
@@ -23,6 +24,7 @@ import {
   PaginationMeta,
   PaymentMethod,
   PaymentMethodName,
+  PayoutMethod,
   Payroll,
   PayrollStatus,
   PermissionGroup,
@@ -241,10 +243,8 @@ export type CreateOrganization = {
 export type EmployeeOnboarding = {
   country: string;
   payoutMethod: string;
-  bankName: string;
-  accountNumber: string;
+  payoutMethodMeta?: unknown;
 };
-
 
 /** Wallet Billing */
 export type WalletBilling = {
@@ -486,4 +486,24 @@ export type IText = Record<string, unknown> & {
   element: 'span' | 'p';
   text: string;
   className?: string;
+};
+
+export type IPayoutMethodMeta = {
+  method: PayoutMethod | null;
+  error?: boolean;
+  setMeta(meta: unknown): any;
+  meta?: unknown;
+};
+
+export type IBankPayoutMethodMeta = {
+  method: PayoutMethod;
+  error?: boolean;
+  setMeta(meta: unknown): any;
+};
+
+export type IEmployeeOnboardingForm = {
+  onSubmit(
+    values: EmployeeOnboarding,
+    formikHelpers: FormikHelpers<EmployeeOnboarding>,
+  ): any;
 };
