@@ -35,4 +35,10 @@ export class EmployeeModule extends HttpRepository {
   ) {
     await this.put(`/employees/status`, { employeeIds, status });
   }
+
+  async completeEmployeeOnboarding(payload: Record<string, any>) {
+    const { data } = await this.put('/employees/onboard', payload);
+
+    return data;
+  }
 }

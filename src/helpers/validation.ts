@@ -58,7 +58,11 @@ export const savePayrollValidationSchema = Yup.object().shape({
 });
 export const EmployeeOnboardingValidationSchema = Yup.object().shape({
   country: format.country,
-  accountNumber: Yup.string().required('Account Number is Required'),
   payoutMethod: Yup.string().required('Payout Method is required'),
-  bankName: Yup.string().required('Bank Name is required'),
+  payoutMethodMeta: Yup.mixed().required(),
+});
+
+export const bankPayoutMethodMetaValidationSchema = Yup.object().shape({
+  bankId: Yup.string().required('Bank name is required'),
+  accountNumber: Yup.string().required('Account number is required'),
 });

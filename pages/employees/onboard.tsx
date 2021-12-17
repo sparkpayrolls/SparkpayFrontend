@@ -1,37 +1,37 @@
+import { EmployeeOnboardingForm } from '@/components/Employee/onboardingform.component';
+import { EmployeeOnboarding } from '@/components/types';
+import { FormikHelpers } from 'formik';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useEffect } from 'react';
-import { Button } from '../../src/components/Button/Button.component';
-import { Input } from '../../src/components/Input/Input.component';
-import { Formik, FormikProps } from 'formik';
-import { useAppSelector, useAppDispatch } from 'src/redux/hooks';
-import { getCountries } from 'src/redux/slices/countries/countries.slice';
-import { SelectInput } from '../../src/components/Input/seletct-input';
-import { EmployeeOnboardingValidationSchema } from 'src/helpers/validation';
-import { EmployeeOnboarding } from '@/components/types';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import { $api } from 'src/api';
+import { HttpError } from 'src/api/repo/http.error';
 
 const EmployeeOnboard: NextPage = () => {
-  const { countries } = useAppSelector((state) => state);
-  const dispatch = useAppDispatch();
+  const router = useRouter();
 
-  const paymentOptions = [
-    { name: 'Bank', id: 'bank' },
-    { name: 'Card', id: 'card' },
-    { name: 'Wallet', id: 'wallet' },
-    { name: 'Crypto', id: 'crypto' },
-  ];
+  const token = (router.query.code as string) || ' ';
 
-  const BankNames = [
-    { name: 'First Bank Of Nigeria', id: 'FBN' },
-    { name: 'GT Bank Plc', id: 'GTB' },
-    { name: 'United Bank for Africa', id: 'UBA' },
-    { name: 'Access Bank', id: 'Access' },
-    { name: 'Sterling Bank', id: 'Sterling' },
-  ];
-
-  useEffect(() => {
-    getCountries(dispatch);
-  }, [dispatch]);
+  const handleSugmit = async (
+    values: EmployeeOnboarding,
+    helpers: FormikHelpers<EmployeeOnboarding>,
+  ) => {
+    try {
+      helpers.setSubmitting(true);
+      await $api.employee.completeEmployeeOnboarding({
+        token,
+        ...values,
+      });
+      toast.success('onboarding successful');
+      setTimeout(router.push, 1500, '/');
+    } catch (error) {
+      const err = error as HttpError;
+      toast.error(err.message);
+    } finally {
+      helpers.setSubmitting(false);
+    }
+  };
 
   return (
     <div className="employee-onboard">
@@ -46,97 +46,7 @@ const EmployeeOnboard: NextPage = () => {
           {' '}
           Enter your details to complete your onboarding{' '}
         </p>
-        <Formik
-          initialValues={{
-            country: '',
-            payoutMethod: '',
-            bankName: '',
-            accountNumber: '',
-          }}
-          validationSchema={EmployeeOnboardingValidationSchema}
-          onSubmit={(values) => {
-            console.log(values);
-          }}
-        >
-          {(props: FormikProps<EmployeeOnboarding>) => {
-            const {
-              handleChange,
-              handleSubmit,
-              handleBlur,
-              values,
-              errors,
-              touched,
-            } = props;
-            return (
-              <form
-                onSubmit={handleSubmit}
-                className="create-organization-form"
-                autoComplete="off"
-              >
-                <div className="employee-onboard__form-input-section">
-                  <div className="employee-onboard__form-grid">
-                    <SelectInput
-                      options={countries}
-                      displayValue="name"
-                      actualValue="id"
-                      name="country"
-                      value={values.country}
-                      label="Country of Origin"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      loading={!countries.length}
-                      error={(touched.country && errors.country) || ''}
-                    />
-                  </div>
-
-                  <SelectInput
-                    options={paymentOptions}
-                    displayValue="name"
-                    actualValue="id"
-                    name="payoutMethod"
-                    value={values.payoutMethod}
-                    label="Payout Method"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    loading={!paymentOptions.length}
-                    error={(touched.payoutMethod && errors.payoutMethod) || ''}
-                  />
-
-                  <SelectInput
-                    options={BankNames}
-                    displayValue="name"
-                    actualValue="id"
-                    name="bankName"
-                    value={values.bankName}
-                    label="Bank Name"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    loading={!BankNames.length}
-                    error={(touched.bankName && errors.bankName) || ''}
-                  />
-                  <Input
-                    type="tel"
-                    label="Account Number"
-                    placeholder="account number"
-                    value={values.accountNumber}
-                    name="accountNumber"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    hasError={errors.accountNumber && touched.accountNumber}
-                    error={errors.accountNumber}
-                  />
-                </div>
-                <Button
-                  label="Submit"
-                  type="submit"
-                  onClick={() => {}}
-                  className="employee-onboard__submit-btn"
-                  primary
-                />
-              </form>
-            );
-          }}
-        </Formik>
+        <EmployeeOnboardingForm onSubmit={handleSugmit} />
         <div className="employee-onboard__sign-up">
           <p className="employee-onboard__sign-up-text">
             Please ensure your details are correct before submitting.
