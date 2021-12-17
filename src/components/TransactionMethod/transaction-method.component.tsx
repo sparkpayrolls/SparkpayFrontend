@@ -17,9 +17,9 @@ import { ITransactionMethod } from '../types';
   }
   if (new RegExp('^bank$', 'gi').test(method)) {
     return <Image src={bank} alt="" className="bank-svg" />;
-   }
-   
-   return null;
+  }
+
+  return null;
 };
 
 export const TransactionMethod = (props: ITransactionMethod) => {

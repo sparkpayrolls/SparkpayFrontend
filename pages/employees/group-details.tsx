@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-
 import removeicon from '../../public/svgs/remove-icon.svg';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import addicon from '../../public/svgs/add-icon.svg';

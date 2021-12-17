@@ -6,21 +6,25 @@
     border: 1px solid #f4f5f6;
     width: 1000px;
   }
+  &__back-icon {
+    cursor: pointer;
+    margin: 0;
+  }
   &__employee-details-settings {
     display: flex;
     justify-content: space-between;
-    // padding-top: 2.6rem;
   }
   &__employee-details-header {
     display: flex;
     grid-column-gap: 1.5rem;
   }
   &__employee-header {
-    font-style: normal;
     font-weight: 600;
     font-size: 1.75rem;
     line-height: 2rem;
+    letter-spacing: -0.01em;
     color: #0e347e;
+    margin-top: .6rem;
   }
   &__employee-button {
     width: 8.5rem;
@@ -33,7 +37,7 @@
     letter-spacing: -0.01em;
     color: #1d4ed8;
     border: none;
-    margin-top: 25px;
+    margin-bottom: 1rem;
     cursor: pointer;
   }
 

@@ -1,10 +1,25 @@
 import type { NextPage } from 'next';
-
 import Image from 'next/image';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
-
 import BackIcon from '../../public/svgs/backicon.svg';
+
+export const SinglePayroll = ({
+  title,
+  details,
+}: {
+  title: string;
+  details: string;
+}) => {
+  return (
+    <div className="payroll-details-section__single-details">
+      <div>
+        <p className="employee-details__employee-details-text">{title}</p>
+        <p className="employee-details__employee-details-text-one">{details}</p>
+      </div>
+    </div>
+  );
+};
 
 const EmployeeDetails: NextPage = () => {
   return (
@@ -12,10 +27,10 @@ const EmployeeDetails: NextPage = () => {
       <div className="employee-details">
         <div className=" employee-details__employee-details-settings">
           <div className="employee-details__employee-details-header">
-            <Image src={BackIcon} alt="back-icon" />
-            <p className="employee-details__employee-header">
+            <Image src={BackIcon} alt="back-icon" className="employee-details__back-icon"/>
+            <h5 className="employee-details__employee-header">
               Employees Details
-            </p>
+            </h5>
           </div>
           <button className="employee-details__employee-button">
             Edit Details
@@ -24,88 +39,44 @@ const EmployeeDetails: NextPage = () => {
         <div className="employee-details__employee-settings-details">
           <div className="employee-details__employee-settings-flex">
             <div>
-              <p className="employee-details__employee-details-text">Name</p>
-              <p className="employee-details__employee-details-text-one">
-                Esther Howard
-              </p>
+              <SinglePayroll title="Name" details="Esther Howard" />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Email Address
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                estherhoward@gmail.com
-              </p>
+              <SinglePayroll
+                title="Email Address"
+                details="estherhoward@gmail.com"
+              />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">Group</p>
-              <p className="employee-details__employee-details-text-one">
-                Payroll group 1
-              </p>
+              <SinglePayroll title="Group" details=" Payroll group 1" />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Dated Created
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                July 20, 2021{' '}
-              </p>
+              <SinglePayroll title=" Date Created" details="July 20, 2021" />
             </div>
           </div>
           <hr />
           <div className="employee-details__employee-settings-flex">
             <div>
-              <p className="employee-details__employee-details-text">
-                Salary Amount
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                ₦ 210,000
-              </p>
+              <SinglePayroll title="Salary Amount" details="₦ 210,000" />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Payment Method
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                Bank Account
-              </p>
-              <p className="employee-details__employee-details-text-one"></p>
+              <SinglePayroll title="Payment Method" details="Bank Account" />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Bank Name
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                First Bank Nigeria
-              </p>
+              <SinglePayroll title="Bank Name" details=" First Bank Nigeria" />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Account Number
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                0033000099
-              </p>
+              <SinglePayroll title="Account Number" details="  0033000099" />
             </div>
           </div>
           <hr />
 
           <div className="employee-details__employee-settings-flex">
             <div>
-              <p className="employee-details__employee-details-text">
-                Resident Country
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                Nigeria
-              </p>
+              <SinglePayroll title="Resident Country" details="Nigeria" />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Country Of Origin
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                Nigeria
-              </p>
+              <SinglePayroll title="Country of Origin" details="Nigeria" />
             </div>
           </div>
           <hr />
@@ -116,3 +87,4 @@ const EmployeeDetails: NextPage = () => {
 };
 
 export default withAuth(EmployeeDetails);
+
