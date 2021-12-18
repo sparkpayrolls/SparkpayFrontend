@@ -1,21 +1,50 @@
 import type { NextPage } from 'next';
-
+import { useState } from 'react';
 import Image from 'next/image';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
-
 import BackIcon from '../../public/svgs/backicon.svg';
 
+export const SingleDetail = ({
+  title,
+  details,
+}: {
+  title: string;
+  details: string;
+}) => {
+  return (
+    <div className="employee-details-section__single-details">
+      <div>
+        <p className="employee-details__employee-details-text">{title}</p>
+        <p className="employee-details__employee-details-text-one">{details}</p>
+      </div>
+    </div>
+  );
+};
+
 const EmployeeDetails: NextPage = () => {
+  const [employee] = useState({
+    name: 'Esther Howard',
+    email: 'estherhoward@gmail.com',
+    group: 'Payroll group 1',
+    date: 'July 20, 2021 ',
+    salary: '₦ 210,000',
+    paymentMethodd: 'Bank Account',
+    bankName: 'First Bank Nigeria',
+    accountNumber: '0033000099',
+    residentCountry: 'Nigeria',
+    countryOrigin: 'Nigeria'
+  },
+   );
   return (
     <DashboardLayout pageTitle="Employee Details">
       <div className="employee-details">
         <div className=" employee-details__employee-details-settings">
           <div className="employee-details__employee-details-header">
-            <Image src={BackIcon} alt="back-icon" />
-            <p className="employee-details__employee-header">
+            <Image src={BackIcon} alt="back-icon" className="employee-details__back-icon"/>
+            <h5 className="employee-details__employee-header">
               Employees Details
-            </p>
+            </h5>
           </div>
           <button className="employee-details__employee-button">
             Edit Details
@@ -24,88 +53,44 @@ const EmployeeDetails: NextPage = () => {
         <div className="employee-details__employee-settings-details">
           <div className="employee-details__employee-settings-flex">
             <div>
-              <p className="employee-details__employee-details-text">Name</p>
-              <p className="employee-details__employee-details-text-one">
-                Esther Howard
-              </p>
+              <SingleDetail title="Name" details={employee.name} />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Email Address
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                estherhoward@gmail.com
-              </p>
+              <SingleDetail
+                title="Email Address"
+                details={employee.email}
+              />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">Group</p>
-              <p className="employee-details__employee-details-text-one">
-                Payroll group 1
-              </p>
+              <SingleDetail title="Name" details={employee.group} />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Dated Created
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                July 20, 2021{' '}
-              </p>
+              <SingleDetail title="Date Created" details={employee.date} />
             </div>
           </div>
           <hr />
           <div className="employee-details__employee-settings-flex">
             <div>
-              <p className="employee-details__employee-details-text">
-                Salary Amount
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                ₦ 210,000
-              </p>
+              <SingleDetail title="Salary Amount" details={employee.salary} />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Payment Method
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                Bank Account
-              </p>
-              <p className="employee-details__employee-details-text-one"></p>
+              <SingleDetail title="Payment Method" details={employee.paymentMethodd} />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Bank Name
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                First Bank Nigeria
-              </p>
+              <SingleDetail title="Bank Name" details={employee.bankName} />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Account Number
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                0033000099
-              </p>
+              <SingleDetail title="Account Number" details={employee.accountNumber} />
             </div>
           </div>
           <hr />
 
           <div className="employee-details__employee-settings-flex">
             <div>
-              <p className="employee-details__employee-details-text">
-                Resident Country
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                Nigeria
-              </p>
+              <SingleDetail title="Resident Country" details={employee.residentCountry} />
             </div>
             <div>
-              <p className="employee-details__employee-details-text">
-                Country Of Origin
-              </p>
-              <p className="employee-details__employee-details-text-one">
-                Nigeria
-              </p>
+              <SingleDetail title="Country of Origin" details={employee.countryOrigin} />
             </div>
           </div>
           <hr />
