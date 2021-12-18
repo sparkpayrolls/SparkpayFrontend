@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import { useState } from 'react';
 import Image from 'next/image';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
@@ -22,6 +23,19 @@ export const SingleDetail = ({
 };
 
 const EmployeeDetails: NextPage = () => {
+  const [employee] = useState({
+    name: 'Esther Howard',
+    email: 'estherhoward@gmail.com',
+    group: 'Payroll group 1',
+    date: 'July 20, 2021 ',
+    salary: '₦ 210,000',
+    paymentMethodd: 'Bank Account',
+    bankName: 'First Bank Nigeria',
+    accountNumber: '0033000099',
+    residentCountry: 'Nigeria',
+    countryOrigin: 'Nigeria'
+  },
+   );
   return (
     <DashboardLayout pageTitle="Employee Details">
       <div className="employee-details">
@@ -39,44 +53,44 @@ const EmployeeDetails: NextPage = () => {
         <div className="employee-details__employee-settings-details">
           <div className="employee-details__employee-settings-flex">
             <div>
-              <SingleDetail title="Name" details="Esther Howard" />
+              <SingleDetail title="Name" details={employee.name} />
             </div>
             <div>
               <SingleDetail
                 title="Email Address"
-                details="estherhoward@gmail.com"
+                details={employee.email}
               />
             </div>
             <div>
-              <SingleDetail title="Group" details=" Payroll group 1" />
+              <SingleDetail title="Name" details={employee.group} />
             </div>
             <div>
-              <SingleDetail title=" Date Created" details="July 20, 2021" />
+              <SingleDetail title="Date Created" details={employee.date} />
             </div>
           </div>
           <hr />
           <div className="employee-details__employee-settings-flex">
             <div>
-              <SingleDetail title="Salary Amount" details="₦ 210,000" />
+              <SingleDetail title="Salary Amount" details={employee.salary} />
             </div>
             <div>
-              <SingleDetail title="Payment Method" details="Bank Account" />
+              <SingleDetail title="Payment Method" details={employee.paymentMethodd} />
             </div>
             <div>
-              <SingleDetail title="Bank Name" details=" First Bank Nigeria" />
+              <SingleDetail title="Bank Name" details={employee.bankName} />
             </div>
             <div>
-              <SingleDetail title="Account Number" details="  0033000099" />
+              <SingleDetail title="Account Number" details={employee.accountNumber} />
             </div>
           </div>
           <hr />
 
           <div className="employee-details__employee-settings-flex">
             <div>
-              <SingleDetail title="Resident Country" details="Nigeria" />
+              <SingleDetail title="Resident Country" details={employee.residentCountry} />
             </div>
             <div>
-              <SingleDetail title="Country of Origin" details="Nigeria" />
+              <SingleDetail title="Country of Origin" details={employee.countryOrigin} />
             </div>
           </div>
           <hr />
@@ -87,4 +101,3 @@ const EmployeeDetails: NextPage = () => {
 };
 
 export default withAuth(EmployeeDetails);
-
