@@ -33,15 +33,18 @@ const EmployeeDetails: NextPage = () => {
     bankName: 'First Bank Nigeria',
     accountNumber: '0033000099',
     residentCountry: 'Nigeria',
-    countryOrigin: 'Nigeria'
-  },
-   );
+    countryOrigin: 'Nigeria',
+  });
   return (
     <DashboardLayout pageTitle="Employee Details">
       <div className="employee-details">
         <div className=" employee-details__employee-details-settings">
           <div className="employee-details__employee-details-header">
-            <Image src={BackIcon} alt="back-icon" className="employee-details__back-icon"/>
+            <Image
+              src={BackIcon}
+              alt="back-icon"
+              className="employee-details__back-icon"
+            />
             <h5 className="employee-details__employee-header">
               Employees Details
             </h5>
@@ -56,10 +59,7 @@ const EmployeeDetails: NextPage = () => {
               <SingleDetail title="Name" details={employee.name} />
             </div>
             <div>
-              <SingleDetail
-                title="Email Address"
-                details={employee.email}
-              />
+              <SingleDetail title="Email Address" details={employee.email} />
             </div>
             <div>
               <SingleDetail title="Name" details={employee.group} />
@@ -74,23 +74,35 @@ const EmployeeDetails: NextPage = () => {
               <SingleDetail title="Salary Amount" details={employee.salary} />
             </div>
             <div>
-              <SingleDetail title="Payment Method" details={employee.paymentMethodd} />
+              <SingleDetail
+                title="Payment Method"
+                details={employee.paymentMethodd}
+              />
             </div>
             <div>
               <SingleDetail title="Bank Name" details={employee.bankName} />
             </div>
             <div>
-              <SingleDetail title="Account Number" details={employee.accountNumber} />
+              <SingleDetail
+                title="Account Number"
+                details={employee.accountNumber}
+              />
             </div>
           </div>
           <hr />
 
           <div className="employee-details__employee-settings-flex">
             <div>
-              <SingleDetail title="Resident Country" details={employee.residentCountry} />
+              <SingleDetail
+                title="Resident Country"
+                details={employee.residentCountry}
+              />
             </div>
             <div>
-              <SingleDetail title="Country of Origin" details={employee.countryOrigin} />
+              <SingleDetail
+                title="Country of Origin"
+                details={employee.countryOrigin}
+              />
             </div>
           </div>
           <hr />
