@@ -54,7 +54,7 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
       } finally {
         setLoading(false);
       }
-    }, 500),
+    }, 1000),
     [],
   );
 
@@ -66,9 +66,15 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
     getBanks();
   }, [getBanks]);
 
+  useEffect(() => {
+    if (props.initialValues && !accountName) {
+      setValues({ ...props.initialValues });
+    }
+  }, [props.initialValues, accountName]);
+
   return (
     <Formik
-      initialValues={{ bankId: '', accountNumber: '' }}
+      initialValues={props.initialValues || vals}
       onSubmit={() => {}}
       validationSchema={bankPayoutMethodMetaValidationSchema}
     >
@@ -87,6 +93,7 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
                 setValues({ ...vals, bankId: event.target.value });
                 handleChange(event);
               }}
+              selected={{ id: values.bankId }}
               onBlur={handleBlur}
               loading={loading || !banks.length}
               error={((error || touched.bankId) && errors.bankId) || ''}

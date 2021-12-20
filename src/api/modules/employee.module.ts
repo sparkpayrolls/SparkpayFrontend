@@ -41,4 +41,25 @@ export class EmployeeModule extends HttpRepository {
 
     return data;
   }
+
+  async getSingleEmployee(id: string) {
+    const { data } = await this.get<Employee>(`/employees/${id}`);
+
+    return data;
+  }
+
+  async getSingleEmployeeByToken(token: string) {
+    const { data } = await this.get<Employee>(`/employees/onboard/${token}`);
+
+    return data;
+  }
+
+  async resendOnboardingLink(id: string | string[]) {
+    const query = this.parseQueryObject({ employee: id });
+    const { data } = await this.post<Employee[]>(
+      `/employees/onboard/resend${query}`,
+    );
+
+    return data;
+  }
 }

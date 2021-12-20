@@ -17,6 +17,15 @@
   &__employee-details-header {
     display: flex;
     grid-column-gap: 1.5rem;
+
+    a {
+      display: flex;
+      align-items: center;
+    }
+  }
+  &__not-found {
+    position: relative;
+    height: calc(100vh - 126px);
   }
   &__employee-header {
     font-weight: 600;
@@ -47,7 +56,7 @@
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid #eaedf4;
-    margin-bottom: 10.1rem;
+    margin-bottom: calc(100vh - 35rem - 126px);
   }
   &__employee-settings-flex {
     padding-left: 1.5rem;

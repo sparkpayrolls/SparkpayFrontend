@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: calc(100vh - 7rem);
   margin: 3rem 0 4rem;
 
   &__section {
@@ -12,6 +12,14 @@
     @media screen and(min-width: 1024px) {
       width: 30%;
     }
+  }
+
+  &__not-found {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
   }
 
   &__title {
@@ -79,4 +87,3 @@
     cursor: pointer;
   }
 }
-

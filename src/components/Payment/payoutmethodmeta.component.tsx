@@ -7,7 +7,12 @@ export const PayoutMethodMeta = (props: IPayoutMethodMeta) => {
   switch (method?.name) {
     case 'Bank Transfer':
       return (
-        <BankPayoutMethodMeta method={method} error={error} setMeta={setMeta} />
+        <BankPayoutMethodMeta
+          initialValues={props.initialValues as any}
+          method={method}
+          error={error}
+          setMeta={setMeta}
+        />
       );
     default:
       return null;

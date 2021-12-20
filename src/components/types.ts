@@ -199,6 +199,7 @@ export type IEmployeeTable = {
   loading: boolean;
   administrator: Administrator;
   onDelete(id: string | string[]): any;
+  onSendOnboardingLink(id: string | string[]): any;
   onStatusToggle(
     action: 'Activate' | 'Delete' | 'Deactivate',
   ): (id: string | string[]) => any;
@@ -243,7 +244,7 @@ export type CreateOrganization = {
 export type EmployeeOnboarding = {
   country: string;
   payoutMethod: string;
-  payoutMethodMeta?: unknown;
+  payoutMethodMeta: Record<string, any>;
 };
 
 /** Wallet Billing */
@@ -491,12 +492,13 @@ export type IText = Record<string, unknown> & {
 export type IPayoutMethodMeta = {
   method: PayoutMethod | null;
   error?: boolean;
-  setMeta(meta: unknown): any;
-  meta?: unknown;
+  setMeta(meta: Record<string, any>): any;
+  initialValues: Record<string, any>;
 };
 
 export type IBankPayoutMethodMeta = {
   method: PayoutMethod;
+  initialValues: { bankId: string; accountNumber: string };
   error?: boolean;
   setMeta(meta: unknown): any;
 };
@@ -506,4 +508,6 @@ export type IEmployeeOnboardingForm = {
     values: EmployeeOnboarding,
     formikHelpers: FormikHelpers<EmployeeOnboarding>,
   ): any;
+  initialValue: EmployeeOnboarding;
+  loading?: boolean;
 };

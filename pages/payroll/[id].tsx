@@ -93,7 +93,7 @@ const PayDetails: NextPage = () => {
       setPayroll(payroll);
     } catch (error) {
       const err = error as HttpError;
-      if (err.status === 400) {
+      if (err.status === 404) {
         setPayrollNotFound(true);
       }
     } finally {
