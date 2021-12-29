@@ -180,6 +180,19 @@ export type IOrganizationTable = {
   deleteOrganisation(id: string): any;
   loading?: boolean;
 };
+export type EmployeeListTable = {
+   employees: Employee[];
+  paginationMeta: PaginationMeta;
+  getEmployees: IGetEmployees;
+  onFilter(): any;
+  loading: boolean;
+  administrator: Administrator;
+  onDelete(id: string | string[]): any;
+  onStatusToggle(
+    action:'Delete',
+  ): (id: string | string[]) => any;
+};
+
 
 export type IGetEmployees = (
   page?: number,
