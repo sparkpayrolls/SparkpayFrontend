@@ -80,6 +80,9 @@ export const SelectInput = (props: ISelectInput) => {
     'select-input--has-error': !!props.error,
     'select-input--drop-top': props.dropTop,
   });
+  const selectedValue = props.options.find(
+    (o) => o[props.actualValue] === selected[props.actualValue],
+  );
 
   const handleOptionClick = (option: ISelectInputOptionItem) => {
     setSelected(option);
@@ -175,7 +178,8 @@ export const SelectInput = (props: ISelectInput) => {
           />
         </span>
         <span className="select-input__placeholder">
-          {(selected[props.displayValue] as string) || 'Select'}
+          {(selectedValue && (selectedValue[props.displayValue] as string)) ||
+            'Select'}
         </span>
         {!loading && (
           <span className="select-input__svg">

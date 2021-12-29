@@ -55,6 +55,19 @@ export const EmployeeTab = (props: IEmployeeTab) => {
     }
   };
 
+  const onSendOnboardingLink = async (id: string | string[]) => {
+    try {
+      setIsLoading(true);
+      await $api.employee.resendOnboardingLink(id);
+      toast.success(`onboarding link resent successfully`);
+    } catch (error) {
+      const err = error as HttpError;
+      toast.error(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const onFilter = () => {
     NiceModal.show(EmployeeFilterModal, {
       filter,
@@ -81,6 +94,7 @@ export const EmployeeTab = (props: IEmployeeTab) => {
           administrator={administrator as Administrator}
           onDelete={onDelete}
           onStatusToggle={onStatusToggle}
+          onSendOnboardingLink={onSendOnboardingLink}
         />
       </div>
     </>

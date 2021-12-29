@@ -3,7 +3,7 @@ import { Util } from 'src/helpers/util';
 import withPermission from 'src/helpers/HOC/withPermission';
 import { DateTimeChip } from '../DateTimeChip/date-time-chip';
 import { StatusChip } from '../StatusChip/status-chip.component';
-import { KebabMenu } from '../KebabMenu/KebabMenu.component';
+import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IEmployeeTable } from '../types';
 import { Table, TR } from './Table.component';
 
@@ -17,12 +17,17 @@ export const EmployeeTable = (props: IEmployeeTable) => {
     onStatusToggle,
     onDelete,
     administrator,
+    onSendOnboardingLink,
   } = props;
   const [selected, setSelected] = useState<string[]>([]);
   const allChecked =
     !!selected.length &&
     employees.every((employee) => selected.includes(employee.id));
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
+  const hasWriteAccess = Util.canActivate(
+    [['Employee', 'write']],
+    administrator,
+  );
 
   const kebabHandler = (action: 'Delete' | 'Activate' | 'Deactivate') => {
     switch (action) {
@@ -47,10 +52,15 @@ export const EmployeeTable = (props: IEmployeeTable) => {
   };
 
   const onCheckAll = () => {
+    if (employees.every((e) => selected.includes(e.id))) {
+      setSelected([]);
+      return;
+    }
+
     setSelected(employees.map((e) => e.id));
   };
 
-  const kebabMenu = Util.canActivate([['Employee', 'write']], administrator)
+  const kebabMenu = hasWriteAccess
     ? [
         { action: () => kebabHandler('Delete')(selected), value: 'Delete' },
         {
@@ -61,20 +71,40 @@ export const EmployeeTable = (props: IEmployeeTable) => {
           action: () => kebabHandler('Deactivate')(selected),
           value: 'Deactivate',
         },
+        {
+          action: () => onSendOnboardingLink(selected),
+          value: 'Resend onboarding link',
+        },
       ]
     : undefined;
 
-  const employeeKebabMenu = (id: string, status: string) => [
-    {
-      action: () => kebabHandler('Delete')(id),
-      value: 'Delete',
-    },
-    {
-      action: () =>
-        kebabHandler(status === 'active' ? 'Deactivate' : 'Activate')(id),
-      value: status === 'active' ? 'Deactivate' : 'Activate',
-    },
-  ];
+  const employeeKebabMenu = (id: string, status: string) => {
+    const menu: IKebabItem[] = [
+      {
+        href: `/employees/${id}`,
+        value: 'View',
+      },
+    ];
+    if (hasWriteAccess) {
+      menu.push(
+        {
+          action: () => kebabHandler('Delete')(id),
+          value: 'Delete',
+        },
+        {
+          action: () =>
+            kebabHandler(status === 'active' ? 'Deactivate' : 'Activate')(id),
+          value: status === 'active' ? 'Deactivate' : 'Activate',
+        },
+        {
+          action: () => onSendOnboardingLink(id),
+          value: 'Resend onboarding link',
+        },
+      );
+    }
+
+    return menu;
+  };
 
   const KebabWithPermissions = withPermission(KebabMenu, ['Employee', 'write']);
 

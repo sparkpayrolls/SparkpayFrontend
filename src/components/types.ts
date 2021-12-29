@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { NiceModalHandler } from '@ebay/nice-modal-react';
+import { FormikHelpers } from 'formik';
 import { Moment } from 'moment';
 import { NextRouter } from 'next/router';
 import {
@@ -23,6 +24,7 @@ import {
   PaginationMeta,
   PaymentMethod,
   PaymentMethodName,
+  PayoutMethod,
   Payroll,
   PayrollStatus,
   PermissionGroup,
@@ -210,6 +212,7 @@ export type IEmployeeTable = {
   loading: boolean;
   administrator: Administrator;
   onDelete(id: string | string[]): any;
+  onSendOnboardingLink(id: string | string[]): any;
   onStatusToggle(
     action: 'Activate' | 'Delete' | 'Deactivate',
   ): (id: string | string[]) => any;
@@ -248,6 +251,13 @@ export type CreateOrganization = {
   email: string;
   phonenumber: string;
   country: string;
+};
+
+/** Employee Onboard */
+export type EmployeeOnboarding = {
+  country: string;
+  payoutMethod: string;
+  payoutMethodMeta: Record<string, any>;
 };
 
 /** Wallet Billing */
@@ -496,4 +506,27 @@ export type IText = Record<string, unknown> & {
   element: 'span' | 'p';
   text: string;
   className?: string;
+};
+
+export type IPayoutMethodMeta = {
+  method: PayoutMethod | null;
+  error?: boolean;
+  setMeta(meta: Record<string, any>): any;
+  initialValues: Record<string, any>;
+};
+
+export type IBankPayoutMethodMeta = {
+  method: PayoutMethod;
+  initialValues: { bankId: string; accountNumber: string };
+  error?: boolean;
+  setMeta(meta: unknown): any;
+};
+
+export type IEmployeeOnboardingForm = {
+  onSubmit(
+    values: EmployeeOnboarding,
+    formikHelpers: FormikHelpers<EmployeeOnboarding>,
+  ): any;
+  initialValue: EmployeeOnboarding;
+  loading?: boolean;
 };

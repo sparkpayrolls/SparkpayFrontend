@@ -11,6 +11,7 @@ import { UserModule } from './modules/user.profile';
 import { PayrollModule } from './modules/payroll.module';
 import { PaymentModule } from './modules/payment.module';
 import { AuditModule } from './modules/audit.module';
+import { PayoutModule } from './modules/payout.module';
 
 export class $api {
   static $axios = axios.create({
@@ -34,6 +35,8 @@ export class $api {
   static payroll = new PayrollModule(this.$axios);
 
   static payment = new PaymentModule(this.$axios);
+
+  static payout = new PayoutModule(this.$axios);
 
   static audit = new AuditModule(this.$axios);
 

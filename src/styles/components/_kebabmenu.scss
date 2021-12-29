@@ -20,7 +20,7 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
     transform-origin: 100% 0;
     margin: 0;
     padding: 4px;
-    width: 147px;
+    min-width: 147px;
 
     li {
       display: block;
