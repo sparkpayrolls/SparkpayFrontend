@@ -4,7 +4,6 @@ import { DatePicker } from '@/components/Input/date-picker.component';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 import { WalletBalanceChip } from '@/components/WalletBalanceChip/wallet-balance-chip.component';
 import { Formik } from 'formik';
-import { SelectInput } from '@/components/Input/seletct-input';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { PayrollSummary, ProcessPayrollPayload } from 'src/api/types';
@@ -18,6 +17,9 @@ import { savePayrollValidationSchema } from 'src/helpers/validation';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { stringifyUrl } from 'query-string';
+import { Label } from '@/components/Shared/label.component';
+import { Select } from 'antd';
+import { InputError } from '@/components/Shared/input-error.component';
 
 const PayrollSummaryPage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
@@ -248,9 +250,9 @@ const PayrollSummaryPage: NextPage = () => {
               const {
                 handleSubmit,
                 isSubmitting,
-                handleChange,
                 handleBlur,
                 setValues,
+                setTouched,
                 values,
                 errors,
                 touched,
@@ -286,33 +288,40 @@ const PayrollSummaryPage: NextPage = () => {
                   </div>
 
                   <div className="payroll-summary__form__input">
-                    <SelectInput
-                      label="Prorate Month"
-                      loading={loading || isSubmitting}
-                      options={[
-                        { value: 'January' },
-                        { value: 'February' },
-                        { value: 'March' },
-                        { value: 'April' },
-                        { value: 'May' },
-                        { value: 'June' },
-                        { value: 'July' },
-                        { value: 'August' },
-                        { value: 'September' },
-                        { value: 'October' },
-                        { value: 'November' },
-                        { value: 'December' },
-                      ]}
-                      selected={{ value: values.proRateMonth }}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      actualValue="value"
-                      displayValue="value"
-                      name="proRateMonth"
-                      error={
-                        (touched.proRateMonth && errors.proRateMonth) || ''
+                    <Label htmlFor="proratemonth">Prorate Month</Label>
+                    <Select
+                      id="proratemonth"
+                      className={
+                        (touched.proRateMonth &&
+                          !!errors.proRateMonth &&
+                          'has-error') ||
+                        ''
                       }
-                    />
+                      onBlur={() =>
+                        setTouched({ ...touched, proRateMonth: true }, true)
+                      }
+                      onChange={(val: string) =>
+                        setValues({ ...values, proRateMonth: val }, true)
+                      }
+                      optionFilterProp="children"
+                      placeholder="Select Prorate Month"
+                      showSearch
+                      loading={loading || isSubmitting}
+                      defaultValue={values.proRateMonth}
+                    >
+                      {Util.prorateMonths().map((month) => {
+                        const { Option } = Select;
+
+                        return (
+                          <Option value={month} key={month}>
+                            {month}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                    <InputError>
+                      {touched.proRateMonth && errors.proRateMonth}
+                    </InputError>
                   </div>
 
                   <input type="submit" value="submit" hidden ref={formRef} />
