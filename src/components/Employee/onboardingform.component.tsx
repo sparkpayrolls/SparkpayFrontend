@@ -1,3 +1,4 @@
+import { Select } from 'antd';
 import { Formik, FormikProps } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { $api } from 'src/api';
@@ -6,9 +7,10 @@ import { EmployeeOnboardingValidationSchema } from 'src/helpers/validation';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { getCountries } from 'src/redux/slices/countries/countries.slice';
 import { Button } from '../Button/Button.component';
-import { SelectInput } from '../Input/seletct-input';
 import { IF } from '../Misc/if.component';
 import { PayoutMethodMeta } from '../Payment/payoutmethodmeta.component';
+import { InputError } from '../Shared/input-error.component';
+import { Label } from '../Shared/label.component';
 import { EmployeeOnboarding, IEmployeeOnboardingForm } from '../types';
 
 export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
@@ -43,8 +45,6 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
   }, [getPayoutMethods]);
 
   useEffect(() => {
-    setCountry(initialValue.country);
-
     const payoutMethod = payoutMethods.find(
       (p) => p.id === initialValue.payoutMethod,
     );
@@ -52,6 +52,10 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
       setPayoutMethod(payoutMethod);
     }
   }, [initialValue, payoutMethods]);
+
+  useEffect(() => {
+    setCountry(initialValue.country);
+  }, [initialValue]);
 
   return (
     <Formik
@@ -61,9 +65,8 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
     >
       {(props: FormikProps<EmployeeOnboarding>) => {
         const {
-          handleChange,
           handleSubmit,
-          handleBlur,
+          setTouched,
           values,
           errors,
           touched,
@@ -79,43 +82,72 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
           >
             <div className="employee-onboard__form-input-section">
               <div className="employee-onboard__form-grid">
-                <SelectInput
-                  options={countries}
-                  displayValue="name"
-                  actualValue="id"
-                  name="country"
-                  value={values.country}
-                  label="Country"
-                  onChange={(event) => {
-                    setCountry(event.target.value);
-                    handleChange(event);
+                <Label htmlFor="country">Country</Label>
+                <Select
+                  id="country"
+                  className={
+                    (touched.country && !!errors.country && 'has-error') || ''
+                  }
+                  onBlur={() => setTouched({ ...touched, country: true }, true)}
+                  onChange={(val: string) => {
+                    setCountry(val);
+                    setValues({ ...values, country: val }, true);
                   }}
-                  selected={{ id: values.country }}
-                  onBlur={handleBlur}
-                  loading={!countries.length || loading}
-                  error={(touched.country && errors.country) || ''}
-                />
+                  optionFilterProp="children"
+                  placeholder="Select Country"
+                  showSearch
+                  disabled={!countries.length}
+                  loading={!countries.length}
+                >
+                  {countries.map((country) => {
+                    const { Option } = Select;
+
+                    return (
+                      <Option value={country.id} key={country.id}>
+                        {country.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <InputError>{touched.country && errors.country}</InputError>
               </div>
 
-              <SelectInput
-                options={payoutMethods}
-                displayValue="name"
-                actualValue="id"
-                name="payoutMethod"
-                value={values.payoutMethod}
-                label="Payout Method"
-                selected={{ id: values.payoutMethod }}
-                onChange={(event) => {
-                  const selected = payoutMethods.find(
-                    (p) => p.id === event.target.value,
-                  );
-                  setPayoutMethod(selected ?? null);
-                  handleChange(event);
-                }}
-                onBlur={handleBlur}
-                loading={(!!country && !payoutMethods.length) || loading}
-                error={(touched.payoutMethod && errors.payoutMethod) || ''}
-              />
+              <div>
+                <Label htmlFor="payoutmethod">Payout Method</Label>
+                <Select
+                  id="payoutmethod"
+                  className={
+                    (touched.payoutMethod &&
+                      !!errors.payoutMethod &&
+                      'has-error') ||
+                    ''
+                  }
+                  placeholder="Select Payout Method"
+                  onBlur={() =>
+                    setTouched({ ...touched, payoutMethod: true }, true)
+                  }
+                  onChange={(val: string) => {
+                    const selected = payoutMethods.find((p) => p.id === val);
+                    setPayoutMethod(selected ?? null);
+                    setValues({ ...values, payoutMethod: val }, true);
+                  }}
+                  optionFilterProp="children"
+                  showSearch
+                  disabled={!country || !payoutMethods.length}
+                  loading={(!!country && !payoutMethods.length) || loading}
+                >
+                  {payoutMethods.map((payoutMethod) => {
+                    const { Option } = Select;
+
+                    return (
+                      <Option value={payoutMethod.id} key={payoutMethod.id}>
+                        {payoutMethod.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <InputError>{touched.country && errors.country}</InputError>
+              </div>
               <IF condition={!!payoutMethod}>
                 <PayoutMethodMeta
                   method={payoutMethod}

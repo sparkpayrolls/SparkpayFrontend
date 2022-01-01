@@ -1,3 +1,4 @@
+import { Select } from 'antd';
 import { Formik } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { $api } from 'src/api';
@@ -5,7 +6,8 @@ import { Bank } from 'src/api/types';
 import { Util } from 'src/helpers/util';
 import { bankPayoutMethodMetaValidationSchema } from 'src/helpers/validation';
 import { Input } from '../Input/Input.component';
-import { SelectInput } from '../Input/seletct-input';
+import { InputError } from '../Shared/input-error.component';
+import { Label } from '../Shared/label.component';
 import { IBankPayoutMethodMeta } from '../types';
 
 export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
@@ -79,25 +81,47 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
       validationSchema={bankPayoutMethodMetaValidationSchema}
     >
       {(props) => {
-        const { values, handleBlur, handleChange, touched, errors } = props;
+        const {
+          values,
+          handleBlur,
+          handleChange,
+          touched,
+          errors,
+          setTouched,
+          setValues: setVals,
+        } = props;
         return (
           <>
-            <SelectInput
-              options={banks}
-              displayValue="name"
-              actualValue="id"
-              name="bankId"
-              value={values.bankId}
-              label="Bank Name"
-              onChange={(event) => {
-                setValues({ ...vals, bankId: event.target.value });
-                handleChange(event);
-              }}
-              selected={{ id: values.bankId }}
-              onBlur={handleBlur}
-              loading={loading || !banks.length}
-              error={((error || touched.bankId) && errors.bankId) || ''}
-            />
+            <div>
+              <Label htmlFor="banks">Bank Name</Label>
+              <Select
+                id="banks"
+                className={
+                  (touched.bankId && !!errors.bankId && 'has-error') || ''
+                }
+                placeholder="Select Bank Name"
+                onBlur={() => setTouched({ ...touched, bankId: true }, true)}
+                onChange={(val: string) => {
+                  setValues({ ...vals, bankId: val });
+                  setVals({ ...values, bankId: val }, true);
+                }}
+                optionFilterProp="children"
+                showSearch
+                disabled={!banks.length}
+                loading={loading}
+              >
+                {banks.map((bank) => {
+                  const { Option } = Select;
+
+                  return (
+                    <Option value={bank.id} key={bank.id}>
+                      {bank.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+              <InputError>{touched.bankId && errors.bankId}</InputError>
+            </div>
 
             <Input
               type="tel"
