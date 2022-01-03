@@ -2,6 +2,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
+import AutoCompleteForm from "../../src/components/autocompleteForm/autocompleteform"
+
 import { Util } from 'src/helpers/util';
 import {
   Administrator,
@@ -125,6 +127,9 @@ const WalletBilling: NextPage = () => {
           meta={transactionMeta}
           transactions={transactions}
         />
+
+<AutoCompleteForm/>
+
       </div>
     </DashboardLayout>
   );
