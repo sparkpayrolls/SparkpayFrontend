@@ -5,7 +5,6 @@ import React from 'react';
 import { Formik, FormikHelpers, FormikProps, FormikErrors } from 'formik';
 import { Button } from '../../src/components/Button/Button.component';
 import { Input } from '../../src/components/Input/Input.component';
-import { SelectInput } from '../../src/components/Input/seletct-input';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
 import Cookies from 'js-cookie';
@@ -17,6 +16,9 @@ import { useRouter } from 'next/router';
 import { signupValidationSchema } from 'src/helpers/validation';
 import { toast } from 'react-toastify';
 import { commitUser } from 'src/redux/slices/user/user.slice';
+import { Label } from '@/components/Shared/label.component';
+import { Select } from 'antd';
+import { InputError } from '@/components/Shared/input-error.component';
 
 interface ISignUpForm {
   firstname: string;
@@ -122,6 +124,8 @@ const CreateAccount: NextPage = () => {
               isSubmitting,
               setErrors,
               setSubmitting,
+              setTouched,
+              setValues,
             } = props;
             return (
               <form onSubmit={handleSubmit}>
@@ -178,19 +182,37 @@ const CreateAccount: NextPage = () => {
                     hasError={errors.email && touched.email}
                     error={errors.email}
                   />
+                  <div>
+                    <Label htmlFor="country">Select Country</Label>
+                    <Select
+                      id="country"
+                      className={
+                        (touched.country && !!errors.country && 'has-error') ||
+                        ''
+                      }
+                      onBlur={() =>
+                        setTouched({ ...touched, country: true }, true)
+                      }
+                      onChange={(val: string) =>
+                        setValues({ ...values, country: val }, true)
+                      }
+                      optionFilterProp="children"
+                      showSearch
+                      loading={!countries.length}
+                      disabled={!countries.length}
+                    >
+                      {countries.map((country) => {
+                        const { Option } = Select;
 
-                  <SelectInput
-                    options={countries}
-                    displayValue="name"
-                    actualValue="id"
-                    name="country"
-                    value={values.country}
-                    label="Select Country"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    loading={!countries.length}
-                    error={(touched.country && errors.country) || ''}
-                  />
+                        return (
+                          <Option value={country.id} key={country.id}>
+                            {country.name}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                    <InputError>{touched.country && errors.country}</InputError>
+                  </div>
 
                   <Input
                     type="password"

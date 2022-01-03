@@ -9,9 +9,11 @@ import { CreateOrganization } from '../types';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
-import { SelectInput } from '../Input/seletct-input';
 import { getCountries } from 'src/redux/slices/countries/countries.slice';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
+import { Label } from '../Shared/label.component';
+import { Select } from 'antd';
+import { InputError } from '../Shared/input-error.component';
 
 export const CreateOrgnizationModal = NiceModal.create(() => {
   return (
@@ -73,6 +75,8 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
           errors,
           touched,
           isSubmitting,
+          setTouched,
+          setValues,
         } = props;
         return (
           <form
@@ -123,18 +127,33 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
             </div>
 
             <div className="create-organization-form__section">
-              <SelectInput
-                options={countries}
-                displayValue="name"
-                actualValue="id"
-                name="country"
-                value={values.country}
-                label="Country"
-                onChange={handleChange}
-                onBlur={handleBlur}
+              <Label htmlFor="country">Country</Label>
+              <Select
+                id="country"
+                className={
+                  (touched.country && !!errors.country && 'has-error') || ''
+                }
+                onBlur={() => setTouched({ ...touched, country: true }, true)}
+                onChange={(val: string) =>
+                  setValues({ ...values, country: val }, true)
+                }
+                optionFilterProp="children"
+                placeholder="Select Country"
+                showSearch
+                disabled={!countries.length}
                 loading={!countries.length}
-                error={(touched.country && errors.country) || ''}
-              />
+              >
+                {countries.map((country) => {
+                  const { Option } = Select;
+
+                  return (
+                    <Option value={country.id} key={country.id}>
+                      {country.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+              <InputError>{touched.country && errors.country}</InputError>
             </div>
 
             <div className="form__submit-button">
