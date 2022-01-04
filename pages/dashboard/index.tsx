@@ -1,18 +1,88 @@
-import withAuth from 'src/helpers/HOC/withAuth';
 import { NextPage } from 'next';
-import Head from 'next/head';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
-// import { toast } from 'react-toastify';
+import withAuth from 'src/helpers/HOC/withAuth';
+import { CreateOrganisationButton } from '@/components/Button/create-organisation-button.component';
+import { useAppSelector } from 'src/redux/hooks';
+import { UserDashboard } from '@/components/dashboard/user-dashboard.component';
+import { OrganisationDashboard } from '@/components/dashboard/organisation-dashboard.component';
+import { useCallback, useState } from 'react';
+import { OrganisationDashboardData, UserDashboardData } from 'src/api/types';
+import { $api } from 'src/api';
 
 const Dashboard: NextPage = () => {
-  // const notify = () => toast.warning('Wow so easy !', { delay: 1000 });
+  const administrator = useAppSelector((state) => state.administrator);
+  const [loading, setLoading] = useState(false);
+  const [userDashboardData, setUserDashboardData] = useState<UserDashboardData>(
+    {
+      totalNumberOfCompanies: 0,
+      recentPayrolls: [],
+      totalNumberOfEmployees: 0,
+      totalNumberOfPayrolls: 0,
+    },
+  );
+  const [
+    organisationDashboardData,
+    setOrganisationDashboardData,
+  ] = useState<OrganisationDashboardData>({
+    recentTransactions: [],
+    totalNumberOfEmployees: 0,
+    totalNumberOfPayrolls: 0,
+    totalPayrollBurden: 0,
+  });
+
+  const getUserDashboardData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await $api.dashboard.getUserDashboardData();
+
+      setUserDashboardData(data);
+    } catch (error) {
+      // ...
+    } finally {
+      setLoading(false);
+    }
+  }, [setUserDashboardData]);
+
+  const getOrganisationDashboardData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await $api.dashboard.getCompanyDashboardData();
+
+      setOrganisationDashboardData(data);
+    } catch (error) {
+      // ...
+    } finally {
+      setLoading(false);
+    }
+  }, [setOrganisationDashboardData]);
+
   return (
-    <>
-      <Head>
-        <title>Log In</title>
-      </Head>
-      <DashboardLayout></DashboardLayout>
-    </>
+    <DashboardLayout pageTitle="Dashboard">
+      <div className="dashboard">
+        <div className="dashboard__top-bar">
+          <h2 className="dashboard__title">Dashboard</h2>
+
+          {!administrator && (
+            <CreateOrganisationButton onCreate={getUserDashboardData} />
+          )}
+        </div>
+
+        {!administrator ? (
+          <UserDashboard
+            getData={getUserDashboardData}
+            loading={loading}
+            data={userDashboardData}
+          />
+        ) : (
+          <OrganisationDashboard
+            getData={getOrganisationDashboardData}
+            loading={loading}
+            data={organisationDashboardData}
+            administrator={administrator}
+          />
+        )}
+      </div>
+    </DashboardLayout>
   );
 };
 

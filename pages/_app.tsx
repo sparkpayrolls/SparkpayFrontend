@@ -1,10 +1,12 @@
 import Head from 'next/head';
 import 'react-toastify/dist/ReactToastify.css';
+import 'antd/dist/antd.css';
 import '../src/styles/globals.scss';
 import type { AppProps } from 'next/app';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux/store';
+import NiceModal from '@ebay/nice-modal-react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { useEffect } from 'react';
@@ -12,20 +14,40 @@ import Cookies from 'js-cookie';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
 import { commitUser } from 'src/redux/slices/user/user.slice';
+import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
+import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
+import { AxiosError } from 'axios';
+import { Company } from 'src/api/types';
 
 let persistor = persistStore(store);
 
 const AuthManager = () => {
-  const { user } = useAppSelector((state) => state);
+  const { user, companies, administrator } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
-
+    const isLoggedIn = !!user;
+    let tokenInterceptor: number;
     if (authToken) {
-      const isLoggedIn = !!user;
+      tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
+        config.headers.Authorization = `Bearer ${authToken}`;
 
-      $api.$axios.defaults.headers.Authorization = `Bearer ${authToken}`;
+        return config;
+      });
+
+      $api.$axios.interceptors.response.use(
+        (res) => res,
+        (error) => {
+          if (error.response?.status === 401) {
+            Cookies.remove('auth_token');
+            dispatch(commitUser(null));
+          }
+
+          return Promise.reject(error);
+        },
+      );
 
       if (!isLoggedIn) {
         $api.user
@@ -40,19 +62,41 @@ const AuthManager = () => {
       }
     }
 
-    const authinterceptor = $api.$axios.interceptors.response.use((res) => {
-      if (res.status === 401) {
-        Cookies.remove('auth_token');
-        dispatch(commitUser(null));
-      }
-
-      return res;
-    });
+    if (!authToken && isLoggedIn) {
+      dispatch(commitUser(null));
+    }
 
     return () => {
-      $api.$axios.interceptors.response.eject(authinterceptor);
+      $api.$axios.interceptors.request.eject(tokenInterceptor);
     };
   }, [user, dispatch]);
+
+  useEffect(() => {
+    refreshCompanies(dispatch);
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    const companySelected = companies.find((company) => company.selected);
+    const company = administrator?.company as Company;
+    const selectedCompany = companySelected?.company as Company;
+    if (selectedCompany && company?.id !== selectedCompany?.id) {
+      getCurrentAdministrator(dispatch);
+    }
+    if (!selectedCompany) {
+      dispatch(commitAministrator(null));
+    }
+
+    $api.$axios.interceptors.response.use(
+      (res) => res,
+      (error: AxiosError) => {
+        if (error.response?.status === 403) {
+          refreshCompanies(dispatch);
+        }
+
+        return Promise.reject(error);
+      },
+    );
+  }, [companies, administrator, dispatch]);
 
   return null;
 };
@@ -67,9 +111,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <Component {...pageProps} />
-          <AuthManager />
-          <ToastContainer hideProgressBar={true} />
+          <NiceModal.Provider>
+            <AuthManager />
+            <Component {...pageProps} />
+            <ToastContainer hideProgressBar={true} autoClose={3000} />
+          </NiceModal.Provider>
         </PersistGate>
       </Provider>
     </>

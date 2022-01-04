@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Spinner } from './Spinner';
+import { Spinner } from './Spinner.component';
 
 export default {
   title: 'Spinner',
@@ -17,5 +17,5 @@ const Template: ComponentStory<typeof Spinner> = (args: any) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  color: '#fff',
+  color: '--green',
 };

@@ -1,0 +1,39 @@
+.dashboard-layout-v2 {
+  width: 100vw;
+  height: 100vh;
+  background: #e5e5e5;
+
+  &__content {
+    width: 92%;
+    height: 100%;
+    max-width: 1334px;
+    background: #ffffff;
+    margin-left: auto;
+    box-shadow: 2px 2px 22px rgba(40, 63, 185, 0.1);
+    padding-top: 3.4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+
+    &__back-button {
+      text-decoration: none;
+      display: block;
+      margin: 0;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+      max-height: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    &__child {
+      overflow-y: auto;
+      height: calc(100% - 2.5rem);
+    }
+
+    @media screen and (max-width: 1024px) {
+      width: 100%;
+    }
+  }
+}

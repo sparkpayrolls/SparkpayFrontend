@@ -1,0 +1,26 @@
+.tab {
+  .ant-tabs-nav::before {
+    border-bottom: 1px solid #dde5ee;
+  }
+
+  .ant-tabs-tab {
+    padding: 0.625rem;
+
+    .ant-tabs-tab-btn {
+      font-family: $font-family-Karla !important;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: 0.002em;
+      color: $gray-200;
+      text-shadow: none;
+    }
+
+    &.ant-tabs-tab-active {
+      .ant-tabs-tab-btn {
+        color: $blue;
+      }
+    }
+  }
+}

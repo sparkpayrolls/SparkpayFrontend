@@ -1,13 +1,15 @@
-import { AxiosError } from "axios";
+import { AxiosError } from 'axios';
 
 export class HttpError extends Error {
   public isHttpException = true;
-  public name = "HttpException";
+  public name = 'HttpException';
 
   constructor(
     public message: string,
+    // eslint-disable-next-line no-unused-vars
     public status: number,
-    public errors: Record<string, string>
+    // eslint-disable-next-line no-unused-vars
+    public errors: Record<string, string>,
   ) {
     super(message);
   }
@@ -17,7 +19,7 @@ export class HttpError extends Error {
       return new HttpError(
         error?.response?.data?.message || error.message,
         error?.response?.status || 0,
-        error?.response?.data?.errors || {}
+        error?.response?.data?.errors || {},
       );
     }
 

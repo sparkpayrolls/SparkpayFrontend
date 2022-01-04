@@ -1,0 +1,176 @@
+import { Select } from 'antd';
+import { Formik, FormikProps } from 'formik';
+import { useCallback, useEffect, useState } from 'react';
+import { $api } from 'src/api';
+import { PayoutMethod } from 'src/api/types';
+import { EmployeeOnboardingValidationSchema } from 'src/helpers/validation';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
+import { getCountries } from 'src/redux/slices/countries/countries.slice';
+import { Button } from '../Button/Button.component';
+import { IF } from '../Misc/if.component';
+import { PayoutMethodMeta } from '../Payment/payoutmethodmeta.component';
+import { InputError } from '../Shared/input-error.component';
+import { Label } from '../Shared/label.component';
+import { EmployeeOnboarding, IEmployeeOnboardingForm } from '../types';
+
+export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
+  const { countries } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
+  const [country, setCountry] = useState('');
+  const [payoutMethods, setPayoutMethods] = useState<PayoutMethod[]>([]);
+  const [payoutMethod, setPayoutMethod] = useState<PayoutMethod | null>(null);
+
+  const { loading, initialValue } = props;
+
+  const getPayoutMethods = useCallback(async () => {
+    try {
+      setPayoutMethods([]);
+      if (country) {
+        const payoutMethods = await $api.payout.getSupportedPayoutMethods(
+          country,
+        );
+        setPayoutMethods(payoutMethods);
+      }
+    } catch (error) {
+      // ....
+    }
+  }, [country]);
+
+  useEffect(() => {
+    getCountries(dispatch);
+  }, [dispatch]);
+
+  useEffect(() => {
+    getPayoutMethods();
+  }, [getPayoutMethods]);
+
+  useEffect(() => {
+    const payoutMethod = payoutMethods.find(
+      (p) => p.id === initialValue.payoutMethod,
+    );
+    if (payoutMethod) {
+      setPayoutMethod(payoutMethod);
+    }
+  }, [initialValue, payoutMethods]);
+
+  useEffect(() => {
+    setCountry(initialValue.country);
+  }, [initialValue]);
+
+  return (
+    <Formik
+      initialValues={initialValue}
+      validationSchema={EmployeeOnboardingValidationSchema}
+      onSubmit={props.onSubmit}
+    >
+      {(props: FormikProps<EmployeeOnboarding>) => {
+        const {
+          handleSubmit,
+          setTouched,
+          values,
+          errors,
+          touched,
+          setValues,
+          isSubmitting,
+        } = props;
+
+        return (
+          <form
+            onSubmit={handleSubmit}
+            className="create-organization-form"
+            autoComplete="off"
+          >
+            <div className="employee-onboard__form-input-section">
+              <div className="employee-onboard__form-grid">
+                <Label htmlFor="country">Country</Label>
+                <Select
+                  id="country"
+                  className={
+                    (touched.country && !!errors.country && 'has-error') || ''
+                  }
+                  onBlur={() => setTouched({ ...touched, country: true }, true)}
+                  onChange={(val: string) => {
+                    setCountry(val);
+                    setValues({ ...values, country: val }, true);
+                  }}
+                  optionFilterProp="children"
+                  placeholder="Select Country"
+                  showSearch
+                  disabled={!countries.length}
+                  loading={!countries.length}
+                >
+                  {countries.map((country) => {
+                    const { Option } = Select;
+
+                    return (
+                      <Option value={country.id} key={country.id}>
+                        {country.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <InputError>{touched.country && errors.country}</InputError>
+              </div>
+
+              <div>
+                <Label htmlFor="payoutmethod">Payout Method</Label>
+                <Select
+                  id="payoutmethod"
+                  className={
+                    (touched.payoutMethod &&
+                      !!errors.payoutMethod &&
+                      'has-error') ||
+                    ''
+                  }
+                  placeholder="Select Payout Method"
+                  onBlur={() =>
+                    setTouched({ ...touched, payoutMethod: true }, true)
+                  }
+                  onChange={(val: string) => {
+                    const selected = payoutMethods.find((p) => p.id === val);
+                    setPayoutMethod(selected ?? null);
+                    setValues({ ...values, payoutMethod: val }, true);
+                  }}
+                  optionFilterProp="children"
+                  showSearch
+                  disabled={!country || !payoutMethods.length}
+                  loading={(!!country && !payoutMethods.length) || loading}
+                >
+                  {payoutMethods.map((payoutMethod) => {
+                    const { Option } = Select;
+
+                    return (
+                      <Option value={payoutMethod.id} key={payoutMethod.id}>
+                        {payoutMethod.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <InputError>{touched.country && errors.country}</InputError>
+              </div>
+              <IF condition={!!payoutMethod}>
+                <PayoutMethodMeta
+                  method={payoutMethod}
+                  setMeta={(payoutMethodMeta) =>
+                    setValues({ ...values, payoutMethodMeta })
+                  }
+                  error={touched.payoutMethodMeta && !!errors.payoutMethodMeta}
+                  initialValues={values.payoutMethodMeta}
+                />
+              </IF>
+            </div>
+            <Button
+              label="Submit"
+              type="submit"
+              disabled={isSubmitting || loading}
+              showSpinner={isSubmitting || loading}
+              onClick={() => {}}
+              className="employee-onboard__submit-btn"
+              primary
+            />
+          </form>
+        );
+      }}
+    </Formik>
+  );
+};

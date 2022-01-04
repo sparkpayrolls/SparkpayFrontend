@@ -5,15 +5,19 @@
     width: 16rem;
     height: 100vh;
     background: #f8fafc;
-    padding: 1.25rem 0 2rem;
     transition: all 500ms;
+    overflow-y: auto;
 
     @media screen and (min-width: 992px) {
       display: block;
     }
 
     &__brand {
-      margin: 0 2.25rem 3rem;
+      position: fixed;
+      width: 16rem;
+      display: block;
+      padding: 1.4375rem 2.25rem;
+      background: inherit;
     }
 
     &__list {
@@ -23,8 +27,14 @@
       padding: 0;
       margin: 0;
       list-style: none;
+      height: 100%;
+      overflow-y: hidden;
+      padding-top: 6.25rem;
+      padding-bottom: 5.875rem;
     }
-
+    &__list:hover {
+      overflow-y: auto;
+    }
     &__list-item {
       margin: 0 1rem;
     }

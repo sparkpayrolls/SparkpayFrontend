@@ -2,23 +2,24 @@ import { useRouter } from 'next/router';
 import { ComponentType } from 'react';
 import { stringifyUrl } from 'query-string';
 import { useAppSelector } from 'src/redux/hooks';
+import { Util } from '../util';
+import { IAllowedPermissions } from '@/components/types';
 
-function withAuth<T>(WrappedComponent: ComponentType<T>) {
+function withAuth<T>(
+  WrappedComponent: ComponentType<T>,
+  ...allowedPermissions: IAllowedPermissions
+) {
   // eslint-disable-next-line react/display-name
   return (props: T) => {
     // checks whether we are on client / browser or server.
     if (typeof window !== 'undefined') {
-      const { user } = useAppSelector((state) => state);
+      const { user, administrator } = useAppSelector((state) => state);
       const Router = useRouter();
       const isLoggedIn = !!user;
 
       // If there is no access token we redirect to "/" page.
       if (!isLoggedIn) {
-        const url = stringifyUrl({
-          url: '/login',
-          query: { goto: Router.pathname },
-        });
-        Router.replace(url);
+        Util.redirectToLogin(Router);
         return null;
       }
 
@@ -30,6 +31,16 @@ function withAuth<T>(WrappedComponent: ComponentType<T>) {
         });
         Router.replace(url);
         return null;
+      }
+
+      if (allowedPermissions.length) {
+        if (
+          !administrator ||
+          !Util.canActivate(allowedPermissions, administrator)
+        ) {
+          Router.replace('/');
+          return null;
+        }
       }
 
       // If this is an accessToken we just render the component that was passed with all its props

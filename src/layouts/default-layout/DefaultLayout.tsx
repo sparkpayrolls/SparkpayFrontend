@@ -1,20 +1,20 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '../../../public/svgs/logo.svg';
-import menu from '../../../public/svgs/menu.svg';
+// import menu from '../../../public/svgs/menu.svg';
 
 // eslint-disable-next-line no-undef
 const DefaultLayout: React.FC = ({ children }) => {
   return (
     <>
-      <header className="default-layout__header">
+      <header className="default-layout__header" id="top">
         <Link href="/">
           <a className="default-layout__header-brand">
             <Image src={Logo} alt="" />
           </a>
         </Link>
 
-        <nav className="navigation">
+        {/* <nav className="navigation">
           <ul className="navigation__list">
             <div className="navigation__list-section">
               <li className="navigation__list-item">
@@ -31,7 +31,7 @@ const DefaultLayout: React.FC = ({ children }) => {
 
             <div className="navigation__list-section">
               <li className="navigation__list-item">
-                <Link href="/login">
+                <Link href="#">
                   <a className="navigation__link login">Log In</a>
                 </Link>
               </li>
@@ -42,11 +42,12 @@ const DefaultLayout: React.FC = ({ children }) => {
               </li>
             </div>
           </ul>
-        </nav>
+        </nav> */}
 
-        <button className="default-layout__menu-btn">
+        {/* //TODO Bring this back later  */}
+        {/* <button className="default-layout__menu-btn">
           <Image src={menu} alt="menu icon" />
-        </button>
+        </button> */}
       </header>
       {children}
       <footer className="default-layout__footer">
