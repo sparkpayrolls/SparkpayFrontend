@@ -17,9 +17,7 @@ import { savePayrollValidationSchema } from 'src/helpers/validation';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { stringifyUrl } from 'query-string';
-import { Label } from '@/components/Shared/label.component';
-import { Select } from 'antd';
-import { InputError } from '@/components/Shared/input-error.component';
+import { Select } from '@/components/Input/select.component';
 
 const PayrollSummaryPage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
@@ -288,15 +286,8 @@ const PayrollSummaryPage: NextPage = () => {
                   </div>
 
                   <div className="payroll-summary__form__input">
-                    <Label htmlFor="proratemonth">Prorate Month</Label>
                     <Select
-                      id="proratemonth"
-                      className={
-                        (touched.proRateMonth &&
-                          !!errors.proRateMonth &&
-                          'has-error') ||
-                        ''
-                      }
+                      label="Prorate Month"
                       onBlur={() =>
                         setTouched({ ...touched, proRateMonth: true }, true)
                       }
@@ -308,6 +299,9 @@ const PayrollSummaryPage: NextPage = () => {
                       showSearch
                       loading={loading || isSubmitting}
                       defaultValue={values.proRateMonth}
+                      error={
+                        (touched.proRateMonth && errors.proRateMonth) || ''
+                      }
                     >
                       {Util.prorateMonths().map((month) => {
                         const { Option } = Select;
@@ -319,9 +313,6 @@ const PayrollSummaryPage: NextPage = () => {
                         );
                       })}
                     </Select>
-                    <InputError>
-                      {touched.proRateMonth && errors.proRateMonth}
-                    </InputError>
                   </div>
 
                   <input type="submit" value="submit" hidden ref={formRef} />

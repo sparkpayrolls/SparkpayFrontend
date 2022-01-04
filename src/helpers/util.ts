@@ -142,4 +142,21 @@ export class Util {
       'December',
     ];
   }
+
+  static deepEquals(
+    objOne: Record<string, any>,
+    objTwo: Record<string, any>,
+  ): boolean {
+    if ((!objOne && objOne !== objTwo) || !objTwo) {
+      return false;
+    }
+
+    return Object.keys(objOne).every((key) => {
+      if (['function', 'object', 'symbol'].includes(typeof objTwo[key])) {
+        return Util.deepEquals(objOne[key], objTwo[key]);
+      }
+
+      return objTwo[key] && objTwo[key] === objOne[key];
+    });
+  }
 }

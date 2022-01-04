@@ -9,9 +9,8 @@
     // display: flex;
     flex-direction: column;
     margin: 0 1rem;
-    @media screen and(min-width: 1024px) {
-      width: 30%;
-    }
+    width: 100%;
+    max-width: 400px;
   }
 
   &__not-found {
@@ -53,13 +52,13 @@
     cursor: pointer;
   }
 
-  &__hide-and-show-password {
-    // cursor: pointer;
-    // position: relative;
-    // width: 20px;
-    // right: 8px;
-    // top: 18px;
-  }
+  // &__hide-and-show-password {
+  //   // cursor: pointer;
+  //   // position: relative;
+  //   // width: 20px;
+  //   // right: 8px;
+  //   // top: 18px;
+  // }
 
   &__submit-btn {
     width: 100%;
