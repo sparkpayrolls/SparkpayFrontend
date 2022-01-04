@@ -11,9 +11,7 @@ import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { getCountries } from 'src/redux/slices/countries/countries.slice';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
-import { Label } from '../Shared/label.component';
-import { Select } from 'antd';
-import { InputError } from '../Shared/input-error.component';
+import { Select } from '../Input/select.component';
 
 export const CreateOrgnizationModal = NiceModal.create(() => {
   return (
@@ -127,12 +125,8 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
             </div>
 
             <div className="create-organization-form__section">
-              <Label htmlFor="country">Country</Label>
               <Select
-                id="country"
-                className={
-                  (touched.country && !!errors.country && 'has-error') || ''
-                }
+                label="Country"
                 onBlur={() => setTouched({ ...touched, country: true }, true)}
                 onChange={(val: string) =>
                   setValues({ ...values, country: val }, true)
@@ -142,6 +136,7 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
                 showSearch
                 disabled={!countries.length}
                 loading={!countries.length}
+                error={(touched.country && errors.country) || ''}
               >
                 {countries.map((country) => {
                   const { Option } = Select;
@@ -153,7 +148,6 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
                   );
                 })}
               </Select>
-              <InputError>{touched.country && errors.country}</InputError>
             </div>
 
             <div className="form__submit-button">

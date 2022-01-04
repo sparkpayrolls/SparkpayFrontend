@@ -16,9 +16,7 @@ import { useRouter } from 'next/router';
 import { signupValidationSchema } from 'src/helpers/validation';
 import { toast } from 'react-toastify';
 import { commitUser } from 'src/redux/slices/user/user.slice';
-import { Label } from '@/components/Shared/label.component';
-import { Select } from 'antd';
-import { InputError } from '@/components/Shared/input-error.component';
+import { Select } from '@/components/Input/select.component';
 
 interface ISignUpForm {
   firstname: string;
@@ -182,37 +180,31 @@ const CreateAccount: NextPage = () => {
                     hasError={errors.email && touched.email}
                     error={errors.email}
                   />
-                  <div>
-                    <Label htmlFor="country">Select Country</Label>
-                    <Select
-                      id="country"
-                      className={
-                        (touched.country && !!errors.country && 'has-error') ||
-                        ''
-                      }
-                      onBlur={() =>
-                        setTouched({ ...touched, country: true }, true)
-                      }
-                      onChange={(val: string) =>
-                        setValues({ ...values, country: val }, true)
-                      }
-                      optionFilterProp="children"
-                      showSearch
-                      loading={!countries.length}
-                      disabled={!countries.length}
-                    >
-                      {countries.map((country) => {
-                        const { Option } = Select;
 
-                        return (
-                          <Option value={country.id} key={country.id}>
-                            {country.name}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                    <InputError>{touched.country && errors.country}</InputError>
-                  </div>
+                  <Select
+                    onBlur={() =>
+                      setTouched({ ...touched, country: true }, true)
+                    }
+                    onChange={(val: string) =>
+                      setValues({ ...values, country: val }, true)
+                    }
+                    optionFilterProp="children"
+                    showSearch
+                    loading={!countries.length}
+                    disabled={!countries.length}
+                    label="Select Country"
+                    error={(touched.country && errors.country) || ''}
+                  >
+                    {countries.map((country) => {
+                      const { Option } = Select;
+
+                      return (
+                        <Option value={country.id} key={country.id}>
+                          {country.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
 
                   <Input
                     type="password"

@@ -1,4 +1,3 @@
-import { Select } from 'antd';
 import { Formik, FormikProps } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { $api } from 'src/api';
@@ -7,10 +6,9 @@ import { EmployeeOnboardingValidationSchema } from 'src/helpers/validation';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { getCountries } from 'src/redux/slices/countries/countries.slice';
 import { Button } from '../Button/Button.component';
+import { Select } from '../Input/select.component';
 import { IF } from '../Misc/if.component';
 import { PayoutMethodMeta } from '../Payment/payoutmethodmeta.component';
-import { InputError } from '../Shared/input-error.component';
-import { Label } from '../Shared/label.component';
 import { EmployeeOnboarding, IEmployeeOnboardingForm } from '../types';
 
 export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
@@ -82,12 +80,8 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
           >
             <div className="employee-onboard__form-input-section">
               <div className="employee-onboard__form-grid">
-                <Label htmlFor="country">Country</Label>
                 <Select
-                  id="country"
-                  className={
-                    (touched.country && !!errors.country && 'has-error') || ''
-                  }
+                  label="Country"
                   onBlur={() => setTouched({ ...touched, country: true }, true)}
                   onChange={(val: string) => {
                     setCountry(val);
@@ -98,6 +92,7 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
                   showSearch
                   disabled={!countries.length}
                   loading={!countries.length}
+                  error={(touched.country && errors.country) || ''}
                 >
                   {countries.map((country) => {
                     const { Option } = Select;
@@ -109,19 +104,11 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
                     );
                   })}
                 </Select>
-                <InputError>{touched.country && errors.country}</InputError>
               </div>
 
               <div>
-                <Label htmlFor="payoutmethod">Payout Method</Label>
                 <Select
-                  id="payoutmethod"
-                  className={
-                    (touched.payoutMethod &&
-                      !!errors.payoutMethod &&
-                      'has-error') ||
-                    ''
-                  }
+                  label="Payout Method"
                   placeholder="Select Payout Method"
                   onBlur={() =>
                     setTouched({ ...touched, payoutMethod: true }, true)
@@ -135,6 +122,7 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
                   showSearch
                   disabled={!country || !payoutMethods.length}
                   loading={(!!country && !payoutMethods.length) || loading}
+                  error={(touched.payoutMethod && errors.payoutMethod) || ''}
                 >
                   {payoutMethods.map((payoutMethod) => {
                     const { Option } = Select;
@@ -146,7 +134,6 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
                     );
                   })}
                 </Select>
-                <InputError>{touched.country && errors.country}</InputError>
               </div>
               <IF condition={!!payoutMethod}>
                 <PayoutMethodMeta
