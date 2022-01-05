@@ -64,5 +64,7 @@ export const EmployeeOnboardingValidationSchema = Yup.object().shape({
 
 export const bankPayoutMethodMetaValidationSchema = Yup.object().shape({
   bankId: Yup.string().required('Bank name is required'),
-  accountNumber: Yup.string().required('Account number is required'),
+  accountNumber: Yup.string()
+    .min(6, 'Account number should be at least 6 digits long')
+    .required('Account number is required'),
 });

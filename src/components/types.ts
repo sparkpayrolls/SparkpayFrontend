@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
 
 import { NiceModalHandler } from '@ebay/nice-modal-react';
+import { SelectProps } from 'antd';
+import { RefSelectProps } from 'antd/lib/select';
 import { FormikHelpers } from 'formik';
 import { Moment } from 'moment';
 import { NextRouter } from 'next/router';
-import {
+import React, {
   ChangeEventHandler,
   DetailedHTMLProps,
   FocusEventHandler,
@@ -529,4 +531,10 @@ export type IEmployeeOnboardingForm = {
   ): any;
   initialValue: EmployeeOnboarding;
   loading?: boolean;
+};
+
+export type ISelect<T> = SelectProps<T> & {
+  ref?: React.Ref<RefSelectProps>;
+  label?: string;
+  error?: string;
 };
