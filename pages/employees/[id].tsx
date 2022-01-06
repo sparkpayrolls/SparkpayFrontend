@@ -33,8 +33,8 @@ const EmployeeDetails: NextPage = () => {
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const salary = Util.formatMoneyNumber(eph?.salary ?? 0);
 
-  const getEmployee = useCallback(() => {
-    getEmployeeMethod({
+  const getEmployee = useCallback(async () => {
+    await getEmployeeMethod({
       employeeId,
       apiCallStarted,
       setEmployee,
