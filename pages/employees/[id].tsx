@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import NiceModal from '@ebay/nice-modal-react';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
-import { EditDetailsModal } from '@/components/Modals/EditDetailsModal.component';
+import { EditEmployeeDetailsModal } from '@/components/Modals/EditDetailsModal.component';
 import withAuth from 'src/helpers/HOC/withAuth';
 import BackIcon from '../../public/svgs/backicon.svg';
 import { SingleDetail } from '@/components/Employee/single-detail.component';
@@ -13,11 +13,13 @@ import { IF } from '@/components/Misc/if.component';
 import { NotFound } from '@/components/Misc/not-found.component';
 import { useRouter } from 'next/router';
 import useApiCall from 'src/helpers/hooks/useapicall.hook';
-import { HttpError } from 'src/api/repo/http.error';
-import { $api } from 'src/api';
 import moment from 'moment';
 import { useAppSelector } from 'src/redux/hooks';
 import { Util } from 'src/helpers/util';
+import {
+  getEmployeeEditSubmitHandler,
+  getEmployeeMethod,
+} from 'src/helpers/methods';
 
 const EmployeeDetails: NextPage = () => {
   const router = useRouter();
@@ -31,23 +33,14 @@ const EmployeeDetails: NextPage = () => {
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const salary = Util.formatMoneyNumber(eph?.salary ?? 0);
 
-  const getEmployee = useCallback(async () => {
-    try {
-      if (!employeeId) {
-        return;
-      }
-
-      apiCallStarted();
-      const employee = await $api.employee.getSingleEmployee(employeeId);
-      setEmployee(employee);
-    } catch (error) {
-      const err = error as HttpError;
-      if (err.status === 404) {
-        setNotFound(true);
-      }
-    } finally {
-      apiCallDone();
-    }
+  const getEmployee = useCallback(() => {
+    getEmployeeMethod({
+      employeeId,
+      apiCallStarted,
+      setEmployee,
+      setNotFound,
+      apiCallDone,
+    })();
   }, [employeeId, apiCallDone, apiCallStarted]);
 
   useEffect(() => {
@@ -55,7 +48,11 @@ const EmployeeDetails: NextPage = () => {
   }, [getEmployee, administrator]);
 
   const onAddEmployee = () => {
-    NiceModal.show(EditDetailsModal, { administrator });
+    NiceModal.show(EditEmployeeDetailsModal, {
+      administrator,
+      employee: eph,
+      onSubmit: getEmployeeEditSubmitHandler(employeeId, getEmployee),
+    });
   };
 
   return (

@@ -17,6 +17,15 @@ export class EmployeeModule extends HttpRepository {
     return data;
   }
 
+  async updateSingleEmployee(
+    id: string,
+    employee: Pick<Employee, 'firstname' | 'lastname' | 'salary' | 'email'>,
+  ) {
+    const { data } = await this.put<Employee>(`/employees/${id}`, employee);
+
+    return data;
+  }
+
   async removeEmployee(id: string) {
     await this.delete(`/employees/${id}`);
   }

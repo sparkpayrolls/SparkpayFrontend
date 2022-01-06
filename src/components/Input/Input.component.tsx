@@ -1,5 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { ChangeEvent, ChangeEventHandler, FocusEvent, useState } from 'react';
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  FocusEvent,
+  useEffect,
+  useState,
+} from 'react';
 import Image from 'next/image';
 import eye from '../../../public/svgs/eye.svg';
 import eye_off from '../../../public/svgs/eye-off.svg';
@@ -86,6 +92,12 @@ export const Input = ({
     onChange(event);
     setValueInternal(event.target.value);
   };
+
+  useEffect(() => {
+    if (transformValue && value) {
+      setValueInternal(transformValue(value));
+    }
+  }, [transformValue, value]);
 
   return (
     <>

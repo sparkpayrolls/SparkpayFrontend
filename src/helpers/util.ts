@@ -156,7 +156,7 @@ export class Util {
         return Util.deepEquals(objOne[key], objTwo[key]);
       }
 
-      return objTwo[key] && objTwo[key] === objOne[key];
+      return objTwo[key] !== undefined && objTwo[key] === objOne[key];
     });
   }
 }
