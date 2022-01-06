@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NiceModal, { NiceModalHandler } from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
-import { Radio } from 'antd';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { Input } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
@@ -37,64 +36,49 @@ const EditDetailsForm = ({
   modal: NiceModalHandler;
   administrator: Administrator;
 }) => {
-  const [uploadType, setUploadType] = useState<'singleUpload' | 'bulkUpload'>(
-    'singleUpload',
-  );
-
   return (
-    <div className="add-employee-modal">
-      <div className="add-employee-modal__upload-type-input">
-        <Radio.Group
-          name="uploadType"
-          onChange={(e) => setUploadType(e.target.value)}
-          className="add-employee-modal__upload-type-input__radio-group"
-          value={uploadType}
-        ></Radio.Group>
-      </div>
-
-      {uploadType === 'singleUpload' && (
-        <SingleEmployeeUpload
+    <div className="edit-details-modal">
+    <EditDetailsProps
           onDone={(employee) => {
             modal.resolve(employee);
             setTimeout(modal.hide, 100);
           }}
           administrator={administrator}
         />
-      )}
     </div>
   );
 };
 
-const SingleEmployeeUpload = (props: ISingleEmployeeUpload) => {
+const EditDetailsProps= (props: ISingleEmployeeUpload) => {
   const { onDone, administrator } = props;
 
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const handleSubmit = async (
-    values: AddEmployee,
-    helpers: FormikHelpers<AddEmployee>,
-  ) => {
-    try {
-      helpers.setSubmitting(true);
-      const salary = +values.salary.replace(/[^0-9]/gi, '');
-      const employee = await $api.employee.addSingleEmployee({
-        ...values,
-        salary,
-      });
-      toast.success('Employee added successfully');
-      if (onDone) {
-        onDone(employee);
-      }
-    } catch (error) {
-      const err = error as HttpError;
-      if (err.errors && Object.keys(err.errors).length) {
-        helpers.setErrors(err.errors);
-      } else {
-        toast.error(err.message);
-      }
-    } finally {
-      helpers.setSubmitting(false);
-    }
-  };
+ const handleSubmit = async (
+   values: AddEmployee,
+   helpers: FormikHelpers<AddEmployee>,
+ ) => {
+   try {
+     helpers.setSubmitting(true);
+     const salary = +values.salary.replace(/[^0-9]/gi, '');
+     const employee = await $api.employee.addSingleEmployee({
+       ...values,
+       salary,
+     });
+     toast.success('Employee added successfully');
+     if (onDone) {
+       onDone(employee);
+     }
+   } catch (error) {
+     const err = error as HttpError;
+     if (err.errors && Object.keys(err.errors).length) {
+       helpers.setErrors(err.errors);
+     } else {
+       toast.error(err.message);
+     }
+   } finally {
+     helpers.setSubmitting(false);
+   }
+ };
 
   return (
     <Formik
@@ -120,7 +104,7 @@ const SingleEmployeeUpload = (props: ISingleEmployeeUpload) => {
         return (
           <form
             onSubmit={handleSubmit}
-            className="single-employee-upload-form"
+            className="edit-details-form"
             autoComplete="off"
           >
             <div className="form__grid single-employee-upload-form__section">
@@ -197,8 +181,8 @@ const SingleEmployeeUpload = (props: ISingleEmployeeUpload) => {
                 showSpinner={isSubmitting}
               />
             </div>
-          </form>
-        );
+                  </form>
+        )
       }}
     </Formik>
   );
