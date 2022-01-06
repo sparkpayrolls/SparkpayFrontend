@@ -2,7 +2,9 @@ import type { NextPage } from 'next';
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import NiceModal from '@ebay/nice-modal-react';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
+import { EditDetailsModal } from '@/components/Modals/EditDetailsModal.component';
 import withAuth from 'src/helpers/HOC/withAuth';
 import BackIcon from '../../public/svgs/backicon.svg';
 import { SingleDetail } from '@/components/Employee/single-detail.component';
@@ -52,6 +54,10 @@ const EmployeeDetails: NextPage = () => {
     getEmployee();
   }, [getEmployee, administrator]);
 
+  const onAddEmployee = () => {
+    NiceModal.show(EditDetailsModal, { administrator });
+  };
+
   return (
     <DashboardLayout pageTitle="Employee Details">
       <div className="employee-details">
@@ -71,7 +77,10 @@ const EmployeeDetails: NextPage = () => {
             </h5>
           </div>
           <IF condition={!notFound && !loading}>
-            <button className="employee-details__employee-button">
+            <button
+              className="employee-details__employee-button"
+              onClick={onAddEmployee}
+            >
               Edit Details
             </button>
           </IF>
