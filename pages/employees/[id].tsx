@@ -55,7 +55,7 @@ const EmployeeDetails: NextPage = () => {
   }, [getEmployee, administrator]);
 
   const onAddEmployee = () => {
-    NiceModal.show(EditDetailsModal);
+    NiceModal.show(EditDetailsModal, { administrator });
   };
 
   return (

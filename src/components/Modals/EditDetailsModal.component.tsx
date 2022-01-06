@@ -38,47 +38,47 @@ const EditDetailsForm = ({
 }) => {
   return (
     <div className="edit-details-modal">
-    <EditDetailsProps
-          onDone={(employee) => {
-            modal.resolve(employee);
-            setTimeout(modal.hide, 100);
-          }}
-          administrator={administrator}
-        />
+      <EditDetailsProps
+        onDone={(employee) => {
+          modal.resolve(employee);
+          setTimeout(modal.hide, 100);
+        }}
+        administrator={administrator}
+      />
     </div>
   );
 };
 
-const EditDetailsProps= (props: ISingleEmployeeUpload) => {
+const EditDetailsProps = (props: ISingleEmployeeUpload) => {
   const { onDone, administrator } = props;
 
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
- const handleSubmit = async (
-   values: AddEmployee,
-   helpers: FormikHelpers<AddEmployee>,
- ) => {
-   try {
-     helpers.setSubmitting(true);
-     const salary = +values.salary.replace(/[^0-9]/gi, '');
-     const employee = await $api.employee.addSingleEmployee({
-       ...values,
-       salary,
-     });
-     toast.success('Employee added successfully');
-     if (onDone) {
-       onDone(employee);
-     }
-   } catch (error) {
-     const err = error as HttpError;
-     if (err.errors && Object.keys(err.errors).length) {
-       helpers.setErrors(err.errors);
-     } else {
-       toast.error(err.message);
-     }
-   } finally {
-     helpers.setSubmitting(false);
-   }
- };
+  const handleSubmit = async (
+    values: AddEmployee,
+    helpers: FormikHelpers<AddEmployee>,
+  ) => {
+    try {
+      helpers.setSubmitting(true);
+      const salary = +values.salary.replace(/[^0-9]/gi, '');
+      const employee = await $api.employee.addSingleEmployee({
+        ...values,
+        salary,
+      });
+      toast.success('Employee added successfully');
+      if (onDone) {
+        onDone(employee);
+      }
+    } catch (error) {
+      const err = error as HttpError;
+      if (err.errors && Object.keys(err.errors).length) {
+        helpers.setErrors(err.errors);
+      } else {
+        toast.error(err.message);
+      }
+    } finally {
+      helpers.setSubmitting(false);
+    }
+  };
 
   return (
     <Formik
@@ -181,8 +181,8 @@ const EditDetailsProps= (props: ISingleEmployeeUpload) => {
                 showSpinner={isSubmitting}
               />
             </div>
-                  </form>
-        )
+          </form>
+        );
       }}
     </Formik>
   );
