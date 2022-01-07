@@ -146,11 +146,6 @@ export type AddEmployee = {
   salary: string;
 };
 
-export type ISingleEmployeeUpload = {
-  onDone?: (employee: Employee) => any;
-  administrator: Administrator;
-};
-
 /** Kebab Menus */
 export type IOrganizationMenu = {
   companies: Administrator[];
@@ -544,3 +539,18 @@ export type IAutoComplete = AutoCompleteProps & RefAttributes<RefSelectProps> & 
   label?:string;
   error?: string;
 }
+export type IEmployeeAddForm = {
+  initialValues: AddEmployee;
+  onSubmit(vals: AddEmployee, helpers: FormikHelpers<AddEmployee>): any;
+  currency: string;
+};
+
+export type IEditEmployeeDetailsModal = {
+  administrator: Administrator;
+  employee: Employee;
+  onSubmit(
+    modal: NiceModalHandler,
+    vals: AddEmployee,
+    helpers: FormikHelpers<AddEmployee>,
+  ): any;
+};

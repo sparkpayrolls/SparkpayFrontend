@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import wallet from '/public/images/wallet.png';
 import card from '/public/images/credit-card.png';
-import bank from '/public/images/bank.png';
+import bank from '/public/svgs/bank.svg';
 import cryptocurrency from '/public/images/cryptocurrency.png';
 import { ITransactionMethod } from '../types';
 
- const MethodImage = ({ method }: Pick<ITransactionMethod, 'method'>) => {
+const MethodImage = ({ method }: Pick<ITransactionMethod, 'method'>) => {
   if (new RegExp('^wallet$', 'gi').test(method)) {
     return <Image src={wallet} alt="" />;
   }
