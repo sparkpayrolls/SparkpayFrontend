@@ -4,6 +4,7 @@ import { singleEmployeeUploadValidationSchema } from 'src/helpers/validation';
 import { Button } from '../Button/Button.component';
 import { Input } from '../Input/Input.component';
 import { AddEmployee, IEmployeeAddForm } from '../types';
+import { AddFileSVG } from '@/components/svg';
 
 export const EmployeeAddForm = (props: IEmployeeAddForm) => {
   const { initialValues, onSubmit, currency } = props;
@@ -104,6 +105,87 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
               <Button
                 type="submit"
                 label={isEditing ? 'Save Details' : 'Save Employee'}
+                className="form__submit-button form__submit-button--full-width"
+                primary
+                disabled={
+                  isSubmitting ||
+                  Util.deepEquals(
+                    {
+                      ...values,
+                      salary: values.salary.replace(/[^0-9]/gi, ''),
+                    },
+                    initialValues,
+                  )
+                }
+                showSpinner={isSubmitting}
+              />
+            </div>
+          </form>
+        );
+      }}
+    </Formik>
+  );
+};
+
+export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
+  const { initialValues, onSubmit, currency } = props;
+  const isEditing =
+    initialValues.firstname ||
+    initialValues.lastname ||
+    initialValues.email ||
+    initialValues.salary;
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={singleEmployeeUploadValidationSchema}
+      onSubmit={onSubmit}
+    >
+      {(props: FormikProps<AddEmployee>) => {
+        const {
+          handleChange,
+          handleSubmit,
+          handleBlur,
+          values,
+          errors,
+          touched,
+          isSubmitting,
+        } = props;
+
+        return (
+          <form
+            onSubmit={handleSubmit}
+            className="edit-details-form"
+            autoComplete="off"
+          >
+            <label>
+              <div className="form__file-upload">
+                <AddFileSVG />
+                <p className="form__file-upload-text">
+                  <span className="form__file-upload-text--highlight">
+                    Upload a file
+                  </span>{' '}
+                  or drag and drop
+                </p>
+
+                <span className="form__file-upload-subtext">
+                  Spreadsheet (xlsl) up to 10MB
+                </span>
+              </div>
+              <input
+                type="file"
+                name="xlslFile"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  console.log(e);
+                }}
+              />
+            </label>
+
+            <div className="form__submit-button">
+              <Button
+                type="submit"
+                label="Proceed"
                 className="form__submit-button form__submit-button--full-width"
                 primary
                 disabled={

@@ -12,6 +12,9 @@ export const ModalLayout = (props: IModalLayout) => {
       destroyOnClose
       placement="right"
       className="modal-layout"
+      maskStyle={{
+        background: '#0d0f114d',
+      }}
     >
       <div className="modal-layout__content">
         <div className="modal-layout__title-section">

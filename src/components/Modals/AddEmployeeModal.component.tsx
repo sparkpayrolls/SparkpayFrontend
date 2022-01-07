@@ -4,7 +4,10 @@ import { ModalLayout } from './ModalLayout.component';
 import { Radio } from 'antd';
 import { Administrator } from 'src/api/types';
 import { Util } from 'src/helpers/util';
-import { EmployeeAddForm } from '../Form/employee-add.form';
+import {
+  EmployeeAddForm,
+  EmployeeBulkAddForm,
+} from '../Form/employee-add.form';
 import { IF } from '../Misc/if.component';
 import { getEmployeeAddSubmitHandler } from 'src/helpers/methods';
 
@@ -53,6 +56,22 @@ const AddEmployeeForm = ({
 
       <IF condition={uploadType === 'singleUpload'}>
         <EmployeeAddForm
+          initialValues={{
+            firstname: '',
+            lastname: '',
+            email: '',
+            salary: '',
+          }}
+          onSubmit={getEmployeeAddSubmitHandler((employee) => {
+            modal.resolve(employee);
+            setTimeout(modal.hide, 100);
+          })}
+          currency={Util.getCurrencySymbolFromAdministrator(administrator)}
+        />
+      </IF>
+
+      <IF condition={uploadType === 'bulkUpload'}>
+        <EmployeeBulkAddForm
           initialValues={{
             firstname: '',
             lastname: '',
