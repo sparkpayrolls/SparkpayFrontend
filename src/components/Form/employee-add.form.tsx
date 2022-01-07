@@ -128,12 +128,7 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
 };
 
 export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
-  const { initialValues, onSubmit, currency } = props;
-  const isEditing =
-    initialValues.firstname ||
-    initialValues.lastname ||
-    initialValues.email ||
-    initialValues.salary;
+  const { initialValues, onSubmit } = props;
 
   return (
     <Formik
@@ -142,15 +137,7 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
       onSubmit={onSubmit}
     >
       {(props: FormikProps<AddEmployee>) => {
-        const {
-          handleChange,
-          handleSubmit,
-          handleBlur,
-          values,
-          errors,
-          touched,
-          isSubmitting,
-        } = props;
+        const { handleSubmit, values, isSubmitting } = props;
 
         return (
           <form
