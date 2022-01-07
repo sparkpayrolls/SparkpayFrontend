@@ -156,7 +156,7 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
                 </p>
 
                 <span className="form__file-upload-subtext">
-                  Spreadsheet (xlsl) up to 10MB
+                  Spreadsheet (xlsx) up to 10MB
                 </span>
               </div>
               <input
