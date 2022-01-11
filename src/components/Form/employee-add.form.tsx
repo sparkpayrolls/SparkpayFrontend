@@ -1,13 +1,18 @@
-import { useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { Formik, FormikProps } from 'formik';
-import $ from 'jquery';
-import { toast } from 'react-toastify';
 import { Util } from 'src/helpers/util';
-import { singleEmployeeUploadValidationSchema } from 'src/helpers/validation';
+import {
+  bulkEmployeeFileUploadValidationSchema,
+  singleEmployeeUploadValidationSchema,
+} from 'src/helpers/validation';
 import { Button } from '../Button/Button.component';
 import { Input } from '../Input/Input.component';
 import { AddEmployee, IEmployeeAddForm } from '../types';
 import { AddFileSVG } from '@/components/svg';
+import classNames from 'classnames';
+import { InputError } from '../Shared/input-error.component';
+import { config } from 'src/helpers/config';
+import { getBulkEmployeeFileUploadHandler } from 'src/helpers/methods';
 
 export const EmployeeAddForm = (props: IEmployeeAddForm) => {
   const { initialValues, onSubmit, currency } = props;
@@ -129,92 +134,31 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
     </Formik>
   );
 };
-const validExtensions = [
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'text/csv',
-];
 
-export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
-  const { initialValues, onSubmit } = props;
-  const uploadRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    function uploadDragover(e) {
-      e.preventDefault();
-      console.log('Click clicked!!!', uploadRef.current?.className);
-      $('.form__file-upload').addClass('active');
-    }
-
-    function uploadDragleave(e) {
-      e.preventDefault();
-      $('.form__file-upload').removeClass('active');
-    }
-
-    function uploadFile(e) {
-      e.preventDefault();
-      const file = e.dataTransfer.files[0];
-      console.log(file);
-      const fileType = file.type;
-
-      if (!validExtensions.includes(file.type)) {
-        toast.error(`Upload a valid Spreadsheet file`, {
-          position: 'top-center',
-        });
-        $('.form__file-upload').removeClass('active');
-        return;
-      }
-
-      if (file.size * 1e-6 > 10) {
-        toast.error(`Upload a valid Spreadsheet file`, {
-          position: 'top-center',
-        });
-
-        $('.form__file-upload').removeClass('active');
-        return;
-      }
-
-      console.log('Appropriate file type');
-      const fileReader = new window.FileReader();
-
-      fileReader.onload = () => {
-        const fileURL = fileReader.result;
-        $('.form__file-upload-text').html(file.name);
-        $('.form__file-upload-subtext').html('Change file');
-        // console.log(fileURL);
-      };
-
-      fileReader.readAsDataURL(file);
-    }
-
-    if (uploadRef && uploadRef.current) {
-      const uploadDivRef = uploadRef.current;
-      uploadDivRef.addEventListener('dragover', uploadDragover);
-      uploadDivRef.addEventListener('dragleave', uploadDragleave);
-      uploadDivRef.addEventListener('drop', uploadFile);
-
-      return () => {
-        // cleanup
-        uploadDivRef.removeEventListener('dragover', uploadDragover);
-        uploadDivRef.removeEventListener('dragleave', uploadDragleave);
-        uploadDivRef.removeEventListener('drop', uploadFile);
-      };
-    }
-  }, []);
-
-  const isEditing =
-    initialValues.firstname ||
-    initialValues.lastname ||
-    initialValues.email ||
-    initialValues.salary;
+export const EmployeeBulkAddForm = () => {
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadTextActive, setUploadTextActive] = useState(false);
+  const fileUploadClass = classNames('form__file-upload', {
+    ['active']: !!file || uploadTextActive,
+  });
 
   return (
     <Formik
-      initialValues={initialValues}
-      validationSchema={singleEmployeeUploadValidationSchema}
-      onSubmit={onSubmit}
+      initialValues={{ file: '' }}
+      validationSchema={bulkEmployeeFileUploadValidationSchema}
+      onSubmit={() => {
+        /** Implementation pending... */
+      }}
     >
-      {(props: FormikProps<AddEmployee>) => {
-        const { handleSubmit, values, isSubmitting } = props;
+      {(props: FormikProps<{ file: string }>) => {
+        const {
+          handleSubmit,
+          isSubmitting,
+          setValues,
+          setTouched,
+          touched,
+          errors,
+        } = props;
 
         return (
           <form
@@ -223,52 +167,49 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
             autoComplete="off"
           >
             <label>
-              <div className="form__file-upload" ref={uploadRef}>
+              <div
+                className={fileUploadClass}
+                draggable
+                onDragOver={() => setUploadTextActive(true)}
+                onDragLeave={() => setUploadTextActive(false)}
+              >
                 <AddFileSVG />
-                <p className="form__file-upload-text">
-                  <span className="form__file-upload-text--highlight">
-                    Upload a file
-                  </span>{' '}
-                  or drag and drop
+                <p className="form__file-upload--text">
+                  {file ? (
+                    file.name
+                  ) : (
+                    <>
+                      <span className="form__file-upload-text--highlight">
+                        Upload a file
+                      </span>{' '}
+                      or drag and drop
+                    </>
+                  )}
                 </p>
 
                 <span className="form__file-upload-subtext">
-                  Spreadsheet (xlsx) up to 10MB
+                  {file ? <>Change File</> : <>Spreadsheet (xlsx) up to 10MB</>}
                 </span>
+                <input
+                  type="file"
+                  name="xlslFile"
+                  accept=".xlsx"
+                  onChange={getBulkEmployeeFileUploadHandler({
+                    setTouched,
+                    setValues,
+                    setFile,
+                  })}
+                />
               </div>
-              <input
-                type="file"
-                name="xlslFile"
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  const [file] = e.target.files;
-                  console.log(file);
-
-                  if (!validExtensions.includes(file.type)) {
-                    toast.error(`Upload a valid Spreadsheet file`, {
-                      position: 'top-center',
-                    });
-                    $('.form__file-upload').removeClass('active');
-                    return;
-                  }
-
-                  if (file.size * 1e-6 > 10) {
-                    toast.error(`Upload a valid Spreadsheet file`, {
-                      position: 'top-center',
-                    });
-
-                    $('.form__file-upload').removeClass('active');
-                    return;
-                  }
-
-                  $('.form__file-upload-text').html(file.name);
-                  $('.form__file-upload-subtext').html('Change file');
-                }}
-              />
+              <InputError>{touched.file && errors.file}</InputError>
             </label>
 
-            <a className="form__sample-btn" href="#">
-              Download Sample
+            <a
+              className="form__sample-btn"
+              download="employee_upload_format.xlsx"
+              href={config.employeeUploadSample}
+            >
+              Download Format
             </a>
 
             <div className="form__submit-button">
@@ -277,16 +218,7 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
                 label="Proceed"
                 className="form__submit-button form__submit-button--full-width"
                 primary
-                disabled={
-                  isSubmitting ||
-                  Util.deepEquals(
-                    {
-                      ...values,
-                      salary: values.salary.replace(/[^0-9]/gi, ''),
-                    },
-                    initialValues,
-                  )
-                }
+                disabled={isSubmitting}
                 showSpinner={isSubmitting}
               />
             </div>

@@ -1,3 +1,5 @@
+import { FormikTouched } from 'formik';
+import { SetStateAction } from 'react';
 import { Employee } from 'src/api/types';
 
 /* eslint-disable no-unused-vars */
@@ -11,4 +13,20 @@ export type IgetEmployeeMethod = {
   setEmployee(value?: Employee): void;
   setNotFound(value: boolean): void;
   apiCallDone(): void;
+};
+
+export type IgetBulkEmployeeFileUploadHandler = {
+  setTouched(
+    touched: FormikTouched<{
+      file: string;
+    }>,
+    shouldValidate?: boolean | undefined,
+  ): void;
+  setFile(value: SetStateAction<File | null>): void;
+  setValues(
+    values: SetStateAction<{
+      file: string;
+    }>,
+    shouldValidate?: boolean | undefined,
+  ): void;
 };
