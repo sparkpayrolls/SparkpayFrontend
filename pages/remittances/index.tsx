@@ -3,37 +3,37 @@ import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 
 
 
-export const RemittancesDetails =({
+export const RemittancesDetails = ({
   title,
   details,
-} :{
-  title:string;
-  details:string;
+}: {
+  title: string;
+  details: string;
 }) => {
-  return(
-<div className="remittances-page__remittances_details-section">
-<div>
-  <p className="remittances-page__remittances_details-text">{title}</p>   
-    <p className="remittances-page__remittances_details">{details}</p>
-  </div>
-</div>
+  return (
+    <div className="remittances-page__remittances_details-section">
+      <div>
+        <p className="remittances-page__remittances_details-title">{title}</p>
+        <p className="remittances-page__remittances_details">{details}</p>
+      </div>
+    </div>
   );
 }
 
-export const NHFDetails =({
+export const PensionDetails = ({
   title,
   details,
-} :{
-  title:string;
-  details:string;
+}: {
+  title: string;
+  details: string;
 }) => {
-  return(
-<div className="remittances-page__NHF_details-section">
-<div>
-  <p className="remittances-page__NHF_details-text">{title}</p>   
-    <p className="remittances-page__NHF_details">{details}</p>
-  </div>
-</div>
+  return (
+    <div className="remittances-page__Pension_details-section">
+      <div>
+        <p className="remittances-page__Pension_details-title">{title}</p>
+        <p className="remittances-page__Pension_details-text">{details}</p>
+      </div>
+    </div>
   );
 }
 const Remittances: NextPage = () => {
@@ -41,29 +41,29 @@ const Remittances: NextPage = () => {
     <DashboardLayout pageTitle="remittances">
       <div className="remittances-page">
         <h1 className="remittances-page__remittances-header-title">
-         Remittance
+          Remittance
         </h1>
-        <p className="remittances-page__remittances-paragraph">3 remittances</p>
+        <p className="remittances-page__remittances-title-paragraph">3 remittances</p>
         <div
           className="remittances-page__remittances-cards
     "
         >
-            <RemittancesDetails
+          <RemittancesDetails
             title="Tax"
             details="Lorem sunt eiusmod officia incid excepteur 
             aliquip cillum aute mollit aliqua dolor."
-            />
-             <NHFDetails
+          />
+          <PensionDetails
             title="Pension"
             details="Lorem sunt eiusmod officia incid excepteur 
             aliquip cillum aute mollit aliqua dolor."
-            />
-             <RemittancesDetails
+          />
+          <RemittancesDetails
             title="NHF"
             details="Lorem sunt eiusmod officia incid excepteur
              aliquip cillum aute mollit aliqua dolor."
-            />
-      </div>
+          />
+        </div>
       </div>
     </DashboardLayout>
   );
