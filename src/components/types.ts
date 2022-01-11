@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { NiceModalHandler } from '@ebay/nice-modal-react';
-import { SelectProps } from 'antd';
+import { AutoCompleteProps, SelectProps } from 'antd';
 import { RefSelectProps } from 'antd/lib/select';
 import { FormikHelpers } from 'formik';
 import { Moment } from 'moment';
@@ -13,6 +13,7 @@ import React, {
   MouseEventHandler,
   ReactElement,
   ReactNode,
+  RefAttributes,
   TableHTMLAttributes,
 } from 'react';
 import { InputRangeProps } from 'react-input-range';
@@ -523,6 +524,10 @@ export type ISelect<T> = SelectProps<T> & {
   error?: string;
 };
 
+export type IAutoComplete = AutoCompleteProps & RefAttributes<RefSelectProps> & {
+  label?:string;
+  error?: string;
+}
 export type IEmployeeAddForm = {
   initialValues: AddEmployee;
   onSubmit(vals: AddEmployee, helpers: FormikHelpers<AddEmployee>): any;

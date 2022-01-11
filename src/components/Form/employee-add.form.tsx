@@ -1,4 +1,7 @@
+import { useRef, useEffect } from 'react';
 import { Formik, FormikProps } from 'formik';
+import $ from 'jquery';
+import { toast } from 'react-toastify';
 import { Util } from 'src/helpers/util';
 import { singleEmployeeUploadValidationSchema } from 'src/helpers/validation';
 import { Button } from '../Button/Button.component';
@@ -126,9 +129,83 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
     </Formik>
   );
 };
+const validExtensions = [
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'text/csv',
+];
 
 export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
   const { initialValues, onSubmit } = props;
+  const uploadRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function uploadDragover(e) {
+      e.preventDefault();
+      console.log('Click clicked!!!', uploadRef.current?.className);
+      $('.form__file-upload').addClass('active');
+    }
+
+    function uploadDragleave(e) {
+      e.preventDefault();
+      $('.form__file-upload').removeClass('active');
+    }
+
+    function uploadFile(e) {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      console.log(file);
+      const fileType = file.type;
+
+      if (!validExtensions.includes(file.type)) {
+        toast.error(`Upload a valid Spreadsheet file`, {
+          position: 'top-center',
+        });
+        $('.form__file-upload').removeClass('active');
+        return;
+      }
+
+      if (file.size * 1e-6 > 10) {
+        toast.error(`Upload a valid Spreadsheet file`, {
+          position: 'top-center',
+        });
+
+        $('.form__file-upload').removeClass('active');
+        return;
+      }
+
+      console.log('Appropriate file type');
+      const fileReader = new window.FileReader();
+
+      fileReader.onload = () => {
+        const fileURL = fileReader.result;
+        $('.form__file-upload-text').html(file.name);
+        $('.form__file-upload-subtext').html('Change file');
+        // console.log(fileURL);
+      };
+
+      fileReader.readAsDataURL(file);
+    }
+
+    if (uploadRef && uploadRef.current) {
+      const uploadDivRef = uploadRef.current;
+      uploadDivRef.addEventListener('dragover', uploadDragover);
+      uploadDivRef.addEventListener('dragleave', uploadDragleave);
+      uploadDivRef.addEventListener('drop', uploadFile);
+
+      return () => {
+        // cleanup
+        uploadDivRef.removeEventListener('dragover', uploadDragover);
+        uploadDivRef.removeEventListener('dragleave', uploadDragleave);
+        uploadDivRef.removeEventListener('drop', uploadFile);
+      };
+    }
+  }, []);
+
+  const isEditing =
+    initialValues.firstname ||
+    initialValues.lastname ||
+    initialValues.email ||
+    initialValues.salary;
 
   return (
     <Formik
@@ -146,7 +223,7 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
             autoComplete="off"
           >
             <label>
-              <div className="form__file-upload">
+              <div className="form__file-upload" ref={uploadRef}>
                 <AddFileSVG />
                 <p className="form__file-upload-text">
                   <span className="form__file-upload-text--highlight">
@@ -164,10 +241,35 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
                 name="xlslFile"
                 style={{ display: 'none' }}
                 onChange={(e) => {
-                  console.log(e);
+                  const [file] = e.target.files;
+                  console.log(file);
+
+                  if (!validExtensions.includes(file.type)) {
+                    toast.error(`Upload a valid Spreadsheet file`, {
+                      position: 'top-center',
+                    });
+                    $('.form__file-upload').removeClass('active');
+                    return;
+                  }
+
+                  if (file.size * 1e-6 > 10) {
+                    toast.error(`Upload a valid Spreadsheet file`, {
+                      position: 'top-center',
+                    });
+
+                    $('.form__file-upload').removeClass('active');
+                    return;
+                  }
+
+                  $('.form__file-upload-text').html(file.name);
+                  $('.form__file-upload-subtext').html('Change file');
                 }}
               />
             </label>
+
+            <a className="form__sample-btn" href="#">
+              Download Sample
+            </a>
 
             <div className="form__submit-button">
               <Button
