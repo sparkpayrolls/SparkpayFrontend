@@ -1,11 +1,9 @@
 .remittances-page {
-  width: 97%;
-  margin: auto;
+  margin-left:2rem;
+  margin-right:2rem;
   padding-top: 2.6rem;
-
+  
   &__remittances-header-title {
-    font-family: Karla;
-    font-style: normal;
     font-weight: 600;
     font-size: 28px;
     line-height: 32px;
@@ -14,8 +12,6 @@
   }
 
   &__remittances-title-paragraph {
-    font-family: Karla;
-    font-style: normal;
     font-weight: 500;
     font-size: 18px;
     line-height: 24px;
@@ -26,69 +22,43 @@
   &__remittances-cards {
     width: 100%;
     display: flex;
-    // justify-content: space-evenly;
     grid-column-gap: 1.15rem;
-    margin-top: 2rem;
+    margin-top: 2rem;   
+    cursor:pointer;
+    
+   
   }
 
   &__remittances_details-section {
     width: 360px;
     height: 124px;
-    background: #FFFFFF;
+    background: $white;
     border: 1px solid #DDE5EE;
     box-sizing: border-box;
     border-radius: 8px;
     padding: 20px 6px 20px 15px;
-
+ 
   }
 
-  &__Pension_details-section {
-    width: 360px;
-    height: 124px;
-    background: #F7F9FB;
-    border: 1px solid #1D4ED8;
-    box-sizing: border-box;
-    border-radius: 8px;
-    padding: 20px 6px 20px 15px;
-
-  }
 
   &__remittances_details-title {
-    font-family: Karla;
-    font-style: normal;
     font-weight: 500;
     font-size: 1.2rem;
     line-height: 24px;
     color: #0B2253;
   }
-
-  &__Pension_details-title {
-    font-family: Karla;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 1.2rem;
-    line-height: 24px;
-    color: #0B2253;
-  }
-
   &__remittances_details {
-    font-family: Karla;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 1rem;
-    padding-top: 0.5rem;
-    line-height: 24px;
-    color: #6D7A98;
-  }
-
-  &__Pension_details-text {
-    font-family: Karla;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 1rem;
-    padding-top: 0.5rem;
+    font-size: 0.959rem;
+    padding-top: 0.2rem;
     line-height: 24px;
     color: #6D7A98;
   }
 
 }
+
+.remittances__card:hover{
+    background: #F7F9FB;
+    border: 1px solid #1D4ED8;
+    box-sizing: border-box;
+    border-radius: 8px;
+    }

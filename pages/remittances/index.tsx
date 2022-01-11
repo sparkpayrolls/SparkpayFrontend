@@ -11,7 +11,7 @@ export const RemittancesDetails = ({
   details: string;
 }) => {
   return (
-    <div className="remittances-page__remittances_details-section">
+    <div className="remittances-page__remittances_details-section remittances__card">
       <div>
         <p className="remittances-page__remittances_details-title">{title}</p>
         <p className="remittances-page__remittances_details">{details}</p>
@@ -20,22 +20,6 @@ export const RemittancesDetails = ({
   );
 }
 
-export const PensionDetails = ({
-  title,
-  details,
-}: {
-  title: string;
-  details: string;
-}) => {
-  return (
-    <div className="remittances-page__Pension_details-section">
-      <div>
-        <p className="remittances-page__Pension_details-title">{title}</p>
-        <p className="remittances-page__Pension_details-text">{details}</p>
-      </div>
-    </div>
-  );
-}
 const Remittances: NextPage = () => {
   return (
     <DashboardLayout pageTitle="remittances">
@@ -44,6 +28,8 @@ const Remittances: NextPage = () => {
           Remittance
         </h1>
         <p className="remittances-page__remittances-title-paragraph">3 remittances</p>
+        <div>
+        </div>
         <div
           className="remittances-page__remittances-cards
     "
@@ -53,7 +39,8 @@ const Remittances: NextPage = () => {
             details="Lorem sunt eiusmod officia incid excepteur 
             aliquip cillum aute mollit aliqua dolor."
           />
-          <PensionDetails
+          
+          <RemittancesDetails
             title="Pension"
             details="Lorem sunt eiusmod officia incid excepteur 
             aliquip cillum aute mollit aliqua dolor."
