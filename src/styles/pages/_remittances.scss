@@ -1,0 +1,45 @@
+&__remittances-cards{
+    width:100%;
+    display:flex;
+    // justify-content: space-evenly;
+    grid-column-gap: 1.15rem;
+    margin-top:2rem;
+}
+.remittances-page{
+    width:97%;
+    margin:auto;
+  padding-top:3rem;
+
+    &__remittances-header-title{
+  font-family: Karla;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  color: #0E347E;  
+    }
+
+    &__remittances_details-section{
+width: 360px;
+height: 124px;
+ background: #FFFFFF;
+border: 1px solid #DDE5EE;
+box-sizing: border-box;
+border-radius: 8px; 
+padding: 20px 6px 15px 20px;
+
+    }
+
+    &__NHF_details-section{
+width: 360px;
+height: 124px;
+   background: #F7F9FB;
+border: 1px solid #1D4ED8;
+box-sizing: border-box;
+border-radius: 8px; 
+padding: 20px 6px 15px 20px;
+
+    }
+
+}
