@@ -135,7 +135,7 @@ const validExtensions = [
 ];
 
 export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
-  const { initialValues, onSubmit, currency } = props;
+  const { initialValues, onSubmit } = props;
   const uploadRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -214,15 +214,7 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
       onSubmit={onSubmit}
     >
       {(props: FormikProps<AddEmployee>) => {
-        const {
-          handleChange,
-          handleSubmit,
-          handleBlur,
-          values,
-          errors,
-          touched,
-          isSubmitting,
-        } = props;
+        const { handleSubmit, values, isSubmitting } = props;
 
         return (
           <form
@@ -241,7 +233,7 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
                 </p>
 
                 <span className="form__file-upload-subtext">
-                  Spreadsheet (xlsl) up to 10MB
+                  Spreadsheet (xlsx) up to 10MB
                 </span>
               </div>
               <input
