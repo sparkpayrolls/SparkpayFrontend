@@ -68,3 +68,10 @@ export const bankPayoutMethodMetaValidationSchema = Yup.object().shape({
     .min(6, 'Account number should be at least 6 digits long')
     .required('Account number is required'),
 });
+
+export const UserProfileValidationSchema = Yup.object().shape({
+  firstname: format.firstname,
+  lastname: format.lastname,
+  email: format.email,
+  phonenumber: format.phonenumber,
+});

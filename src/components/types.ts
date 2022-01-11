@@ -229,6 +229,14 @@ export type IPayrollTable = {
   kebabMenuItems(payroll: Payroll): IKebabItem[];
 };
 
+/**User Profile */
+export type userProfile = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phonenumber: string;
+};
+
 /** Create Organization */
 export type CreateOrganization = {
   name: string;
