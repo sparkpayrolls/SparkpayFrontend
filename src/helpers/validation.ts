@@ -40,6 +40,10 @@ export const singleEmployeeUploadValidationSchema = Yup.object().shape({
   salary: Yup.string().required('salary is required'),
 });
 
+export const bulkEmployeeFileUploadValidationSchema = Yup.object().shape({
+  file: Yup.string().required('please upload an xlsx file to proceed'),
+});
+
 export const createOrganizationValidationSchema = Yup.object().shape({
   email: format.email,
   name: format.firstname,

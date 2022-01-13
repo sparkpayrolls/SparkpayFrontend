@@ -1,10 +1,18 @@
+import { useState } from 'react';
 import { Formik, FormikProps } from 'formik';
 import { Util } from 'src/helpers/util';
-import { singleEmployeeUploadValidationSchema } from 'src/helpers/validation';
+import {
+  bulkEmployeeFileUploadValidationSchema,
+  singleEmployeeUploadValidationSchema,
+} from 'src/helpers/validation';
 import { Button } from '../Button/Button.component';
 import { Input } from '../Input/Input.component';
 import { AddEmployee, IEmployeeAddForm } from '../types';
 import { AddFileSVG } from '@/components/svg';
+import classNames from 'classnames';
+import { InputError } from '../Shared/input-error.component';
+import { config } from 'src/helpers/config';
+import { getBulkEmployeeFileUploadHandler } from 'src/helpers/methods';
 
 export const EmployeeAddForm = (props: IEmployeeAddForm) => {
   const { initialValues, onSubmit, currency } = props;
@@ -127,17 +135,30 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
   );
 };
 
-export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
-  const { initialValues, onSubmit } = props;
+export const EmployeeBulkAddForm = () => {
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadTextActive, setUploadTextActive] = useState(false);
+  const fileUploadClass = classNames('form__file-upload', {
+    ['active']: !!file || uploadTextActive,
+  });
 
   return (
     <Formik
-      initialValues={initialValues}
-      validationSchema={singleEmployeeUploadValidationSchema}
-      onSubmit={onSubmit}
+      initialValues={{ file: '' }}
+      validationSchema={bulkEmployeeFileUploadValidationSchema}
+      onSubmit={() => {
+        /** Implementation pending... */
+      }}
     >
-      {(props: FormikProps<AddEmployee>) => {
-        const { handleSubmit, values, isSubmitting } = props;
+      {(props: FormikProps<{ file: string }>) => {
+        const {
+          handleSubmit,
+          isSubmitting,
+          setValues,
+          setTouched,
+          touched,
+          errors,
+        } = props;
 
         return (
           <form
@@ -146,28 +167,50 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
             autoComplete="off"
           >
             <label>
-              <div className="form__file-upload">
+              <div
+                className={fileUploadClass}
+                draggable
+                onDragOver={() => setUploadTextActive(true)}
+                onDragLeave={() => setUploadTextActive(false)}
+              >
                 <AddFileSVG />
-                <p className="form__file-upload-text">
-                  <span className="form__file-upload-text--highlight">
-                    Upload a file
-                  </span>{' '}
-                  or drag and drop
+                <p className="form__file-upload--text">
+                  {file ? (
+                    file.name
+                  ) : (
+                    <>
+                      <span className="form__file-upload-text--highlight">
+                        Upload a file
+                      </span>{' '}
+                      or drag and drop
+                    </>
+                  )}
                 </p>
 
                 <span className="form__file-upload-subtext">
-                  Spreadsheet (xlsx) up to 10MB
+                  {file ? <>Change File</> : <>Spreadsheet (xlsx) up to 10MB</>}
                 </span>
+                <input
+                  type="file"
+                  name="xlslFile"
+                  accept=".xlsx"
+                  onChange={getBulkEmployeeFileUploadHandler({
+                    setTouched,
+                    setValues,
+                    setFile,
+                  })}
+                />
               </div>
-              <input
-                type="file"
-                name="xlslFile"
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  console.log(e);
-                }}
-              />
+              <InputError>{touched.file && errors.file}</InputError>
             </label>
+
+            <a
+              className="form__sample-btn"
+              download="employee_upload_format.xlsx"
+              href={config.employeeUploadSample}
+            >
+              Download Format
+            </a>
 
             <div className="form__submit-button">
               <Button
@@ -175,16 +218,7 @@ export const EmployeeBulkAddForm = (props: IEmployeeAddForm) => {
                 label="Proceed"
                 className="form__submit-button form__submit-button--full-width"
                 primary
-                disabled={
-                  isSubmitting ||
-                  Util.deepEquals(
-                    {
-                      ...values,
-                      salary: values.salary.replace(/[^0-9]/gi, ''),
-                    },
-                    initialValues,
-                  )
-                }
+                disabled={isSubmitting}
                 showSpinner={isSubmitting}
               />
             </div>
