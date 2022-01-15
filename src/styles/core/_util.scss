@@ -19,6 +19,20 @@
 .padding-right-space-1 {
   padding-right: $space-1;
 }
+
+.container {
+  width: 100%;
+  margin-inline: auto;
+
+  @media screen and (min-width: 1200px) {
+    width: 1140px !important;
+    padding: unset !important;
+  }
+  @media screen and (min-width: 1400px) {
+    width: 1320px !important;
+    padding: unset !important;
+  }
+}
 .sr-only {
   width: 0;
   height: 0;
