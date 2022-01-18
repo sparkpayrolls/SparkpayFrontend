@@ -7,14 +7,15 @@ import { Button } from '../../src/components/Button/Button.component';
 const RemittancesTax: NextPage = () => {
   return (
     <DashboardLayout pageTitle="remittances-tax">
-      <div className="remittances-page">
+      <div className="payroll-section__details">
+      <div className="remittances-tax-section">
         <div className="payroll-section__head">
-          <h1 className="payroll-section__title">Payroll</h1>
+          <h1 className="payroll-section__title">Tax</h1>
           <div className="payroll-section__employee-button">
             <Button
               label={
                 <>
-                  {'Create Payroll'}
+                  {'Proceed'}
                 </>
               }
               element="a"
@@ -26,6 +27,7 @@ const RemittancesTax: NextPage = () => {
           </div>
         </div>
         </div>
+      </div>
     </DashboardLayout>
   );
 };
