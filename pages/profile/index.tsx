@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAppSelector } from 'src/redux/hooks';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
@@ -8,8 +9,18 @@ import { Input } from '../../src/components/Input/Input.component';
 import { Formik, FormikProps } from 'formik';
 import { UserProfileValidationSchema } from 'src/helpers/validation';
 import { userProfile } from '../../src/components/types';
+import NiceModal from '@ebay/nice-modal-react';
+import { AddEmployeeModal } from '@/components/Modals/UserProfileModal.component';
+
 
 const UserProfile: NextPage = () => {
+  const administrator = useAppSelector((state) => state.administrator);
+
+   const onAddEmployee = () => {
+     NiceModal.show(AddEmployeeModal, {
+       administrator
+     });
+   };
   return (
     <DashboardLayout pageTitle="Profile">
       <div className="user-profile">
@@ -25,7 +36,11 @@ const UserProfile: NextPage = () => {
               <p className="user-profile__upload-image-text">Upload Image </p>
             </div>
           </label>
-          <input type="file" id="upload" className='user-profile__input-upload'/>
+          <input
+            type="file"
+            id="upload"
+            className="user-profile__input-upload"
+          />
 
           <div className="user-profile__formik-section">
             <Formik
@@ -115,7 +130,7 @@ const UserProfile: NextPage = () => {
                         className="user-profile__button"
                         primary
                       />
-                    </div>
+                    </div>  
                   </form>
                 );
               }}
@@ -132,9 +147,16 @@ const UserProfile: NextPage = () => {
               <p className="user-profile__change-new-password">
                 Change your password to a new one
               </p>
-              <p className="user-profile__change-password-text">
+              <button>Change Password</button>
+              <button
+                className="employee-details__employee-button"
+                onClick={onAddEmployee}
+              >
                 Change Password
-              </p>
+              </button>
+              {/* <p className="user-profile__change-password-text">
+                Change Password
+              </p> */}
             </div>
           </div>
         </section>

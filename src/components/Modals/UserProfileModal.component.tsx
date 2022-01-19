@@ -13,8 +13,8 @@ import { getEmployeeAddSubmitHandler } from 'src/helpers/methods';
 
 export const AddEmployeeModal = NiceModal.create(
   (props: { administrator: Administrator }) => {
-    return ( 
-      <ModalLayout title="Add Employee">
+    return (  
+      <ModalLayout title="Change Password">
         {(modal) => {
           return (
             <AddEmployeeForm

@@ -36,7 +36,7 @@ const EmployeeDetails: NextPage = () => {
   const getEmployee = useCallback(async () => {
     await getEmployeeMethod({
       employeeId,
-      apiCallStarted,
+      apiCallStarted, 
       setEmployee,
       setNotFound,
       apiCallDone,

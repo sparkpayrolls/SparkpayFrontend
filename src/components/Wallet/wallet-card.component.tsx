@@ -14,7 +14,7 @@ export const WalletCard = (props: IWalletCard) => {
     refreshBalance,
     paymentMethods,
   } = props;
-  const pollRefreshBalance = (times = 0, duration = 0) => {
+  const pollRefreshBalance = (times = 0, duration = 0) => { 
     if (times < 5) {
       refreshBalance();
       setTimeout(pollRefreshBalance, duration + 3000, times + 1);
