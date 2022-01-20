@@ -72,3 +72,21 @@ export const bankPayoutMethodMetaValidationSchema = Yup.object().shape({
     .min(6, 'Account number should be at least 6 digits long')
     .required('Account number is required'),
 });
+
+export const BulkEmployeeAddValidation = Yup.object()
+  .shape({
+    employees: Yup.array()
+      .of(
+        Yup.object()
+          .shape({
+            firstname: Yup.string().required('First Name is required'),
+            lastname: Yup.string().required('Last Name is required'),
+            email: Yup.string().required('Email is required'),
+            salary: Yup.string().required('Salary is required'),
+          })
+          .required(),
+      )
+      .min(1, 'at least one employee')
+      .required(),
+  })
+  .required();

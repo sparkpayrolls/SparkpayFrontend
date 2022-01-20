@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { RecentPayroll } from 'src/api/types';
+import { Util } from 'src/helpers/util';
 import { Identity } from '../Identity/identity.component';
 import { StatusChip } from '../StatusChip/status-chip.component';
 import { Table } from './Table.component';
@@ -35,11 +36,11 @@ export const UserDashboardTable = ({
                   </td>
 
                   <td>
-                    {payroll.company?.country?.currencySymbol}
-                    {payroll.totalAmount}
+                    {payroll.company?.country?.currencySymbol}{' '}
+                    {Util.formatMoneyNumber(payroll.totalAmount)}
                   </td>
 
-                  <td>{payroll.size}</td>
+                  <td>{Util.formatNumber(payroll.size)}</td>
 
                   <td>
                     <StatusChip status={payroll.status} />

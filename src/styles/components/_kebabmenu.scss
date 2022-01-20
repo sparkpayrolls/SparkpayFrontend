@@ -2,25 +2,19 @@ $cubic-out: cubic-bezier(0.32, 2.04, 0.85, 0.54);
 $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
 
 .kebabmenu {
-  position: relative;
-  display: inline-block;
-  box-sizing: border-box;
-  cursor: pointer;
+  &__trigger {
+    cursor: pointer;
+  }
 
   &__dropdown {
     background: #ffffff;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 3px;
-    position: absolute;
-    z-index: 999999999;
-    right: 0;
-    top: 3em;
-    transition: all 0.25s ease-out;
-    transform: scale(0);
-    transform-origin: 100% 0;
     margin: 0;
     padding: 4px;
     min-width: 147px;
+    max-height: 300px;
+    overflow-y: auto;
 
     li {
       display: block;
@@ -41,11 +35,6 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
         color: $blue;
         transition: background 0.2s ease-in-out;
       }
-    }
-
-    &--active {
-      transform: scale(1);
-      transition: all 0.25s cubic-bezier(0.5, 1.8, 0.9, 0.8);
     }
   }
 }

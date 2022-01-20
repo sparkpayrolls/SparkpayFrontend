@@ -1,4 +1,4 @@
-import { Switch } from 'antd';
+import { Switch, Dropdown } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,60 +16,28 @@ export type IKebabMenu = {
 };
 
 export const KebabMenu = (props: IKebabMenu) => {
-  const [isActive, setIsActive] = useState(false);
-  const [id] = useState(`kebabmenu-${Math.ceil(Math.random() * 10000000)}`);
-  const kebabRef = useRef<HTMLDivElement>(null);
   const { items } = props;
 
-  const handleClick = useCallback(() => {
-    setIsActive(!isActive);
-  }, [setIsActive, isActive]);
-
-  useEffect(() => {
-    const element = kebabRef.current;
-
-    if (element) {
-      const handleClickOutside = (event: MouseEvent) => {
-        // @ts-ignore
-        if (!event?.target?.closest(`#${element?.id}`)) {
-          setIsActive(false);
-        }
-      };
-      window.addEventListener('click', handleClickOutside);
-
-      return function unmount() {
-        window.removeEventListener('click', handleClickOutside);
-      };
-    }
-  }, [kebabRef]);
+  const menu = (
+    <ul className="kebabmenu__dropdown">
+      {items.map((item, i) => {
+        return (
+          <li onClick={item.action} key={`kebabmenu-${i}`}>
+            <Link href={item.href || '#'}>
+              <a>{item.value}</a>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
 
   return (
-    <div className="kebabmenu" id={id} ref={kebabRef}>
-      <span className="kebabmenu__trigger" onClick={handleClick}>
+    <Dropdown overlay={menu}>
+      <span className="kebabmenu__trigger" onClick={(e) => e.preventDefault()}>
         <KebabMenuSVG />
       </span>
-      <ul
-        className={`kebabmenu__dropdown${
-          isActive ? ' kebabmenu__dropdown--active' : ''
-        }`}
-      >
-        {items.map((item, i) => {
-          return (
-            <li
-              onClick={() => {
-                setIsActive(false);
-                item.action && item.action();
-              }}
-              key={`kebabmenu-${i}`}
-            >
-              <Link href={item.href || '#'}>
-                <a>{item.value}</a>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+    </Dropdown>
   );
 };
 
