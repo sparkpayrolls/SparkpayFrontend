@@ -73,6 +73,13 @@ export const bankPayoutMethodMetaValidationSchema = Yup.object().shape({
     .required('Account number is required'),
 });
 
+export const UserProfileValidationSchema = Yup.object().shape({
+  firstname: format.firstname,
+  lastname: format.lastname,
+  email: format.email,
+  phonenumber: format.phonenumber,
+});
+
 export const BulkEmployeeAddValidation = Yup.object()
   .shape({
     employees: Yup.array()
