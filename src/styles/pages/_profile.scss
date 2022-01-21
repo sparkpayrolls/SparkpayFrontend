@@ -17,8 +17,19 @@
   &__image-upload-link-parent {
     display: flex;
     margin-top: 2rem;
-    cursor: pointer;
     width: 30%;
+    align-items: center;
+
+    &__image {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        max-width: 100%;
+      }
+    }
   }
   &__input-upload {
     display: none;
@@ -30,6 +41,7 @@
     font-weight: 500;
     border-bottom: 1px solid #1d4ed8;
     margin-bottom: 2.2rem;
+    cursor: pointer;
   }
   &__formik-section {
     margin-top: 2rem;
@@ -55,7 +67,7 @@
   }
   &__button-container {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     width: 71.8%;
     margin-top: 2rem;
   }
@@ -101,5 +113,3 @@
     cursor: pointer;
   }
 }
-
-

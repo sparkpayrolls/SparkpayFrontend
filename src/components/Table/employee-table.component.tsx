@@ -120,7 +120,7 @@ export const EmployeeTable = (props: IEmployeeTable) => {
         headerRow={[
           'Name',
           'Email\xa0Address',
-          `Amount\xa0(${currency})`,
+          `Amount`,
           'Status',
           'Group',
           'Date\xa0Added',
@@ -154,7 +154,9 @@ export const EmployeeTable = (props: IEmployeeTable) => {
                         {employee.email}
                       </span>
                     </td>
-                    <td>{employee.salary}</td>
+                    <td>
+                      {currency} {Util.formatMoneyNumber(employee.salary)}
+                    </td>
                     <td>
                       <StatusChip status={employee.status} />
                     </td>

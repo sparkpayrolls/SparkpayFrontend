@@ -65,6 +65,8 @@ interface InputProps {
   transformValue?: (val: string) => string;
 
   loading?: boolean;
+
+  readOnly?: boolean;
 }
 
 /**

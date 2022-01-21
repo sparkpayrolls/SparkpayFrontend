@@ -71,7 +71,7 @@ const AddEmployeeForm = ({
       </IF>
 
       <IF condition={uploadType === 'bulkUpload'}>
-        <EmployeeBulkAddForm />
+        <EmployeeBulkAddForm onSubmit={modal.hide} />
       </IF>
     </div>
   );
