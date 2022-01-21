@@ -143,10 +143,16 @@ const UserProfile: NextPage = () => {
               Update your Password
             </p>
             <div className="user-profile__change-password-container">
-              <p className="user-profile__change-new-password">
+              <p
+                className="user-profile__change-new-password"
+                onClick={onAddEmployee}
+              >
                 Change your password to a new one
               </p>
-              <p className="user-profile__change-password-text" onClick={onAddEmployee}>
+              <p
+                className="user-profile__change-password-text"
+                onClick={onAddEmployee}
+              >
                 Change Password
               </p>
             </div>
