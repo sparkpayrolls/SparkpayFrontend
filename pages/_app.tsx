@@ -57,6 +57,8 @@ const AuthManager = () => {
           // error logging in...
           Cookies.remove('auth_token');
         });
+      refreshCompanies(dispatch);
+      getCurrentAdministrator(dispatch);
     } else {
       dispatch(commitUser(null));
     }
@@ -90,10 +92,10 @@ const AuthManager = () => {
   }, [companies, administrator, dispatch]);
 
   useEffect(() => {
-    if (user) {
+    if (user && companies.some((c) => c.user !== user?.id)) {
       refreshCompanies(dispatch);
     }
-  }, [user, dispatch]);
+  }, [user, companies, dispatch]);
 
   return null;
 };

@@ -22,16 +22,11 @@ import { ChangePasswordModal } from '@/components/Modals/UserProfileModal.compon
 import withAuth from 'src/helpers/HOC/withAuth';
 
 const UserProfile: NextPage = () => {
-  const { user, administrator } = useAppSelector((state) => ({
-    administrator: state.administrator,
-    user: state.user,
-  }));
+  const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const [file, setFile] = useState({ filename: '', data: '' });
   const onAddEmployee = () => {
-    NiceModal.show(ChangePasswordModal, {
-      administrator,
-    });
+    NiceModal.show(ChangePasswordModal);
   };
 
   return (
