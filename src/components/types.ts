@@ -238,6 +238,13 @@ export type userProfile = {
   phonenumber: string;
 };
 
+/*user profile change password modal*/
+export type ChangePasswordUserProfile = {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
 /** Create Organization */
 export type CreateOrganization = {
   name: string;

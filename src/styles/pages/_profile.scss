@@ -11,13 +11,14 @@
     color: #0e347e;
   }
   &__user-image {
-    border: 4px solid #E1FBEB !important;
+    border: 4px solid #e1fbeb !important;
     border-radius: 50%;
   }
   &__image-upload-link-parent {
     display: flex;
     margin-top: 2rem;
     cursor: pointer;
+    width: 30%;
   }
   &__input-upload {
     display: none;
@@ -100,3 +101,5 @@
     cursor: pointer;
   }
 }
+
+

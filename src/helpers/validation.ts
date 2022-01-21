@@ -51,6 +51,13 @@ export const createOrganizationValidationSchema = Yup.object().shape({
   phonenumber: format.phonenumber,
 });
 
+export const userChangePasswordValidationSchema = Yup.object().shape({
+  oldPassword: format.password,
+  newPassword: Yup.string().required('enter your new password'),
+  confirmPassword: Yup.string().required('enter password again'),
+
+});
+
 export const fundWalletValidationSchema = Yup.object().shape({
   amount: Yup.string().required('amount is required'),
   channel: Yup.string().required('select payment method'),

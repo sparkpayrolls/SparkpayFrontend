@@ -10,17 +10,16 @@ import { Formik, FormikProps } from 'formik';
 import { UserProfileValidationSchema } from 'src/helpers/validation';
 import { userProfile } from '../../src/components/types';
 import NiceModal from '@ebay/nice-modal-react';
-import { AddEmployeeModal } from '@/components/Modals/UserProfileModal.component';
-
+import { ChangePasswordModal } from '@/components/Modals/UserProfileModal.component';
 
 const UserProfile: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
 
-   const onAddEmployee = () => {
-     NiceModal.show(AddEmployeeModal, {
-       administrator
-     });
-   };
+  const onAddEmployee = () => {
+    NiceModal.show(ChangePasswordModal, {
+      administrator,
+    });
+  };
   return (
     <DashboardLayout pageTitle="Profile">
       <div className="user-profile">
@@ -130,7 +129,7 @@ const UserProfile: NextPage = () => {
                         className="user-profile__button"
                         primary
                       />
-                    </div>  
+                    </div>
                   </form>
                 );
               }}
@@ -147,16 +146,9 @@ const UserProfile: NextPage = () => {
               <p className="user-profile__change-new-password">
                 Change your password to a new one
               </p>
-              <button>Change Password</button>
-              <button
-                className="employee-details__employee-button"
-                onClick={onAddEmployee}
-              >
+              <p className="user-profile__change-password-text" onClick={onAddEmployee}>
                 Change Password
-              </button>
-              {/* <p className="user-profile__change-password-text">
-                Change Password
-              </p> */}
+              </p>
             </div>
           </div>
         </section>
