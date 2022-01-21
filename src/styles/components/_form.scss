@@ -35,6 +35,20 @@
     border-radius: 6px;
     padding: 26px;
     cursor: pointer;
+    position: relative;
+
+    &.active {
+      border: 2px solid #bac2c9;
+    }
+
+    input {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
   }
 
   &__file-upload-text {

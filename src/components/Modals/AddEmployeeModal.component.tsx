@@ -71,19 +71,7 @@ const AddEmployeeForm = ({
       </IF>
 
       <IF condition={uploadType === 'bulkUpload'}>
-        <EmployeeBulkAddForm
-          initialValues={{
-            firstname: '',
-            lastname: '',
-            email: '',
-            salary: '',
-          }}
-          onSubmit={getEmployeeAddSubmitHandler((employee) => {
-            modal.resolve(employee);
-            setTimeout(modal.hide, 100);
-          })}
-          currency={Util.getCurrencySymbolFromAdministrator(administrator)}
-        />
+        <EmployeeBulkAddForm onSubmit={modal.hide} />
       </IF>
     </div>
   );
