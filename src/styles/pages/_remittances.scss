@@ -60,11 +60,89 @@
     line-height: 24px;
     color: #6d7a98;
   }
-}
 
-.remittances__card:hover {
-  background: #f7f9fb;
-  border: 1px solid #1d4ed8;
-  box-sizing: border-box;
-  border-radius: 8px;
+  .remittances__card:hover {
+    background: #f7f9fb;
+    border: 1px solid #1d4ed8;
+    box-sizing: border-box;
+    border-radius: 8px;
+  }
+}
+// remittances tax page
+.remittances-tax-page {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  &__tax-details {
+    margin-top: 1.3rem;
+    margin-bottom: 2rem;
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 178px);
+    border: 1px solid $gray-800;
+    box-sizing: border-box;
+    border-radius: 8px;
+  }
+
+  &__line {
+    border-left: 1px solid $gray-800;
+    height: 100%;
+    position: relative;
+    left: 0.1%;
+    margin-left: -3px;
+    top: 0px;
+  }
+
+  &__remittances-options-group,
+  &__General-information {
+    width: 50%;
+    padding: 24px;
+
+    > hr {
+      width: 100%;
+      margin-top: 0.9rem;
+      border: 1px solid $gray-800;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__remittances-options-group > h2 {
+    font-weight: bold;
+    font-size: 18px;
+    color: #0e347e;
+    padding-top: 1.3rem;
+  }
+  &__remittances-options-group > p {
+    font-size: 0.9rem;
+    color: #6d7a98;
+    padding-top: 8px;
+  }
+  &__General-information > h2 {
+    font-weight: bold;
+    font-size: 18px;
+    color: #0e347e;
+    padding-top: 1.3rem;
+  }
+  &__General-information > p {
+    font-size: 0.9rem;
+    color: #6d7a98;
+    padding-top: 8px;
+  }
+
+  &__remittances-inbox-image {
+    position: relative;
+    left: 170px;
+    top: 7rem;
+  }
+
+  &__remittances-inbox-image > p {
+    position: relative;
+    right: 160px;
+    text-align: center;
+    padding-top: 1.5rem;
+    color: #0b2253;
+    font-size: 1rem;
+  }
+}
+.ant-radio-wrapper {
+  margin-bottom: 0.5rem;
 }
