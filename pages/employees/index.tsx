@@ -5,7 +5,6 @@ import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout'
 import withAuth from 'src/helpers/HOC/withAuth';
 import { Employee } from 'src/api/types';
 import { $api } from 'src/api';
-
 import { AddEmployeeModal } from '@/components/Modals/AddEmployeeModal.component';
 import { useAppSelector } from 'src/redux/hooks';
 import { EmployeeTab } from '@/components/Employee/employee-tab.component';

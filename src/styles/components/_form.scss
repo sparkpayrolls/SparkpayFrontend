@@ -91,7 +91,8 @@
 }
 
 .single-employee-upload-form,
-.create-organization-form {
+.create-organization-form,
+.change-password-form{
   &__section:not(:last-child) {
     margin-bottom: $space-2;
   }

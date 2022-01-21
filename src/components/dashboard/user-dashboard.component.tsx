@@ -3,6 +3,7 @@ import { EmployeeCardSvg, OrganisationCardSvg, PayrollCardSvg } from '../svg';
 import { UserDashboardTable } from '../Table/user-dashboard-table.component';
 import { IUserDashboard } from '../types';
 import { DashboardCard } from '../Card/dashboard-card.component';
+import { Util } from 'src/helpers/util';
 
 export const UserDashboard = (props: IUserDashboard) => {
   const { getData, loading, data } = props;
@@ -16,21 +17,21 @@ export const UserDashboard = (props: IUserDashboard) => {
       <section className="dashboard__stats-section">
         <DashboardCard
           Icon={OrganisationCardSvg}
-          value={data.totalNumberOfCompanies}
+          value={Util.formatNumber(data.totalNumberOfCompanies)}
           title="Organisations"
           loading={loading}
         />
 
         <DashboardCard
           Icon={PayrollCardSvg}
-          value={data.totalNumberOfPayrolls}
+          value={Util.formatNumber(data.totalNumberOfPayrolls)}
           loading={loading}
           title="Payrolls"
         />
 
         <DashboardCard
           Icon={EmployeeCardSvg}
-          value={data.totalNumberOfEmployees}
+          value={Util.formatNumber(data.totalNumberOfEmployees)}
           loading={loading}
           title="Employees"
         />

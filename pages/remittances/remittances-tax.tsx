@@ -3,7 +3,7 @@ import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import { Button } from '../../src/components/Button/Button.component';
 import { Radio } from 'antd';
 import Image from 'next/image';
-import RemittancesInbox from "../../public/svgs/inbox.svg"
+import RemittancesInbox from '../../public/svgs/inbox.svg';
 import backicon from '../../public/svgs/back-icon.svg';
 import Link from 'next/link';
 
@@ -13,7 +13,7 @@ const RemittancesTax: NextPage = () => {
       <div className="remittances-tax-page">
         <div className="remittances-tax-section">
           <div className="group-details__header-content">
-            <div className="group-details__group-detail-title-section"> 
+            <div className="group-details__group-detail-title-section">
               <Link href="/remittances">
                 <a>
                   <Image
@@ -26,24 +26,21 @@ const RemittancesTax: NextPage = () => {
               <h5 className="group-details__group-detail-title">Tax</h5>
             </div>
             <Button
-                label={
-                <>
-                  {'Proceed'}
-                </>
-              }
+              label={<>{'Proceed'}</>}
               element="a"
-              
               className="payroll-section__submit-btn"
               primary
               type="submit"
-              />
+            />
           </div>
           <div className="remittances-tax-page__tax-details">
             <div className="remittances-tax-page__remittances-options-group">
               <h2>Required Actions</h2>
-              <p>You can only select on at a time</p>
+              <p>You can only select one at a time</p>
               <hr />
               <Radio.Group name="uploadType">
+                <Radio value="Disable">Disable</Radio>
+                <br />
                 <Radio value="Calculate">Calculate</Radio>
                 <br />
                 <Radio value="Deduct">Deduct</Radio>
@@ -57,12 +54,10 @@ const RemittancesTax: NextPage = () => {
               <p>Enter general info to calculate taxes</p>
               <hr />
               <div className="remittances-tax-page__remittances-inbox-image">
-                <Image
-                  src={RemittancesInbox}
-                  alt="remittances-inbox"
-                  
-                />
-                <p className="text-center" >Select one of the required Actions</p>
+                <Image src={RemittancesInbox} alt="remittances-inbox" />
+                <p className="text-center">
+                  Select one of the required Actions
+                </p>
               </div>
             </div>
           </div>

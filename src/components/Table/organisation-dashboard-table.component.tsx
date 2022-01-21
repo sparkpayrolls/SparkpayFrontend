@@ -2,6 +2,7 @@ import { RecentTransaction } from 'src/api/types';
 import { TransactionMethod } from '../TransactionMethod/transaction-method.component';
 import { DateTimeChip } from '../DateTimeChip/date-time-chip';
 import { Table } from './Table.component';
+import { Util } from 'src/helpers/util';
 
 export const OrganisationDashboardTable = (props: {
   currency: string;
@@ -12,7 +13,7 @@ export const OrganisationDashboardTable = (props: {
     <Table
       headerRow={[
         'Transaction\xa0ID',
-        `Amount\xa0(${props.currency})`,
+        `Amount`,
         'Transaction\xa0Method',
         'Description',
         'Date',
@@ -31,7 +32,10 @@ export const OrganisationDashboardTable = (props: {
                 <tr key={transaction.id}>
                   <td>{transaction.id.toUpperCase()}</td>
 
-                  <td>{transaction.amount}</td>
+                  <td>
+                    {props.currency}{' '}
+                    {Util.formatMoneyNumber(transaction.amount)}
+                  </td>
 
                   <td>
                     <TransactionMethod method={transaction.transactionMethod} />
