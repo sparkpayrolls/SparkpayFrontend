@@ -2,7 +2,7 @@ import Head from 'next/head';
 import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
 import '../src/styles/globals.scss';
-import type { AppProps } from 'next/app';
+import { AppProps } from 'next/app';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux/store';
@@ -28,15 +28,39 @@ const AuthManager = () => {
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
-    const isLoggedIn = !!user;
     let tokenInterceptor: number;
+    let authInterceptor: number;
     if (authToken) {
       tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${authToken}`;
 
         return config;
       });
+      authInterceptor = $api.$axios.interceptors.response.use(
+        (res) => res,
+        (error) => {
+          if (error.response?.status === 401) {
+            Cookies.remove('auth_token');
+            dispatch(commitUser(null));
+          }
 
+          return Promise.reject(error);
+        },
+      );
+    }
+    if (!authToken && user) {
+      dispatch(commitUser(null));
+    }
+
+    return () => {
+      $api.$axios.interceptors.request.eject(tokenInterceptor);
+      $api.$axios.interceptors.request.eject(authInterceptor);
+    };
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    const authToken = Cookies.get('auth_token') as string;
+    if (authToken) {
       $api.$axios.interceptors.response.use(
         (res) => res,
         (error) => {
@@ -49,31 +73,19 @@ const AuthManager = () => {
         },
       );
 
-      if (!isLoggedIn) {
-        $api.user
-          .getProfile()
-          .then((user) => {
-            dispatch(commitUser(user));
-          })
-          .catch(() => {
-            // error logging in...
-            Cookies.remove('auth_token');
-          });
-      }
+      $api.user
+        .getProfile()
+        .then((user) => {
+          dispatch(commitUser(user));
+        })
+        .catch(() => {
+          // error logging in...
+          Cookies.remove('auth_token');
+        });
+      refreshCompanies(dispatch);
+      getCurrentAdministrator(dispatch);
     }
-
-    if (!authToken && isLoggedIn) {
-      dispatch(commitUser(null));
-    }
-
-    return () => {
-      $api.$axios.interceptors.request.eject(tokenInterceptor);
-    };
-  }, [user, dispatch]);
-
-  useEffect(() => {
-    refreshCompanies(dispatch);
-  }, [user, dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     const companySelected = companies.find((company) => company.selected);
@@ -97,6 +109,12 @@ const AuthManager = () => {
       },
     );
   }, [companies, administrator, dispatch]);
+
+  useEffect(() => {
+    if (user && companies.some((c) => c.user !== user?.id)) {
+      refreshCompanies(dispatch);
+    }
+  }, [user, companies, dispatch]);
 
   return null;
 };

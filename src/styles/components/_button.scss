@@ -2,18 +2,20 @@
   font-weight: 500;
   border: 0;
   border-radius: 8px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
   transition: background 0.2s ease-in-out;
 
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+
   &--primary {
     color: #ffffff;
     background: $primary;
 
-    cursor: pointer;
     &:hover:not(:disabled) {
       background: $primary-hover;
     }

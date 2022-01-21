@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { OrganisationDashboardTable } from '../Table/organisation-dashboard-table.component';
 import withPermission from 'src/helpers/HOC/withPermission';
 import { IOrganisationDashboard } from '../types';
+import { Util } from 'src/helpers/util';
 
 const ViewMoreButton = withPermission(() => (
   <Link href="/wallet">
@@ -29,21 +30,23 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
       <section className="dashboard__stats-section">
         <DashboardCard
           Icon={PayrollBurdenCardSvg}
-          value={`${currency} ${data.totalPayrollBurden}`}
+          value={`${currency} ${Util.formatMoneyNumber(
+            data.totalPayrollBurden,
+          )}`}
           title="Payroll burden"
           loading={loading}
         />
 
         <DashboardCard
           Icon={PayrollCardSvg}
-          value={data.totalNumberOfPayrolls}
+          value={Util.formatNumber(data.totalNumberOfPayrolls)}
           title="Payrolls"
           loading={loading}
         />
 
         <DashboardCard
           Icon={EmployeeCardSvg}
-          value={data.totalNumberOfEmployees}
+          value={Util.formatNumber(data.totalNumberOfEmployees)}
           title="Employees"
           loading={loading}
         />
