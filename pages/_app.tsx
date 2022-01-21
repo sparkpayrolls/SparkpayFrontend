@@ -2,7 +2,7 @@ import Head from 'next/head';
 import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
 import '../src/styles/globals.scss';
-import type { AppProps } from 'next/app';
+import { AppProps } from 'next/app';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux/store';
@@ -23,24 +23,11 @@ import { Company } from 'src/api/types';
 let persistor = persistStore(store);
 
 const AuthManager = () => {
-  const { user, companies, administrator } = useAppSelector((state) => state);
+  const { companies, administrator } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    $api.user
-      .getProfile()
-      .then((user) => {
-        dispatch(commitUser(user));
-      })
-      .catch(() => {
-        // error logging in...
-        Cookies.remove('auth_token');
-      });
-  }, [dispatch]);
-
-  useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
-    const isLoggedIn = !!user;
     let tokenInterceptor: number;
     if (authToken) {
       tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
@@ -61,31 +48,23 @@ const AuthManager = () => {
         },
       );
 
-      if (!isLoggedIn) {
-        $api.user
-          .getProfile()
-          .then((user) => {
-            dispatch(commitUser(user));
-          })
-          .catch(() => {
-            // error logging in...
-            Cookies.remove('auth_token');
-          });
-      }
-    }
-
-    if (!authToken && isLoggedIn) {
+      $api.user
+        .getProfile()
+        .then((user) => {
+          dispatch(commitUser(user));
+        })
+        .catch(() => {
+          // error logging in...
+          Cookies.remove('auth_token');
+        });
+    } else {
       dispatch(commitUser(null));
     }
 
     return () => {
       $api.$axios.interceptors.request.eject(tokenInterceptor);
     };
-  }, [user, dispatch]);
-
-  useEffect(() => {
-    refreshCompanies(dispatch);
-  }, [user, dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     const companySelected = companies.find((company) => company.selected);
