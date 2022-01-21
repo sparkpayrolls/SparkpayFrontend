@@ -23,7 +23,7 @@ import { Company } from 'src/api/types';
 let persistor = persistStore(store);
 
 const AuthManager = () => {
-  const { companies, administrator } = useAppSelector((state) => state);
+  const { user, companies, administrator } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -88,6 +88,12 @@ const AuthManager = () => {
       },
     );
   }, [companies, administrator, dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      refreshCompanies(dispatch);
+    }
+  }, [user, dispatch]);
 
   return null;
 };

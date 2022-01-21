@@ -11,7 +11,6 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { loginValidationSchema } from 'src/helpers/validation';
 import { commitUser } from 'src/redux/slices/user/user.slice';
-import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 
 interface ISignInForm {
   email: string;
@@ -41,7 +40,6 @@ const Login: NextPage = () => {
       const { user, token } = await $api.auth.login(username, password);
       Cookies.set('auth_token', token);
       dispatch(commitUser(user));
-      refreshCompanies(dispatch);
     } catch (error: any) {
       toast.error(error.message, { delay: 1000 });
     } finally {
