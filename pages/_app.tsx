@@ -27,6 +27,18 @@ const AuthManager = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    $api.user
+      .getProfile()
+      .then((user) => {
+        dispatch(commitUser(user));
+      })
+      .catch(() => {
+        // error logging in...
+        Cookies.remove('auth_token');
+      });
+  }, [dispatch]);
+
+  useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
     const isLoggedIn = !!user;
     let tokenInterceptor: number;
