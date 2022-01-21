@@ -150,6 +150,7 @@ export const Input = ({
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
+              tabIndex={-1}
             >
               {!props.loading ? (
                 <Image

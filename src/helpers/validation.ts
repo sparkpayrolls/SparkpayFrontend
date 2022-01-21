@@ -52,10 +52,9 @@ export const createOrganizationValidationSchema = Yup.object().shape({
 });
 
 export const userChangePasswordValidationSchema = Yup.object().shape({
-  oldPassword: format.password,
-  newPassword: Yup.string().required('enter your new password'),
-  confirmPassword: Yup.string().required('enter password again'),
-
+  oldPassword: Yup.string().required('Old password is required'),
+  newPassword: Yup.string().required('New password is required'),
+  confirmPassword: Yup.string().required('Enter new password again'),
 });
 
 export const fundWalletValidationSchema = Yup.object().shape({
@@ -103,4 +102,3 @@ export const BulkEmployeeAddValidation = Yup.object()
       .required(),
   })
   .required();
-

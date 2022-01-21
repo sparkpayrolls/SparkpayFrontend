@@ -29,13 +29,38 @@ const AuthManager = () => {
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
     let tokenInterceptor: number;
+    let authInterceptor: number;
     if (authToken) {
       tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${authToken}`;
 
         return config;
       });
+      authInterceptor = $api.$axios.interceptors.response.use(
+        (res) => res,
+        (error) => {
+          if (error.response?.status === 401) {
+            Cookies.remove('auth_token');
+            dispatch(commitUser(null));
+          }
 
+          return Promise.reject(error);
+        },
+      );
+    }
+    if (!authToken && user) {
+      dispatch(commitUser(null));
+    }
+
+    return () => {
+      $api.$axios.interceptors.request.eject(tokenInterceptor);
+      $api.$axios.interceptors.request.eject(authInterceptor);
+    };
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    const authToken = Cookies.get('auth_token') as string;
+    if (authToken) {
       $api.$axios.interceptors.response.use(
         (res) => res,
         (error) => {
@@ -59,13 +84,7 @@ const AuthManager = () => {
         });
       refreshCompanies(dispatch);
       getCurrentAdministrator(dispatch);
-    } else {
-      dispatch(commitUser(null));
     }
-
-    return () => {
-      $api.$axios.interceptors.request.eject(tokenInterceptor);
-    };
   }, [dispatch]);
 
   useEffect(() => {
