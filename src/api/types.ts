@@ -52,6 +52,8 @@ export type User = Document & {
   emailVerified: boolean;
 
   avatar?: string;
+
+  phonenumber?: string;
 };
 
 export type LoggedInUser = {
@@ -403,4 +405,14 @@ export type Bank = Document & {
   name: string;
   meta?: unknown;
   country: string | Country;
+};
+
+export type UpdateUserPayload = {
+  firstname?: string;
+  lastname?: string;
+  phonenumber?: string;
+  avatarFile?: {
+    filename: string;
+    data: string;
+  };
 };

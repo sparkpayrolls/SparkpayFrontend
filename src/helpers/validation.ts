@@ -76,8 +76,7 @@ export const bankPayoutMethodMetaValidationSchema = Yup.object().shape({
 export const UserProfileValidationSchema = Yup.object().shape({
   firstname: format.firstname,
   lastname: format.lastname,
-  email: format.email,
-  phonenumber: format.phonenumber,
+  phonenumber: format.phonenumber.optional(),
 });
 
 export const BulkEmployeeAddValidation = Yup.object()
@@ -86,9 +85,9 @@ export const BulkEmployeeAddValidation = Yup.object()
       .of(
         Yup.object()
           .shape({
-            firstname: Yup.string().required('First Name is required'),
-            lastname: Yup.string().required('Last Name is required'),
-            email: Yup.string().required('Email is required'),
+            firstname: format.firstname,
+            lastname: format.lastname,
+            email: format.email,
             salary: Yup.string().required('Salary is required'),
           })
           .required(),

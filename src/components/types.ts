@@ -231,11 +231,10 @@ export type IPayrollTable = {
 };
 
 /**User Profile */
-export type userProfile = {
+export type IUserProfile = {
   firstname: string;
   lastname: string;
-  email: string;
-  phonenumber: string;
+  phonenumber?: string;
 };
 
 /** Create Organization */
@@ -524,10 +523,11 @@ export type ISelect<T> = SelectProps<T> & {
   error?: string;
 };
 
-export type IAutoComplete = AutoCompleteProps & RefAttributes<RefSelectProps> & {
-  label?:string;
-  error?: string;
-}
+export type IAutoComplete = AutoCompleteProps &
+  RefAttributes<RefSelectProps> & {
+    label?: string;
+    error?: string;
+  };
 export type IEmployeeAddForm = {
   initialValues: AddEmployee;
   onSubmit(vals: AddEmployee, helpers: FormikHelpers<AddEmployee>): any;
