@@ -18,6 +18,7 @@ import { useAppSelector } from 'src/redux/hooks';
 import { BulkEmployeeAddValidation } from 'src/helpers/validation';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
+import withAuth from 'src/helpers/HOC/withAuth';
 
 interface BulkEmployeeUploadList {
   firstname: string;
@@ -331,4 +332,4 @@ const EditableField = (
   );
 };
 
-export default EmployeeList;
+export default withAuth(EmployeeList, ['Employee', 'write']);

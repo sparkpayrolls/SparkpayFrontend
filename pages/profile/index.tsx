@@ -19,6 +19,7 @@ import { $api } from 'src/api';
 import { Util } from 'src/helpers/util';
 import { commitUser } from 'src/redux/slices/user/user.slice';
 import { ChangePasswordModal } from '@/components/Modals/UserProfileModal.component';
+import withAuth from 'src/helpers/HOC/withAuth';
 
 const UserProfile: NextPage = () => {
   const { user, administrator } = useAppSelector((state) => ({
@@ -219,4 +220,4 @@ const UserProfile: NextPage = () => {
   );
 };
 
-export default UserProfile;
+export default withAuth(UserProfile);
