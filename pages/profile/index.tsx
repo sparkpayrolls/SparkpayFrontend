@@ -1,5 +1,6 @@
+import NiceModal from '@ebay/nice-modal-react';
 import React, { useState } from 'react';
-import type { NextPage } from 'next';
+import { NextPage } from 'next';
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import DashboardLayout, {
@@ -17,11 +18,20 @@ import { UpdateUserPayload } from 'src/api/types';
 import { $api } from 'src/api';
 import { Util } from 'src/helpers/util';
 import { commitUser } from 'src/redux/slices/user/user.slice';
+import { ChangePasswordModal } from '@/components/Modals/UserProfileModal.component';
 
 const UserProfile: NextPage = () => {
-  const user = useAppSelector((state) => state.user);
+  const { user, administrator } = useAppSelector((state) => ({
+    administrator: state.administrator,
+    user: state.user,
+  }));
   const dispatch = useAppDispatch();
   const [file, setFile] = useState({ filename: '', data: '' });
+  const onAddEmployee = () => {
+    NiceModal.show(ChangePasswordModal, {
+      administrator,
+    });
+  };
 
   return (
     <DashboardLayout pageTitle="Profile">
@@ -189,10 +199,16 @@ const UserProfile: NextPage = () => {
               Update your Password
             </p>
             <div className="user-profile__change-password-container">
-              <p className="user-profile__change-new-password">
+              <p
+                className="user-profile__change-new-password"
+                onClick={onAddEmployee}
+              >
                 Change your password to a new one
               </p>
-              <p className="user-profile__change-password-text">
+              <p
+                className="user-profile__change-password-text"
+                onClick={onAddEmployee}
+              >
                 Change Password
               </p>
             </div>

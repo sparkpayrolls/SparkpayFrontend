@@ -231,6 +231,13 @@ export type IPayrollTable = {
 };
 
 /**User Profile */
+/*user profile change password modal*/
+export type ChangePasswordUserProfile = {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 export type IUserProfile = {
   firstname: string;
   lastname: string;
