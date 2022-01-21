@@ -1,0 +1,64 @@
+.remittances-page {
+  margin-left:2rem;
+  margin-right:2rem;
+  padding-top: 2.6rem;
+  
+  &__remittances-header-title {
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: #0E347E;
+  }
+
+  &__remittances-title-paragraph {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    color: #0D0F11;
+    margin-top: 2.3rem;
+  }
+
+  &__remittances-cards {
+    width: 100%;
+    display: flex;
+    grid-column-gap: 1.15rem;
+    margin-top: 2rem;   
+    cursor:pointer;
+    
+   
+  }
+
+  &__remittances_details-section {
+    width: 360px;
+    height: 124px;
+    background: $white;
+    border: 1px solid #DDE5EE;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 20px 6px 20px 15px;
+ 
+  }
+
+
+  &__remittances_details-title {
+    font-weight: 500;
+    font-size: 1.2rem;
+    line-height: 24px;
+    color: #0B2253;
+  }
+  &__remittances_details {
+    font-size: 0.959rem;
+    padding-top: 0.2rem;
+    line-height: 24px;
+    color: #6D7A98;
+  }
+
+}
+
+.remittances__card:hover{
+    background: #F7F9FB;
+    border: 1px solid #1D4ED8;
+    box-sizing: border-box;
+    border-radius: 8px;
+    }
