@@ -1,5 +1,7 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Formik, FormikProps } from 'formik';
+import { stringifyUrl } from 'query-string';
 import { Util } from 'src/helpers/util';
 import {
   bulkEmployeeFileUploadValidationSchema,
@@ -135,7 +137,8 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
   );
 };
 
-export const EmployeeBulkAddForm = () => {
+export const EmployeeBulkAddForm = (props: { onSubmit?: () => void }) => {
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [uploadTextActive, setUploadTextActive] = useState(false);
   const fileUploadClass = classNames('form__file-upload', {
@@ -146,8 +149,14 @@ export const EmployeeBulkAddForm = () => {
     <Formik
       initialValues={{ file: '' }}
       validationSchema={bulkEmployeeFileUploadValidationSchema}
-      onSubmit={() => {
-        /** Implementation pending... */
+      onSubmit={({ file }) => {
+        const url = stringifyUrl({
+          url: '/employees/employee-list',
+          query: { file },
+        });
+
+        props.onSubmit && props.onSubmit();
+        router.replace(url);
       }}
     >
       {(props: FormikProps<{ file: string }>) => {

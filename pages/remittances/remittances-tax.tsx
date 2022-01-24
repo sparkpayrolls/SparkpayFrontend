@@ -3,7 +3,7 @@ import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import { Button } from '../../src/components/Button/Button.component';
 import { Radio } from 'antd';
 import Image from 'next/image';
-import RemittancesInbox from "../../public/svgs/inbox.svg"
+import RemittancesInbox from '../../public/svgs/inbox.svg';
 import backicon from '../../public/svgs/back-icon.svg';
 import Link from 'next/link';
 
@@ -26,13 +26,8 @@ const RemittancesTax: NextPage = () => {
               <h5 className="group-details__group-detail-title">Tax</h5>
             </div>
             <Button
-              label={
-                <>
-                  {'Proceed'}
-                </>
-              }
+              label={<>{'Proceed'}</>}
               element="a"
-
               className="payroll-section__submit-btn"
               primary
               type="submit"
@@ -41,19 +36,18 @@ const RemittancesTax: NextPage = () => {
           <div className="remittances-tax-page__tax-details">
           <div className="remittances-tax-page__remittances-options-details">
             <div className="remittances-tax-page__remittances-options-group">
-              <div className="remittances-tax-page__remittances-header">
-                <h2>Required Actions</h2>
-                <p>You can only select on at a time</p>
-              </div>
-              <div className="remittances-tax-page__remittances-options">
-                <Radio.Group name="uploadType">
-                  <Radio value="Calculate">Calculate</Radio>
-                  <br />
-                  <Radio value="Deduct">Deduct</Radio>
-                  <br />
-                  <Radio value="Remit">Remit</Radio>
-                </Radio.Group>
-              </div>
+              <h2>Required Actions</h2>
+              <p>You can only select one at a time</p>
+              <hr />
+              <Radio.Group name="uploadType">
+                <Radio value="Disable">Disable</Radio>
+                <br />
+                <Radio value="Calculate">Calculate</Radio>
+                <br />
+                <Radio value="Deduct">Deduct</Radio>
+                <br />
+                <Radio value="Remit">Remit</Radio>
+              </Radio.Group>
             </div>
           </div>
             <div className="remittances-tax-page__General-information">
@@ -63,11 +57,10 @@ const RemittancesTax: NextPage = () => {
             </div>
             <div className="remittances-tax-page__General-information-image">
               <div className="remittances-tax-page__remittances-inbox-image">
-                <Image
-                  src={RemittancesInbox}
-                  alt="remittances-inbox"
-
-                />
+                <Image src={RemittancesInbox} alt="remittances-inbox" />
+                <p className="text-center">
+                  Select one of the required Actions
+                </p>
               </div>
                 <p>Select one of the required actions</p>
             </div>

@@ -75,13 +75,15 @@
       }
     }
 
-    input[type="checkbox"] {
+    input[type='checkbox'] {
       accent-color: #0d0f11;
     }
   }
 
   &__input-container {
     position: relative;
+    padding: 0.1rem;
+
     > input {
       width: 100%;
       height: 100%;
@@ -98,10 +100,25 @@
       color: #0b2253;
     }
 
+    &__input {
+      &--has-error {
+        &:focus {
+          outline-color: #ca1b1b;
+        }
+      }
+    }
+
     > span {
       position: absolute;
       right: 1rem;
       top: 26px;
+    }
+
+    &__error {
+      position: absolute;
+      left: 1rem;
+      width: 100%;
+      bottom: 0.5rem;
     }
   }
 }

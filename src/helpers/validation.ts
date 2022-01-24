@@ -51,6 +51,12 @@ export const createOrganizationValidationSchema = Yup.object().shape({
   phonenumber: format.phonenumber,
 });
 
+export const userChangePasswordValidationSchema = Yup.object().shape({
+  oldPassword: Yup.string().required('Old password is required'),
+  newPassword: Yup.string().required('New password is required'),
+  confirmPassword: Yup.string().required('Enter new password again'),
+});
+
 export const fundWalletValidationSchema = Yup.object().shape({
   amount: Yup.string().required('amount is required'),
   channel: Yup.string().required('select payment method'),
@@ -72,3 +78,27 @@ export const bankPayoutMethodMetaValidationSchema = Yup.object().shape({
     .min(6, 'Account number should be at least 6 digits long')
     .required('Account number is required'),
 });
+
+export const UserProfileValidationSchema = Yup.object().shape({
+  firstname: format.firstname,
+  lastname: format.lastname,
+  phonenumber: format.phonenumber.optional(),
+});
+
+export const BulkEmployeeAddValidation = Yup.object()
+  .shape({
+    employees: Yup.array()
+      .of(
+        Yup.object()
+          .shape({
+            firstname: format.firstname,
+            lastname: format.lastname,
+            email: format.email,
+            salary: Yup.string().required('Salary is required'),
+          })
+          .required(),
+      )
+      .min(1, 'at least one employee')
+      .required(),
+  })
+  .required();

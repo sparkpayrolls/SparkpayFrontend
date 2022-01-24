@@ -4,27 +4,9 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
-// import withAuth from 'src/helpers/HOC/withAuth';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { commitUser } from 'src/redux/slices/user/user.slice';
-// import { Button } from '../src/components/Button/Button.component';
 import Dashboard from './dashboard';
-
-// const Dashboard = withAuth(() => {
-//   const dispatch = useAppDispatch();
-
-//   const logout = () => {
-//     Cookies.remove('auth_token');
-//     dispatch(commitUser(null));
-//   };
-
-//   return (
-//     <>
-//       <h1>Dashboard</h1>
-//       <Button label="Log out" onClick={logout} type="button" />
-//     </>
-//   );
-// });
 
 const Index = () => {
   const dispatch = useAppDispatch();

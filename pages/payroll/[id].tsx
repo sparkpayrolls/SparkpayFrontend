@@ -89,8 +89,10 @@ const PayDetails: NextPage = () => {
   const getPayroll = useCallback(async () => {
     try {
       setApiCalls((c) => c + 1);
-      const payroll = await $api.payroll.getById(payrollId);
-      setPayroll(payroll);
+      if (payrollId) {
+        const payroll = await $api.payroll.getById(payrollId);
+        setPayroll(payroll);
+      }
     } catch (error) {
       const err = error as HttpError;
       if (err.status === 404) {
@@ -104,10 +106,12 @@ const PayDetails: NextPage = () => {
   const getPayrollEmployees = useCallback(async () => {
     try {
       setApiCalls((c) => c + 1);
-      const { data } = await $api.payroll.getPayrollEmployees(payrollId, {
-        all: true,
-      });
-      setEmployees(data);
+      if (payrollId) {
+        const { data } = await $api.payroll.getPayrollEmployees(payrollId, {
+          all: true,
+        });
+        setEmployees(data);
+      }
     } catch (error) {
       // ...
     } finally {

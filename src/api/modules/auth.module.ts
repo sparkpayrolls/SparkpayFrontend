@@ -11,6 +11,15 @@ export class AuthModule extends HttpRepository {
     return data;
   }
 
+  async changePassword(oldPassword: string, newPassword: string) {
+    const { data } = await this.put<LoggedInUser>('/auth/change-password', {
+      oldPassword,
+      newPassword,
+    });
+
+    return data;
+  }
+
   async signup(signupDTO: SignupDTO): Promise<LoggedInUser> {
     const { data } = await this.post<LoggedInUser>('/auth/signup', signupDTO);
 
