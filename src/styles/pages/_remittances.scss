@@ -61,78 +61,98 @@
 .remittances-tax-page {
    margin-left: 2rem;
   margin-right: 2rem;
+
   &__tax-details{
     margin-top: 1.3rem;
-    padding-left:1rem;
+    // padding-left:1rem;
     margin-bottom:2rem;
     display:flex;
-    grid-column-gap:1.3rem;
-    width: 1030px;
-     height: 700px;
+    // width: 100%;
+     height: 80vh;
      border: 1px solid $gray-800;
      box-sizing: border-box;
      border-radius: 8px;
   }
- 
-  &__line{
-   border-left: 1px solid $gray-800;
-  height: 700px;
-  position: relative;
-  left: 0.1%;
-  margin-left: -3px;
-  top: 0px;
-  }
 
-&__remittances-options-group > h2{
-font-weight: bold;
-font-size: 18px;
-color: #0E347E;
-padding-top:1.3rem;
+  &__remittances-options-details{
+    width:100vw;
   }
-  &__remittances-options-group > p{
-font-size: 0.9rem;
-color: #6D7A98;
-padding-top:8px;
+  &__General-information{
+    width:100vw;
+    
   }
-   &__remittances-options-group > hr{
-width: 450px;
-margin-top:0.9rem;
-border: 1px solid $gray-800;
-margin-bottom:1rem;
+ &__remittances-header{
+border-bottom: 1px solid $gray-800;
+margin: 0px 24px 0px 24px;
 
-
-  }
-  &__General-information> h2{
-font-weight: bold;
-font-size: 18px;
-color: #0E347E;
-padding-top:1.3rem;
-  }
-  &__General-information> p{
-font-size: 0.9rem;
-color: #6D7A98;
-padding-top:8px;
-  }
-   &__General-information> hr{
-width: 500px;
-margin-top:0.9rem;
-border: 1px solid $gray-800;
-margin-bottom:1rem;
-  }
-
- &__remittances-inbox-image{
- position:relative;
- left:170px;
- top:7rem;
  }
- 
- &__remittances-inbox-image > p{
-   position:relative;
-   right:160px;
-   text-align:center;
-   padding-top: 1.5rem;
-   color: #0B2253;
-   font-size:1rem;
+&__remittances-header > h2{
+font-weight: bold;
+font-size: 18px;
+color: #0E347E;
+padding-top:1.3rem;
+  }
+  &__remittances-header > p{
+font-size: 0.9rem;
+color: #6D7A98;
+padding:8px 0px 8px 0px;
+  }
+  &__remittances-options{
+    padding:24px 60% 0px 24px ;
+  }
+  &__General-information{
+   border-left: 1px solid $gray-800; 
+  }
+  &__remittances-inbox-image{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    // padding:24px 340px 0px 24px ;
+  }
+  &__General-information-header{
+    border-bottom: 1px solid $gray-800;
+    margin: 0px 24px 0px 24px;
+  }
+  &__General-information-image > p{
+    text-align:center;
+    font-size: 1rem;
+    padding-top:1rem;
+    color: #0B2253;
+  }
+  &__General-information-header> h2{
+font-weight: bold;
+font-size: 18px;
+color: #0E347E;
+padding-top:1.3rem;
+  }
+  &__General-information-header> p{
+padding:8px 0px 8px 0px;
+font-size: 0.9rem;
+color: #6D7A98;
+padding-top:8px;
+  }
+  &__remittances-inbox-image{
+    margin-top:4rem;
+  }
+
+
+
+ @media only screen and (max-width: 768px) {
+  &__tax-details{
+    display:flex;
+    flex-direction:column;
+  }  
+
+  &__General-information{
+   border-left: none; 
+  }
+   &__remittances-options-details{
+    width:80vw;
+  }
+  &__General-information{
+    width:80vw;
+    
+  }
  }
 }
  .ant-radio-wrapper{

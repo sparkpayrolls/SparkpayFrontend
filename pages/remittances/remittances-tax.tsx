@@ -13,7 +13,7 @@ const RemittancesTax: NextPage = () => {
       <div className="remittances-tax-page">
         <div className="remittances-tax-section">
           <div className="group-details__header-content">
-            <div className="group-details__group-detail-title-section"> 
+            <div className="group-details__group-detail-title-section">
               <Link href="/remittances">
                 <a>
                   <Image
@@ -26,44 +26,51 @@ const RemittancesTax: NextPage = () => {
               <h5 className="group-details__group-detail-title">Tax</h5>
             </div>
             <Button
-                label={
+              label={
                 <>
                   {'Proceed'}
                 </>
               }
               element="a"
-              
+
               className="payroll-section__submit-btn"
               primary
               type="submit"
-              />
+            />
           </div>
           <div className="remittances-tax-page__tax-details">
+          <div className="remittances-tax-page__remittances-options-details">
             <div className="remittances-tax-page__remittances-options-group">
-              <h2>Required Actions</h2>
-              <p>You can only select on at a time</p>
-              <hr />
-              <Radio.Group name="uploadType">
-                <Radio value="Calculate">Calculate</Radio>
-                <br />
-                <Radio value="Deduct">Deduct</Radio>
-                <br />
-                <Radio value="Remit">Remit</Radio>
-              </Radio.Group>
+              <div className="remittances-tax-page__remittances-header">
+                <h2>Required Actions</h2>
+                <p>You can only select on at a time</p>
+              </div>
+              <div className="remittances-tax-page__remittances-options">
+                <Radio.Group name="uploadType">
+                  <Radio value="Calculate">Calculate</Radio>
+                  <br />
+                  <Radio value="Deduct">Deduct</Radio>
+                  <br />
+                  <Radio value="Remit">Remit</Radio>
+                </Radio.Group>
+              </div>
             </div>
-            <div className="remittances-tax-page__line"></div>
+          </div>
             <div className="remittances-tax-page__General-information">
+            <div className="remittances-tax-page__General-information-header">
               <h2>General Info</h2>
               <p>Enter general info to calculate taxes</p>
-              <hr />
+            </div>
+            <div className="remittances-tax-page__General-information-image">
               <div className="remittances-tax-page__remittances-inbox-image">
                 <Image
                   src={RemittancesInbox}
                   alt="remittances-inbox"
-                  
+
                 />
-                <p className="text-center" >Select one of the required Actions</p>
               </div>
+                <p>Select one of the required actions</p>
+            </div>
             </div>
           </div>
         </div>
