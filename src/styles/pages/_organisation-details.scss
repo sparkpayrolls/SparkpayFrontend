@@ -1,3 +1,72 @@
-.employee-details {
-    // background-color: red;
+.organisation-details {
+  margin-right: 2rem;
+  margin-left: 2rem;
+
+  hr {
+    border: 1px solid #f4f5f6;
+    width: calc(100% - 3rem);
+  }
+  &__back-icon {
+    cursor: pointer;
+    margin: 0;
+  }
+  &__single-details-container{
+    background: #ffffff;
+    border: 1px solid #eaedf4;
+    box-sizing: border-box;
+    border-radius: 8px;
+    height: 480px;
+    margin-bottom: 3rem;
+  }
+  &__organisation-details-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 1.25rem;
+  }
+  &__organisation-details-header {
+    display: flex;
+    align-items: center;
+    column-gap: 1.5rem;
+
+    a {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__organisation-header {
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    letter-spacing: -0.01em;
+    color: #0e347e;
+    // margin-top: 0.6rem;
+  }
+  &__organisation-button {
+    width: 134px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #edf1fd;
+    border-radius: 8px;
+    font-style: normal;
+    font-weight: normal;
+    text-align: center;
+    letter-spacing: -0.01em;
+    color: #1d4ed8;
+    border: none;
+    cursor: pointer;
+  }
+  &__organisation-settings-flex {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-top: 0.4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 1rem;
+  }
 }
+

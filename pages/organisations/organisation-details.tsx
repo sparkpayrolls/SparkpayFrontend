@@ -6,99 +6,90 @@ import BackIcon from '../../public/svgs/backicon.svg';
 import { SingleDetail } from '@/components/Employee/single-detail.component';
 
 
-const EmployeeDetails: NextPage = () => {
+const OrganisationDetails: NextPage = () => {
   return (
     <DashboardLayout pageTitle="Organisation Details">
-      <div className="employee-details">
-        <div className=" employee-details__employee-details-settings">
-          <div className="employee-details__employee-details-header">
+      <div className="organisation-details">
+        <div className=" organisation-details__organisation-details-container">
+          <div className="organisation-details__organisation-details-header">
             <Link href="/organisations">
               <a>
                 <Image
                   src={BackIcon}
                   alt="back-icon"
-                  className="employee-details__back-icon"
+                  className="organisation-details__back-icon"
                 />
               </a>
             </Link>
-            <h5 className="employee-details__employee-header">Back</h5>
+            <h5 className="organisation-details__organisation-header">Back</h5>
           </div>
           {/* <div>
             <button
-              className="employee-details__employee-button"
+              className="organisation-details__organisation-button"
             >
               Salary Breakdown
             </button>
           </div> */}
         </div>
-        <div className="employee-details__employee-settings-details">
-          <div className="employee-details__employee-settings-flex">
+        <div className="organisation-details__single-details-container">
+          <div className="organisation-details__organisation-settings-flex">
             <div>
               <SingleDetail
                 title="Name"
                 details="Credpal"
-                //   loading={loading}
               />
             </div>
             <div>
               <SingleDetail
                 title="Phone Number"
                 details="+234 703 321 8457"
-                //   loading={loading}
               />
             </div>
             <div>
               <SingleDetail
                 title="Email Address"
                 details="hello@credpal.com"
-                //   loading={loading}
               />
             </div>
             <div>
               <SingleDetail
                 title="Date Created"
                 details="July 20, 2021"
-                //   loading={loading}
               />
             </div>
           </div>
           <hr />
 
-          <div className="employee-details__employee-settings-flex">
+          <div className="organisation-details__organisation-settings-flex">
             <div>
               <SingleDetail
                 title="Country"
                 details="Nigeria"
-                //   loading={loading}
               />
             </div>
             <div>
               <SingleDetail
                 title="RC Number"
                 details="AP 703 321 AAA"
-                //   loading={loading}
               />
             </div>
             <div>
               <SingleDetail
                 title="RC Number"
                 details="AP 703 321 AAA"
-                //   loading={loading}
               />
             </div>
             <div>
               <SingleDetail
                 title="Status"
                 details="Active"
-                //   loading={loading}
               />
             </div>
           </div>
-          <hr />
         </div>
       </div>
     </DashboardLayout>
   );
 };
 
-export default EmployeeDetails;
+export default OrganisationDetails;
