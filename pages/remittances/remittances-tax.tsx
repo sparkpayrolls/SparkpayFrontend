@@ -36,9 +36,11 @@ const RemittancesTax: NextPage = () => {
           <div className="remittances-tax-page__tax-details">
           <div className="remittances-tax-page__remittances-options-details">
             <div className="remittances-tax-page__remittances-options-group">
+            <div  className="remittances-tax-page__remittances-header">
               <h2>Required Actions</h2>
               <p>You can only select one at a time</p>
-              <hr />
+            </div>
+              <div className="remittances-tax-page__remittances-options">
               <Radio.Group name="uploadType">
                 <Radio value="Disable">Disable</Radio>
                 <br />
@@ -48,6 +50,7 @@ const RemittancesTax: NextPage = () => {
                 <br />
                 <Radio value="Remit">Remit</Radio>
               </Radio.Group>
+              </div>
             </div>
           </div>
             <div className="remittances-tax-page__General-information">
@@ -58,11 +61,10 @@ const RemittancesTax: NextPage = () => {
             <div className="remittances-tax-page__General-information-image">
               <div className="remittances-tax-page__remittances-inbox-image">
                 <Image src={RemittancesInbox} alt="remittances-inbox" />
+              </div>
                 <p className="text-center">
                   Select one of the required Actions
                 </p>
-              </div>
-                <p>Select one of the required actions</p>
             </div>
             </div>
           </div>
