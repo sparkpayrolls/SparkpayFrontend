@@ -138,7 +138,7 @@ const ChangePasswordForm = ({ modal }: { modal: NiceModalHandler }) => {
               <Button
                 type="submit"
                 label="Reset Password"
-                className="form__submit-button form__submit-button--full-width"
+                className="form__submit-button form__submit-button--full-width reset-button"
                 primary
                 showSpinner={isSubmitting}
               />
