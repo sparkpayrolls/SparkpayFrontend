@@ -252,6 +252,14 @@ export type CreateOrganization = {
   country: string;
 };
 
+/** Edit Organisation Details */
+export type OrganisationDetails = {
+  name: string;
+  email: string;
+  phonenumber: string;
+  country: string;
+}
+
 /** Employee Onboard */
 export type EmployeeOnboarding = {
   country: string;
