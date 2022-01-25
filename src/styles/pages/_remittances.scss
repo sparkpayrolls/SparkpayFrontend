@@ -154,8 +154,15 @@ padding:8px 0px 8px 0px;
     display:flex;
   }
 
+  &__input-width > label{
+    color: #6D7A98;
+  }
+  &__input-width > Select{
+    color: #6D7A98;
+  }
   &__input-width{
-    width:75%;
+    width:80%;
+
   }
   
   &__General-information-tax{

@@ -114,6 +114,7 @@ const Tax: NextPage = () => {
                                                                     <Select
                                                                         showSearch
                                                                         label="Select state"
+                                                                        className="remittances-tax-page__input-width"
                                                                         error={(touched.state && errors.state) || ''}
                                                                     >
                                                                     </Select>
