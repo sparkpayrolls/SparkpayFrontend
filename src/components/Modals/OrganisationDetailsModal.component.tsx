@@ -12,7 +12,7 @@ import { Select } from '../Input/select.component';
 
 export const OrganisationDetailsModal = NiceModal.create(() => {
   return (
-    <ModalLayout title="Edit Organisation Details">
+    <ModalLayout title="Edit Organisatio Details">
       {(modal) => {
         return <OrganisationDetailsForm modal={modal} />;
       }}
