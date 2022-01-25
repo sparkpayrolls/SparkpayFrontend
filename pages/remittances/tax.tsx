@@ -52,7 +52,7 @@ const Tax: NextPage = () => {
                                 <div className="remittances-tax-page__remittances-tax-tab">
                                     <div className="remittances-tax-page__remittances-options-details">
                                         <div className="remittances-tax-page__remittances-options-group">
-                                            <div className="remittances-tax-page__remittances-header">
+                                            <div className="remittances-tax-page__remittances-tax-header">
                                                 <h2>Required Actions</h2>
                                                 <p>You can only select one at a time</p>
                                             </div>
