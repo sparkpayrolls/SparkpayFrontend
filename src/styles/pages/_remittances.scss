@@ -109,6 +109,7 @@ padding:8px 0px 8px 0px;
   }
   &__General-information{
    border-left: 1px solid $gray-800; 
+   padding-bottom:2rem;
   }
   &__remittances-inbox-image{
     display:flex;
@@ -145,11 +146,15 @@ padding:8px 0px 8px 0px;
   &__tax-section{
     margin-top: 1.3rem;
     margin-bottom:2rem;
-     height: 100vh;
+    //  height: 100vh;
      border: 1px solid $gray-800;
      box-sizing: border-box;
      border-radius: 8px;
   }
+
+  // &__General-tax-information{
+  //    border-left: 1px solid $gray-800;
+  // }
   &__remittances-tax-tab{
     display:flex;
   }
@@ -197,16 +202,40 @@ font-size: 18px;
 color: #0E347E;
 padding-top:0.4rem;
   }
+
+
   &__remittances-tax-header > p{
 font-size: 0.9rem;
 color: #6D7A98;
 padding:8px 0px 8px 0px;
   }
+
+  &__remittances-settings{
+    padding-top:2.5rem;
+  }
+
+
+    &__remittances-settings > h6{
+    color: #0E347E;
+    font-size:1rem;
+  }
+
+  &__tax-settings{
+    display:flex;
+    justify-content:space-between;
+    padding-top:1rem;
+  }
+  &__tax-settings > p{
+    // margin-bottom:0.2rem;
+    font-size:1rem;
+color: #6D7A98;
+  }
+
+
  @media only screen and (max-width: 768px) {
   &__tax-details{
     display:flex;
     flex-direction:column;
-     height: 100vh;
 
   }  
 
@@ -227,20 +256,19 @@ padding:8px 0px 8px 0px;
   }
   
   .ant-tabs-tab{
-    padding-left:20px;
+    padding: 10px 20px;
   }
   .ant-tabs-nav-list{
     padding-top:1rem;
   }
-//   .ant-tabs-tab{
-// color: #1D4ED8;
-// font-size: 14px;
-    
-//   }
-//   .ant-tabs-tab-active{
-//     color:#1D4ED8;
-//   }
-  .ant-tabs-nav{
-    // width:65px;
+
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+    color: #1D4ED8;
+    font-size:1rem;
+  }
+  
+  .ant-tabs-tab:hover{
+      color: #1D4ED8;
+;
   }
 } 

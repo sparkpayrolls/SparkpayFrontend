@@ -12,6 +12,7 @@ import { Formik, FormikProps } from 'formik';
 import { TaxInformationValidationSchema } from 'src/helpers/validation';
 import { TaxCalculation } from '../../src/components/types';
 import { Select } from '@/components/Input/select.component';
+import { Switch } from 'antd';
 
 
 const { TabPane } = Tabs;
@@ -113,6 +114,7 @@ const Tax: NextPage = () => {
                                                                     />
                                                                     <Select
                                                                         showSearch
+                                                                        placeholder="Lagos"
                                                                         label="Select state"
                                                                         className="remittances-tax-page__input-width"
                                                                         error={(touched.state && errors.state) || ''}
@@ -132,8 +134,20 @@ const Tax: NextPage = () => {
                                                                         error={errors.taxOfficeNumber}
                                                                     />
                                                                 </div>
-                                                                <div>
-                                                                    <p>Settings</p>
+                                                                <div className="remittances-tax-page__remittances-settings">
+                                                                    <h6>Settings</h6>
+                                                                    <div className="remittances-tax-page__tax-settings">
+                                                                        <p>With-holding Tax</p>
+                                                                    <Switch
+                                                                     className="organization-menu__dropdown__item__switch"
+                                                                    />
+                                                                    </div>
+                                                                      <div className="remittances-tax-page__tax-settings">
+                                                                        <p>Payee Tax</p>
+                                                                    <Switch
+                                                                     className="organization-menu__dropdown__item__switch"
+                                                                    />
+                                                                    </div>
                                                                 </div>
                                                             </div>
 
@@ -146,7 +160,7 @@ const Tax: NextPage = () => {
                                 </div>
 
                             </TabPane>
-                            <TabPane tab="Tax Group" key="2">
+                            <TabPane tab="Tax Groups" key="2">
                                 Content of Tab Pane 2
                             </TabPane>
 
