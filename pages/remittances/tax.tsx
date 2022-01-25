@@ -132,6 +132,9 @@ const Tax: NextPage = () => {
                                                                         error={errors.taxOfficeNumber}
                                                                     />
                                                                 </div>
+                                                                <div>
+                                                                    <p>Settings</p>
+                                                                </div>
                                                             </div>
 
                                                         </form>
