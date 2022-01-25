@@ -140,12 +140,50 @@ padding:8px 0px 8px 0px;
     margin-top:4rem;
   }
 
+  
+  //tax tab section
+  &__tax-section{
+    margin-top: 1.3rem;
+    margin-bottom:2rem;
+     height: 100vh;
+     border: 1px solid $gray-800;
+     box-sizing: border-box;
+     border-radius: 8px;
+  }
+  &__remittances-tax-tab{
+    display:flex;
+  }
 
+  &__input-width{
+    width:75%;
+  }
+  
+  &__General-information-tax{
+     margin: 0px 24px 0px 24px;
+  }
+
+  &__General-tax-header{
+    border-bottom: 1px solid $gray-800;
+    margin: 0px 24px 0px 24px;
+  }
+    &__General-tax-header> h2{
+font-weight: bold;
+font-size: 18px;
+color: #0E347E;
+padding-top:0.5rem;
+  }
+   &__General-tax-header > p{
+font-size: 0.9rem;
+color: #6D7A98;
+padding:8px 0px 8px 0px;
+  }
 
  @media only screen and (max-width: 768px) {
   &__tax-details{
     display:flex;
     flex-direction:column;
+     height: 100vh;
+
   }  
 
   &__General-information{
@@ -159,8 +197,15 @@ padding:8px 0px 8px 0px;
     
   }
  }
-}
+
  .ant-radio-wrapper{
-  margin-bottom:0.5rem;
-}
+   margin-bottom:0.5rem;
+  }
   
+  .ant-tabs-tab{
+    padding-left:20px;
+  }
+  .ant-tabs-nav-list{
+    padding-top:1rem;
+  }
+} 

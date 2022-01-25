@@ -244,6 +244,12 @@ export type IUserProfile = {
   phonenumber?: string;
 };
 
+/** Tax */
+export type TaxCalculation = {
+taxId:string,
+state: string,
+taxOfficeNumber:string,
+};
 /** Create Organization */
 export type CreateOrganization = {
   name: string;
