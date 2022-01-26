@@ -264,15 +264,12 @@ function EmployeeList() {
                                         />
                                       </td>
                                       <td>
-                                        <button
-                                          style={{
-                                            verticalAlign: 'middle',
-                                            cursor: 'pointer',
-                                          }}
+                                        <Button
+                                          danger
+                                          size="small"
                                           type="button"
                                           disabled={isSubmitting}
-                                          onClick={(e) => {
-                                            e.preventDefault();
+                                          onClick={() => {
                                             if (isSubmitting) {
                                               return;
                                             }
@@ -285,9 +282,8 @@ function EmployeeList() {
                                               helpers.push(emptyEmployee);
                                             }
                                           }}
-                                        >
-                                          Delete
-                                        </button>
+                                          label="Delete"
+                                        />
                                       </td>
                                     </tr>
                                   );

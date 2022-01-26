@@ -47,6 +47,11 @@
     font-size: 16px;
     padding: 12px 24px;
   }
+
+  &--danger {
+    color: #ca1b1b;
+    border-color: #ca1b1b;
+  }
 }
 
 .filter-button {
