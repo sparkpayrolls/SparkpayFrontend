@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Spinner } from '../Spinner/Spinner.component';
 import { ButtonProps } from '../types';
+import classNames from 'classnames';
 
 /**
  * Primary UI component for user interaction
@@ -17,16 +18,24 @@ export const Button = ({
   showLabel = true,
   element,
   href,
+  danger,
   ...props
 }: ButtonProps) => {
   const mode = primary ? 'button--primary' : 'button--secondary';
+  const buttonClassName = classNames(
+    'button',
+    `button--${size}`,
+    mode,
+    className,
+    { 'button--danger': danger },
+  );
 
   if (element === 'a' && href) {
     return (
       <Link href={href}>
         <a
           type={type}
-          className={['button', `button--${size}`, mode, className].join(' ')}
+          className={buttonClassName}
           style={{ backgroundColor }}
           {...props}
         >
@@ -40,7 +49,7 @@ export const Button = ({
   return (
     <button
       type={type}
-      className={['button', `button--${size}`, mode, className].join(' ')}
+      className={buttonClassName}
       style={{ backgroundColor }}
       {...props}
     >
