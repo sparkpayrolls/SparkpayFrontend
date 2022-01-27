@@ -8,9 +8,9 @@ import { OrganisationDetailsModal } from '@/components/Modals/OrganisationDetail
 import NiceModal from '@ebay/nice-modal-react';
 
 const OrganisationDetails: NextPage = () => {
-   const onAddEmployee = () => {
-     NiceModal.show(OrganisationDetailsModal);
-   };
+  const onAddEmployee = () => {
+    NiceModal.show(OrganisationDetailsModal);
+  };
   return (
     <DashboardLayout pageTitle="Organisation Details">
       <div className="organisation-details">
@@ -81,8 +81,55 @@ const OrganisationDetails: NextPage = () => {
               <SingleDetail title="Date Created" details="July 20, 2021" />
             </div>
           </div>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+          {/* <form action="">
+            <fieldset>
+              <legend>Personalia:</legend>
+              <label>First name:</label>
+              <input type="text" id="fname" name="fname"></input>
+            </fieldset>
+          </form>
+          <div>
+            <form>
+              <fieldset>
+                <legend>Personalia:</legend>
+                <label>First name:</label>
+                <input type="text" placeholder="Search" />
+              </fieldset>
+            </form> */}
+          </div>
         </div>
-      </div>
     </DashboardLayout>
   );
 };
