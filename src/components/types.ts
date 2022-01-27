@@ -236,7 +236,7 @@ export type ChangePasswordUserProfile = {
   oldPassword: string;
   newPassword: string;
   confirmPassword: string;
-}
+};
 
 export type IUserProfile = {
   firstname: string;
@@ -246,9 +246,9 @@ export type IUserProfile = {
 
 /** Tax */
 export type TaxCalculation = {
-taxId:string,
-state: string,
-taxOfficeNumber:string,
+  taxId: string;
+  state: string;
+  taxOfficeNumber: string;
 };
 /** Create Organization */
 export type CreateOrganization = {
@@ -494,6 +494,8 @@ export interface ButtonProps {
   href?: string;
 
   title?: string;
+
+  danger?: boolean;
 }
 
 export interface IElementWrapper {
