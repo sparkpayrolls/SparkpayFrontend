@@ -44,13 +44,9 @@ const CreatePayroll: NextPage = () => {
     'Total Net Salary': 0,
   };
   const headerRow: string[] = [];
+  const remittanceRows: string[] = [];
 
   employees.forEach((employee) => {
-    const e = employee.employee as Employee;
-    if (exclude.includes(e.id)) {
-      return;
-    }
-
     totals['Total Salary Amount'] += employee.salary;
     totals['Total Net Salary'] += employee.netSalary;
     if (employee.deductions && employee.deductions.length) {
@@ -58,23 +54,28 @@ const CreatePayroll: NextPage = () => {
       totals['Total Deductions'] += Util.sum(
         employee.deductions.map((d) => d.amount),
       );
+      if (!headerRow.includes(`Deductions (${currency})`)) {
+        headerRow.push(`Deductions (${currency})`);
+      }
     }
     if (employee.bonuses && employee.bonuses.length) {
       totals['Total Bonuses'] = totals['Total Bonuses'] || 0;
       totals['Total Bonuses'] += Util.sum(
         employee.bonuses.map((d) => d.amount),
       );
+      if (!headerRow.includes(`Bonuses (${currency})`)) {
+        headerRow.push(`Bonuses (${currency})`);
+      }
     }
-  });
-
-  employees.forEach((e) => {
-    const deductionRow = `Deductions (${currency})`;
-    const bonusRow = `Bonuses (${currency})`;
-    if (e.deductions?.length && !headerRow.includes(deductionRow)) {
-      headerRow.push(deductionRow);
-    }
-    if (e.bonuses?.length && !headerRow.includes(bonusRow)) {
-      headerRow.push(bonusRow);
+    if (employee.remittances && employee.remittances.length) {
+      employee.remittances.forEach((remittance) => {
+        const name = `Total ${remittance.name}`;
+        totals[name] = totals[name] || 0;
+        totals[name] += remittance.amount;
+        if (!remittanceRows.includes(`${remittance.name} (${currency})`)) {
+          remittanceRows.push(`${remittance.name} (${currency})`);
+        }
+      });
     }
   });
 
@@ -191,6 +192,9 @@ const CreatePayroll: NextPage = () => {
                   {headerRow.map((row) => {
                     return <th key={row}>{row}</th>;
                   })}
+                  {remittanceRows.map((row) => {
+                    return <th key={row}>{row}</th>;
+                  })}
                 </tr>
               </thead>
               <tbody>
@@ -234,6 +238,19 @@ const CreatePayroll: NextPage = () => {
                           )}
                         </td>
                       </IF>
+                      {remittanceRows.map((row) => {
+                        const remittances = e.remittances || [];
+                        const remittance = remittances.find(
+                          (r) => r.name === row.replace(` (${currency})`, ''),
+                        );
+
+                        return (
+                          <td key={`${employee.id}-${row}`}>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(remittance?.amount || 0)}
+                          </td>
+                        );
+                      })}
                     </tr>
                   );
                 })}

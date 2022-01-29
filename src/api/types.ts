@@ -373,6 +373,12 @@ export type Addon = {
   meta?: unknown;
 };
 
+export type Remittance = {
+  name: string;
+  amount: number;
+  meta?: unknown;
+};
+
 export type PayrollEmployee = Document & {
   salary: number;
   employee: string | Employee;
@@ -382,6 +388,7 @@ export type PayrollEmployee = Document & {
   payoutStatus?: PayrollEmployeePayoutStatus;
   deductions?: Addon[];
   bonuses?: Addon[];
+  remittances?: Remittance[];
   remark?: string;
 };
 
