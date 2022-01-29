@@ -1,5 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
@@ -28,6 +28,17 @@ const UserProfile: NextPage = () => {
   const onAddEmployee = () => {
     NiceModal.show(ChangePasswordModal);
   };
+
+  useEffect(() => {
+    $api.user
+      .getProfile()
+      .then((user) => {
+        dispatch(commitUser(user));
+      })
+      .catch(() => {
+        // ...
+      });
+  }, [dispatch]);
 
   return (
     <DashboardLayout pageTitle="Profile">
