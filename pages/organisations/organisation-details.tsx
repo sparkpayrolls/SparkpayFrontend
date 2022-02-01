@@ -81,55 +81,28 @@ const OrganisationDetails: NextPage = () => {
               <SingleDetail title="Date Created" details="July 20, 2021" />
             </div>
           </div>
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-          
-          {/* <form action="">
-            <fieldset>
-              <legend>Personalia:</legend>
-              <label>First name:</label>
-              <input type="text" id="fname" name="fname"></input>
-            </fieldset>
-          </form>
           <div>
-            <form>
-              <fieldset>
-                <legend>Personalia:</legend>
-                <label>First name:</label>
-                <input type="text" placeholder="Search" />
-              </fieldset>
-            </form> */}
+            <h5 className="organisation-details__organisation-header salary-breakdown">
+              Salary Breakdown
+            </h5>
+            <div className="organisation-details__organisation-settings-flex">
+              <div>
+                <SingleDetail title="Country" details="Nigeria" />
+              </div>
+              <div>
+                <SingleDetail title="RC Number" details="AP 703 321 AAA" />
+              </div>
+              <div>
+                <SingleDetail title="RC Number" details="AP 703 321 AAA" />
+              </div>
+              <div>
+                <SingleDetail title="Status" details="Active" />
+              </div>
+            </div>
+            <hr />
           </div>
         </div>
+      </div>
     </DashboardLayout>
   );
 };

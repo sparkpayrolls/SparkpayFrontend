@@ -109,26 +109,33 @@
 
 #shipping_name {
   padding-left: 10px;
-  background: #e0e8f0;
+  background: #ebf1f7;
   border-radius: 4px;
   border: none;
   height: 35px;
   outline: none;
+  color: #6D7A98;
 }
 
 #percentage {
   width: 60px;
   margin-left: 20px;
   padding-left: 10px;
-  background: #e0e8f0;
+  background: #ebf1f7;
   border-radius: 4px;
   border: none;
   height: 35px;
   outline: none;
+  color: #6D7A98;
 }
 .fas {
   color: #1d4ed8;
   margin-left: 20px;
   padding-top: 10px;
   cursor: pointer;
+}
+.salary-breakdown {
+  margin-top: 4rem;
+  padding-left: 1rem;
+  font-size: 1.4rem;
 }
