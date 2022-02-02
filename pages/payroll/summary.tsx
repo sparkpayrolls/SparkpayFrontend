@@ -108,7 +108,7 @@ const PayrollSummaryPage: NextPage = () => {
                 </span>
                 <span className="summary-table__row__item__value">
                   <IF condition={loading}>
-                    <Spinner color="--green" />
+                    <Spinner size={16} color="--green" />
                   </IF>
                   <IF condition={!loading}>
                     {Util.formatNumber(summary?.payrollSize || 0)}
@@ -124,7 +124,7 @@ const PayrollSummaryPage: NextPage = () => {
                 </span>
                 <span className="summary-table__row__item__value">
                   <IF condition={loading}>
-                    <Spinner color="--green" />
+                    <Spinner size={16} color="--green" />
                   </IF>
                   <IF condition={!loading}>
                     {currency}{' '}
@@ -141,7 +141,7 @@ const PayrollSummaryPage: NextPage = () => {
                 </span>
                 <span className="summary-table__row__item__value">
                   <IF condition={loading}>
-                    <Spinner color="--green" />
+                    <Spinner size={16} color="--green" />
                   </IF>
                   <IF condition={!loading}>
                     {currency}{' '}
@@ -151,46 +151,32 @@ const PayrollSummaryPage: NextPage = () => {
               </div>
             </div>
 
-            <div className="summary-table__row">
-              <div className="summary-table__row__item">
-                <span className="summary-table__row__item__title">
-                  Total Bonuses
-                </span>
-                <span className="summary-table__row__item__value">
-                  <IF condition={loading}>
-                    <Spinner color="--green" />
-                  </IF>
-                  <IF condition={!loading}>
-                    {currency}{' '}
-                    {Util.formatMoneyNumber(summary?.totalBonus || 0)}
-                  </IF>
-                </span>
-              </div>
-            </div>
-
-            <div className="summary-table__row">
-              <div className="summary-table__row__item">
-                <span className="summary-table__row__item__title">
-                  Total Deductions
-                </span>
-                <span className="summary-table__row__item__value">
-                  <IF condition={loading}>
-                    <Spinner color="--green" />
-                  </IF>
-                  <IF condition={!loading}>
-                    {currency}{' '}
-                    {Util.formatMoneyNumber(summary?.totalDeduction || 0)}
-                  </IF>
-                </span>
-              </div>
-            </div>
+            {summary?.items?.map((item) => {
+              return (
+                <div key={item.name} className="summary-table__row">
+                  <div className="summary-table__row__item">
+                    <span className="summary-table__row__item__title">
+                      {item.name}
+                    </span>
+                    <span className="summary-table__row__item__value">
+                      <IF condition={loading}>
+                        <Spinner size={16} color="--green" />
+                      </IF>
+                      <IF condition={!loading}>
+                        {currency} {Util.formatMoneyNumber(item.value)}
+                      </IF>
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
 
             <div className="summary-table__row">
               <div className="summary-table__row__item">
                 <span className="summary-table__row__item__title">Fee</span>
                 <span className="summary-table__row__item__value">
                   <IF condition={loading}>
-                    <Spinner color="--green" />
+                    <Spinner size={16} color="--green" />
                   </IF>
                   <IF condition={!loading}>
                     {currency} {Util.formatMoneyNumber(summary?.fee || 0)}
@@ -206,7 +192,7 @@ const PayrollSummaryPage: NextPage = () => {
                 </span>
                 <span className="summary-table__row__item__value summary-table__row__item--large__value">
                   <IF condition={loading}>
-                    <Spinner color="--green" />
+                    <Spinner size={16} color="--green" />
                   </IF>
                   <IF condition={!loading}>
                     {currency}{' '}

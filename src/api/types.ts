@@ -402,8 +402,7 @@ export type PayrollSummary = {
   fee: number;
   totalNetSalaries: number;
   totalSalaries: number;
-  totalBonus: number;
-  totalDeduction: number;
+  items: { name: string; value: number }[];
   payrollSize: number;
   totalAmount: number;
 };
