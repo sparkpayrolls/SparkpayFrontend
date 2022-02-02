@@ -111,7 +111,10 @@
     > span {
       position: absolute;
       right: 1rem;
-      top: 26px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
     }
 
     &__error {

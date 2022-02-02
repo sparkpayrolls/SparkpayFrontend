@@ -129,7 +129,7 @@ export const getBulkEmployeeFileUploadHandler = (
       const fileReader = new FileReader();
       fileReader.onload = () => {
         setValues({
-          file: Util.signObject({
+          file: JSON.stringify({
             filename: file.name,
             data: fileReader.result,
           }),
