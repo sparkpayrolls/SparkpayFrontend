@@ -6,6 +6,7 @@ interface SpinnerProps {
    * What color to use
    */
   color?: '--green';
+  size?: number;
 }
 
 /**
@@ -15,13 +16,16 @@ export const Spinner = (props: SpinnerProps) => {
   const className = classNames('spinner', {
     [`spinner${props.color}`]: !!props.color,
   });
+  const { size = 28 } = props;
+  const sizeInner = Math.round(size * 0.643);
+  const margin = Math.round(sizeInner * 0.278);
 
   return (
-    <div className={className}>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <div className={className} style={{ width: size, height: size }}>
+      <div style={{ width: sizeInner, height: sizeInner, margin }}></div>
+      <div style={{ width: sizeInner, height: sizeInner, margin }}></div>
+      <div style={{ width: sizeInner, height: sizeInner, margin }}></div>
+      <div style={{ width: sizeInner, height: sizeInner, margin }}></div>
     </div>
   );
 };

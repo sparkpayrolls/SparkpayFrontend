@@ -15,6 +15,19 @@ import classNames from 'classnames';
 import { InputError } from '../Shared/input-error.component';
 import { config } from 'src/helpers/config';
 import { getBulkEmployeeFileUploadHandler } from 'src/helpers/methods';
+import { $api } from 'src/api';
+
+const emailExists = Util.debounce(
+  // eslint-disable-next-line no-unused-vars
+  (email: string, callback: (_exists: boolean) => any) => {
+    $api.employee
+      .findEmployeeByEmail(email)
+      .then(() => callback(true))
+      .catch(() => callback(false));
+  },
+  500,
+);
+const lastEmail: string[] = [];
 
 export const EmployeeAddForm = (props: IEmployeeAddForm) => {
   const { initialValues, onSubmit, currency } = props;
@@ -39,7 +52,27 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
           errors,
           touched,
           isSubmitting,
+          setErrors,
+          setSubmitting,
         } = props;
+        if (
+          !errors.email &&
+          touched.email &&
+          values.email &&
+          !isSubmitting &&
+          !lastEmail.includes(values.email)
+        ) {
+          setSubmitting(true);
+          emailExists(values.email, (exists) => {
+            setSubmitting(false);
+            if (exists) {
+              setErrors({
+                ...errors,
+                email: 'Employee with email already exists.',
+              });
+            } else lastEmail.push(values.email);
+          });
+        }
 
         return (
           <form
@@ -88,6 +121,7 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
                 onBlur={handleBlur}
                 hasError={errors.email && touched.email}
                 error={errors.email}
+                loading={isSubmitting}
               />
             </div>
 
@@ -152,7 +186,7 @@ export const EmployeeBulkAddForm = (props: { onSubmit?: () => void }) => {
       onSubmit={({ file }) => {
         const url = stringifyUrl({
           url: '/employees/employee-list',
-          query: { file },
+          query: JSON.parse(file),
         });
 
         props.onSubmit && props.onSubmit();

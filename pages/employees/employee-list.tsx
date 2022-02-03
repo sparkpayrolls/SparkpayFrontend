@@ -19,6 +19,7 @@ import { BulkEmployeeAddValidation } from 'src/helpers/validation';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import withAuth from 'src/helpers/HOC/withAuth';
+import { Spinner } from '@/components/Spinner/Spinner.component';
 
 interface BulkEmployeeUploadList {
   firstname: string;
@@ -34,6 +35,19 @@ const emptyEmployee = {
   salary: '',
 };
 
+const emailExists = Util.debounce(
+  // eslint-disable-next-line no-unused-vars
+  (email: string, callback: (_exists: boolean) => any) => {
+    $api.employee
+      .findEmployeeByEmail(email)
+      .then(() => callback(true))
+      .catch(() => callback(false));
+  },
+  500,
+);
+
+let lastEmail: string[] = [];
+
 function EmployeeList() {
   const router = useRouter();
   const administrator = useAppSelector((state) => state.administrator);
@@ -44,12 +58,9 @@ function EmployeeList() {
 
   const getEmployees = useCallback(async () => {
     try {
-      const jwt = router.query.file;
+      const jwt = router.query.data;
       if (jwt && typeof jwt === 'string') {
-        const file = Util.decodeToken<{ data: string }>(jwt);
-        const parsed = await $api.file.parseXlsxFile<Record<string, any>>(
-          file.data,
-        );
+        const parsed = await $api.file.parseXlsxFile<Record<string, any>>(jwt);
         const employees = parsed['Employee data'].map(
           (data: Record<string, string>) => ({
             firstname: data.Firstname,
@@ -59,6 +70,7 @@ function EmployeeList() {
           }),
         );
         setEmployees(employees);
+        router.push(router.pathname);
         return;
       }
     } catch (error) {
@@ -77,6 +89,24 @@ function EmployeeList() {
   useEffect(() => {
     getEmployees();
   }, [getEmployees]);
+
+  useEffect(() => {
+    const interceptRefresh = (e: BeforeUnloadEvent) => {
+      var message = 'Your changes are not saved.';
+      e = e || window.event;
+      // For IE and Firefox
+      if (e) {
+        e.returnValue = message;
+      }
+
+      // For Safari
+      return message;
+    };
+    window.addEventListener('beforeunload', interceptRefresh);
+    return () => {
+      window.removeEventListener('beforeunload', interceptRefresh);
+    };
+  }, []);
 
   return (
     <DashboardLayoutV2 title="Employee list" href="/employees">
@@ -113,6 +143,8 @@ function EmployeeList() {
                 handleBlur,
                 isSubmitting,
                 handleSubmit,
+                setSubmitting,
+                setErrors,
               } = props;
 
               return (
@@ -167,11 +199,44 @@ function EmployeeList() {
 
                               <tbody>
                                 {values.employees.map((employee, i) => {
+                                  const emailTouched = getIn(
+                                    touched,
+                                    `employees.${i}.email`,
+                                  );
+                                  const emailError = getIn(
+                                    errors,
+                                    `employees.${i}.email`,
+                                  );
+                                  if (
+                                    !emailError &&
+                                    employee.email &&
+                                    !isSubmitting &&
+                                    !lastEmail.includes(employee.email)
+                                  ) {
+                                    setSubmitting(true);
+                                    const employees = [
+                                      ...(getIn(errors, 'employees') || []),
+                                    ];
+                                    emailExists(employee.email, (exists) => {
+                                      setSubmitting(false);
+                                      if (exists) {
+                                        employees[i] = {
+                                          ...(getIn(errors, `employees.${i}`) ||
+                                            {}),
+                                          email:
+                                            'Employee with email already exists.',
+                                        };
+                                        setErrors({
+                                          ...errors,
+                                          employees,
+                                        });
+                                      } else lastEmail.push(employee.email);
+                                    });
+                                  }
                                   return (
                                     <tr key={i}>
                                       <td>
                                         <EditableField
-                                          readOnly={isSubmitting}
                                           type="text"
                                           placeholder="First Name"
                                           onChange={handleChange}
@@ -193,7 +258,6 @@ function EmployeeList() {
 
                                       <td>
                                         <EditableField
-                                          readOnly={isSubmitting}
                                           type="text"
                                           placeholder="Last Name"
                                           onChange={handleChange}
@@ -215,28 +279,18 @@ function EmployeeList() {
 
                                       <td>
                                         <EditableField
-                                          readOnly={isSubmitting}
+                                          loading={isSubmitting}
                                           type="email"
                                           placeholder="Email"
                                           onChange={handleChange}
                                           onBlur={handleBlur}
                                           name={`employees.${i}.email`}
                                           value={employee.email}
-                                          error={
-                                            getIn(
-                                              touched,
-                                              `employees.${i}.email`,
-                                            ) &&
-                                            getIn(
-                                              errors,
-                                              `employees.${i}.email`,
-                                            )
-                                          }
+                                          error={emailTouched && emailError}
                                         />
                                       </td>
                                       <td>
                                         <EditableField
-                                          readOnly={isSubmitting}
                                           type="text"
                                           placeholder={`Salary (${currency})`}
                                           onChange={(e) => {
@@ -305,12 +359,13 @@ function EmployeeList() {
   );
 }
 
-const EditableField = (
-  props: DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > & { error?: boolean | string },
-) => {
+const EditableField = ({
+  loading,
+  ...props
+}: DetailedHTMLProps<
+  InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> & { error?: boolean | string; loading?: boolean }) => {
   const inputClassname = classNames('employee-list__input-container__input', {
     'employee-list__input-container__input--has-error': !!props.error,
   });
@@ -318,9 +373,15 @@ const EditableField = (
   return (
     <div className="employee-list__input-container">
       <input {...props} className={inputClassname} />
-      <span>
-        <EditableSVG />
-      </span>
+      {!loading ? (
+        <span>
+          <EditableSVG />
+        </span>
+      ) : (
+        <span className="employee-list__input-container__loader">
+          <Spinner size={20} color="--green" />
+        </span>
+      )}
       <div className="employee-list__input-container__error">
         <InputError>{props.error}</InputError>
       </div>

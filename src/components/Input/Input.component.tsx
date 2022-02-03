@@ -80,6 +80,7 @@ export const Input = ({
   className,
   hasError,
   error,
+  loading,
   transformValue,
   onChange,
   ...props
@@ -119,7 +120,7 @@ export const Input = ({
               onChange={handleChange}
               {...props}
             />
-            {props.loading && (
+            {loading && (
               <div className="input-container__input__loader">
                 <Spinner color="--green" />
               </div>
@@ -152,7 +153,7 @@ export const Input = ({
               onClick={() => setShowPassword(!showPassword)}
               tabIndex={-1}
             >
-              {!props.loading ? (
+              {!loading ? (
                 <Image
                   src={showPassword ? eye_off : eye}
                   alt="eye icon"

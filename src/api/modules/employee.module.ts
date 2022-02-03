@@ -77,4 +77,12 @@ export class EmployeeModule extends HttpRepository {
 
     return data;
   }
+
+  async findEmployeeByEmail(email: string) {
+    const { data } = await this.get<Employee>(
+      `/employees/find-by-email/${email}`,
+    );
+
+    return data;
+  }
 }
