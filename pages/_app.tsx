@@ -124,7 +124,7 @@ const AuthManager = () => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <HttpsRedirect disabled={!config.isDev}>
+    <HttpsRedirect disabled={config.isDev}>
       <Head>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
