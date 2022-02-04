@@ -301,6 +301,14 @@ color: #0B2253;
 &__tax-table{
   margin-top: 1rem;
 }
+
+&__tax-table > h1 {
+  font-weight: 600;
+font-size: 1.2rem;
+line-height: 24px;
+color: #0B2253;
+padding-top: 3rem;
+}
 &__tax-trash-icon{
   display:flex;
 }
