@@ -57,7 +57,7 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
           setLoading(false);
         }
       }
-    }, 1000),
+    }, 500),
     [],
   );
 

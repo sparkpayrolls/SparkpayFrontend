@@ -92,6 +92,12 @@ export const UserProfileValidationSchema = Yup.object().shape({
   phonenumber: format.phonenumber.optional(),
 });
 
+export const TaxInformationValidationSchema = Yup.object().shape({
+  taxId: Yup.string(),
+  state: Yup.string(),
+  taxOfficeNumber: Yup.string(),
+});
+
 export const BulkEmployeeAddValidation = Yup.object()
   .shape({
     employees: Yup.array()
