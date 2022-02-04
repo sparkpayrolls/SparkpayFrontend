@@ -256,7 +256,10 @@ font-weight:600;
 color: #0B2253;
   }
 
-  &__tax-section-list{
+
+
+
+   &__tax-section-list{
     margin-left:32px;
   }
   
@@ -271,6 +274,14 @@ color: #0B2253;
      height:56px;
   }
 
+  &__search-text{
+    font-weight: 600;
+font-size: 1.2rem;
+line-height: 24px;
+color: #0B2253;
+   margin-top:1.3rem;
+
+  }
   &__employee-tax-flex{
     display:flex;
   }
@@ -287,6 +298,9 @@ font-size: 1.2rem;
 color: #0B2253;
 }
 
+&__tax-table{
+  margin-top: 1rem;
+}
 &__tax-trash-icon{
   display:flex;
 }

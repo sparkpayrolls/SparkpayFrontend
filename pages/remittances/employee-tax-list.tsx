@@ -11,8 +11,12 @@ import classNames from 'classnames';
 import SelectTaxImage from "../../public/svgs/select.svg";
 import backicon from '../../public/svgs/back-icon.svg';
 import Link from 'next/link';
+import EmployeeSearchIcon from "../../public/svgs/search-icon.svg"
 import { DeleteTaxSVG } from './../../src/components/svg/index';
-import { Table, TR } from '../../src/components/Table/Table.component';
+import { TableV2 } from '@/components/Table/Table.component';
+import { TableLayout } from '@/components/Table/table-layout.component';
+import { CheckboxTableColumn } from '@/components/Table/check-box-table-col.component';
+
 
 const EmployeeTaxList = () => {
   return (
@@ -42,62 +46,78 @@ const EmployeeTaxList = () => {
             />
           </div>
           <div className="remittances-tax-page__tax-details-table">
-          <h1>Search</h1>
-            <div className="remittances-tax-page__tax-table">
-              <Table
-                headerRow={[
-                  'Name',
-                  'Phone Number',
-                  `Payee ID`,
-                  'Tax State',
-                  '',
-
-                ]}
+          <h1 className="remittances-tax-page__search-text">Search</h1>
+            <div className="remittances-tax-page__employee-tax-flex">
+              <input type="text"
+                placeholder='Search by employee name or email'
+                className="remittances-tax-page__employee-input"
+              />
+              <div className="remittances-tax-page__employee-image"
               >
-                {() => {
-                  return (
-                    <tbody>
-                      <TR
+                <Image
+                  src={EmployeeSearchIcon}
+                  alt="group-details-image" />
+              </div>
+            </div>
+            <div className="remittances-tax-page__tax-table">
+              <h1>Employees on Tax list</h1>
+             <TableLayout>
+               <TableV2>
+                  <thead>
+                    <tr>
+                      <CheckboxTableColumn
+                        element="th"
                       >
+                        Name
+                      </CheckboxTableColumn>
+                      <th>Phone Number</th>
+                      <th>Payee ID </th>
+                      <th>Tax State</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <CheckboxTableColumn
+                        element="td"
+                      >
+                        Esther Howard
+                      </CheckboxTableColumn>
+                    <td>
+                      <EditableField
+                          placeholder="Phone Number"
+                      />
+                    </td>
+                    <td>
+                      <EditableField
+                        placeholder="Payee ID"
+                      />
+                    </td>
+                      <td>
+                        <SelectEditableField
+                          placeholder="Selete state"
+                        />
+                      </td>
+                      <span className="remittances-tax-page__tax-trash-delete">
                         <td>
-                          Kolajo Tomike
-                        </td>
-                        <td>
-                          <EditableField
-                            placeholder="Payee ID"
-                          />
-                        </td>
-                        <td>
-                          <EditableField
-                            placeholder="Payee ID"
-                          />
-                        </td>
-                        <td>
-                          <SelectEditableField
-                            placeholder="Payee ID"
-                          />
-                        </td>
-                        <span className="remittances-tax-page__tax-trash-delete">
-                          <td>
-                            <Button
-                              label={
-                                <>
-                                  <DeleteTaxSVG />
-                                  &nbsp;{'Delete'}
-                                </>
-                              }
-                              danger
-                              size="small"
-                              type="button"
+                          <Button
+                            label={
+                              <>
+                                <DeleteTaxSVG />
+                                &nbsp;{'Delete'}
+                              </>
+                            }
+                            danger
+                            size="small"
+                            type="button"
 
-                            />
-                          </td>
-                        </span>
-                      </TR>
-                    </tbody>
-                  );
-                }}
-              </Table>
+                          />
+                        </td>
+                      </span>
+                     </tr>
+                  </tbody>
+               </TableV2>
+             </TableLayout>
             </div>
           </div>
         </div>
