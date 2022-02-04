@@ -58,6 +58,18 @@ function GroupDetails() {
                     July 20, 2021{' '}
                   </p>
                 </div>
+                <div>
+                  <p className="group-details__group-titles">Dated Created</p>
+                  <p className="group-details__group-property-value">
+                    July 20, 2021{' '}
+                  </p>
+                </div>{' '}
+                <div>
+                  <p className="group-details__group-titles">Dated Created</p>
+                  <p className="group-details__group-property-value">
+                    July 20, 2021{' '}
+                  </p>
+                </div>
               </div>
               <hr />
               <div className="group-details__group-details-flex-body-inherit">

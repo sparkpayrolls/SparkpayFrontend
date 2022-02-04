@@ -68,6 +68,15 @@ const EmployeeDetails: NextPage = () => {
                   className="employee-details__back-icon"
                 />
               </a>
+              <Image
+                  src={BackIcon}
+                  alt="back-icon"
+                  className="employee-details__back-icon"
+                /><Image
+                  src={BackIcon}
+                  alt="back-icon"
+                  className="employee-details__back-icon"
+                />
             </Link>
             <h5 className="employee-details__employee-header">
               Employees Details
@@ -92,6 +101,15 @@ const EmployeeDetails: NextPage = () => {
             <div className="employee-details__employee-settings-flex">
               <div>
                 <SingleDetail
+                  title="Name"
+                  details={`${eph?.firstname} ${eph?.lastname}`}
+                  loading={loading}
+                />
+                <SingleDetail
+                  title="Name"
+                  details={`${eph?.firstname} ${eph?.lastname}`}
+                  loading={loading}
+                /><SingleDetail
                   title="Name"
                   details={`${eph?.firstname} ${eph?.lastname}`}
                   loading={loading}

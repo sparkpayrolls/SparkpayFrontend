@@ -99,6 +99,21 @@ const OrganisationDetails: NextPage = () => {
                 <SingleDetail title="Transport" details="10%" />
               </div>
             </div>
+            <div>
+              <SingleDetail title="Transport" details="10%" />
+            </div>
+            <div>
+              <SingleDetail title="Transport" details="10%" />
+            </div>
+            <div>
+              <SingleDetail title="Transport" details="10%" />
+            </div>
+            <div>
+              <SingleDetail title="Transport" details="10%" />
+            </div>
+            <div>
+              <SingleDetail title="Transport" details="10%" />
+            </div>
             {/* <hr /> */}
           </div>
         </div>

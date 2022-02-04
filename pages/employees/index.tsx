@@ -104,6 +104,18 @@ const EmployeePage: NextPage = () => {
                 primary
                 type="submit"
               />
+              <Button
+                label={
+                  <>
+                    <PlusSvg />
+                    &nbsp;{'Add\xa0Employee'}
+                  </>
+                }
+                onClick={onAddEmployee}
+                className="employee-section__submit-btn"
+                primary
+                type="submit"
+              />
             </div>
           </div>
           <Tab
