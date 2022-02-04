@@ -87,19 +87,19 @@ const OrganisationDetails: NextPage = () => {
             </h5>
             <div className="organisation-details__organisation-settings-flex">
               <div>
-                <SingleDetail title="Country" details="Nigeria" />
+                <SingleDetail title="Basic Salary" details="30%" />
               </div>
               <div>
-                <SingleDetail title="RC Number" details="AP 703 321 AAA" />
+                <SingleDetail title="Electricity" details="20%" />
               </div>
               <div>
-                <SingleDetail title="RC Number" details="AP 703 321 AAA" />
+                <SingleDetail title="Housing" details="5%" />
               </div>
               <div>
-                <SingleDetail title="Status" details="Active" />
+                <SingleDetail title="Transport" details="10%" />
               </div>
             </div>
-            <hr />
+            {/* <hr /> */}
           </div>
         </div>
       </div>
