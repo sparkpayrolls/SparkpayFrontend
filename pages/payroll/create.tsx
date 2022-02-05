@@ -47,7 +47,7 @@ const CreatePayroll: NextPage = () => {
   const remittanceRows: string[] = [];
 
   employees.forEach((employee) => {
-    if (exclude.includes(employee.id)) {
+    if (exclude.includes((employee.employee as Employee).id)) {
       return;
     }
 
