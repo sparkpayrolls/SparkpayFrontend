@@ -85,8 +85,6 @@ const AuthManager = () => {
           // error logging in...
           Cookies.remove('auth_token');
         });
-      refreshCompanies(dispatch);
-      getCurrentAdministrator(dispatch);
     }
   }, [dispatch]);
 
