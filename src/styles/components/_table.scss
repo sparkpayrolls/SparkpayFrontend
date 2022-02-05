@@ -240,6 +240,10 @@
     align-items: center;
     justify-content: flex-start;
 
+    img {
+      max-height: 30px;
+    }
+
     .identity {
       &__initial,
       &__image {

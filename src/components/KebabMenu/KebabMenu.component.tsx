@@ -88,12 +88,21 @@ export const OrganizationsMenu = ({
   return (
     <div className="organization-menu" ref={menuRef} id={id}>
       <div className="organization-menu__trigger" onClick={handleClick}>
-        <Identity
-          name={selectedCompany?.name || 'Select Organisation'}
-          initial={selectedCompany?.name?.charAt(0)}
-          image={selectedCompany?.logo}
-          type="reverse"
-        />
+        {selectedCompany?.logo ? (
+          <div className="organization-menu__trigger__logo">
+            {
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={selectedCompany.logo} alt="company-logo" />
+            }
+          </div>
+        ) : (
+          <Identity
+            name={selectedCompany?.name || 'Select Organisation'}
+            initial={selectedCompany?.name?.charAt(0)}
+            image={selectedCompany?.logo}
+            type="reverse"
+          />
+        )}
         <button className="organization-menu__trigger__drop-svg">
           <Image src={dropdown} alt="down-arrow" />
         </button>
@@ -112,11 +121,16 @@ export const OrganizationsMenu = ({
           const company = a.company as Company;
           return (
             <li key={company?.id} className="organization-menu__dropdown__item">
-              <Identity
-                name={company?.name}
-                initial={company?.name?.charAt(0)}
-                image={company?.logo}
-              />
+              {company?.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={company?.logo} alt={`${company.name} logo`} />
+              ) : (
+                <Identity
+                  name={company?.name}
+                  initial={company?.name?.charAt(0)}
+                  image={company?.logo}
+                />
+              )}
 
               <Switch
                 loading={loading === company?.id || (!!loading && a.selected)}

@@ -52,6 +52,12 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
       border: none;
       cursor: pointer;
     }
+
+    &__logo {
+      img {
+        max-height: 30px;
+      }
+    }
   }
 
   &__dropdown {
@@ -100,6 +106,10 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
     &__item {
       &:not(:last-child) {
         margin-bottom: 24px;
+      }
+
+      img {
+        max-height: 30px;
       }
 
       display: flex;
