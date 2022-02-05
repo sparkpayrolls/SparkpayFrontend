@@ -4,6 +4,7 @@ import { stringifyUrl } from 'query-string';
 import { useAppSelector } from 'src/redux/hooks';
 import { Util } from '../util';
 import { IAllowedPermissions } from '@/components/types';
+import { Forbidden } from '@/components/Misc/not-found.component';
 
 function withAuth<T>(
   WrappedComponent: ComponentType<T>,
@@ -38,8 +39,8 @@ function withAuth<T>(
           !administrator ||
           !Util.canActivate(allowedPermissions, administrator)
         ) {
-          Router.replace('/');
-          return null;
+          // Router.replace('/');
+          return <Forbidden />;
         }
       }
 

@@ -47,6 +47,10 @@ const CreatePayroll: NextPage = () => {
   const remittanceRows: string[] = [];
 
   employees.forEach((employee) => {
+    if (exclude.includes((employee.employee as Employee).id)) {
+      return;
+    }
+
     totals['Total Salary Amount'] += employee.salary;
     totals['Total Net Salary'] += employee.netSalary;
     if (employee.deductions && employee.deductions.length) {

@@ -17,6 +17,8 @@ import { signupValidationSchema } from 'src/helpers/validation';
 import { toast } from 'react-toastify';
 import { commitUser } from 'src/redux/slices/user/user.slice';
 import { Select } from '@/components/Input/select.component';
+import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 interface ISignUpForm {
   firstname: string;
@@ -71,6 +73,8 @@ const CreateAccount: NextPage = () => {
       const { user, token } = await $api.auth.signup(values);
       Cookies.set('auth_token', token);
       dispatch(commitUser(user));
+      refreshCompanies(dispatch);
+      getCurrentAdministrator(dispatch);
     } catch (error) {
       const err = error as HttpError;
       if (err.status === 422) {
