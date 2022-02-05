@@ -38,6 +38,7 @@ const OrganisationDetails: NextPage = () => {
             </button>
           </div>
         </div>
+        
         <div className="organisation-details__single-details-container">
           <div className="organisation-details__organisation-settings-flex">
             <div>
@@ -98,21 +99,6 @@ const OrganisationDetails: NextPage = () => {
               <div>
                 <SingleDetail title="Transport" details="10%" />
               </div>
-            </div>
-            <div>
-              <SingleDetail title="Transport" details="10%" />
-            </div>
-            <div>
-              <SingleDetail title="Transport" details="10%" />
-            </div>
-            <div>
-              <SingleDetail title="Transport" details="10%" />
-            </div>
-            <div>
-              <SingleDetail title="Transport" details="10%" />
-            </div>
-            <div>
-              <SingleDetail title="Transport" details="10%" />
             </div>
             {/* <hr /> */}
           </div>
