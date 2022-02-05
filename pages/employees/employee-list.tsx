@@ -20,6 +20,8 @@ import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { Spinner } from '@/components/Spinner/Spinner.component';
+import { DeleteTaxSVG } from './../../src/components/svg/index';
+
 
 interface BulkEmployeeUploadList {
   firstname: string;
@@ -319,24 +321,16 @@ function EmployeeList() {
                                       </td>
                                       <td>
                                         <Button
+                                          label={
+                                            <>
+                                              <DeleteTaxSVG />
+                                              &nbsp;{'Delete'}
+                                            </>
+                                          }
                                           danger
                                           size="small"
                                           type="button"
-                                          disabled={isSubmitting}
-                                          onClick={() => {
-                                            if (isSubmitting) {
-                                              return;
-                                            }
 
-                                            helpers.remove(i);
-                                            if (
-                                              i === 0 &&
-                                              values.employees.length <= 1
-                                            ) {
-                                              helpers.push(emptyEmployee);
-                                            }
-                                          }}
-                                          label="Delete"
                                         />
                                       </td>
                                     </tr>
