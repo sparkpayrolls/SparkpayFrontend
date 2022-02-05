@@ -114,10 +114,11 @@ const AuthManager = () => {
   }, [companies, administrator, dispatch]);
 
   useEffect(() => {
-    if (user && companies.some((c) => c.user !== user?.id)) {
+    if (user) {
       refreshCompanies(dispatch);
+      getCurrentAdministrator(dispatch);
     }
-  }, [user, companies, dispatch]);
+  }, [user, dispatch]);
 
   return null;
 };
