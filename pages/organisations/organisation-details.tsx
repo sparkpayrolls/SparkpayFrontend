@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
+import avatar from '../../public/svgs/user.svg';
 import BackIcon from '../../public/svgs/backicon.svg';
 import { SingleDetail } from '@/components/Employee/single-detail.component';
 import { OrganisationDetailsModal } from '@/components/Modals/OrganisationDetailsModal.component';
@@ -38,7 +39,18 @@ const OrganisationDetails: NextPage = () => {
             </button>
           </div>
         </div>
-        
+        <div className="user-profile__image-upload-link-parent">
+          <div className="user-profile__image-upload-link-parent__image">
+              <Image
+                src={avatar}
+                alt="user-profileimage"
+                className="user-profile__user-image"
+              />
+          </div>
+          <label htmlFor="upload" className="user-profile__upload-image-text">
+            change logo
+          </label>
+        </div>
         <div className="organisation-details__single-details-container">
           <div className="organisation-details__organisation-settings-flex">
             <div>
