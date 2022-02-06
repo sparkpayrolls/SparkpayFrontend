@@ -53,10 +53,10 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
           return (
             <form
               onSubmit={handleSubmit}
-              className="create-organization-form"
+              className="organisation-detail"
               autoComplete="off"
             >
-              <div className="create-organization-form__section">
+              <div className="organisation-detail__section">
                 <Input
                   type="text"
                   label="Company Name"
@@ -70,7 +70,7 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
                 />
               </div>
 
-              <div className="create-organization-form__section">
+              <div className="organisation-detail__section">
                 <Input
                   type="email"
                   label="Email Address"
@@ -84,7 +84,7 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
                 />
               </div>
 
-              <div className="create-organization-form__section">
+              <div className="organisation-detail__section">
                 <Input
                   type="tel"
                   label="Phone No."
@@ -98,7 +98,7 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
                 />
               </div>
 
-              <div className="create-organization-form__section">
+              <div className="organisation-detail__section">
                 <Select
                   label="Country"
                   onBlur={() => setTouched({ ...touched, country: true }, true)}
@@ -128,7 +128,6 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
                   <span>Salary Breakdown</span>
                 </h1>
                 <div>
-                  {/* <br /> */}
                   <input
                     type="text"
                     name="shipping_name"
@@ -147,7 +146,7 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
               <div className="form__submit-button">
                 <Button
                   type="submit"
-                  label="Create Organisation"
+                  label="Edit Organisation"
                   className="form__submit-button form__submit-button--full-width"
                   primary
                   disabled={isSubmitting || !countries.length}

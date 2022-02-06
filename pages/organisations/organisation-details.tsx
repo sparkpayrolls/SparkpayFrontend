@@ -39,15 +39,15 @@ const OrganisationDetails: NextPage = () => {
             </button>
           </div>
         </div>
-        <div className="user-profile__image-upload-link-parent">
-          <div className="user-profile__image-upload-link-parent__image">
+        <div className="organisation-details__image-upload-link-parent">
+          <div className="organisation-details__image-upload-link-parent__image">
               <Image
                 src={avatar}
                 alt="user-profileimage"
-                className="user-profile__user-image"
+                className="organisation-details__user-image"
               />
           </div>
-          <label htmlFor="upload" className="user-profile__upload-image-text">
+          <label htmlFor="upload" className="organisation-details__upload-image-text">
             change logo
           </label>
         </div>
