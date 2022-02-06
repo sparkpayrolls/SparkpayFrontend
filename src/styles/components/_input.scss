@@ -6,6 +6,7 @@
   &__input {
     width: 100%;
     position: relative;
+    
 
     .input {
       width: 100%;
@@ -56,6 +57,7 @@
     border-radius: 4px;
   }
 
+  
   &--error {
     border: 1px solid #ca1b1b;
   }
@@ -81,6 +83,8 @@
       border: 1px solid $primary;
       padding: 0 1rem;
     }
+
+   
   }
 
   .input--error {

@@ -14,7 +14,7 @@ export const OrganizationTable = (props: IOrganizationTable) => {
   } = props;
 
   const headerRow = [
-    'Organization Name',
+    'Organization',
     'Role',
     'Email Adress',
     'Phone Number',
@@ -64,13 +64,21 @@ export const OrganizationTable = (props: IOrganizationTable) => {
                   <tr key={company?.id}>
                     <td>
                       <div className="organization-table__item">
-                        <Identity
-                          image={company?.logo}
-                          imageHeight={32}
-                          imageWidth={32}
-                          initial={company?.name?.charAt(0)}
-                          name={company?.name}
-                        />
+                        {company?.logo ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={company.logo}
+                            alt={`${company.name} logo`}
+                          />
+                        ) : (
+                          <Identity
+                            image={company?.logo}
+                            imageHeight={32}
+                            imageWidth={32}
+                            initial={company?.name?.charAt(0)}
+                            name={company?.name}
+                          />
+                        )}
                       </div>
                     </td>
 

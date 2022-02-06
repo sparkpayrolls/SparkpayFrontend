@@ -152,9 +152,7 @@ padding:8px 0px 8px 0px;
      border-radius: 8px;
   }
 
-  // &__General-tax-information{
-  //    border-left: 1px solid $gray-800;
-  // }
+  
   &__remittances-tax-tab{
     display:flex;
   }
@@ -162,14 +160,14 @@ padding:8px 0px 8px 0px;
   &__input-width > label{
     color: #6D7A98;
   }
+
   &__input-width > Select{
     color: #6D7A98;
   }
-  // &__input-width{
-  //   width:80%;
-
-  // }
-  
+ 
+  td{
+    padding:13px;
+  }
   &__General-information-tax{
     width:70%;
      margin: 0px 24px 0px 24px;
@@ -228,8 +226,94 @@ padding:8px 0px 8px 0px;
   &__tax-settings > p{
     // margin-bottom:0.2rem;
     font-size:1rem;
-color: #6D7A98;
+    color: #6D7A98;
   }
+
+
+  //Employee Tax List 
+
+  &__tax-details-table{
+    width:100%;
+    padding-left:1rem;
+    padding-right:1rem;
+     margin-top: 1.3rem;
+    margin-bottom:2rem;
+     border: 1px solid $gray-800;
+     box-sizing: border-box;
+     border-radius: 8px;
+  }
+  &__employee-list-search{
+   margin-top:1.3rem;
+  }
+
+  &__employee-list-search > p{
+font-size: 1.05rem;
+font-weight:600;
+color: #0B2253;
+  }
+
+
+
+
+   &__tax-section-list{
+    margin-left:32px;
+  }
+  
+  &__employee-input{
+    padding-left: 1rem;
+    margin-top:1rem;
+    border:none;
+    outline:none;
+    background: #F7F9FB;
+     border-radius: 4px;
+     width:610px;
+     height:56px;
+  }
+
+  &__search-text{
+    font-weight: 600;
+font-size: 1.2rem;
+line-height: 24px;
+color: #0B2253;
+   margin-top:1.3rem;
+
+  }
+  &__employee-tax-flex{
+    display:flex;
+  }
+  &__employee-image{
+    top:2.2rem;
+    right:30px;
+   position:relative;
+  }
+
+&__tax-header{
+  padding-top:2.8rem;
+ font-weight: 600;
+font-size: 1.2rem;
+color: #0B2253;
+}
+
+&__tax-table{
+  margin-top: 1rem;
+}
+
+&__tax-table > h1 {
+  font-weight: 600;
+font-size: 1.2rem;
+line-height: 24px;
+color: #0B2253;
+padding-top: 3rem;
+}
+&__tax-trash-icon{
+  display:flex;
+}
+
+&__tax-trash-delete{
+  margin-left:20px;
+}
+
+
 
 
  @media only screen and (max-width: 768px) {
@@ -249,26 +333,27 @@ color: #6D7A98;
     width:80vw;
     
   }
+ 
+ 
+}
+.ant-radio-wrapper{
+  margin-bottom:0.5rem;
+ }
+ 
+ .ant-tabs-tab{
+   padding: 10px 20px;
+ }
+ .ant-tabs-nav-list{
+   padding-top:1rem;
  }
 
- .ant-radio-wrapper{
-   margin-bottom:0.5rem;
-  }
-  
-  .ant-tabs-tab{
-    padding: 10px 20px;
-  }
-  .ant-tabs-nav-list{
-    padding-top:1rem;
-  }
-
-  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
-    color: #1D4ED8;
-    font-size:1rem;
-  }
-  
-  .ant-tabs-tab:hover{
-      color: #1D4ED8;
-;
-  }
-} 
+ .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+   color: #1D4ED8;
+   font-size:1rem;
+ }
+ 
+ .ant-tabs-tab:hover{
+     color: #1D4ED8;
+ }
+}
+ 
