@@ -140,7 +140,7 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
                     id="percentage"
                     placeholder="%"
                   ></input>
-                  <i className="fas fa-minus-circle fa-2x"></i>
+                  <i className="fas fa-minus-circle fa"></i>
                 </div>
               </div>
               <div className="form__submit-button">
