@@ -14,24 +14,22 @@ const DashboardLayoutV2 = (
 
       <div className="dashboard-layout-v2">
         <div className="dashboard-layout-v2__body">
-          <div className="dashboard-layout-v2__container container">
-            {props.href && !props.action && (
-              <Link href={props.href}>
-                <a className="dashboard-layout-v2__body--back-button">
-                  <BackSVG />
-                </a>
-              </Link>
-            )}
-            {props.action && (
-              <button
-                onClick={props.action}
-                className="dashboard-layout-v2__body--back-button"
-              >
+          {props.href && !props.action && (
+            <Link href={props.href}>
+              <a className="dashboard-layout-v2__back-button">
                 <BackSVG />
-              </button>
-            )}
-            {props.children}
-          </div>
+              </a>
+            </Link>
+          )}
+          {props.action && (
+            <button
+              onClick={props.action}
+              className="dashboard-layout-v2__back-button"
+            >
+              <BackSVG />
+            </button>
+          )}
+          <div className="dashboard-layout-v2__content">{props.children}</div>
         </div>
       </div>
     </>
