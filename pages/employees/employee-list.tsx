@@ -73,7 +73,7 @@ function EmployeeList() {
   }, [router]);
 
   const transformSalary = (val: string) => {
-    const valTransformed = +val.replace(/[^0-9.]/gi, '');
+    const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
     if (!valTransformed) return '';
 
     return `${currency} ${valTransformed.toLocaleString()}`;
