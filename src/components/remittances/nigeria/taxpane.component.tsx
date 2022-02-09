@@ -537,7 +537,7 @@ export const TaxPane = () => {
                 text={
                   employeesLoading
                     ? 'Getting data...'
-                    : 'No employees on your tax list'
+                    : 'No employees on your Tax list'
                 }
               />
             )}
