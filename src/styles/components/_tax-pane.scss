@@ -60,6 +60,10 @@
       bottom: 0;
       background: #ffffff;
     }
+
+    &__empty-state {
+      max-height: 290px !important;
+    }
   }
 
   @media screen and (min-width: 1440px) {

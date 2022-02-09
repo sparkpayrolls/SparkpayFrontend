@@ -534,6 +534,7 @@ export const TaxPane = () => {
             </TableLayout>
             {taxEmployees.length < 1 && (
               <TableEmptyState
+                className="tax-pane__table-container__empty-state"
                 text={
                   employeesLoading
                     ? 'Getting data...'
