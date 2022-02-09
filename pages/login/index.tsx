@@ -120,7 +120,6 @@ const Login: NextPage = () => {
                       <Input
                         type="email"
                         label="Email Address"
-                        placeholder="Email Address"
                         name="email"
                         value={values.email}
                         onChange={handleChange}
@@ -133,7 +132,6 @@ const Login: NextPage = () => {
                     <Input
                       type="password"
                       label="Password"
-                      placeholder="password"
                       name="password"
                       value={values.password}
                       onChange={handleChange}

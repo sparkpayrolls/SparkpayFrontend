@@ -8,6 +8,7 @@
   &__side-info {
     display: none;
     position: fixed;
+    left: 0;
     width: 523px;
     height: 100vh;
     background: #1d4ed8;
@@ -71,7 +72,7 @@
   }
 
   &__container {
-    height: 100vh;
+    margin: 0 1.25rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -79,12 +80,21 @@
     @media screen and (min-width: 1250px) {
       width: calc(100% - 523px);
       margin: 0 0 0 523px;
+      padding-bottom: unset;
+      height: 100vh;
     }
   }
 
   &__section {
-    margin: 0 1.25rem;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    margin: 4rem 0 0;
+
+    @media screen and (min-width: 1250px) {
+      height: unset;
+      margin: unset;
+    }
 
     &--logo {
       display: flex;
