@@ -1,4 +1,5 @@
 import { Button } from '@/components/Button/Button.component';
+import { TableEmptyState } from '@/components/EmptyState/table-emptystate.component';
 import { AutoComplete } from '@/components/Input/autocomplete.component';
 import { EditableField } from '@/components/Input/editable-field.component';
 import { InputV2 } from '@/components/Input/Input.component';
@@ -531,6 +532,15 @@ export const TaxPane = () => {
                 </tbody>
               </TableV2>
             </TableLayout>
+            {taxEmployees.length < 1 && (
+              <TableEmptyState
+                text={
+                  employeesLoading
+                    ? 'Getting data...'
+                    : 'No employees on your tax list'
+                }
+              />
+            )}
             {employeePaginationMeta.pageCount > 1 && (
               <Container className="tax-pane__table-container__pagination">
                 <Pagination
