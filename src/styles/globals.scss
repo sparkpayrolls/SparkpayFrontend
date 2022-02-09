@@ -32,6 +32,8 @@
 @import './components/text';
 @import './components/total-payroll-chip';
 @import './components/not-found';
+@import './components/container';
+@import './components/tax-pane';
 
 // PAGES
 @import './pages/home';
@@ -52,3 +54,4 @@
 @import './pages/profile';
 @import './pages/remittances';
 @import './pages/employee-list';
+@import './pages/nigerian-tax';

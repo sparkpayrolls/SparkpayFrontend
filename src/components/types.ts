@@ -383,17 +383,20 @@ export type IMenuTableColumn = {
 };
 
 export type IPagination = {
+  perPageItems?: { value: string }[];
   refresh?(query: Record<string, any>): any;
-  meta?: Pick<
-    PaginationMeta,
-    | 'perPage'
-    | 'total'
-    | 'page'
-    | 'pageCount'
-    | 'hasNextPage'
-    | 'hasPrevPage'
-    | 'previousPage'
-    | 'nextPage'
+  meta?: Partial<
+    Pick<
+      PaginationMeta,
+      | 'perPage'
+      | 'total'
+      | 'page'
+      | 'pageCount'
+      | 'hasNextPage'
+      | 'hasPrevPage'
+      | 'previousPage'
+      | 'nextPage'
+    >
   >;
 };
 

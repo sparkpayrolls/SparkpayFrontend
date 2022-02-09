@@ -13,7 +13,10 @@ export const Pagination = (props: IPagination) => {
     previousPage = null,
     nextPage = null,
   } = props.meta || {};
-  const { refresh = () => {} } = props;
+  const {
+    refresh = () => {},
+    perPageItems = ['10', '100', '1000', 'all'],
+  } = props;
 
   const handlePerPageSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -35,12 +38,7 @@ export const Pagination = (props: IPagination) => {
       <div className="pagination__per-page d-flex align-items-center">
         <span>Items per page: </span>
         <SelectInput
-          options={[
-            { value: '10' },
-            { value: '100' },
-            { value: '1000' },
-            { value: 'all' },
-          ]}
+          options={perPageItems.map((value) => ({ value }))}
           displayValue="value"
           actualValue="value"
           onChange={handlePerPageSelect}
