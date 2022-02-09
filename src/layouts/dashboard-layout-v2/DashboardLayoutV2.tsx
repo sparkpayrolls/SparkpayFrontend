@@ -1,3 +1,4 @@
+import { Container } from '@/components/Shared/container.component';
 import { BackSVG } from '@/components/svg';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -14,21 +15,23 @@ const DashboardLayoutV2 = (
 
       <div className="dashboard-layout-v2">
         <div className="dashboard-layout-v2__body">
-          {props.href && !props.action && (
-            <Link href={props.href}>
-              <a className="dashboard-layout-v2__back-button">
+          <Container>
+            {props.href && !props.action && (
+              <Link href={props.href}>
+                <a className="dashboard-layout-v2__back-button">
+                  <BackSVG />
+                </a>
+              </Link>
+            )}
+            {props.action && (
+              <button
+                onClick={props.action}
+                className="dashboard-layout-v2__back-button"
+              >
                 <BackSVG />
-              </a>
-            </Link>
-          )}
-          {props.action && (
-            <button
-              onClick={props.action}
-              className="dashboard-layout-v2__back-button"
-            >
-              <BackSVG />
-            </button>
-          )}
+              </button>
+            )}
+          </Container>
           <div className="dashboard-layout-v2__content">{props.children}</div>
         </div>
       </div>

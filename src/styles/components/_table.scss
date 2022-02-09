@@ -373,25 +373,65 @@
 }
 
 .pagination {
+  padding: 0.5rem 0;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
 
-  &__summary {
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 24px;
-    letter-spacing: 0.4px;
-    color: #0b2253;
+  &__summary,
+  &__per-page {
+    display: none;
+  }
 
-    span {
-      color: #6d7a98;
+  @media screen and (min-width: 768px) {
+    justify-content: space-between;
+    align-items: center;
+
+    &__summary {
+      display: initial;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 24px;
+      letter-spacing: 0.4px;
+      color: #0b2253;
+
+      span {
+        color: #6d7a98;
+      }
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    &__per-page {
+      display: flex;
+      justify-content: flex-start;
+
+      > span {
+        display: block;
+        margin-right: 10px;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 24px;
+        letter-spacing: 0.4px;
+        color: #0b2253;
+      }
+
+      .select-input {
+        width: 5rem;
+
+        &__selector {
+          padding: 4px 8px;
+        }
+
+        &__option {
+          padding: 4px 8px;
+        }
+      }
     }
   }
 
   &__buttons {
     display: flex;
-    grid-column-gap: 0.5rem;
+    grid-column-gap: 0.2rem;
 
     button {
       font-weight: normal;
@@ -419,32 +459,6 @@
         &:disabled {
           opacity: 0.5;
         }
-      }
-    }
-  }
-
-  &__per-page {
-    justify-content: flex-start;
-
-    > span {
-      display: block;
-      margin-right: 10px;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 24px;
-      letter-spacing: 0.4px;
-      color: #0b2253;
-    }
-
-    .select-input {
-      width: 5rem;
-
-      &__selector {
-        padding: 4px 8px;
-      }
-
-      &__option {
-        padding: 4px 8px;
       }
     }
   }

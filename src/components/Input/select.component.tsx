@@ -1,15 +1,16 @@
 import { Select as S } from 'antd';
 import { SelectValue } from 'antd/lib/select';
 import classNames from 'classnames';
-import { PropsWithChildren } from 'react';
-import { InputError } from '../Shared/input-error.component';
-import { Label } from '../Shared/label.component';
+import { PropsWithChildren, useState } from 'react';
+import { Container } from '../Shared/container.component';
 import { ISelect } from '../types';
+import { Text } from '../Typography/Text';
 
 export function Select<T extends SelectValue>(
   props: PropsWithChildren<ISelect<T>>,
 ) {
-  const { label, error, className, ...selectProps } = props;
+  const [autocompleteDisabled, setAutocompleteDisabled] = useState(false);
+  const { label, error, className, onFocus, ...selectProps } = props;
   let id: string | undefined;
   const selectClass = classNames('app-select', className, {
     [`has-error`]: !!error,
@@ -19,11 +20,41 @@ export function Select<T extends SelectValue>(
   }
 
   return (
-    <div className="app-select">
-      <Label htmlFor={id}>{label}</Label>
-      <S id={id} {...selectProps} className={selectClass} />
-      <InputError>{error}</InputError>
-    </div>
+    <Container className="app-select">
+      {label && (
+        <Text
+          text={label}
+          className="text__label"
+          element="label"
+          htmlFor={id}
+        />
+      )}
+      <S
+        id={id}
+        {...selectProps}
+        className={selectClass}
+        onFocus={(e) => {
+          if (!autocompleteDisabled) {
+            const els = document.querySelectorAll(
+              '.ant-select-selection-search-input',
+            );
+            Array.prototype.forEach.call(els, (el) => {
+              el?.setAttribute('autocomplete', 'registration-select');
+            });
+            setAutocompleteDisabled(true);
+          }
+          if (onFocus) {
+            onFocus(e);
+          }
+        }}
+      />
+      {error && (
+        <Text
+          className="input-v2--error__error text__sm text__danger"
+          text={error}
+        />
+      )}
+    </Container>
   );
 }
 

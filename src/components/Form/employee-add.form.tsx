@@ -8,7 +8,7 @@ import {
   singleEmployeeUploadValidationSchema,
 } from 'src/helpers/validation';
 import { Button } from '../Button/Button.component';
-import { Input } from '../Input/Input.component';
+import { InputV2 } from '../Input/Input.component';
 import { AddEmployee, IEmployeeAddForm } from '../types';
 import { AddFileSVG } from '@/components/svg';
 import classNames from 'classnames';
@@ -82,36 +82,32 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
           >
             <div className="form__grid single-employee-upload-form__section">
               <div className="form__grid__col--6 padding-right-space-1">
-                <Input
+                <InputV2
                   label="First Name"
-                  type="text"
                   placeholder="First Name"
                   name="firstname"
                   value={values.firstname}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  hasError={errors.firstname && touched.firstname}
-                  error={errors.firstname}
+                  error={touched.firstname && errors.firstname}
                 />
               </div>
 
               <div className="form__grid__col--6 padding-left-space-1">
-                <Input
-                  type="text"
+                <InputV2
                   label="Last Name"
                   placeholder="Last Name"
                   name="lastname"
                   value={values.lastname}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  hasError={errors.lastname && touched.lastname}
-                  error={errors.lastname}
+                  error={touched.lastname && errors.lastname}
                 />
               </div>
             </div>
 
             <div className="single-employee-upload-form__section">
-              <Input
+              <InputV2
                 type="email"
                 label="Email Address"
                 placeholder="Email Address"
@@ -119,26 +115,24 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                hasError={errors.email && touched.email}
-                error={errors.email}
+                error={touched.lastname && errors.email}
                 loading={isSubmitting}
               />
             </div>
 
             <div className="single-employee-upload-form__section">
-              <Input
-                type="text"
+              <InputV2
+                type="number"
                 label={`Salary Amount (${currency})`}
                 placeholder={`Salary Amount (${currency})`}
                 name="salary"
                 value={values.salary}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                hasError={errors.salary && touched.salary}
-                error={errors.salary}
+                error={touched.salary && errors.salary}
                 transformValue={(val) => {
-                  const valTransformed = +val.replace(/[^0-9]/gi, '');
-                  if (!valTransformed) return '';
+                  const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
+                  if (isNaN(valTransformed) || val === '') return '';
 
                   return `${currency} ${valTransformed.toLocaleString()}`;
                 }}
@@ -152,14 +146,7 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
                 className="form__submit-button form__submit-button--full-width"
                 primary
                 disabled={
-                  isSubmitting ||
-                  Util.deepEquals(
-                    {
-                      ...values,
-                      salary: values.salary.replace(/[^0-9]/gi, ''),
-                    },
-                    initialValues,
-                  )
+                  isSubmitting || Util.deepEquals(values, initialValues)
                 }
                 showSpinner={isSubmitting}
               />

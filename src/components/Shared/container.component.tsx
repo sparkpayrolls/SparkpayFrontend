@@ -15,7 +15,7 @@ export const Container = (
 
   return (
     <div {...divProps} className={divClassName}>
-      {children}
+      {loading ? null : children}
     </div>
   );
 };
