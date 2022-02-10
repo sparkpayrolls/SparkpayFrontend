@@ -99,7 +99,7 @@
         top: 0;
         left: 0;
         right: auto;
-        content: '';
+        content: "";
         height: 3px;
         background-color: #1d4ed8;
         width: 100%;
@@ -137,6 +137,7 @@
     font-size: 14px;
     line-height: 1rem;
     color: #0b2253;
+    white-space: nowrap;
 
     span.email {
       display: block;
@@ -320,7 +321,7 @@
       top: 0;
       left: 0;
       right: auto;
-      content: '';
+      content: "";
       height: 3px;
       background-color: #1d4ed8;
       width: 100%;

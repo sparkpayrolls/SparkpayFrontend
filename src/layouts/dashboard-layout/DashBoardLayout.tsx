@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Head from 'next/head';
-import Logo from '../../../public/svgs/logo.svg';
 import { ReactNode, useState } from 'react';
 import {
   OrganizationsMenu,
@@ -18,6 +17,10 @@ import { logOut } from 'src/redux/slices/user/user.slice';
 import { NavList } from './dashboard-navigation-list';
 import { useRouter } from 'next/router';
 import { Util } from 'src/helpers/util';
+import { MenuOutlined } from '@ant-design/icons';
+import { Drawer } from 'antd';
+import Logo from '../../../public/svgs/logo.svg';
+import close from '../../../public/svgs/close.svg';
 
 interface Props {
   children?: ReactNode;
@@ -31,6 +34,7 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [loadingCompanySelect, setLoadingCompanySelect] = useState('');
+  const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
 
   const selectedCompany = companies.find((company) => company.selected);
   const userRole = selectedCompany?.isRoot
@@ -65,6 +69,14 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
     }
   };
 
+  const showDrawer = () => {
+    setVisibleDrawer(true);
+  };
+
+  const onClose = () => {
+    setVisibleDrawer(false);
+  };
+
   return (
     <>
       <Head>
@@ -92,7 +104,29 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
           </div>
         </nav>
 
+        <div className="dashboardLayout__logo">
+          <Link href="/">
+            <a>
+              <Image src={Logo} alt="logo" />
+            </a>
+          </Link>
+        </div>
+
         <div className="dashboardLayout__top-bar">
+          {/* <div
+            style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}
+          > */}
+          <button
+            className="dashboardLayout__top-bar--menu-btn"
+            onClick={showDrawer}
+          >
+            <MenuOutlined />
+          </button>
+
+          {/* </div> */}
+
+          {/* <div>Hello</div> */}
+
           <OrganizationsMenu
             companies={companies}
             onSelect={handleSelect}
@@ -102,9 +136,34 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
 
         <main className="dashboardLayout__body">{children}</main>
       </div>
+
+      <Drawer
+        placement="left"
+        closable
+        onClose={onClose}
+        closeIcon={<CustomClose />}
+        visible={visibleDrawer}
+        key="left"
+        className="drawer-menu"
+      >
+        <nav className="dashboard-navigation">
+          <NavList />
+
+          <div className="dashboard-navigation__profile">
+            <ProfileMenu
+              name={`${user?.firstname} ${user?.lastname}`}
+              role={userRole}
+              avatar={user?.avatar}
+              actions={profileMenuActions}
+            />
+          </div>
+        </nav>
+      </Drawer>
     </>
   );
 };
+
+const CustomClose = () => <Image src={close} alt="close icon" />;
 
 export default DashboardLayout;
 
