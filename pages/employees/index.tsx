@@ -16,6 +16,12 @@ import { Tab } from '@/components/Tab/tab.component';
 import { TabPane } from '@/components/Tab/tabpane.component';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
+import {
+  MoreMenuHorizontalSVG,
+  EditSquareSVG,
+  Plus2Svg,
+} from '@/components/svg';
+import { Dropdown, Menu } from 'antd';
 
 const EmployeePage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
@@ -78,16 +84,31 @@ const EmployeePage: NextPage = () => {
     });
   };
 
+  const menu = (
+    <Menu>
+      <Menu.Item key="0">
+        <button className="employee-menu-list" onClick={onAddEmployee}>
+          <Plus2Svg /> Add employee
+        </button>
+      </Menu.Item>
+
+      <Menu.Item key="1">
+        <button className="employee-menu-list" onClick={() => {}}>
+          <EditSquareSVG /> Create employee group
+        </button>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <DashboardLayout pageTitle="Employees">
       <div className="employee-section">
         <div className=" employee-section__details">
           <div className="employee-section__head">
             <h1 className="employee-section__title">Employee Settings</h1>
-
             <div className="employee-section__employee-button">
               <Button
-                label="Create Employee group"
+                label="Create Employee Group"
                 onClick={() => {}}
                 className="employee-section__employee-button1"
                 type="submit"
@@ -117,7 +138,18 @@ const EmployeePage: NextPage = () => {
                 type="submit"
               />
             </div>
+
+            <Dropdown
+              overlay={menu}
+              trigger={['click']}
+              overlayClassName="employee-dropdown"
+            >
+              <button className="employee-section__employee-menu">
+                <MoreMenuHorizontalSVG />
+              </button>
+            </Dropdown>
           </div>
+
           <Tab
             onChange={onTabChange}
             active={selectedTab}
@@ -143,34 +175,3 @@ const EmployeePage: NextPage = () => {
 };
 
 export default withAuth(EmployeePage, ['Employee', 'read']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
