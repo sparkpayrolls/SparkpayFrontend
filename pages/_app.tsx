@@ -3,8 +3,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
 import '../src/styles/globals.scss';
 import { AppProps } from 'next/app';
-// @ts-ignore
-import HttpsRedirect from 'react-https-redirect';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux/store';
@@ -21,7 +19,6 @@ import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { AxiosError } from 'axios';
 import { Company } from 'src/api/types';
-import { config } from 'src/helpers/config';
 
 let persistor = persistStore(store);
 
@@ -123,7 +120,7 @@ const AuthManager = () => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <HttpsRedirect disabled={config.isDev}>
+    <>
       <Head>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -138,7 +135,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </NiceModal.Provider>
         </PersistGate>
       </Provider>
-    </HttpsRedirect>
+    </>
   );
 }
 export default MyApp;

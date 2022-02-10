@@ -13,6 +13,7 @@ import { PaymentModule } from './modules/payment.module';
 import { AuditModule } from './modules/audit.module';
 import { PayoutModule } from './modules/payout.module';
 import { FileModule } from './modules/file.module';
+import { RemittanceModule } from './modules/remittances/remittance.module';
 
 export class $api {
   static $axios = axios.create({
@@ -42,6 +43,8 @@ export class $api {
   static audit = new AuditModule(this.$axios);
 
   static file = new FileModule(this.$axios);
+
+  static remittance = new RemittanceModule(this.$axios);
 
   static async joinWaitList(email: string, name: string) {
     await $api.$axios.post('/join-wait-list', { email, name });

@@ -1,19 +1,12 @@
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { ICheckboxTableColumn, IElementWrapper } from '../types';
 
-export const ElementWrapper = (props: PropsWithChildren<IElementWrapper>) => {
-  switch (props.element) {
-    case 'td':
-      return <td className={props.className}>{props.children}</td>;
-    case 'th':
-      return <th className={props.className}>{props.children}</th>;
-    case 'p':
-      return <p className={props.className}>{props.children}</p>;
-    case 'span':
-      return <span className={props.className}>{props.children}</span>;
-    default:
-      return null;
-  }
+export const ElementWrapper = (
+  props: PropsWithChildren<IElementWrapper & Record<string, unknown>>,
+) => {
+  const { element, children, ...otherProps } = props;
+
+  return React.createElement(element, otherProps, children);
 };
 
 export const CheckboxTableColumn = (
