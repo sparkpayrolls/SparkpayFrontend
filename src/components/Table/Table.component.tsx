@@ -152,7 +152,7 @@ export const Table = (props: ITable) => {
           {!props.isNotSearchable && (
             <div
               style={{
-                minWidth: '45%',
+                // minWidth: '45%',
                 display: 'flex',
                 gridColumnGap: 16,
                 alignItems: 'center',
@@ -170,6 +170,10 @@ export const Table = (props: ITable) => {
                 />
                 <Image src={search_icon} alt="search icon" />
               </div>
+
+              <button className="table-component__search-btn">
+                <Image src={search_icon} alt="search icon" />
+              </button>
 
               {props.onFilterClick && (
                 <button

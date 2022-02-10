@@ -159,6 +159,31 @@ export const PlusSvg = () => (
   </svg>
 );
 
+export const Plus2Svg = () => (
+  <svg
+    width="17"
+    height="17"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M8.61133 3.94434V13.2777"
+      stroke="currentColor"
+      strokeWidth="1.72222"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M3.94482 8.61084H13.2782"
+      stroke="currentColor"
+      strokeWidth="1.72222"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export const OrganisationCardSvg = () => (
   <svg
     width="28"
@@ -254,6 +279,73 @@ export const MoreMenuSVG = () => (
     <path
       d="M1.30621 0.5C0.633984 0.5 0.0839844 1.05 0.0839844 1.72222C0.0839844 2.39444 0.633984 2.94444 1.30621 2.94444C1.97843 2.94444 2.52843 2.39444 2.52843 1.72222C2.52843 1.05 1.97843 0.5 1.30621 0.5ZM1.30621 9.05556C0.633984 9.05556 0.0839844 9.60556 0.0839844 10.2778C0.0839844 10.95 0.633984 11.5 1.30621 11.5C1.97843 11.5 2.52843 10.95 2.52843 10.2778C2.52843 9.60556 1.97843 9.05556 1.30621 9.05556ZM1.30621 4.77778C0.633984 4.77778 0.0839844 5.32778 0.0839844 6C0.0839844 6.67222 0.633984 7.22222 1.30621 7.22222C1.97843 7.22222 2.52843 6.67222 2.52843 6C2.52843 5.32778 1.97843 4.77778 1.30621 4.77778Z"
       fill="#0D0F11"
+    />
+  </svg>
+);
+
+export const MoreMenuHorizontalSVG = () => (
+  <svg
+    width="36"
+    height="36"
+    viewBox="0 0 36 36"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle cx="18" cy="18" r="18" fill="#F8F8F8" />
+    <path
+      d="M18 19C18.5523 19 19 18.5523 19 18C19 17.4477 18.5523 17 18 17C17.4477 17 17 17.4477 17 18C17 18.5523 17.4477 19 18 19Z"
+      stroke="black"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M25 19C25.5523 19 26 18.5523 26 18C26 17.4477 25.5523 17 25 17C24.4477 17 24 17.4477 24 18C24 18.5523 24.4477 19 25 19Z"
+      stroke="black"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M11 19C11.5523 19 12 18.5523 12 18C12 17.4477 11.5523 17 11 17C10.4477 17 10 17.4477 10 18C10 18.5523 10.4477 19 11 19Z"
+      stroke="black"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const EditSquareSVG = () => (
+  <svg
+    width="16"
+    height="17"
+    viewBox="0 0 16 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M7.6615 2.35938H5.16883C3.11883 2.35938 1.8335 3.81071 1.8335 5.86537V11.408C1.8335 13.4627 3.11283 14.914 5.16883 14.914H11.0515C13.1082 14.914 14.3875 13.4627 14.3875 11.408V8.72271"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M5.88493 7.78098L10.8669 2.79898C11.4876 2.17898 12.4936 2.17898 13.1143 2.79898L13.9256 3.61032C14.5463 4.23098 14.5463 5.23765 13.9256 5.85765L8.91959 10.8637C8.64826 11.135 8.28026 11.2877 7.89626 11.2877H5.39893L5.46159 8.76765C5.47093 8.39698 5.62226 8.04365 5.88493 7.78098Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10.1104 3.56836L13.1544 6.61236"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -421,7 +513,6 @@ export const DeleteSVG = () => (
     </g>
   </svg>
 );
-
 
 export const DeleteTaxSVG = () => (
   <svg
