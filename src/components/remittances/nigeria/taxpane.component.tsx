@@ -374,8 +374,6 @@ export const TaxPane = () => {
               getInputHandler('customTaxRelief')(e);
             }}
             transformValue={(v: number) => {
-              if (!v) return '';
-
               return `${currency} ${Util.formatMoneyNumber(+v || 0)}`;
             }}
           />
@@ -386,8 +384,6 @@ export const TaxPane = () => {
             label="Salary Breakdown"
             items={salaryBreakdown}
             transformValue={(v: number) => {
-              if (!v) return '';
-
               return `${(+v).toFixed(1)}%`;
             }}
             readonly
