@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { Button } from '../../src/components/Button/Button.component';
-import { Input } from '../../src/components/Input/Input.component';
+import { InputV2 } from '../../src/components/Input/Input.component';
 import { useRouter } from 'next/router';
 import { $api } from 'src/api';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
@@ -117,27 +117,27 @@ const Login: NextPage = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="login__form-input-section">
                     <div className="login__form-grid">
-                      <Input
+                      <InputV2
                         type="email"
                         label="Email Address"
                         name="email"
                         value={values.email}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        hasError={errors.email && touched.email}
-                        error={errors.email}
+                        error={touched.email && errors.email}
                       />
                     </div>
 
-                    <Input
+                    <InputV2
                       type="password"
                       label="Password"
                       name="password"
                       value={values.password}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      hasError={errors.password && touched.password}
-                      error={errors.password}
+                      showVisibilityToggle
+                      hideValue
+                      error={touched.password && errors.password}
                     />
                   </div>
                   <div className="login__forgot-password">
