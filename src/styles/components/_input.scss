@@ -42,6 +42,7 @@
     transform: translateY(-50%);
     left: auto;
     right: 19px;
+    width: unset !important;
 
     &__button {
       cursor: pointer;

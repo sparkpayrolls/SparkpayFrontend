@@ -5,7 +5,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Formik, FormikHelpers, FormikProps, FormikErrors } from 'formik';
 import { Button } from '../../src/components/Button/Button.component';
-import { Input } from '../../src/components/Input/Input.component';
+import { InputV2 } from '../../src/components/Input/Input.component';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
 import Cookies from 'js-cookie';
@@ -163,30 +163,28 @@ const CreateAccount: NextPage = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="create-account__form-input-area">
                     <div className="create-account__form-grid">
-                      <Input
+                      <InputV2
                         type="text"
                         label="First Name"
                         name="firstname"
                         value={values.firstname}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        hasError={errors.firstname && touched.firstname}
-                        error={errors.firstname}
+                        error={touched.firstname && errors.firstname}
                       />
 
-                      <Input
+                      <InputV2
                         type="text"
                         label="Last Name"
                         name="lastname"
                         value={values.lastname}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        hasError={errors.lastname && touched.lastname}
-                        error={errors.lastname}
+                        error={touched.lastname && errors.lastname}
                       />
                     </div>
 
-                    <Input
+                    <InputV2
                       type="email"
                       label="Email Address"
                       name="email"
@@ -208,8 +206,7 @@ const CreateAccount: NextPage = () => {
                         );
                         handleBlur(event);
                       }}
-                      hasError={errors.email && touched.email}
-                      error={errors.email}
+                      error={touched.email && errors.email}
                     />
 
                     <Select
@@ -237,15 +234,16 @@ const CreateAccount: NextPage = () => {
                       })}
                     </Select>
 
-                    <Input
+                    <InputV2
                       type="password"
                       label="Password"
                       name="password"
                       value={values.password}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      hasError={errors.password && touched.password}
-                      error={errors.password}
+                      showVisibilityToggle
+                      hideValue
+                      error={touched.password && errors.password}
                     />
                   </div>
 
