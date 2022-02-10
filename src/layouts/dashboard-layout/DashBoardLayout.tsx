@@ -20,7 +20,7 @@ import { Util } from 'src/helpers/util';
 import { MenuOutlined } from '@ant-design/icons';
 import { Drawer } from 'antd';
 import Logo from '../../../public/svgs/logo.svg';
-import close from '../../../public/svgs/close.svg';
+import close from '../../../public/svgs/Close.svg';
 
 interface Props {
   children?: ReactNode;
