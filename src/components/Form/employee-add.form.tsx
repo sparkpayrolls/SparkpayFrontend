@@ -16,6 +16,7 @@ import { InputError } from '../Shared/input-error.component';
 import { config } from 'src/helpers/config';
 import { getBulkEmployeeFileUploadHandler } from 'src/helpers/methods';
 import { $api } from 'src/api';
+import { toast } from 'react-toastify';
 
 const emailExists = Util.debounce(
   // eslint-disable-next-line no-unused-vars
@@ -170,14 +171,25 @@ export const EmployeeBulkAddForm = (props: { onSubmit?: () => void }) => {
     <Formik
       initialValues={{ file: '' }}
       validationSchema={bulkEmployeeFileUploadValidationSchema}
-      onSubmit={({ file }) => {
-        const url = stringifyUrl({
-          url: '/employees/employee-list',
-          query: JSON.parse(file),
-        });
+      onSubmit={({ file }, helpers) => {
+        helpers.setSubmitting(true);
+        $api.file
+          .uploadTemporaryFile(JSON.parse(file))
+          .then((file) => {
+            const url = stringifyUrl({
+              url: '/employees/employee-list',
+              query: { file: file.id },
+            });
 
-        props.onSubmit && props.onSubmit();
-        router.replace(url);
+            props.onSubmit && props.onSubmit();
+            router.replace(url);
+          })
+          .catch((error) => {
+            toast.error(error.message);
+          })
+          .finally(() => {
+            helpers.setSubmitting(false);
+          });
       }}
     >
       {(props: FormikProps<{ file: string }>) => {
