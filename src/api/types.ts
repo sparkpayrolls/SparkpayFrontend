@@ -121,6 +121,7 @@ export type Employee = Document & {
   salaryAddOns: unknown[];
   groups: EmployeeGroup[];
   status: EmployeeStatus;
+  phoneNumber?: string;
 };
 
 export type Group = Document & {
@@ -421,4 +422,83 @@ export type UpdateUserPayload = {
     filename: string;
     data: string;
   };
+};
+
+export enum TaxStatusEnum {
+  Disabled = 'Disabled',
+  Calculate = 'Calculate',
+  Deduct = 'Deduct',
+  Remit = 'Remit',
+}
+
+export type TaxStatus = keyof typeof TaxStatusEnum;
+
+export enum TaxTypeEnum {
+  PAYE = 'PAYE',
+  WITHHOLDING = 'WITHHOLDING',
+}
+
+export type TaxType = keyof typeof TaxTypeEnum;
+
+export type State = Document & {
+  country: string | Country;
+  name: string;
+  code?: string;
+  meta?: Record<string, unknown>;
+};
+
+export type SalaryBreakdown = {
+  name: string;
+  value: number;
+};
+
+export type CustomTaxRelief = {
+  name: string;
+  amount: number;
+};
+
+export type NigerianTaxSettings = {
+  status: TaxStatus;
+  type: TaxType;
+  whTaxRate: number;
+  taxId: string;
+  taxOffice: string;
+  taxState: State;
+  company: {
+    salaryBreakdown: SalaryBreakdown[];
+  };
+  customTaxRelief: CustomTaxRelief[];
+};
+
+export type SetupTaxPayload = Partial<Omit<NigerianTaxSettings, 'company'>>;
+
+export type EmployeeTaxDetail = Document & {
+  employee: string | Employee;
+  taxId?: string;
+  taxState?: string | State;
+  taxGroup?: string;
+  company: string | Company;
+  lastAdded?: string;
+  companyTaxDetails?: NigerianTaxSettings;
+};
+
+export type EmployeeTaxDetailPayload = Pick<
+  EmployeeTaxDetail,
+  'employee' | 'taxId' | 'taxState'
+> & {};
+
+export type AddEmployeeToNigerianTaxPayload = {
+  employeeDetails: EmployeeTaxDetailPayload[];
+};
+
+export type FileUploadPayload = {
+  filename: string;
+  data: string;
+};
+
+export type File = Document & {
+  mime: string;
+  filename: string;
+  url: string;
+  provider: string;
 };

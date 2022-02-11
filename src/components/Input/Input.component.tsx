@@ -2,7 +2,10 @@
 import {
   ChangeEvent,
   ChangeEventHandler,
+  CSSProperties,
+  DetailedHTMLProps,
   FocusEvent,
+  InputHTMLAttributes,
   useEffect,
   useState,
 } from 'react';
@@ -10,6 +13,9 @@ import Image from 'next/image';
 import eye from '../../../public/svgs/eye.svg';
 import eye_off from '../../../public/svgs/eye-off.svg';
 import { Spinner } from '../Spinner/Spinner.component';
+import classNames from 'classnames';
+import { Text } from '../Typography/Text';
+import { Container } from '../Shared/container.component';
 interface InputProps {
   /**
    * Input Placeholder contents
@@ -18,7 +24,7 @@ interface InputProps {
   /**
    * input type 'text' | 'email' | 'password'
    */
-  type: 'text' | 'email' | 'password' | 'tel';
+  type: 'text' | 'email' | 'password' | 'tel' | 'number';
   /**
    * Input label content
    */
@@ -37,7 +43,7 @@ interface InputProps {
   /**
    * Input value (optional)
    */
-  value?: string;
+  value?: string | number;
 
   /**
    * Input onChange function
@@ -62,11 +68,13 @@ interface InputProps {
    */
   error?: string;
 
-  transformValue?: (val: string) => string;
+  transformValue?: (val: string | number) => string;
 
   loading?: boolean;
 
   readOnly?: boolean;
+
+  style?: CSSProperties;
 }
 
 /**
@@ -86,7 +94,9 @@ export const Input = ({
   ...props
 }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [valueInternal, setValueInternal] = useState(value || '');
+  const [valueInternal, setValueInternal] = useState<
+    string | number | undefined
+  >();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (transformValue) {
@@ -97,6 +107,7 @@ export const Input = ({
   };
 
   useEffect(() => {
+    setValueInternal(value);
     if (transformValue && value) {
       setValueInternal(transformValue(value));
     }
@@ -170,5 +181,126 @@ export const Input = ({
         </div>
       )}
     </>
+  );
+};
+
+interface IInputV2 {
+  label?: string;
+  labelFor?: string;
+  error?: boolean | string;
+  helper?: string;
+  loading?: boolean;
+  hideValue?: boolean;
+  showVisibilityToggle?: boolean;
+  transformValue?(val: string | number | readonly string[] | undefined): any;
+}
+
+export const InputV2 = (
+  props: DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > &
+    IInputV2,
+) => {
+  const [focused, setFocused] = useState<boolean>(false);
+  const [contentVisible, setContentVisible] = useState<boolean>(true);
+  const {
+    className,
+    label,
+    error,
+    helper,
+    loading,
+    hideValue,
+    showVisibilityToggle,
+    type,
+    labelFor,
+    transformValue,
+    ...inputProps
+  } = props;
+  const inputClassname = classNames(
+    'input-v2__input',
+    { 'input-v2--focused__input': focused, 'input-v2--error__input': !!error },
+    className,
+  );
+  const labelClassname = classNames('input-v2__label text__label', {
+    'input-v2--focused__label text__black': focused,
+  });
+  const containerClass = classNames('input-v2', {
+    'input-v2--focused': focused,
+    'input-v2--error': !!error,
+  });
+  const isNumberInput = type === 'number';
+  let contentVisibleInputType = props.type === 'password' ? 'text' : props.type;
+  if (isNumberInput) {
+    contentVisibleInputType = focused ? 'number' : 'text';
+  }
+  let value = props.value;
+  if (((isNumberInput && !focused) || !isNumberInput) && transformValue) {
+    value = transformValue(value);
+  }
+
+  useEffect(() => {
+    if (hideValue !== undefined) {
+      setContentVisible(!hideValue);
+    }
+  }, [hideValue]);
+
+  return (
+    <Container className={containerClass}>
+      {!!label && (
+        <Text
+          className={labelClassname}
+          htmlFor={labelFor}
+          text={label}
+          element="label"
+        />
+      )}
+      <Container className="input-v2__input-container">
+        <input
+          {...inputProps}
+          className={inputClassname}
+          onBlur={(e) => {
+            props.onBlur && props.onBlur(e);
+            setFocused(false);
+          }}
+          onFocus={(e) => {
+            props.onFocus && props.onFocus(e);
+            setFocused(true);
+          }}
+          type={contentVisible ? contentVisibleInputType : 'password'}
+          value={value}
+        />
+        <Container className="input-v2__add-on">
+          {loading && <Spinner color="--green" />}
+          {showVisibilityToggle && !loading && (
+            <span
+              role="button"
+              className="input-v2__add-on__button"
+              onClick={() => setContentVisible(!contentVisible)}
+            >
+              <Text text="toggle visibility" className="sr-only" />
+              <Image
+                src={contentVisible ? eye_off : eye}
+                alt="eye icon"
+                width="20"
+                height="20"
+              />
+            </span>
+          )}
+        </Container>
+      </Container>
+      {!!error && typeof error === 'string' && (
+        <Text
+          className="input-v2--error__error text__sm text__danger"
+          text={error}
+        />
+      )}
+      {!!helper && !error && (
+        <Text
+          className="input-v2__helper text__sm text__gray400"
+          text={helper}
+        />
+      )}
+    </Container>
   );
 };

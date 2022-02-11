@@ -15,7 +15,7 @@
   }
 
   &__search {
-    display: flex;
+    display: none;
     align-items: center;
     grid-column-gap: 4px;
     background: #ffffff;
@@ -40,16 +40,35 @@
         outline: 0;
       }
     }
+
+    @media screen and (min-width: 600px) {
+      display: flex;
+    }
+  }
+
+  &__search-btn {
+    display: block;
+    background: unset;
+    border: unset;
+    padding: 12px 1rem;
+    @media screen and (min-width: 600px) {
+      display: none;
+    }
   }
 
   &__filter-btn,
-  &__option-btn {
+  &__option-btn,
+  &__search-btn {
     background: #fff;
+    // border: unset;
+    line-height: 0;
+    cursor: pointer;
+
+    // @media screen and (min-width: 600px) {
     border: 1px solid #d7dce0;
     box-sizing: border-box;
     border-radius: 4px;
-    line-height: 0;
-    cursor: pointer;
+    // }
   }
 
   &__filter-btn {
@@ -64,6 +83,15 @@
     color: #3a434b;
 
     padding: 12px 1rem;
+    > span {
+      display: none;
+    }
+
+    @media screen and (min-width: 600px) {
+      > span {
+        display: block;
+      }
+    }
   }
 
   &__option-btn {
@@ -99,7 +127,7 @@
         top: 0;
         left: 0;
         right: auto;
-        content: '';
+        content: "";
         height: 3px;
         background-color: #1d4ed8;
         width: 100%;
@@ -132,11 +160,12 @@
 
   td {
     text-align: left;
-    padding: 20px;
+    padding: 1.25rem;
     font-weight: normal;
     font-size: 14px;
     line-height: 1rem;
     color: #0b2253;
+    white-space: nowrap;
 
     span.email {
       display: block;
@@ -152,13 +181,28 @@
   }
 
   &__pagination {
+    position: absolute;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-top: 2rem;
     padding-bottom: 0.5rem;
 
+    bottom: 2rem;
+    right: 1.25rem;
+    left: 1.25rem;
+
+    @media screen and(min-width: 600px) {
+      justify-content: space-between;
+    }
+
+    @media screen and(min-width: 992px) {
+      right: 2rem;
+      left: 18rem;
+    }
+
     &--page-summary {
+      display: none;
       font-weight: normal;
       font-size: 14px;
       line-height: 24px;
@@ -167,6 +211,10 @@
 
       span {
         color: #6d7a98;
+      }
+
+      @media screen and(min-width: 600px) {
+        display: block;
       }
     }
 
@@ -205,7 +253,12 @@
     }
 
     &--per-page {
+      display: none;
       justify-content: flex-start;
+
+      @media screen and(min-width: 600px) {
+        display: flex;
+      }
 
       > span {
         display: block;
@@ -320,7 +373,7 @@
       top: 0;
       left: 0;
       right: auto;
-      content: '';
+      content: "";
       height: 3px;
       background-color: #1d4ed8;
       width: 100%;
@@ -348,7 +401,7 @@
 
   td {
     text-align: left;
-    padding: 20px;
+    padding: 1.25rem;
     font-weight: normal;
     font-size: 14px;
     line-height: 1rem;
@@ -373,25 +426,65 @@
 }
 
 .pagination {
+  padding: 0.5rem 0;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
 
-  &__summary {
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 24px;
-    letter-spacing: 0.4px;
-    color: #0b2253;
+  &__summary,
+  &__per-page {
+    display: none;
+  }
 
-    span {
-      color: #6d7a98;
+  @media screen and (min-width: 768px) {
+    justify-content: space-between;
+    align-items: center;
+
+    &__summary {
+      display: initial;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 24px;
+      letter-spacing: 0.4px;
+      color: #0b2253;
+
+      span {
+        color: #6d7a98;
+      }
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    &__per-page {
+      display: flex;
+      justify-content: flex-start;
+
+      > span {
+        display: block;
+        margin-right: 10px;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 24px;
+        letter-spacing: 0.4px;
+        color: #0b2253;
+      }
+
+      .select-input {
+        width: 5rem;
+
+        &__selector {
+          padding: 4px 8px;
+        }
+
+        &__option {
+          padding: 4px 8px;
+        }
+      }
     }
   }
 
   &__buttons {
     display: flex;
-    grid-column-gap: 0.5rem;
+    grid-column-gap: 0.2rem;
 
     button {
       font-weight: normal;
@@ -419,32 +512,6 @@
         &:disabled {
           opacity: 0.5;
         }
-      }
-    }
-  }
-
-  &__per-page {
-    justify-content: flex-start;
-
-    > span {
-      display: block;
-      margin-right: 10px;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 24px;
-      letter-spacing: 0.4px;
-      color: #0b2253;
-    }
-
-    .select-input {
-      width: 5rem;
-
-      &__selector {
-        padding: 4px 8px;
-      }
-
-      &__option {
-        padding: 4px 8px;
       }
     }
   }

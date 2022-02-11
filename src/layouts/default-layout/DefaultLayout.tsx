@@ -10,7 +10,7 @@ const DefaultLayout: React.FC = ({ children }) => {
       <header className="default-layout__header" id="top">
         <Link href="/">
           <a className="default-layout__header-brand">
-            <Image src={Logo} alt="" />
+            <Image src={Logo} alt="logo" />
           </a>
         </Link>
 

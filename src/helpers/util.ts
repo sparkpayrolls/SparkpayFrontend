@@ -145,21 +145,37 @@ export class Util {
     ];
   }
 
-  static deepEquals(
-    objOne: Record<string, any>,
-    objTwo: Record<string, any>,
-  ): boolean {
-    if ((!objOne && objOne !== objTwo) || !objTwo) {
+  static deepEquals(objOne: any, objTwo: any): boolean {
+    const isComparableValue =
+      !['function', 'object', 'symbol'].includes(typeof objOne) ||
+      objOne === null;
+    if (isComparableValue) {
+      return objOne === objTwo;
+    }
+
+    if (
+      !['function', 'object', 'symbol'].includes(typeof objTwo) ||
+      objTwo === null
+    ) {
       return false;
     }
 
-    return Object.keys(objOne).every((key) => {
-      if (['function', 'object', 'symbol'].includes(typeof objTwo[key])) {
-        return Util.deepEquals(objOne[key], objTwo[key]);
-      }
+    return (
+      Object.keys(objOne).every((key) => {
+        if (['function', 'object', 'symbol'].includes(typeof objOne[key])) {
+          return Util.deepEquals(objOne[key], objTwo[key]);
+        }
 
-      return objTwo[key] !== undefined && objTwo[key] === objOne[key];
-    });
+        return objTwo[key] === objOne[key];
+      }) &&
+      Object.keys(objTwo).every((key) => {
+        if (['function', 'object', 'symbol'].includes(typeof objTwo[key])) {
+          return Util.deepEquals(objTwo[key], objOne[key]);
+        }
+
+        return objOne[key] === objTwo[key];
+      })
+    );
   }
 
   static validXLSXFileTypes() {

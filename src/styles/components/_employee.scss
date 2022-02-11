@@ -5,8 +5,10 @@
   // padding-top: 0.25rem;
 
   &__details {
-    margin-right: 32px;
-    margin-left: 32px;
+    @media screen and (min-width: 9922px) {
+      margin-right: 32px;
+      margin-left: 32px;
+    }
   }
 
   &__profile {
@@ -35,8 +37,21 @@
   }
 
   &__employee-button {
+    display: none;
     grid-column-gap: 1rem;
-    display: flex;
+
+    @media screen and(min-width: 992px) {
+      display: flex;
+    }
+  }
+
+  &__employee-menu {
+    background: unset;
+    border: unset;
+
+    @media screen and(min-width: 992px) {
+      display: none;
+    }
   }
 
   &__submit-btn {
@@ -299,29 +314,16 @@
   }
 
   @media screen and (max-width: 600px) {
-    &__details {
-      margin-right: 19px;
-      margin-left: 19px;
-    }
-    &__head {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 2.25rem;
-    }
-
     &__title {
       font-style: normal;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 1.5rem;
       line-height: 2rem;
       color: #0e347e;
       margin-right: 0px;
       // margin: 0;
     }
-    &__employee-button {
-      display: flex;
-      grid-column-gap: 2rem;
-    }
+
     &__employee-button1 {
       height: 2rem;
       box-sizing: border-box;
@@ -343,5 +345,26 @@
       padding: 0 1.25rem;
       margin-top: 30px;
     }
+  }
+}
+
+.employee-dropdown {
+  .ant-dropdown-menu {
+    box-shadow: 0px 20px 40px rgba(22, 1, 32, 0.06);
+    border-radius: 5px;
+    padding-block: 8px;
+  }
+
+  .ant-dropdown-menu-item .employee-menu-list {
+    background: unset;
+    border: unset;
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
+    line-height: 28px;
+  }
+
+  .ant-dropdown-menu-item:first-child .employee-menu-list {
+    color: #1d4ed8;
   }
 }

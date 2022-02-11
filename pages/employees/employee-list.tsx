@@ -1,27 +1,17 @@
 import { useRouter } from 'next/router';
-import {
-  useState,
-  useEffect,
-  useCallback,
-  DetailedHTMLProps,
-  InputHTMLAttributes,
-} from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import DashboardLayoutV2 from '../../src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 import { Button } from '@/components/Button/Button.component';
-import { EditableSVG, PlusSvg } from '../../src/components/svg/index';
+import { PlusSvg } from '../../src/components/svg/index';
 import { Util } from 'src/helpers/util';
 import { $api } from 'src/api';
 import { FieldArray, Form, Formik, getIn } from 'formik';
-import { InputError } from '@/components/Shared/input-error.component';
-import classNames from 'classnames';
 import { useAppSelector } from 'src/redux/hooks';
 import { BulkEmployeeAddValidation } from 'src/helpers/validation';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import withAuth from 'src/helpers/HOC/withAuth';
-import { Spinner } from '@/components/Spinner/Spinner.component';
-import { DeleteTaxSVG } from './../../src/components/svg/index';
-
+import { EditableField } from '@/components/Input/editable-field.component';
 
 interface BulkEmployeeUploadList {
   firstname: string;
@@ -60,9 +50,11 @@ function EmployeeList() {
 
   const getEmployees = useCallback(async () => {
     try {
-      const jwt = router.query.data;
+      const jwt = router.query.file;
       if (jwt && typeof jwt === 'string') {
-        const parsed = await $api.file.parseXlsxFile<Record<string, any>>(jwt);
+        const parsed = await $api.file.parseSavedXlsxFile<Record<string, any>>(
+          jwt,
+        );
         const employees = parsed['Employee data'].map(
           (data: Record<string, string>) => ({
             firstname: data.Firstname,
@@ -72,17 +64,17 @@ function EmployeeList() {
           }),
         );
         setEmployees(employees);
-        router.push(router.pathname);
         return;
       }
     } catch (error) {
-      // ...
+      toast.error('xlsx invalid or deleted, upload again');
+      router.push('/employees');
+      return;
     }
-    setEmployees([emptyEmployee]);
   }, [router]);
 
   const transformSalary = (val: string) => {
-    const valTransformed = +val.replace(/[^0-9]/gi, '');
+    const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
     if (!valTransformed) return '';
 
     return `${currency} ${valTransformed.toLocaleString()}`;
@@ -91,24 +83,6 @@ function EmployeeList() {
   useEffect(() => {
     getEmployees();
   }, [getEmployees]);
-
-  useEffect(() => {
-    const interceptRefresh = (e: BeforeUnloadEvent) => {
-      var message = 'Your changes are not saved.';
-      e = e || window.event;
-      // For IE and Firefox
-      if (e) {
-        e.returnValue = message;
-      }
-
-      // For Safari
-      return message;
-    };
-    window.addEventListener('beforeunload', interceptRefresh);
-    return () => {
-      window.removeEventListener('beforeunload', interceptRefresh);
-    };
-  }, []);
 
   return (
     <DashboardLayoutV2 title="Employee list" href="/employees">
@@ -120,12 +94,7 @@ function EmployeeList() {
             onSubmit={async (values, helpers) => {
               try {
                 helpers.setSubmitting(true);
-                const employees = values.employees.map((e) => {
-                  e.salary = String(e.salary).replace(/[^0-9]/gi, '');
-
-                  return e;
-                }) as any;
-                await $api.employee.addEmployees({ employees });
+                await $api.employee.addEmployees(values as any);
                 toast.success('Employees added successfully.');
                 router.push('/employees');
               } catch (error) {
@@ -293,20 +262,13 @@ function EmployeeList() {
                                       </td>
                                       <td>
                                         <EditableField
-                                          type="text"
+                                          type="number"
                                           placeholder={`Salary (${currency})`}
-                                          onChange={(e) => {
-                                            e.target.value = transformSalary(
-                                              e.target.value,
-                                            );
-
-                                            handleChange(e);
-                                          }}
+                                          onChange={handleChange}
+                                          transformValue={transformSalary}
                                           onBlur={handleBlur}
                                           name={`employees.${i}.salary`}
-                                          value={transformSalary(
-                                            `${employee.salary}`,
-                                          )}
+                                          value={employee.salary}
                                           error={
                                             getIn(
                                               touched,
@@ -321,16 +283,16 @@ function EmployeeList() {
                                       </td>
                                       <td>
                                         <Button
+                                          onClick={() => helpers.remove(i)}
                                           label={
                                             <>
-                                              <DeleteTaxSVG />
+                                              <i className="fas fa-trash" />
                                               &nbsp;{'Delete'}
                                             </>
                                           }
                                           danger
                                           size="small"
                                           type="button"
-
                                         />
                                       </td>
                                     </tr>
@@ -352,35 +314,5 @@ function EmployeeList() {
     </DashboardLayoutV2>
   );
 }
-
-const EditableField = ({
-  loading,
-  ...props
-}: DetailedHTMLProps<
-  InputHTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
-> & { error?: boolean | string; loading?: boolean }) => {
-  const inputClassname = classNames('employee-list__input-container__input', {
-    'employee-list__input-container__input--has-error': !!props.error,
-  });
-
-  return (
-    <div className="employee-list__input-container">
-      <input {...props} className={inputClassname} />
-      {!loading ? (
-        <span>
-          <EditableSVG />
-        </span>
-      ) : (
-        <span className="employee-list__input-container__loader">
-          <Spinner size={20} color="--green" />
-        </span>
-      )}
-      <div className="employee-list__input-container__error">
-        <InputError>{props.error}</InputError>
-      </div>
-    </div>
-  );
-};
 
 export default withAuth(EmployeeList, ['Employee', 'write']);

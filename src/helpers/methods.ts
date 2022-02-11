@@ -17,10 +17,9 @@ export const getEmployeeAddSubmitHandler = (
   return async (values: AddEmployee, helpers: FormikHelpers<AddEmployee>) => {
     try {
       helpers.setSubmitting(true);
-      const salary = +values.salary.replace(/[^0-9]/gi, '');
       const employee = await $api.employee.addSingleEmployee({
         ...values,
-        salary,
+        salary: +values.salary,
       });
       toast.success('Employee added successfully');
       if (onDone) {
@@ -50,10 +49,9 @@ export const getEmployeeEditSubmitHandler = (
   ) => {
     try {
       helpers.setSubmitting(true);
-      const salary = +values.salary.replace(/[^0-9]/gi, '');
       await $api.employee.updateSingleEmployee(id, {
         ...pick(values, ['firstname', 'lastname', 'email']),
-        salary,
+        salary: +values.salary,
       });
       await getEmployee();
       toast.success('Employee details updated');

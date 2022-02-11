@@ -15,3 +15,5 @@ export const Tab = (props: PropsWithChildren<ITab>) => {
     </div>
   );
 };
+
+Tab.TabPane = Tabs.TabPane;

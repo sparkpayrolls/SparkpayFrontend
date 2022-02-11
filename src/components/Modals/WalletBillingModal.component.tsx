@@ -5,7 +5,7 @@ import NiceModal from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
 import { Radio } from 'antd';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
-import { Input } from '../Input/Input.component';
+import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
 import {
   IWalletBillingForm,
@@ -98,7 +98,6 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
     helpers: FormikHelpers<WalletBilling>,
   ) => {
     helpers.setSubmitting(true);
-    values.amount = values.amount.replace(/[^0-9]/gi, '');
 
     switch (country.name) {
       case 'Nigeria': {
@@ -158,26 +157,26 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
               </div>
 
               <div className="single-employee-upload-form__section">
-                <Input
-                  type="text"
+                <InputV2
+                  type="number"
                   label={`Amount (${currency})`}
                   placeholder={`Amount (${currency})`}
                   name="amount"
                   transformValue={(val) => {
-                    const valTransformed = +val.replace(/[^0-9]/gi, '');
+                    const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
                     if (!valTransformed) return '';
 
                     return `${currency} ${valTransformed.toLocaleString()}`;
                   }}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  hasError={
-                    (errors.amount && touched.amount) ||
-                    (errors.channel && touched.channel)
+                  error={
+                    ((errors.amount && touched.amount) ||
+                      (errors.channel && touched.channel)) &&
+                    [errors.amount, errors.channel]
+                      .filter((e) => !!e)
+                      .join(' and ')
                   }
-                  error={[errors.amount, errors.channel]
-                    .filter((e) => !!e)
-                    .join(' and ')}
                 />
               </div>
 

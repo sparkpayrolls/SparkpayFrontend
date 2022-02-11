@@ -65,15 +65,40 @@
     }
   }
 
+  &__logo {
+    padding: 1.25rem 1.25rem 0.5rem;
+
+    @media screen and (min-width: 992px) {
+      display: none;
+    }
+  }
+
   &__top-bar {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     background: $white;
-    padding: 1.25rem 2rem;
+    padding: 1.25rem;
 
     @media screen and(min-width: 992px) {
+      justify-content: flex-end;
       margin-left: 16rem;
+      padding-inline: 2rem;
+    }
+
+    &--logo {
+      @media screen and(min-width: 992px) {
+        display: none;
+      }
+    }
+
+    &--menu-btn {
+      background: unset;
+      padding: unset;
+      border: unset;
+      @media screen and (min-width: 992px) {
+        display: none;
+      }
     }
 
     &--name {
@@ -95,11 +120,78 @@
   }
 
   &__body {
-    padding: 0 1.25rem;
+    margin-inline: 1.25rem;
+
+    min-height: calc(100vh - 127px);
 
     @media screen and(min-width: 992px) {
-      padding: 0;
-      padding-left: 16rem;
+      padding-inline: 32px;
+      margin-left: 16rem;
+      margin-right: 0;
     }
+  }
+}
+
+.drawer-menu {
+  .dashboard-navigation {
+    // width: 16rem;
+    // height: 100vh;
+
+    &__brand {
+      position: fixed;
+      width: 16rem;
+      display: block;
+      padding: 1.4375rem 2.25rem;
+      background: inherit;
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      grid-row-gap: 0.75rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      height: 100%;
+      overflow-y: hidden;
+      padding-top: 4.25rem;
+      padding-bottom: 5.875rem;
+    }
+    &__list:hover {
+      overflow-y: auto;
+    }
+    &__list-item {
+      margin: 0 1rem;
+    }
+
+    &__link {
+      display: flex;
+      align-items: center;
+      grid-column-gap: 1.125rem;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      color: #0b2253;
+      padding: 0.75rem 1rem;
+      transition: all 500ms;
+      > svg {
+        color: #b9c8d4;
+        transition: all 500ms;
+      }
+
+      &:hover,
+      &.active {
+        color: $primary;
+        background: #eff6ff;
+        border-radius: 0.25rem;
+        > svg {
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  .ant-drawer-body {
+    padding: unset;
+    background: #f8fafc;
   }
 }

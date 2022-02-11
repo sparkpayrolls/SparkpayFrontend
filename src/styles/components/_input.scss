@@ -6,7 +6,6 @@
   &__input {
     width: 100%;
     position: relative;
-    
 
     .input {
       width: 100%;
@@ -20,6 +19,128 @@
       height: 20px;
       width: 20px;
     }
+  }
+}
+
+.input-v2 {
+  > * {
+    transition: 0.2s ease;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  &__input-container {
+    position: relative;
+  }
+
+  &__add-on {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: auto;
+    right: 19px;
+    width: unset !important;
+
+    &__button {
+      cursor: pointer;
+    }
+  }
+
+  &__input {
+    outline: none;
+    width: 100%;
+    line-height: $line-height-24;
+    font-size: $font-size-16;
+    font-family: $font-family-Karla;
+    padding: 16px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    background: $gray-filled;
+    color: $black;
+
+    &::placeholder {
+      color: $n-400;
+    }
+  }
+
+  &__helper {
+    margin-top: 8px;
+    display: block;
+  }
+
+  &--focused {
+    &__label {
+      color: $black !important;
+    }
+    &__input {
+      border: 1px solid $blue;
+    }
+  }
+
+  &--error {
+    &__input {
+      border: 1px solid $red-600;
+    }
+
+    &__error {
+      margin-top: 8px;
+      display: block;
+    }
+  }
+}
+
+.name-value-input-group {
+  width: 100%;
+
+  &__label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  &__helper {
+    margin-top: 8px;
+    display: block;
+  }
+
+  &__inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  &--error {
+    &__error {
+      margin-top: 8px;
+      display: block;
+    }
+  }
+}
+
+.name-value-input {
+  display: flex;
+  align-items: center;
+
+  > *:not(:last-child) {
+    margin-right: 0.5rem;
+  }
+  > div {
+    width: 100%;
+  }
+
+  > div:first-child {
+    max-width: 300px;
+  }
+  > div:nth-child(2) {
+    max-width: 150px;
+  }
+  > span {
+    font-size: 16px;
+    margin-left: 1rem;
+    color: $red-600;
+    cursor: pointer;
   }
 }
 
@@ -57,7 +178,6 @@
     border-radius: 4px;
   }
 
-  
   &--error {
     border: 1px solid #ca1b1b;
   }
@@ -83,8 +203,6 @@
       border: 1px solid $primary;
       padding: 0 1rem;
     }
-
-   
   }
 
   .input--error {
@@ -497,6 +615,7 @@
     padding: 0 16px;
     border-radius: 4px;
     background-color: #f7f9fb;
+    border: 1px solid transparent;
   }
 
   .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
@@ -535,5 +654,11 @@
     .ant-select-selector {
       border: 1px solid #ca1b1b;
     }
+  }
+}
+
+.app-select-container--focused {
+  label {
+    color: $black !important;
   }
 }
