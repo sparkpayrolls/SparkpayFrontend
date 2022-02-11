@@ -10,21 +10,25 @@ export function Select<T extends SelectValue>(
   props: PropsWithChildren<ISelect<T>>,
 ) {
   const [autocompleteDisabled, setAutocompleteDisabled] = useState(false);
+  const [focused, setFocused] = useState(false);
   const { label, error, className, onFocus, ...selectProps } = props;
   let id: string | undefined;
   const selectClass = classNames('app-select', className, {
     [`has-error`]: !!error,
+  });
+  const containerClass = classNames('app-select-container app-select', {
+    'app-select-container--focused': focused,
   });
   if (label) {
     id = label.toLowerCase().replace(/\s/gi, '_');
   }
 
   return (
-    <Container className="app-select">
+    <Container className={containerClass}>
       {label && (
         <Text
           text={label}
-          className="text__label"
+          className="label text__label"
           element="label"
           htmlFor={id}
         />
@@ -43,9 +47,13 @@ export function Select<T extends SelectValue>(
             });
             setAutocompleteDisabled(true);
           }
+          setFocused(true);
           if (onFocus) {
             onFocus(e);
           }
+        }}
+        onBlur={() => {
+          setFocused(false);
         }}
       />
       {error && (
