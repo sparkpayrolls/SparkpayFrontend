@@ -52,8 +52,9 @@ export function Select<T extends SelectValue>(
             onFocus(e);
           }
         }}
-        onBlur={() => {
+        onBlur={(e) => {
           setFocused(false);
+          props.onBlur && props.onBlur(e);
         }}
       />
       {error && (
