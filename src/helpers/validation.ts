@@ -51,6 +51,13 @@ export const createOrganizationValidationSchema = Yup.object().shape({
   phonenumber: format.phonenumber,
 });
 
+export const EditOrganisationDetailsValidationSchema = Yup.object().shape({
+  email: format.email,
+  name: format.firstname,
+  country: format.country,
+  phonenumber: format.phonenumber,
+});
+
 export const userChangePasswordValidationSchema = Yup.object().shape({
   oldPassword: Yup.string().required('Old password is required'),
   newPassword: Yup.string().required('New password is required'),
