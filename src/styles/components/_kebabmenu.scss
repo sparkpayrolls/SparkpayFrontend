@@ -122,6 +122,15 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
         max-height: 30px;
       }
 
+      .identity {
+        &__image {
+          max-height: 30px;
+          height: unset;
+          width: unset;
+          border-radius: unset;
+        }
+      }
+
       display: flex;
       align-items: center;
       justify-content: flex-start;
