@@ -41,7 +41,6 @@ const AuthManager = () => {
     if (authToken) {
       tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${authToken}`;
-
         return config;
       });
       authInterceptor = $api.$axios.interceptors.response.use(
@@ -51,7 +50,6 @@ const AuthManager = () => {
             Cookies.remove('auth_token');
             dispatch(commitUser(null));
           }
-
           return Promise.reject(error);
         },
       );
@@ -61,11 +59,9 @@ const AuthManager = () => {
           if (error.response?.status === 403) {
             refreshCompanies(dispatch);
           }
-
           return Promise.reject(error);
         },
       );
-
       $api.user
         .getProfile()
         .then((newUser) => {
@@ -74,9 +70,10 @@ const AuthManager = () => {
           }
         })
         .catch(() => {
-          // error logging in...
-          Cookies.remove('auth_token');
+          /* do nothing */
         });
+    } else if (user) {
+      dispatch(commitUser(null));
     }
     if (user) {
       $api.company
