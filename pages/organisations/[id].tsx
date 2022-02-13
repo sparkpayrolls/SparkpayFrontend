@@ -173,7 +173,7 @@ const OrganisationDetails: NextPage = () => {
                   />
                 </div>
               </div>
-              {organization.salaryBreakdown?.length && (
+              {!!organization.salaryBreakdown?.length && (
                 <>
                   <hr />
                   <div>
