@@ -138,6 +138,7 @@ export type Company = Document & {
   phonenumber: string;
   country: string | Country;
   logo?: string;
+  salaryBreakdown?: SalaryBreakdown[];
 };
 
 export enum PermissionGroupEnum {

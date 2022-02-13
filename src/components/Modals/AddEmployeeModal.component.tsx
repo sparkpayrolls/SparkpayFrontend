@@ -13,7 +13,7 @@ import { getEmployeeAddSubmitHandler } from 'src/helpers/methods';
 
 export const AddEmployeeModal = NiceModal.create(
   (props: { administrator: Administrator }) => {
-    return ( 
+    return (
       <ModalLayout title="Add Employee">
         {(modal) => {
           return (
@@ -64,7 +64,7 @@ const AddEmployeeForm = ({
           }}
           onSubmit={getEmployeeAddSubmitHandler((employee) => {
             modal.resolve(employee);
-            setTimeout(modal.hide, 100);
+            setTimeout(modal.hide, 20);
           })}
           currency={Util.getCurrencySymbolFromAdministrator(administrator)}
         />

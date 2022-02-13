@@ -285,3 +285,7 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
     }
   }
 }
+
+img[alt='company-logo'] {
+  max-height: 30px;
+}

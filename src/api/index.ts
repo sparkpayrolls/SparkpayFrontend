@@ -50,8 +50,3 @@ export class $api {
     await $api.$axios.post('/join-wait-list', { email, name });
   }
 }
-
-$api.$axios.interceptors.request.use((config) => {
-  console.log(`[${config?.method?.toUpperCase()}] ${config.url}`);
-  return config;
-});

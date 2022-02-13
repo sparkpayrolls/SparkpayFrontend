@@ -117,6 +117,19 @@
       display: block;
     }
   }
+
+  &.organisation-salary-breakdown {
+    .name-value-input-group__inputs {
+      display: block;
+      border: 1px solid #dceaf8;
+      border-radius: 4px;
+      padding: 8px;
+
+      & > *:not(:last-child) {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
 }
 
 .name-value-input {
@@ -139,8 +152,11 @@
   > span {
     font-size: 16px;
     margin-left: 1rem;
-    color: $red-600;
     cursor: pointer;
+
+    i {
+      color: $red-600;
+    }
   }
 }
 

@@ -1,44 +1,96 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import NiceModal, { NiceModalHandler } from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
-import { Formik, FormikProps } from 'formik';
-import { Input } from '../Input/Input.component';
+import { Formik } from 'formik';
+import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
 import { EditOrganisationDetailsValidationSchema } from 'src/helpers/validation';
-import { OrganisationDetails } from '../types';
-import { useAppSelector } from 'src/redux/hooks';
-import { Select } from '../Input/select.component';
+import { Company } from 'src/api/types';
+import { Util } from 'src/helpers/util';
+import { NameValueInputGroup } from '../Input/name-value.component';
+import { HttpError } from 'src/api/repo/http.error';
+import { $api } from 'src/api';
 
+type IOrganisationDetailsModal = PropsWithChildren<{
+  organization?: Company;
+}>;
 
-export const OrganisationDetailsModal = NiceModal.create(() => {
-  return (
-    <ModalLayout title="Edit Organisation Details">
-      {(modal) => {
-        return <OrganisationDetailsForm modal={modal} />;
-      }}
-    </ModalLayout>
-  );
-});
+export const OrganisationDetailsModal = NiceModal.create(
+  (props: IOrganisationDetailsModal) => {
+    return (
+      <ModalLayout title="Edit Organisation Details">
+        {(modal) => {
+          return (
+            <OrganisationDetailsForm
+              modal={modal}
+              organization={props.organization}
+            />
+          );
+        }}
+      </ModalLayout>
+    );
+  },
+);
 
-const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
-    
-  const countries = useAppSelector((state) => state.countries);
+interface IOrganisationDetailsForm {
+  modal: NiceModalHandler;
+  organization?: Company;
+}
+
+const OrganisationDetailsForm = (props: IOrganisationDetailsForm) => {
+  const { organization, modal } = props;
+  const initialValues = {
+    name: organization?.name,
+    email: organization?.email,
+    phonenumber: organization?.phonenumber,
+    salaryBreakdown: organization?.salaryBreakdown || [],
+    logo: organization?.logo,
+  };
+
   return (
     <div>
       <Formik
-        initialValues={{
-          name: '',
-          country: '',
-          email: '',
-          phonenumber: '',
-        }}
+        initialValues={initialValues}
         validationSchema={EditOrganisationDetailsValidationSchema}
-        onSubmit={(values) => {
-          modal;
-          console.log(values);
+        onSubmit={async (values, helpers) => {
+          const toast = (await import('react-toastify')).toast;
+          try {
+            helpers.setSubmitting(true);
+            const { logo, salaryBreakdown, ...others } = values;
+            const [data, filename] = logo?.split(':filename') || [];
+            const update = {
+              ...others,
+              logoFile: { filename, data },
+              salaryBreakdown: salaryBreakdown.map((b) => ({
+                name: b.name,
+                value: b.value,
+              })),
+            };
+            if (!filename || !data) {
+              // @ts-ignore
+              delete update.logoFile;
+            }
+            const org = await $api.company.updateCompanyById(
+              organization?.id || '',
+              update,
+            );
+            modal.resolve(org);
+            setTimeout(modal.hide, 10);
+            toast.success('Organisation details updated successfully.');
+          } catch (error) {
+            const httpError = error as HttpError;
+            if (httpError.status === 422) {
+              helpers.setErrors({ ...httpError.errors });
+              return;
+            }
+
+            toast.error(httpError.message);
+          } finally {
+            helpers.setSubmitting(false);
+          }
         }}
       >
-        {(props: FormikProps<OrganisationDetails>) => {
+        {(props) => {
           const {
             handleChange,
             handleSubmit,
@@ -47,9 +99,27 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
             errors,
             touched,
             isSubmitting,
-            setTouched,
             setValues,
+            setErrors,
           } = props;
+          if (!errors.salaryBreakdown) {
+            const totalSalaryBreakdown = values.salaryBreakdown.reduce(
+              (acc, cur) => {
+                if (!+cur.value) return acc;
+
+                return acc + +cur.value;
+              },
+              0,
+            );
+            if (totalSalaryBreakdown !== 100) {
+              setErrors({
+                ...errors,
+                salaryBreakdown: 'Total salary breakdown should be 100%',
+              });
+              return null;
+            }
+          }
+
           return (
             <form
               onSubmit={handleSubmit}
@@ -57,7 +127,50 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
               autoComplete="off"
             >
               <div className="organisation-detail__section">
-                <Input
+                <label htmlFor="logo" className="image-upload-input">
+                  <input
+                    type="file"
+                    name="logo"
+                    id="logo"
+                    className="sr-only"
+                    accept=".jpg,.png,.jpeg"
+                    onChange={(event) => {
+                      const files = event.target.files;
+                      if (files) {
+                        const file = files[0];
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setValues({
+                            ...values,
+                            logo: `${reader.result}:filename${file.name}`,
+                          });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                  <span className="text__label label" role="label">
+                    Logo
+                  </span>
+                  <div>
+                    {values.logo && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={values.logo.split(':filename')[0]}
+                        alt="company-logo"
+                      />
+                    )}
+                    <span
+                      className="text__label placeholder"
+                      role="placeholder"
+                    >
+                      {values.logo ? 'Change your logo' : 'Upload your logo'}
+                    </span>
+                  </div>
+                </label>
+              </div>
+              <div className="organisation-detail__section">
+                <InputV2
                   type="text"
                   label="Company Name"
                   placeholder="Company Name"
@@ -65,13 +178,12 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
                   value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  hasError={errors.name && touched.name}
-                  error={errors.name}
+                  error={touched.name && errors.name}
                 />
               </div>
 
               <div className="organisation-detail__section">
-                <Input
+                <InputV2
                   type="email"
                   label="Email Address"
                   placeholder="Email Address"
@@ -79,13 +191,12 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  hasError={errors.email && touched.email}
-                  error={errors.email}
+                  error={touched.email && errors.email}
                 />
               </div>
 
               <div className="organisation-detail__section">
-                <Input
+                <InputV2
                   type="tel"
                   label="Phone No."
                   placeholder="Phone No."
@@ -93,72 +204,43 @@ const OrganisationDetailsForm = ({ modal }: { modal: NiceModalHandler }) => {
                   value={values.phonenumber}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  hasError={errors.phonenumber && touched.phonenumber}
-                  error={errors.phonenumber}
+                  error={touched.phonenumber && errors.phonenumber}
                 />
               </div>
 
               <div className="organisation-detail__section">
-                <Select
-                  label="Country"
-                  onBlur={() => setTouched({ ...touched, country: true }, true)}
-                  onChange={(val: string) =>
-                    setValues({ ...values, country: val }, true)
-                  }
-                  optionFilterProp="children"
-                  placeholder="Select Country"
-                  showSearch
-                  disabled={!countries.length}
-                  loading={!countries.length}
-                  error={(touched.country && errors.country) || ''}
-                >
-                  {countries.map((country) => {
-                    const { Option } = Select;
-
-                    return (
-                      <Option value={country.id} key={country.id}>
-                        {country.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </div>
-              <div className="custom-field">
-                <h1>
-                  <span>Salary Breakdown</span>
-                </h1>
-                <div>
-                  <input
-                    type="text"
-                    name="shipping_name"
-                    id="shipping_name"
-                    placeholder="Basic"
-                  ></input>
-                  <input
-                    type="text"
-                    name="shipping_street"
-                    id="percentage"
-                    placeholder="%"
-                  ></input>
-                  <i className="fas fa-minus-circle fa"></i>
-                </div>
+                <NameValueInputGroup
+                  className="organisation-salary-breakdown"
+                  label="Salary Breakdown"
+                  items={values.salaryBreakdown}
+                  transformValue={(v: number) => {
+                    return `${(+v).toFixed(1)}%`;
+                  }}
+                  onChange={(e) => {
+                    setValues({
+                      ...values,
+                      salaryBreakdown: e.target.value as any,
+                    });
+                  }}
+                  error={errors.salaryBreakdown}
+                />
               </div>
               <div className="form__submit-button">
                 <Button
                   type="submit"
-                  label="Edit Organisation"
+                  label="Save Changes"
                   className="form__submit-button form__submit-button--full-width"
                   primary
-                  disabled={isSubmitting || !countries.length}
-                  showSpinner={isSubmitting || !countries.length}
+                  disabled={
+                    isSubmitting || Util.deepEquals(values, initialValues)
+                  }
+                  showSpinner={isSubmitting}
                 />
               </div>
             </form>
           );
         }}
-       
       </Formik>
     </div>
   );
 };
-

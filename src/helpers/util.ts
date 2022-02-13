@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IAllowedPermissions } from '@/components/types';
-import jwt from 'jsonwebtoken';
 import { NextRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
 import {
   Administrator,
   Company,
@@ -11,7 +9,6 @@ import {
   Permission,
   Role,
 } from 'src/api/types';
-import { config } from './config';
 import { DebouncedFunc } from './types';
 
 export class Util {
@@ -120,7 +117,10 @@ export class Util {
     return Array.isArray(val) ? val : [val];
   }
 
-  static redirectToLogin(router: NextRouter) {
+  static async redirectToLogin(router: NextRouter) {
+    const stringifyUrl = await import('query-string').then(
+      (mod) => mod.stringifyUrl,
+    );
     const url = stringifyUrl({
       url: '/login',
       query: { goto: router.pathname },
@@ -172,15 +172,5 @@ export class Util {
     return [
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     ];
-  }
-
-  static signObject<T extends string | Record<string, unknown> | Buffer>(
-    payload: T,
-  ) {
-    return jwt.sign(payload, config.jwtKey as string);
-  }
-
-  static decodeToken<T>(token: string) {
-    return jwt.verify(token, config.jwtKey as string) as T;
   }
 }
