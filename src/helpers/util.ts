@@ -146,13 +146,12 @@ export class Util {
   }
 
   static deepEquals(objOne: any, objTwo: any): boolean {
-    const isComparableValue =
+    if (
       !['function', 'object', 'symbol'].includes(typeof objOne) ||
-      objOne === null;
-    if (isComparableValue) {
+      objOne === null
+    ) {
       return objOne === objTwo;
     }
-
     if (
       !['function', 'object', 'symbol'].includes(typeof objTwo) ||
       objTwo === null
@@ -160,22 +159,13 @@ export class Util {
       return false;
     }
 
-    return (
-      Object.keys(objOne).every((key) => {
-        if (['function', 'object', 'symbol'].includes(typeof objOne[key])) {
-          return Util.deepEquals(objOne[key], objTwo[key]);
-        }
+    return Object.keys(objOne).every((key) => {
+      if (['function', 'object', 'symbol'].includes(typeof objOne[key])) {
+        return Util.deepEquals(objOne[key], objTwo[key]);
+      }
 
-        return objTwo[key] === objOne[key];
-      }) &&
-      Object.keys(objTwo).every((key) => {
-        if (['function', 'object', 'symbol'].includes(typeof objTwo[key])) {
-          return Util.deepEquals(objTwo[key], objOne[key]);
-        }
-
-        return objOne[key] === objTwo[key];
-      })
-    );
+      return objTwo[key] === objOne[key];
+    });
   }
 
   static validXLSXFileTypes() {

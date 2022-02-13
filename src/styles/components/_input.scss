@@ -656,3 +656,9 @@
     }
   }
 }
+
+.app-select-container--focused {
+  label {
+    color: $black !important;
+  }
+}

@@ -11,7 +11,6 @@ import { BulkEmployeeAddValidation } from 'src/helpers/validation';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import withAuth from 'src/helpers/HOC/withAuth';
-import { DeleteTaxSVG } from './../../src/components/svg/index';
 import { EditableField } from '@/components/Input/editable-field.component';
 
 interface BulkEmployeeUploadList {
@@ -51,9 +50,11 @@ function EmployeeList() {
 
   const getEmployees = useCallback(async () => {
     try {
-      const jwt = router.query.data;
+      const jwt = router.query.file;
       if (jwt && typeof jwt === 'string') {
-        const parsed = await $api.file.parseXlsxFile<Record<string, any>>(jwt);
+        const parsed = await $api.file.parseSavedXlsxFile<Record<string, any>>(
+          jwt,
+        );
         const employees = parsed['Employee data'].map(
           (data: Record<string, string>) => ({
             firstname: data.Firstname,
@@ -63,13 +64,13 @@ function EmployeeList() {
           }),
         );
         setEmployees(employees);
-        router.push(router.pathname);
         return;
       }
     } catch (error) {
-      // ...
+      toast.error('xlsx invalid or deleted, upload again');
+      router.push('/employees');
+      return;
     }
-    setEmployees([emptyEmployee]);
   }, [router]);
 
   const transformSalary = (val: string) => {
@@ -82,24 +83,6 @@ function EmployeeList() {
   useEffect(() => {
     getEmployees();
   }, [getEmployees]);
-
-  useEffect(() => {
-    const interceptRefresh = (e: BeforeUnloadEvent) => {
-      var message = 'Your changes are not saved.';
-      e = e || window.event;
-      // For IE and Firefox
-      if (e) {
-        e.returnValue = message;
-      }
-
-      // For Safari
-      return message;
-    };
-    window.addEventListener('beforeunload', interceptRefresh);
-    return () => {
-      window.removeEventListener('beforeunload', interceptRefresh);
-    };
-  }, []);
 
   return (
     <DashboardLayoutV2 title="Employee list" href="/employees">
@@ -300,9 +283,10 @@ function EmployeeList() {
                                       </td>
                                       <td>
                                         <Button
+                                          onClick={() => helpers.remove(i)}
                                           label={
                                             <>
-                                              <DeleteTaxSVG />
+                                              <i className="fas fa-trash" />
                                               &nbsp;{'Delete'}
                                             </>
                                           }
