@@ -1,0 +1,10 @@
+.organisation {
+  width: 97%;
+  margin: auto;
+}
+.organisation__table-section {
+  margin-top: -1.5rem;
+}
+.organisation__org-logo {
+  margin-top: -0.5rem;
+}

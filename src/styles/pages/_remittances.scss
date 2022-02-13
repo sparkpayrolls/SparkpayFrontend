@@ -336,6 +336,7 @@ padding-top: 3rem;
  
  
 }
+}
 .ant-radio-wrapper{
   margin-bottom:0.5rem;
  }
@@ -353,7 +354,10 @@ padding-top: 3rem;
  }
  
  .ant-tabs-tab:hover{
-     color: #1D4ED8;
+     color: #0E347E;
  }
-}
  
+ .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+color: #0E347E;
+font-size:1rem;
+ }

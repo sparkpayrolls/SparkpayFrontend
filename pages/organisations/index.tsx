@@ -12,6 +12,17 @@ import withAuth from 'src/helpers/HOC/withAuth';
 import { CreateOrganisationButton } from '@/components/Button/create-organisation-button.component';
 import { useAppDispatch } from 'src/redux/hooks';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import 'antd/dist/antd.css';
+import { Tabs } from 'antd';
+import InvitationTab from "../../src/components/invitation";
+
+
+
+const { TabPane } = Tabs;
+
+function callback(key: any) {
+  console.log(key);
+}
 
 const OrganizationSettings: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -82,16 +93,26 @@ const OrganizationSettings: NextPage = () => {
               />
             </div>
           </div>
-          <div className="organisation__table-section">
-            <OrganizationTable
-              organizations={data}
-              paginationMeta={meta}
-              getOrganizations={getOrganizations}
-              deleteOrganisation={deleteOrganization}
-              loading={loading}
-            />
+            <Tabs defaultActiveKey="1" onChange={callback}>
+              <TabPane tab="Organizations" key="1">
+                <div className="organisation__table-section">
+                  <OrganizationTable
+                    organizations={data}
+                    paginationMeta={meta}
+                    getOrganizations={getOrganizations}
+                    deleteOrganisation={deleteOrganization}
+                    loading={loading}
+                  />
+                  </div>
+              </TabPane>
+              <TabPane tab="Invitations" key="2">              
+                <InvitationTab
+                 />
+              </TabPane>
+
+            </Tabs>
           </div>
-        </div>
+
       </DashboardLayout>
     </>
   );
