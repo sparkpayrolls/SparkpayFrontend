@@ -138,6 +138,7 @@ export type Company = Document & {
   phonenumber: string;
   country: string | Country;
   logo?: string;
+  salaryBreakdown?: SalaryBreakdown[];
 };
 
 export enum PermissionGroupEnum {
@@ -489,4 +490,16 @@ export type EmployeeTaxDetailPayload = Pick<
 
 export type AddEmployeeToNigerianTaxPayload = {
   employeeDetails: EmployeeTaxDetailPayload[];
+};
+
+export type FileUploadPayload = {
+  filename: string;
+  data: string;
+};
+
+export type File = Document & {
+  mime: string;
+  filename: string;
+  url: string;
+  provider: string;
 };

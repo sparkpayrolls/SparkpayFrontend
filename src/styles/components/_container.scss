@@ -30,3 +30,18 @@
     }
   }
 }
+
+.line-loader {
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: auto;
+    content: '';
+    height: 3px;
+    background-color: #1d4ed8;
+    width: 100%;
+    animation: slide 3s infinite linear;
+    z-index: 9;
+  }
+}

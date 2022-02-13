@@ -3,15 +3,13 @@ import Skeleton from 'react-loading-skeleton';
 
 import 'react-loading-skeleton/dist/skeleton.css';
 
-export const SingleDetail = ({
-  title,
-  details,
-  loading,
-}: {
+export interface ISingleDetail {
   title: ReactNode;
   details: ReactNode;
   loading?: boolean;
-}) => {
+}
+
+export const SingleDetail = ({ title, details, loading }: ISingleDetail) => {
   return (
     <div className="employee-details-section__single-details">
       <div>
