@@ -88,21 +88,13 @@ export const OrganizationsMenu = ({
   return (
     <div className="organization-menu" ref={menuRef} id={id}>
       <div className="organization-menu__trigger" onClick={handleClick}>
-        {selectedCompany?.logo ? (
-          <div className="organization-menu__trigger__logo">
-            {
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={selectedCompany.logo} alt="company-logo" />
-            }
-          </div>
-        ) : (
-          <Identity
-            name={selectedCompany?.name || 'Select Organisation'}
-            initial={selectedCompany?.name?.charAt(0)}
-            image={selectedCompany?.logo}
-            type="reverse"
-          />
-        )}
+        <Identity
+          name={selectedCompany?.name || 'Select Organisation'}
+          initial={selectedCompany?.name?.charAt(0)}
+          image={selectedCompany?.logo}
+          type="reverse"
+        />
+
         <button className="organization-menu__trigger__drop-svg">
           <Image src={dropdown} alt="down-arrow" />
         </button>

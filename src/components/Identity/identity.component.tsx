@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { ImageLoader } from 'src/layouts/dashboard-layout/DashBoardLayout';
 import { IIdentity } from '../types';
 
 export const Identity = (props: IIdentity) => {
@@ -11,12 +10,15 @@ export const Identity = (props: IIdentity) => {
     <span className={className}>
       {!!props?.image && (
         <span className="identity__image">
-          <ImageLoader
-            src={props?.image}
-            width={props?.imageWidth || 30}
-            height={props?.imageHeight || 30}
-            alt={props.name}
-          />
+          {
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={props?.image}
+              width={props?.imageWidth}
+              height={props?.imageHeight}
+              alt={props.name}
+            />
+          }
         </span>
       )}
 
