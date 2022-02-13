@@ -18,10 +18,6 @@ import InvitationTab from '../../src/components/Organization/invitation-tab';
 
 const { TabPane } = Tabs;
 
-function callback(key: any) {
-  console.log(key);
-}
-
 const OrganizationSettings: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [{ data, meta }, setData] = useState({
@@ -91,7 +87,7 @@ const OrganizationSettings: NextPage = () => {
               />
             </div>
           </div>
-          <Tabs defaultActiveKey="1" onChange={callback}>
+          <Tabs defaultActiveKey="1">
             <TabPane tab="Organizations" key="1">
               <div className="organisation__table-section">
                 <OrganizationTable
