@@ -14,9 +14,7 @@ import { useAppDispatch } from 'src/redux/hooks';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import 'antd/dist/antd.css';
 import { Tabs } from 'antd';
-import InvitationTab from "../../src/components/invitation";
-
-
+import InvitationTab from '../../src/components/Organization/invitation-tab';
 
 const { TabPane } = Tabs;
 
@@ -93,26 +91,23 @@ const OrganizationSettings: NextPage = () => {
               />
             </div>
           </div>
-            <Tabs defaultActiveKey="1" onChange={callback}>
-              <TabPane tab="Organizations" key="1">
-                <div className="organisation__table-section">
-                  <OrganizationTable
-                    organizations={data}
-                    paginationMeta={meta}
-                    getOrganizations={getOrganizations}
-                    deleteOrganisation={deleteOrganization}
-                    loading={loading}
-                  />
-                  </div>
-              </TabPane>
-              <TabPane tab="Invitations" key="2">              
-                <InvitationTab
-                 />
-              </TabPane>
-
-            </Tabs>
-          </div>
-
+          <Tabs defaultActiveKey="1" onChange={callback}>
+            <TabPane tab="Organizations" key="1">
+              <div className="organisation__table-section">
+                <OrganizationTable
+                  organizations={data}
+                  paginationMeta={meta}
+                  getOrganizations={getOrganizations}
+                  deleteOrganisation={deleteOrganization}
+                  loading={loading}
+                />
+              </div>
+            </TabPane>
+            <TabPane tab="Invitations" key="2">
+              <InvitationTab />
+            </TabPane>
+          </Tabs>
+        </div>
       </DashboardLayout>
     </>
   );
