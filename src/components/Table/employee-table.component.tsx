@@ -129,7 +129,9 @@ export const EmployeeTable = (props: IEmployeeTable) => {
         onCheckAllClick={onCheckAll}
         paginationMeta={paginationMeta}
         refresh={getEmployees}
-        title={`${paginationMeta.total}\xa0Employee(s)`}
+        title={`${paginationMeta.total}\xa0Employee${
+          paginationMeta.total > 1 ? 's' : ''
+        }`}
         onFilterClick={onFilter}
         isEmpty={!employees.length}
         emptyStateText="No employee yet"

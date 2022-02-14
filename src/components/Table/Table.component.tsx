@@ -8,6 +8,7 @@ import { Button } from '../Button/Button.component';
 import { SelectInput } from '../Input/seletct-input';
 import { KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { ITable, ITablePagination, ITablev2, ITR } from '../types';
+import { Dropdown, Menu } from 'antd';
 
 export const TR = (props: PropsWithChildren<ITR>) => {
   return (
@@ -134,6 +135,25 @@ export const Table = (props: ITable) => {
     props.refresh && props.refresh(page, perPage, search, all);
   };
 
+  const menu = (
+    <Menu>
+      <Menu.Item key="0">
+        <div className="table-component__mobile-search">
+          <input
+            type="search"
+            placeholder="Search by name"
+            className="table-component__search--input"
+            onChange={(event) => {
+              setSearch(event.target.value);
+              searchFunc(props.refresh || (() => {}), event.target.value);
+            }}
+          />
+          <Image src={search_icon} alt="search icon" />
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <div
       className={`table-component${
@@ -171,9 +191,15 @@ export const Table = (props: ITable) => {
                 <Image src={search_icon} alt="search icon" />
               </div>
 
-              <button className="table-component__search-btn">
-                <Image src={search_icon} alt="search icon" />
-              </button>
+              <Dropdown
+                overlay={menu}
+                trigger={['click']}
+                overlayClassName="employee-dropdown"
+              >
+                <button className="table-component__search-btn">
+                  <Image src={search_icon} alt="search icon" />
+                </button>
+              </Dropdown>
 
               {props.onFilterClick && (
                 <button
