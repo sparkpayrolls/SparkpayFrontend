@@ -14,6 +14,8 @@ import { Identity } from '../Identity/identity.component';
 import { TableEmptyState } from '../EmptyState/table-emptystate.component';
 import { useAppDispatch } from 'src/redux/hooks';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 
 const InvitationTab: NextPage = () => {
   const [{ data: invites, meta }, setInvites] = useState({
@@ -24,6 +26,7 @@ const InvitationTab: NextPage = () => {
   const [lockTableHeight, setLockTableHeight] = useState(false);
   const [params, setParams] = useState({} as Record<string, any>);
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const tableClassName = classNames('organisation__invitation-table', {
     'invitation-table--lock': lockTableHeight,
   });
@@ -40,32 +43,35 @@ const InvitationTab: NextPage = () => {
     }
   }, [params]);
 
-  const getActionHandler = (action: 'reject' | 'accept', token: string) => {
-    return async () => {
-      try {
-        setLoading(false);
-        switch (action) {
-          case 'accept':
-            await $api.admin.acceptInvitation(token);
-            refreshCompanies(dispatch);
-            break;
-          case 'reject':
-            await $api.admin.rejectInvitation(token);
-        }
+  const getActionHandler = useCallback(
+    (action: 'reject' | 'accept', token: string) => {
+      return async () => {
+        try {
+          setLoading(false);
+          switch (action) {
+            case 'accept':
+              await $api.admin.acceptInvitation(token);
+              refreshCompanies(dispatch);
+              break;
+            case 'reject':
+              await $api.admin.rejectInvitation(token);
+          }
 
-        getInvites();
-        toast.success(`invitation ${action}ed successfully.`);
-      } catch (error) {
-        const httpError = error as HttpError;
-        if (httpError.status === 400) {
           getInvites();
+          toast.success(`invitation ${action}ed successfully.`);
+        } catch (error) {
+          const httpError = error as HttpError;
+          if (httpError.status === 400) {
+            getInvites();
+          }
+          toast.error(httpError.message);
+        } finally {
+          setLoading(false);
         }
-        toast.error(httpError.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-  };
+      };
+    },
+    [dispatch, getInvites],
+  );
 
   useEffect(() => {
     getInvites();
@@ -86,6 +92,18 @@ const InvitationTab: NextPage = () => {
       window.document.body.removeEventListener('scroll', lockTableHeight);
     };
   }, []);
+
+  useEffect(() => {
+    const { action, inviteToken: token, ...others } = router.query;
+    if (['accept', 'reject'].includes(action as string)) {
+      const url = stringifyUrl({
+        url: router.pathname,
+        query: others,
+      });
+      getActionHandler(action as 'accept', token as string)();
+      router.push(url);
+    }
+  }, [router, getActionHandler]);
 
   return (
     <>

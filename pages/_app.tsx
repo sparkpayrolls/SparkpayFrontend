@@ -32,36 +32,33 @@ const AuthManager = () => {
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
-    let tokenInterceptor: number;
-    let authInterceptor: number;
-    let permitInterceptor: number;
     const companySelected = companies.find((company) => company.selected);
     const company = administrator?.company as Company;
     const selectedCompany = companySelected?.company as Company;
+    const tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
+      config.headers.Authorization = `Bearer ${authToken}`;
+      return config;
+    });
+    const authInterceptor = $api.$axios.interceptors.response.use(
+      (res) => res,
+      (error) => {
+        if (error.response?.status === 401) {
+          Cookies.remove('auth_token');
+          dispatch(commitUser(null));
+        }
+        return Promise.reject(error);
+      },
+    );
+    const permitInterceptor = $api.$axios.interceptors.response.use(
+      (res) => res,
+      (error: AxiosError) => {
+        if (error.response?.status === 403) {
+          refreshCompanies(dispatch);
+        }
+        return Promise.reject(error);
+      },
+    );
     if (authToken) {
-      tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
-        config.headers.Authorization = `Bearer ${authToken}`;
-        return config;
-      });
-      authInterceptor = $api.$axios.interceptors.response.use(
-        (res) => res,
-        (error) => {
-          if (error.response?.status === 401) {
-            Cookies.remove('auth_token');
-            dispatch(commitUser(null));
-          }
-          return Promise.reject(error);
-        },
-      );
-      permitInterceptor = $api.$axios.interceptors.response.use(
-        (res) => res,
-        (error: AxiosError) => {
-          if (error.response?.status === 403) {
-            refreshCompanies(dispatch);
-          }
-          return Promise.reject(error);
-        },
-      );
       $api.user
         .getProfile()
         .then((newUser) => {
@@ -84,7 +81,7 @@ const AuthManager = () => {
           }
         })
         .catch(() => {
-          dispatch(commitCompanies([]));
+          /* do nothing */
         });
       $api.company
         .getCurrentCompany()
@@ -94,7 +91,7 @@ const AuthManager = () => {
           }
         })
         .catch(() => {
-          dispatch(commitAministrator(null));
+          /* do nothing */
         });
     }
     if (selectedCompany && company?.id !== selectedCompany?.id) {
