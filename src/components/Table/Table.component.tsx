@@ -7,6 +7,7 @@ import search_icon from '../../../public/svgs/search-icon.svg';
 import { Button } from '../Button/Button.component';
 import { SelectInput } from '../Input/seletct-input';
 import { KebabMenu } from '../KebabMenu/KebabMenu.component';
+import { Pagination } from '../Pagination/pagination.component';
 import { ITable, ITablePagination, ITablev2, ITR } from '../types';
 
 export const TR = (props: PropsWithChildren<ITR>) => {
@@ -25,6 +26,10 @@ export const TR = (props: PropsWithChildren<ITR>) => {
 };
 
 const TablePagination = (props: ITablePagination) => {
+  if (props.total <= props.perPage) {
+    return null;
+  }
+
   const refresh = (page: number, perPage: number, all?: boolean) => {
     props.refresh && props.refresh(page, perPage, all);
   };

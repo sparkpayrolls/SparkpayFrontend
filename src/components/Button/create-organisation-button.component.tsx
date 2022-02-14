@@ -10,10 +10,10 @@ export const CreateOrganisationButton = (props: ICreateOrganisationButton) => {
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    NiceModal.show(CreateOrgnizationModal).then(() => {
+    NiceModal.show(CreateOrgnizationModal).then((org: any) => {
       refreshCompanies(dispatch);
       if (props.onCreate) {
-        props.onCreate();
+        props.onCreate(org);
       }
     });
   };

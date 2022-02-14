@@ -503,3 +503,22 @@ export type File = Document & {
   url: string;
   provider: string;
 };
+
+export enum InviteTypeStatusEnum {
+  Accepted = 'Accepted',
+  Rejected = 'Rejected',
+  Pending = 'Pending',
+  Withdrawn = 'Withdrawn',
+}
+
+export type InviteTypeStatus = keyof typeof InviteTypeStatusEnum;
+
+export type Invite = Document & {
+  email?: string;
+  name?: string;
+  company: string | Company;
+  status?: InviteTypeStatus;
+  user?: string | User;
+  role?: string | Role;
+  token: string;
+};

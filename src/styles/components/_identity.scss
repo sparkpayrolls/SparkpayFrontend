@@ -38,4 +38,13 @@
       max-width: 100%;
     }
   }
+
+  &.company-identity {
+    .identity__image {
+      max-height: 30px;
+      width: unset;
+      border-radius: unset;
+      overflow: unset;
+    }
+  }
 }

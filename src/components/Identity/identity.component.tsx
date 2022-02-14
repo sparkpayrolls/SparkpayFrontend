@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { IIdentity } from '../types';
 
 export const Identity = (props: IIdentity) => {
-  const className = classNames('identity', {
+  const className = classNames('identity', props.className, {
     [`identity--${props.type}`]: !!props.type,
   });
 

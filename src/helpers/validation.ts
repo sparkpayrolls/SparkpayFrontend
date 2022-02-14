@@ -46,7 +46,14 @@ export const bulkEmployeeFileUploadValidationSchema = Yup.object().shape({
 
 export const createOrganizationValidationSchema = Yup.object().shape({
   email: format.email,
-  name: format.firstname,
+  name: Yup.string().required('Company name is required'),
+  phonenumber: format.phonenumber,
+  country: Yup.string().required('Country is required'),
+});
+
+export const EditOrganisationDetailsValidationSchema = Yup.object().shape({
+  email: format.email,
+  name: Yup.string().required('Company name is required'),
   phonenumber: format.phonenumber,
   logo: Yup.string().optional(),
   salaryBreakdown: Yup.array()
@@ -58,12 +65,6 @@ export const createOrganizationValidationSchema = Yup.object().shape({
     )
     .min(1)
     .required('At least, one item and should sum up to 100%'),
-});
-
-export const EditOrganisationDetailsValidationSchema = Yup.object().shape({
-  email: format.email,
-  name: Yup.string().required('Name is required'),
-  phonenumber: format.phonenumber,
 });
 
 export const userChangePasswordValidationSchema = Yup.object().shape({

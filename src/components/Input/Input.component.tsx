@@ -9,7 +9,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import Image from 'next/image';
 import eye from '../../../public/svgs/eye.svg';
 import eye_off from '../../../public/svgs/eye-off.svg';
 import { Spinner } from '../Spinner/Spinner.component';
@@ -165,7 +164,8 @@ export const Input = ({
               tabIndex={-1}
             >
               {!loading ? (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={showPassword ? eye_off : eye}
                   alt="eye icon"
                   width="20"
@@ -279,12 +279,15 @@ export const InputV2 = (
               onClick={() => setContentVisible(!contentVisible)}
             >
               <Text text="toggle visibility" className="sr-only" />
-              <Image
-                src={contentVisible ? eye_off : eye}
-                alt="eye icon"
-                width="20"
-                height="20"
-              />
+              {
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={contentVisible ? eye_off : eye}
+                  alt="eye icon"
+                  width="20"
+                  height="20"
+                />
+              }
             </span>
           )}
         </Container>
