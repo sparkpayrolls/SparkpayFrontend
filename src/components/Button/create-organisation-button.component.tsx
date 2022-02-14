@@ -5,11 +5,7 @@ import { CreateOrgnizationModal } from '../Modals/CreateOrganizationModal.compon
 import { PlusSvg } from '../svg';
 import { ICreateOrganisationButton } from '../types';
 import { Button } from './Button.component';
-import {
-  MoreMenuHorizontalSVG,
-  EditSquareSVG,
-  Plus2Svg,
-} from '@/components/svg';
+import { MoreMenuHorizontalSVG, Plus2Svg } from '@/components/svg';
 import { Dropdown, Menu } from 'antd';
 
 export const CreateOrganisationButton = (props: ICreateOrganisationButton) => {
