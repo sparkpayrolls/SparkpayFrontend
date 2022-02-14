@@ -1,5 +1,5 @@
 import { HttpRepository } from '../repo/http.repo';
-import { Administrator, Company } from '../types';
+import { Administrator, Company, FileUploadPayload } from '../types';
 
 export class CompanyModule extends HttpRepository {
   async getCompanies() {
@@ -41,6 +41,25 @@ export class CompanyModule extends HttpRepository {
 
   async getCurrentCompany() {
     const { data } = await this.get<Administrator>('/companies/current');
+
+    return data;
+  }
+
+  async getCompanyById(id: string) {
+    const { data } = await this.get<Company>(`/companies/${id}`);
+
+    return data;
+  }
+
+  async updateCompanyById(
+    id: string,
+    update: Partial<
+      Pick<Company, 'name' | 'email' | 'salaryBreakdown' | 'phonenumber'> & {
+        logoFile: FileUploadPayload;
+      }
+    >,
+  ) {
+    const { data } = await this.put<Company>(`/companies/${id}`, update);
 
     return data;
   }

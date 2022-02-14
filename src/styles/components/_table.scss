@@ -159,7 +159,7 @@
         top: 0;
         left: 0;
         right: auto;
-        content: "";
+        content: '';
         height: 3px;
         background-color: #1d4ed8;
         width: 100%;
@@ -330,10 +330,16 @@
     }
 
     .identity {
-      &__initial,
-      &__image {
+      &__initial {
         width: 32px;
         height: 32px;
+      }
+
+      &__image {
+        max-height: 32px;
+        height: unset;
+        width: unset;
+        border-radius: unset;
       }
     }
 
@@ -405,7 +411,7 @@
       top: 0;
       left: 0;
       right: auto;
-      content: "";
+      content: '';
       height: 3px;
       background-color: #1d4ed8;
       width: 100%;

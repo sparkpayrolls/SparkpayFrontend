@@ -21,20 +21,29 @@ import { MenuOutlined } from '@ant-design/icons';
 import { Drawer } from 'antd';
 import Logo from '../../../public/svgs/logo.svg';
 import close from '../../../public/svgs/Close.svg';
+import classNames from 'classnames';
 
 interface Props {
   children?: ReactNode;
   pageTitle: string;
+  loading?: boolean;
 }
 
 // eslint-disable-next-line no-undef
-const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
+const DashboardLayout: React.FC<Props> = ({
+  children,
+  pageTitle,
+  loading,
+}: Props) => {
   const companies = useAppSelector((state) => state.companies);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [loadingCompanySelect, setLoadingCompanySelect] = useState('');
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
+  const topBarClassName = classNames('dashboardLayout__top-bar', {
+    'line-loader': loading,
+  });
 
   const selectedCompany = companies.find((company) => company.selected);
   const userRole = selectedCompany?.isRoot
@@ -112,7 +121,7 @@ const DashboardLayout: React.FC<Props> = ({ children, pageTitle }: Props) => {
           </Link>
         </div>
 
-        <div className="dashboardLayout__top-bar">
+        <div className={topBarClassName}>
           {/* <div
             style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}
           > */}

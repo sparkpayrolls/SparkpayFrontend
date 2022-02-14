@@ -18,6 +18,7 @@ import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { stringifyUrl } from 'query-string';
 import { Select } from '@/components/Input/select.component';
+import withAuth from 'src/helpers/HOC/withAuth';
 
 const PayrollSummaryPage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
@@ -312,4 +313,4 @@ const PayrollSummaryPage: NextPage = () => {
   );
 };
 
-export default PayrollSummaryPage;
+export default withAuth(PayrollSummaryPage, ['Payroll', 'write']);

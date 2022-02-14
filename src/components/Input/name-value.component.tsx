@@ -1,69 +1,84 @@
 /* eslint-disable no-unused-vars */
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Text } from '../Typography/Text';
 import { InputV2 } from './Input.component';
 
+interface INameValue {
+  name: string;
+  value: string | number;
+}
 interface INameValueInputGroup {
-  error?: boolean | string;
   helper?: string;
-  items?: { name: string; value: number | number }[];
+  items?: INameValue[];
   name?: string;
-  onChange?(val: {
-    target: { value: { name: string; value: string | number }[]; name: string };
-  }): any;
+  onChange?(val: { target: { value: INameValue[]; name: string } }): any;
   transformValue?(val: string | number | readonly string[] | undefined): any;
   readonly?: boolean;
   label?: string;
+  error?: string | string[] | Partial<INameValue>[];
+  className?: string;
 }
 
 export const NameValueInputGroup = (props: INameValueInputGroup) => {
-  const [items, setItems] = useState(props.items || []);
-  const { error, helper, name, onChange, readonly, label } = props;
-  const containerClass = classNames('name-value-input-group', {
+  const [items, setItems] = useState<INameValue[]>([]);
+  const [currentItem, setCurrentItem] = useState<INameValue>({
+    name: '',
+    value: 0,
+  });
+  const { error, helper, name, onChange, readonly, label, className } = props;
+  const containerClass = classNames('name-value-input-group', className, {
     'name-value-input-group--error': !!error,
   });
+
+  const triggerChange = useCallback(
+    (value: INameValue[]) => {
+      if (onChange) {
+        onChange({
+          target: {
+            name: name || '',
+            value,
+          },
+        });
+      }
+      setItems(value);
+    },
+    [onChange, name],
+  );
+
   const removeItem = (index: number) => {
-    setItems(items.filter((_, i) => index !== i));
+    const newItems = (props.items || items).filter((_, i) => index !== i);
+    triggerChange(newItems);
   };
+
   const updateItem = (index: number, key: string, value: string) => {
-    setItems(
-      [...items].map((item, i) => {
-        if (i === index) {
-          (item as any)[key] = value;
-        }
-        return item;
-      }),
-    );
+    const itemsCopy = [...(props.items || items)];
+    if (!itemsCopy[index]) {
+      setCurrentItem({ ...currentItem, [key]: value });
+      return;
+    }
+
+    const newItems = itemsCopy.map((item, i) => {
+      if (i === index) {
+        (item as any)[key] = value;
+      }
+      return item;
+    });
+    triggerChange(newItems);
   };
 
   useEffect(() => {
-    const validItems = items.filter((i) => !!i.name && !!i.value);
-    const itemOne = validItems.map((i) => `${i.name}:${i.value}`) || [];
-
-    props.items?.forEach((i) => {
-      const index = itemOne.indexOf(`${i.name}:${i.value}`);
-      if (index !== -1) itemOne.splice(index, 1);
-    });
-
-    if (onChange && validItems.length && itemOne.length) {
-      onChange({
-        target: {
-          name: name || '',
-          value: items.filter((i) => !!i.name && !!i.value),
-        },
-      });
+    if (currentItem.name) {
+      triggerChange([...(props.items || items), currentItem]);
+      setCurrentItem({ name: '', value: 0 });
     }
-  }, [items, name, onChange, props.items]);
+  }, [currentItem, items, props.items, triggerChange]);
 
-  // Add empty input
-  const addEmptyField = items.every((item) => !!item.name && !!item.value);
+  const it = [...(props.items || items)];
+  const addEmptyField = it.every((item) => item.name);
   if (addEmptyField && !readonly) {
-    setItems([...items, { name: '', value: '' as any }]);
-    return null;
+    it.push(currentItem);
   }
-
-  // Remove empty input that is not last item
 
   return (
     <div className={containerClass}>
@@ -76,12 +91,16 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
       )}
 
       <div className="name-value-input-group__inputs">
-        {items.map((item, i) => {
-          if (!item.name && !item.value && i !== items.length - 1) {
+        {it.map((item, i) => {
+          if (!item.name && i !== it.length - 1) {
             removeItem(i);
             return null;
           }
-          const canDelete = i !== items.length - 1 && !readonly;
+          const canDelete = i !== it.length - 1 && !readonly;
+          let errors: string | Partial<INameValue> | undefined;
+          if (Array.isArray(error)) {
+            errors = error[i];
+          }
 
           return (
             <div key={i} className="name-value-input">
@@ -92,6 +111,10 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
                   updateItem(i, 'name', e.target.value);
                 }}
                 readOnly={readonly}
+                error={
+                  !!errors &&
+                  (typeof errors === 'string' ? errors : errors.name)
+                }
               />
               <InputV2
                 placeholder="Value"
@@ -102,6 +125,9 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
                 }}
                 transformValue={props.transformValue}
                 readOnly={readonly}
+                error={
+                  !!errors && typeof errors !== 'string' && `${errors.value}`
+                }
               />
               {canDelete && (
                 <span role="button" onClick={() => removeItem(i)}>

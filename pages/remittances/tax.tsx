@@ -21,6 +21,8 @@ function callback(key: any) {
     console.log(key);
 }
 const Tax: NextPage = () => {
+
+
     return (
         <DashboardLayout pageTitle="remittances-tax">
             <div className="remittances-tax-page">

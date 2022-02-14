@@ -138,6 +138,7 @@ export type Company = Document & {
   phonenumber: string;
   country: string | Country;
   logo?: string;
+  salaryBreakdown?: SalaryBreakdown[];
 };
 
 export enum PermissionGroupEnum {
@@ -489,4 +490,35 @@ export type EmployeeTaxDetailPayload = Pick<
 
 export type AddEmployeeToNigerianTaxPayload = {
   employeeDetails: EmployeeTaxDetailPayload[];
+};
+
+export type FileUploadPayload = {
+  filename: string;
+  data: string;
+};
+
+export type File = Document & {
+  mime: string;
+  filename: string;
+  url: string;
+  provider: string;
+};
+
+export enum InviteTypeStatusEnum {
+  Accepted = 'Accepted',
+  Rejected = 'Rejected',
+  Pending = 'Pending',
+  Withdrawn = 'Withdrawn',
+}
+
+export type InviteTypeStatus = keyof typeof InviteTypeStatusEnum;
+
+export type Invite = Document & {
+  email?: string;
+  name?: string;
+  company: string | Company;
+  status?: InviteTypeStatus;
+  user?: string | User;
+  role?: string | Role;
+  token: string;
 };

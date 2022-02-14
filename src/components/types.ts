@@ -21,8 +21,10 @@ import {
   Administrator,
   Audit,
   AuditAction,
+  Company,
   Employee,
   EmployeeStatus,
+  InviteTypeStatus,
   OrganisationDashboardData,
   PaginationMeta,
   PaymentMethod,
@@ -258,6 +260,14 @@ export type CreateOrganization = {
   country: string;
 };
 
+/** Edit Organisation Details */
+export type OrganisationDetails = {
+  name: string;
+  email: string;
+  phonenumber: string;
+  country: string;
+};
+
 /** Employee Onboard */
 export type EmployeeOnboarding = {
   country: string;
@@ -285,7 +295,7 @@ export type IAllowedPermissions = [PermissionGroup, PermissionLevel][];
 
 /** Button */
 export type ICreateOrganisationButton = {
-  onCreate?(): any;
+  onCreate?(org: Company): any;
 };
 
 /** Dashboard */
@@ -305,6 +315,7 @@ export type IIdentity = {
   imageHeight?: number;
   type?: 'reverse';
   initial?: string;
+  className?: string;
 };
 
 /** Statuschip */
@@ -313,7 +324,8 @@ export type IStatusChip = {
     | PayrollStatus
     | EmployeeStatus
     | WalletTransactionStatus
-    | AuditAction;
+    | AuditAction
+    | InviteTypeStatus;
 };
 
 /** TransactionMethod */
