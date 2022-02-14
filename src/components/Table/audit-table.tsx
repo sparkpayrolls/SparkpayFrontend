@@ -56,13 +56,7 @@ export const AuditTable = (props: IAuditTable) => {
         <TableV2 className="audit-table__table" loading={loading}>
           <thead>
             <tr>
-              <CheckboxTableColumn
-                onChange={toggleSelectAll}
-                checked={allSelected}
-                element="th"
-              >
-                Name
-              </CheckboxTableColumn>
+              <th>Name</th>
               <th>Activity</th>
               <th>Role</th>
               <th>Action</th>
@@ -74,11 +68,7 @@ export const AuditTable = (props: IAuditTable) => {
               const user = log.actionBy as User;
               return (
                 <tr key={log.id}>
-                  <CheckboxTableColumn
-                    checked={selected.includes(log.id)}
-                    onChange={onSelect(log.id)}
-                    element="td"
-                  >
+                  <th>
                     <Identity
                       image={user.avatar}
                       imageHeight={32}
@@ -86,7 +76,7 @@ export const AuditTable = (props: IAuditTable) => {
                       initial={user.firstname.charAt(0)}
                       name={`${user.firstname} ${user.lastname}`}
                     />
-                  </CheckboxTableColumn>
+                  </th>
                   <td className="audit-table__table__description-col">
                     {log.description}
                   </td>
