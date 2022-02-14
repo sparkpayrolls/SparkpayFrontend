@@ -14,7 +14,7 @@ export const WalletCard = (props: IWalletCard) => {
     refreshBalance,
     paymentMethods,
   } = props;
-  const pollRefreshBalance = (times = 0, duration = 0) => { 
+  const pollRefreshBalance = (times = 0, duration = 0) => {
     if (times < 5) {
       refreshBalance();
       setTimeout(pollRefreshBalance, duration + 3000, times + 1);
@@ -22,33 +22,34 @@ export const WalletCard = (props: IWalletCard) => {
   };
 
   return (
-    <div>
+    <>
       <div className="wallet-billing-page__wallet-amount">
         <div className="wallet-billing-page__wallet-purple-image">
           <Image src={PurpleImage} alt="purple image" />
         </div>
+
         <div className="wallet-billing-page__wallet-text">
           <p>{title}</p>
           <p className="wallet-billing-page__wallet-amount-text">{amount}</p>
         </div>
-        <div>
-          <Button
-            label={<>{'Fund Wallet'}</>}
-            onClick={() => {
-              NiceModal.show(WalletBillingModal, {
-                administrator,
-                paymentMethods,
-              }).then(() => pollRefreshBalance());
-            }}
-            className="employee-section__submit-btn"
-            primary
-            type="submit"
-          />
+
+        <Button
+          label={<>{'Fund Wallet'}</>}
+          onClick={() => {
+            NiceModal.show(WalletBillingModal, {
+              administrator,
+              paymentMethods,
+            }).then(() => pollRefreshBalance());
+          }}
+          className="wallet-billing-page__submit-btn"
+          primary
+          type="submit"
+        />
+
+        <div className="wallet-billing-page__wallet-yellow-image">
+          <Image src={YellowImage} alt="yellowImage" />
         </div>
       </div>
-      <div className="wallet-billing-page__wallet-yellow-image">
-        <Image src={YellowImage} alt="yellowImage" />
-      </div>
-    </div>
+    </>
   );
 };

@@ -116,7 +116,7 @@ const WalletBilling: NextPage = () => {
             refreshBalance={refreshAfterFund}
             paymentMethods={paymentMethods}
           />
-          <PayrollUpdateCard payrollDate="A rich person is not one who has the most but the one who needs the least." />
+          <PayrollUpdateCard payrollDate="Next payroll date is on the 27th, May" />
         </div>
         <TransactionTable
           getTransactions={getTransactions}

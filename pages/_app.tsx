@@ -128,7 +128,7 @@ const AuthManager = () => {
           closeOnClick: online,
           closeButton: online,
           delay: online ? 600 : 0,
-          position: 'bottom-left',
+          position: 'top-center',
           type: online ? 'success' : 'warning',
           transition: Slide,
         });
