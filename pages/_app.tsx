@@ -125,6 +125,7 @@ const AuthManager = () => {
           toastId: `online-${online}`,
           autoClose: online ? 3000 : false,
           draggable: online,
+          closeOnClick: online,
           closeButton: online,
           delay: online ? 600 : 0,
           position: 'bottom-left',
