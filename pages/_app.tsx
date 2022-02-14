@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
 import '../src/styles/globals.scss';
 import { AppProps } from 'next/app';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer, Slide } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux/store';
 import NiceModal from '@ebay/nice-modal-react';
@@ -23,8 +23,10 @@ import { getCurrentAdministrator } from 'src/redux/slices/administrator/administ
 import { AxiosError } from 'axios';
 import { Company } from 'src/api/types';
 import { Util } from 'src/helpers/util';
+import { Detector } from 'react-detect-offline';
 
 let persistor = persistStore(store);
+let lastStatus = true;
 
 const AuthManager = () => {
   const { user, companies, administrator } = useAppSelector((state) => state);
@@ -108,7 +110,31 @@ const AuthManager = () => {
     };
   }, [user, companies, administrator, dispatch]);
 
-  return null;
+  return (
+    <Detector
+      render={({ online }) => {
+        if (lastStatus === online) {
+          return null;
+        }
+        lastStatus = online;
+        if (online) {
+          toast.dismiss('online-false');
+        }
+
+        toast(online ? 'You are back online' : 'You are currently offline', {
+          toastId: `online-${online}`,
+          autoClose: online ? 3000 : false,
+          draggable: online,
+          closeButton: online,
+          delay: online ? 600 : 0,
+          position: 'bottom-left',
+          type: online ? 'success' : 'warning',
+          transition: Slide,
+        });
+        return null;
+      }}
+    />
+  );
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
