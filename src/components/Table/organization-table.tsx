@@ -5,6 +5,8 @@ import { KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IOrganizationTable } from '../types';
 import { Table } from './Table.component';
 
+import { Util } from 'src/helpers/util';
+
 export const OrganizationTable = (props: IOrganizationTable) => {
   const {
     organizations,
@@ -45,7 +47,10 @@ export const OrganizationTable = (props: IOrganizationTable) => {
   return (
     <div className="organization-table">
       <Table
-        title={`${paginationMeta.total} Organisation(s)`}
+        title={`${paginationMeta.total} ${Util.pluraliseTitle(
+          'Organisation',
+          paginationMeta.total,
+        )}`}
         isNotSelectable={true}
         headerRow={headerRow}
         isEmpty={!organizations.length}

@@ -173,4 +173,8 @@ export class Util {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     ];
   }
+
+  static pluraliseTitle(name: string, elem: number) {
+    return elem > 1 ? `${name + 's'}` : name;
+  }
 }

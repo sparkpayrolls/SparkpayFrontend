@@ -38,11 +38,11 @@ const OrganizationSettings: NextPage = () => {
           <div className="employee-section__head">
             <h1 className="employee-section__title">Organisations</h1>
 
-            <div className="employee-section__employee-button">
-              <CreateOrganisationButton
-                onCreate={(org) => (trigger.current = org.id)}
-              />
-            </div>
+            {/* <div className="employee-section__employee-button"> */}
+            <CreateOrganisationButton
+              onCreate={(org) => (trigger.current = org.id)}
+            />
+            {/* </div> */}
           </div>
           <Tab
             onChange={onTabChange}
