@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -42,9 +53,11 @@ var organization_table_1 = require("@/components/Table/organization-table");
 var react_1 = require("react");
 var util_1 = require("src/helpers/util");
 var api_1 = require("src/api");
+var react_toastify_1 = require("react-toastify");
 var withAuth_1 = require("src/helpers/HOC/withAuth");
 var create_organisation_button_component_1 = require("@/components/Button/create-organisation-button.component");
 var hooks_1 = require("src/redux/hooks");
+var companies_slice_1 = require("src/redux/slices/companies/companies.slice");
 require("antd/dist/antd.css");
 var antd_1 = require("antd");
 var invitation_1 = require("../../src/components/invitation");
@@ -87,9 +100,39 @@ var OrganizationSettings = function () {
         });
     }); }, [setLoading, setData, setQuery]);
     var deleteOrganization = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+        var clone, error_2, err;
         return __generator(this, function (_a) {
-            showModal();
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    showModal();
+                    if (loading) return [3 /*break*/, 5];
+                    setLoading(true);
+                    clone = data.map(function (d) { return (__assign({}, d)); });
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, 4, 5]);
+                    setData({
+                        meta: meta,
+                        data: data.filter(function (d) { return d.company.id !== id; })
+                    });
+                    return [4 /*yield*/, api_1.$api.company.deleteCompany(id)];
+                case 2:
+                    _a.sent();
+                    getOrganizations(query);
+                    companies_slice_1.refreshCompanies(dispatch);
+                    react_toastify_1.toast.success('company deleted successfully');
+                    return [3 /*break*/, 5];
+                case 3:
+                    error_2 = _a.sent();
+                    err = error_2;
+                    react_toastify_1.toast.error(err.message);
+                    setData({ meta: meta, data: clone });
+                    return [3 /*break*/, 5];
+                case 4:
+                    setLoading(false);
+                    return [7 /*endfinally*/];
+                case 5: return [2 /*return*/];
+            }
         });
     }); };
     react_1.useEffect(function () {
