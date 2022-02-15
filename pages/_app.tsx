@@ -128,6 +128,7 @@ const AuthManager = () => {
           closeOnClick: online,
           closeButton: online,
           delay: online ? 600 : 0,
+          pauseOnFocusLoss: online,
           position: 'top-center',
           type: online ? 'success' : 'warning',
           transition: Slide,
