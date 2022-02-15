@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IAllowedPermissions } from '@/components/types';
-import jwt from 'jsonwebtoken';
 import { NextRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
 import {
   Administrator,
   Company,
@@ -11,7 +9,6 @@ import {
   Permission,
   Role,
 } from 'src/api/types';
-import { config } from './config';
 import { DebouncedFunc } from './types';
 
 export class Util {
@@ -120,7 +117,10 @@ export class Util {
     return Array.isArray(val) ? val : [val];
   }
 
-  static redirectToLogin(router: NextRouter) {
+  static async redirectToLogin(router: NextRouter) {
+    const stringifyUrl = await import('query-string').then(
+      (mod) => mod.stringifyUrl,
+    );
     const url = stringifyUrl({
       url: '/login',
       query: { goto: router.pathname },
@@ -146,13 +146,12 @@ export class Util {
   }
 
   static deepEquals(objOne: any, objTwo: any): boolean {
-    const isComparableValue =
+    if (
       !['function', 'object', 'symbol'].includes(typeof objOne) ||
-      objOne === null;
-    if (isComparableValue) {
+      objOne === null
+    ) {
       return objOne === objTwo;
     }
-
     if (
       !['function', 'object', 'symbol'].includes(typeof objTwo) ||
       objTwo === null
@@ -160,22 +159,13 @@ export class Util {
       return false;
     }
 
-    return (
-      Object.keys(objOne).every((key) => {
-        if (['function', 'object', 'symbol'].includes(typeof objOne[key])) {
-          return Util.deepEquals(objOne[key], objTwo[key]);
-        }
+    return Object.keys(objOne).every((key) => {
+      if (['function', 'object', 'symbol'].includes(typeof objOne[key])) {
+        return Util.deepEquals(objOne[key], objTwo[key]);
+      }
 
-        return objTwo[key] === objOne[key];
-      }) &&
-      Object.keys(objTwo).every((key) => {
-        if (['function', 'object', 'symbol'].includes(typeof objTwo[key])) {
-          return Util.deepEquals(objTwo[key], objOne[key]);
-        }
-
-        return objOne[key] === objTwo[key];
-      })
-    );
+      return objTwo[key] === objOne[key];
+    });
   }
 
   static validXLSXFileTypes() {
@@ -184,13 +174,7 @@ export class Util {
     ];
   }
 
-  static signObject<T extends string | Record<string, unknown> | Buffer>(
-    payload: T,
-  ) {
-    return jwt.sign(payload, config.jwtKey as string);
-  }
-
-  static decodeToken<T>(token: string) {
-    return jwt.verify(token, config.jwtKey as string) as T;
+  static pluraliseTitle(name: string, elem: number) {
+    return elem > 1 ? `${name + 's'}` : name;
   }
 }

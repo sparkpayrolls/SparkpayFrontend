@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { User } from 'src/api/types';
 import { DateTimeChip } from '../DateTimeChip/date-time-chip';
 import { TableEmptyState } from '../EmptyState/table-emptystate.component';
@@ -6,39 +5,13 @@ import { Identity } from '../Identity/identity.component';
 import { Pagination } from '../Pagination/pagination.component';
 import { StatusChip } from '../StatusChip/status-chip.component';
 import { IAuditTable } from '../types';
-import { CheckboxTableColumn } from './check-box-table-col.component';
 import { MenuTableColumn } from './menu-table-col.component';
 import { TableLayout } from './table-layout.component';
 import { TableV2 } from './Table.component';
 
 export const AuditTable = (props: IAuditTable) => {
   const { logs, meta, getLogs, loading } = props;
-
-  const [selected, setSelected] = useState<string[]>([]);
-
-  const allSelected =
-    !!selected.length && logs.every((log) => selected.includes(log.id));
-  const shouldPaginate = meta.total > 10;
   const isEmpty = logs.length <= 0;
-
-  const toggleSelectAll = () => {
-    if (allSelected) {
-      setSelected([]);
-      return;
-    }
-
-    setSelected(logs.map((log) => log.id));
-  };
-  const onSelect = (id: string) => {
-    return () => {
-      if (selected.includes(id)) {
-        setSelected(selected.filter((s) => s !== id));
-        return;
-      }
-
-      setSelected([...selected, id]);
-    };
-  };
 
   const onSearch = (search: string) => {
     getLogs({ search, page: 1, perPage: meta.perPage });
@@ -56,13 +29,7 @@ export const AuditTable = (props: IAuditTable) => {
         <TableV2 className="audit-table__table" loading={loading}>
           <thead>
             <tr>
-              <CheckboxTableColumn
-                onChange={toggleSelectAll}
-                checked={allSelected}
-                element="th"
-              >
-                Name
-              </CheckboxTableColumn>
+              <th>Name</th>
               <th>Activity</th>
               <th>Role</th>
               <th>Action</th>
@@ -74,11 +41,7 @@ export const AuditTable = (props: IAuditTable) => {
               const user = log.actionBy as User;
               return (
                 <tr key={log.id}>
-                  <CheckboxTableColumn
-                    checked={selected.includes(log.id)}
-                    onChange={onSelect(log.id)}
-                    element="td"
-                  >
+                  <th>
                     <Identity
                       image={user.avatar}
                       imageHeight={32}
@@ -86,7 +49,7 @@ export const AuditTable = (props: IAuditTable) => {
                       initial={user.firstname.charAt(0)}
                       name={`${user.firstname} ${user.lastname}`}
                     />
-                  </CheckboxTableColumn>
+                  </th>
                   <td className="audit-table__table__description-col">
                     {log.description}
                   </td>
@@ -110,7 +73,7 @@ export const AuditTable = (props: IAuditTable) => {
           }
         />
       )}
-      {shouldPaginate && <Pagination refresh={getLogs} meta={meta} />}
+      <Pagination refresh={getLogs} meta={meta} />
     </div>
   );
 };

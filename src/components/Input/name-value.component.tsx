@@ -6,10 +6,9 @@ import { InputV2 } from './Input.component';
 
 interface INameValue {
   name: string;
-  value: number;
+  value: string | number;
 }
 interface INameValueInputGroup {
-  error?: boolean | string;
   helper?: string;
   items?: INameValue[];
   name?: string;
@@ -17,6 +16,8 @@ interface INameValueInputGroup {
   transformValue?(val: string | number | readonly string[] | undefined): any;
   readonly?: boolean;
   label?: string;
+  error?: string | string[] | Partial<INameValue>[];
+  className?: string;
 }
 
 export const NameValueInputGroup = (props: INameValueInputGroup) => {
@@ -25,8 +26,8 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
     name: '',
     value: 0,
   });
-  const { error, helper, name, onChange, readonly, label } = props;
-  const containerClass = classNames('name-value-input-group', {
+  const { error, helper, name, onChange, readonly, label, className } = props;
+  const containerClass = classNames('name-value-input-group', className, {
     'name-value-input-group--error': !!error,
   });
 
@@ -96,6 +97,10 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
             return null;
           }
           const canDelete = i !== it.length - 1 && !readonly;
+          let errors: string | Partial<INameValue> | undefined;
+          if (Array.isArray(error)) {
+            errors = error[i];
+          }
 
           return (
             <div key={i} className="name-value-input">
@@ -106,6 +111,10 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
                   updateItem(i, 'name', e.target.value);
                 }}
                 readOnly={readonly}
+                error={
+                  !!errors &&
+                  (typeof errors === 'string' ? errors : errors.name)
+                }
               />
               <InputV2
                 placeholder="Value"
@@ -116,6 +125,9 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
                 }}
                 transformValue={props.transformValue}
                 readOnly={readonly}
+                error={
+                  !!errors && typeof errors !== 'string' && `${errors.value}`
+                }
               />
               {canDelete && (
                 <span role="button" onClick={() => removeItem(i)}>

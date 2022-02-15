@@ -93,7 +93,7 @@ const EmployeePage: NextPage = () => {
       </Menu.Item>
 
       <Menu.Item key="1">
-        <button className="employee-menu-list" onClick={() => { }}>
+        <button className="employee-menu-list" onClick={() => {}}>
           <EditSquareSVG /> Create employee group
         </button>
       </Menu.Item>
@@ -109,7 +109,7 @@ const EmployeePage: NextPage = () => {
             <div className="employee-section__employee-button">
               <Button
                 label="Create Employee Group"
-                onClick={() => { }}
+                onClick={() => {}}
                 className="employee-section__employee-button1"
                 type="submit"
               />

@@ -6,15 +6,28 @@
   margin: auto;
 
   &__table-section {
-      margin-top: -1.5rem;
+    margin-top: -1.5rem;
   }
   &__org-logo {
-      margin-top: -.5rem;
+    margin-top: -0.5rem;
   }
 
-  &__invitation-table{
-    margin-top:1rem;
+  &__invitation-table {
+    margin-top: 1rem;
   }
 }
 
+.invitation-table {
+  &--lock {
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
 
+    &__pagination {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      background-color: #ffff;
+      padding-bottom: 1rem;
+    }
+  }
+}
