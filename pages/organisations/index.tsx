@@ -13,9 +13,8 @@ import { CreateOrganisationButton } from '@/components/Button/create-organisatio
 import { useAppDispatch } from 'src/redux/hooks';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import 'antd/dist/antd.css';
-import { Tabs } from 'antd';
+import { Tabs, Modal } from 'antd';
 import InvitationTab from "../../src/components/invitation";
-
 
 
 const { TabPane } = Tabs;
@@ -26,6 +25,8 @@ function callback(key: any) {
 
 const OrganizationSettings: NextPage = () => {
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const [{ data, meta }, setData] = useState({
     data: [] as Administrator[],
     meta: Util.getDefaultPaginationMeta({}),
@@ -51,6 +52,7 @@ const OrganizationSettings: NextPage = () => {
   );
 
   const deleteOrganization = async (id: string) => {
+    showModal()
     if (!loading) {
       setLoading(true);
       const clone = data.map((d) => ({ ...d }));
@@ -77,6 +79,19 @@ const OrganizationSettings: NextPage = () => {
     getOrganizations({});
   }, [getOrganizations]);
 
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <>
       <DashboardLayout pageTitle="Organisations">
@@ -93,26 +108,29 @@ const OrganizationSettings: NextPage = () => {
               />
             </div>
           </div>
-            <Tabs defaultActiveKey="1" onChange={callback}>
-              <TabPane tab="Organizations" key="1">
-                <div className="organisation__table-section">
-                  <OrganizationTable
-                    organizations={data}
-                    paginationMeta={meta}
-                    getOrganizations={getOrganizations}
-                    deleteOrganisation={deleteOrganization}
-                    loading={loading}
-                  />
-                  </div>
-              </TabPane>
-              <TabPane tab="Invitations" key="2">              
-                <InvitationTab
-                 />
-              </TabPane>
+          <Tabs defaultActiveKey="1" onChange={callback}>
+            <TabPane tab="Organizations" key="1">
+              <div className="organisation__table-section">
+                <OrganizationTable
+                  organizations={data}
+                  paginationMeta={meta}
+                  getOrganizations={getOrganizations}
+                  deleteOrganisation={deleteOrganization}
+                  loading={loading}
+                />
+              </div>
+            </TabPane>
+            <TabPane tab="Invitations" key="2">
+              <InvitationTab
+              />
+            </TabPane>
 
-            </Tabs>
-          </div>
-
+          </Tabs>
+        </div>
+        <Modal title="Warning" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <p>Are you sure you want to delete this organization?</p>
+          
+        </Modal>
       </DashboardLayout>
     </>
   );

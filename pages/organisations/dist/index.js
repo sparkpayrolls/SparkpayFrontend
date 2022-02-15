@@ -1,19 +1,4 @@
-import {React} from 'react'
-
-
-
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -57,11 +42,9 @@ var organization_table_1 = require("@/components/Table/organization-table");
 var react_1 = require("react");
 var util_1 = require("src/helpers/util");
 var api_1 = require("src/api");
-var react_toastify_1 = require("react-toastify");
 var withAuth_1 = require("src/helpers/HOC/withAuth");
 var create_organisation_button_component_1 = require("@/components/Button/create-organisation-button.component");
 var hooks_1 = require("src/redux/hooks");
-var companies_slice_1 = require("src/redux/slices/companies/companies.slice");
 require("antd/dist/antd.css");
 var antd_1 = require("antd");
 var invitation_1 = require("../../src/components/invitation");
@@ -71,11 +54,12 @@ function callback(key) {
 }
 var OrganizationSettings = function () {
     var _a = react_1.useState(false), loading = _a[0], setLoading = _a[1];
-    var _b = react_1.useState({
+    var _b = react_1.useState(false), isModalVisible = _b[0], setIsModalVisible = _b[1];
+    var _c = react_1.useState({
         data: [],
         meta: util_1.Util.getDefaultPaginationMeta({})
-    }), _c = _b[0], data = _c.data, meta = _c.meta, setData = _b[1];
-    var _d = react_1.useState({}), query = _d[0], setQuery = _d[1];
+    }), _d = _c[0], data = _d.data, meta = _d.meta, setData = _c[1];
+    var _e = react_1.useState({}), query = _e[0], setQuery = _e[1];
     var dispatch = hooks_1.useAppDispatch();
     var getOrganizations = react_1.useCallback(function (query) { return __awaiter(void 0, void 0, void 0, function () {
         var res_1, error_1;
@@ -103,43 +87,23 @@ var OrganizationSettings = function () {
         });
     }); }, [setLoading, setData, setQuery]);
     var deleteOrganization = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-        var clone, error_2, err;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (loading) return [3 /*break*/, 5];
-                    setLoading(true);
-                    clone = data.map(function (d) { return (__assign({}, d)); });
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, 4, 5]);
-                    setData({
-                        meta: meta,
-                        data: data.filter(function (d) { return d.company.id !== id; })
-                    });
-                    return [4 /*yield*/, api_1.$api.company.deleteCompany(id)];
-                case 2:
-                    _a.sent();
-                    getOrganizations(query);
-                    companies_slice_1.refreshCompanies(dispatch);
-                    react_toastify_1.toast.success('company deleted successfully');
-                    return [3 /*break*/, 5];
-                case 3:
-                    error_2 = _a.sent();
-                    err = error_2;
-                    react_toastify_1.toast.error(err.message);
-                    setData({ meta: meta, data: clone });
-                    return [3 /*break*/, 5];
-                case 4:
-                    setLoading(false);
-                    return [7 /*endfinally*/];
-                case 5: return [2 /*return*/];
-            }
+            showModal();
+            return [2 /*return*/];
         });
     }); };
     react_1.useEffect(function () {
         getOrganizations({});
     }, [getOrganizations]);
+    var showModal = function () {
+        setIsModalVisible(true);
+    };
+    var handleOk = function () {
+        setIsModalVisible(false);
+    };
+    var handleCancel = function () {
+        setIsModalVisible(false);
+    };
     return (React.createElement(React.Fragment, null,
         React.createElement(DashBoardLayout_1["default"], { pageTitle: "Organisations" },
             React.createElement("div", { className: "organisation" },
@@ -154,6 +118,8 @@ var OrganizationSettings = function () {
                         React.createElement("div", { className: "organisation__table-section" },
                             React.createElement(organization_table_1.OrganizationTable, { organizations: data, paginationMeta: meta, getOrganizations: getOrganizations, deleteOrganisation: deleteOrganization, loading: loading }))),
                     React.createElement(TabPane, { tab: "Invitations", key: "2" },
-                        React.createElement(invitation_1["default"], null)))))));
+                        React.createElement(invitation_1["default"], null)))),
+            React.createElement(antd_1.Modal, { title: "Warning", visible: isModalVisible, onOk: handleOk, onCancel: handleCancel },
+                React.createElement("p", null, "Are you sure you want to delete this organization?")))));
 };
 exports["default"] = withAuth_1["default"](OrganizationSettings);
