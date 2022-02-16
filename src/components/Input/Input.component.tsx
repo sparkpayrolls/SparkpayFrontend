@@ -9,13 +9,12 @@ import {
   useEffect,
   useState,
 } from 'react';
-import Image from 'next/image';
-import eye from '../../../public/svgs/eye.svg';
-import eye_off from '../../../public/svgs/eye-off.svg';
+
 import { Spinner } from '../Spinner/Spinner.component';
 import classNames from 'classnames';
 import { Text } from '../Typography/Text';
 import { Container } from '../Shared/container.component';
+import { HidePasswordSVG, ShowPasswordSVG } from '../svg';
 interface InputProps {
   /**
    * Input Placeholder contents
@@ -165,12 +164,12 @@ export const Input = ({
               tabIndex={-1}
             >
               {!loading ? (
-                <Image
-                  src={showPassword ? eye_off : eye}
-                  alt="eye icon"
-                  width="20"
-                  height="20"
-                />
+                // eslint-disable-next-line @next/next/no-img-element
+                showPassword ? (
+                  <ShowPasswordSVG />
+                ) : (
+                  <HidePasswordSVG />
+                )
               ) : (
                 <Spinner color="--green" />
               )}
@@ -279,12 +278,10 @@ export const InputV2 = (
               onClick={() => setContentVisible(!contentVisible)}
             >
               <Text text="toggle visibility" className="sr-only" />
-              <Image
-                src={contentVisible ? eye_off : eye}
-                alt="eye icon"
-                width="20"
-                height="20"
-              />
+              {
+                // eslint-disable-next-line @next/next/no-img-element
+                contentVisible ? <ShowPasswordSVG /> : <HidePasswordSVG />
+              }
             </span>
           )}
         </Container>

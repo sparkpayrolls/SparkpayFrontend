@@ -59,6 +59,15 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
         max-height: 30px;
       }
     }
+
+    .identity {
+      &__image {
+        max-height: 30px;
+        height: unset;
+        width: unset;
+        border-radius: unset;
+      }
+    }
   }
 
   &__dropdown {
@@ -111,6 +120,15 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
 
       img {
         max-height: 30px;
+      }
+
+      .identity {
+        &__image {
+          max-height: 30px;
+          height: unset;
+          width: unset;
+          border-radius: unset;
+        }
       }
 
       display: flex;
@@ -284,4 +302,8 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
       transition: all 0.25s cubic-bezier(0.5, 1.8, 0.9, 0.8);
     }
   }
+}
+
+img[alt='company-logo'] {
+  max-height: 30px;
 }

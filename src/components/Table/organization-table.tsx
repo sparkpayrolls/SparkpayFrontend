@@ -5,6 +5,8 @@ import { KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IOrganizationTable } from '../types';
 import { Table } from './Table.component';
 
+import { Util } from 'src/helpers/util';
+
 export const OrganizationTable = (props: IOrganizationTable) => {
   const {
     organizations,
@@ -45,7 +47,10 @@ export const OrganizationTable = (props: IOrganizationTable) => {
   return (
     <div className="organization-table">
       <Table
-        title={`${paginationMeta.total} Organisation(s)`}
+        title={`${paginationMeta.total} ${Util.pluraliseTitle(
+          'Organisation',
+          paginationMeta.total,
+        )}`}
         isNotSelectable={true}
         headerRow={headerRow}
         isEmpty={!organizations.length}
@@ -64,21 +69,11 @@ export const OrganizationTable = (props: IOrganizationTable) => {
                   <tr key={company?.id}>
                     <td>
                       <div className="organization-table__item">
-                        {company?.logo ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={company.logo}
-                            alt={`${company.name} logo`}
-                          />
-                        ) : (
-                          <Identity
-                            image={company?.logo}
-                            imageHeight={32}
-                            imageWidth={32}
-                            initial={company?.name?.charAt(0)}
-                            name={company?.name}
-                          />
-                        )}
+                        <Identity
+                          image={company?.logo}
+                          initial={company?.name?.charAt(0)}
+                          name={company?.name}
+                        />
                       </div>
                     </td>
 

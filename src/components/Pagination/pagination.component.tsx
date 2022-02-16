@@ -13,6 +13,10 @@ export const Pagination = (props: IPagination) => {
     previousPage = null,
     nextPage = null,
   } = props.meta || {};
+  if (total <= perPage) {
+    return null;
+  }
+
   const {
     refresh = () => {},
     perPageItems = ['10', '100', '1000', 'all'],

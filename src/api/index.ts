@@ -14,6 +14,7 @@ import { AuditModule } from './modules/audit.module';
 import { PayoutModule } from './modules/payout.module';
 import { FileModule } from './modules/file.module';
 import { RemittanceModule } from './modules/remittances/remittance.module';
+import { Admin } from './modules/admin.module';
 
 export class $api {
   static $axios = axios.create({
@@ -46,12 +47,9 @@ export class $api {
 
   static remittance = new RemittanceModule(this.$axios);
 
+  static admin = new Admin(this.$axios);
+
   static async joinWaitList(email: string, name: string) {
     await $api.$axios.post('/join-wait-list', { email, name });
   }
 }
-
-$api.$axios.interceptors.request.use((config) => {
-  console.log(`[${config?.method?.toUpperCase()}] ${config.url}`);
-  return config;
-});

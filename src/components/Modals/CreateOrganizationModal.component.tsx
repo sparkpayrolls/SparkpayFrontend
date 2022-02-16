@@ -1,17 +1,22 @@
 import React, { useEffect } from 'react';
 import NiceModal, { NiceModalHandler } from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
-import { Formik, FormikHelpers, FormikProps } from 'formik';
-import { Input } from '../Input/Input.component';
+import type { FormikValues, FormikHelpers, FormikProps } from 'formik';
+import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
 import { createOrganizationValidationSchema } from 'src/helpers/validation';
 import { CreateOrganization } from '../types';
 import { HttpError } from 'src/api/repo/http.error';
-import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { getCountries } from 'src/redux/slices/countries/countries.slice';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { Select } from '../Input/select.component';
+import dynamic from 'next/dynamic';
+
+// @ts-ignore
+const Formik = dynamic<FormikValues>(() => {
+  return import('formik').then((mod) => mod.Formik);
+});
 
 export const CreateOrgnizationModal = NiceModal.create(() => {
   return (
@@ -35,12 +40,13 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
     values: CreateOrganization,
     helpers: FormikHelpers<CreateOrganization>,
   ) => {
+    const toast = (await import('react-toastify')).toast;
     try {
       helpers.setSubmitting(true);
       const company = await $api.company.createCompany(values);
       toast.success('Organization created successfully');
       modal.resolve(company);
-      setTimeout(modal.hide, 100);
+      setTimeout(modal.hide, 10);
     } catch (error) {
       const err = error as HttpError;
       if (err.errors && Object.keys(err.errors).length) {
@@ -83,7 +89,7 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
             autoComplete="off"
           >
             <div className="create-organization-form__section">
-              <Input
+              <InputV2
                 type="text"
                 label="Company Name"
                 placeholder="Company Name"
@@ -91,13 +97,12 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
                 value={values.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                hasError={errors.name && touched.name}
-                error={errors.name}
+                error={touched.name && errors.name}
               />
             </div>
 
             <div className="create-organization-form__section">
-              <Input
+              <InputV2
                 type="email"
                 label="Email Address"
                 placeholder="Email Address"
@@ -105,13 +110,12 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                hasError={errors.email && touched.email}
-                error={errors.email}
+                error={touched.email && errors.email}
               />
             </div>
 
             <div className="create-organization-form__section">
-              <Input
+              <InputV2
                 type="tel"
                 label="Phone No."
                 placeholder="Phone No."
@@ -119,8 +123,7 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
                 value={values.phonenumber}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                hasError={errors.phonenumber && touched.phonenumber}
-                error={errors.phonenumber}
+                error={touched.phonenumber && errors.phonenumber}
               />
             </div>
 

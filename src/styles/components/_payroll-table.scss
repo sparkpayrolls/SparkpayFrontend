@@ -5,8 +5,12 @@
   // padding-top: 0.25rem;
 
   &__details {
-    margin-right: 32px;
-    margin-left: 32px;
+    margin-inline: unset;
+
+    @media screen and (mi-width: 992px) {
+      margin-right: 32px;
+      margin-left: 32px;
+    }
   }
 
   &__profile {
@@ -334,10 +338,6 @@
   }
 
   @media screen and (max-width: 600px) {
-    &__details {
-      margin-right: 19px;
-      margin-left: 19px;
-    }
     &__head {
       display: flex;
       flex-direction: column;
