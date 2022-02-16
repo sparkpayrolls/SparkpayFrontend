@@ -7,6 +7,7 @@ import { OrganisationDashboardTable } from '../Table/organisation-dashboard-tabl
 import withPermission from 'src/helpers/HOC/withPermission';
 import { IOrganisationDashboard } from '../types';
 import { Util } from 'src/helpers/util';
+import BarChart from '../Chart/BarChart';
 
 const ViewMoreButton = withPermission(() => (
   <Link href="/wallet">
@@ -51,6 +52,9 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
           loading={loading}
         />
       </section>
+      <section>
+          <BarChart />
+      </section>
 
       <section className="dashboard__transactions-section">
         <div className="transactions__header">
@@ -58,7 +62,7 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
 
           <ViewMoreButton />
         </div>
-
+        
         <OrganisationDashboardTable
           loading={!!loading}
           recentTransactions={data.recentTransactions}
