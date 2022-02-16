@@ -7,7 +7,9 @@ import { OrganisationDashboardTable } from '../Table/organisation-dashboard-tabl
 import withPermission from 'src/helpers/HOC/withPermission';
 import { IOrganisationDashboard } from '../types';
 import { Util } from 'src/helpers/util';
-import { Bar } from 'react-chartjs-2';
+import { OrganizationDashboardBarChart } from '../Chart/organizationdashoard-chart';
+import { Select } from '../Input/select.component';
+import moment from 'moment';
 
 const ViewMoreButton = withPermission(() => (
   <Link href="/wallet">
@@ -54,59 +56,24 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
       </section>
 
       <section className="dashboard__chart-section">
-        <Bar
-          data={{
-            labels: [
-              'January',
-              'Febuary',
-              'March',
-              'April',
-              'May',
-              'June',
-              'July',
-              'August',
-              'September',
-              'October',
-              'November',
-              'December',
-            ],
-            datasets: [
-              {
-                label: 'Quantity',
-                data: [12, 19, 3, 5, 9, 3, 22, 16, 7, 10, 4, 19],
-                backgroundColor: '#64E5D6',
-                borderWidth: 0,
-                borderRadius: Number.MAX_VALUE,
-                borderSkipped: false,
-              },
-            ],
-          }}
-          options={{
-            plugins: {
-              legend: {
-                display: false,
-              },
-            },
-            scales: {
-              xAxes: {
-                grid: {
-                  display: false,
-                },
-              },
-              yAxes: {
-                beginAtZero: true,
-                grid: {
-                  display: false,
-                },
-              },
-            },
-            datasets: {
-              bar: {
-                barPercentage: 0.2,
-              },
-            },
-          }}
-        />
+        <div className="disbursement">
+          <div className="disbursement__header">
+            <div className="disbursement__info">
+              <p className="disbursement__title">Payroll trend</p>
+              <p className="disbursement__date">
+                {moment().format('MMMM DD, YYYY, hh:mm A')}
+              </p>
+            </div>
+
+            <div className="disbursement__select">
+              <Select value="monthly">
+                <Select.Option value="monthly">Monthly</Select.Option>
+                <Select.Option value="yearly">Yearly</Select.Option>
+              </Select>
+            </div>
+          </div>
+          <OrganizationDashboardBarChart />
+        </div>
       </section>
 
       <section className="dashboard__transactions-section">
