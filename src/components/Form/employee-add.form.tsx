@@ -126,11 +126,11 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
                 type="tel"
                 label="Phone Number"
                 placeholder="Phone Number"
-                name="phonenumber"
-                value={(values as any).phonenumber}
+                name="phoneNumber"
+                value={(values as any).phoneNumber}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={(touched as any).phonenumber && (errors as any).phonenumber}
+                error={(touched as any).phoneNumber && (errors as any).phoneNumber}
               />
             </div>
 
