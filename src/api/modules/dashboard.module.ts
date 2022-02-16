@@ -1,5 +1,9 @@
 import { HttpRepository } from '../repo/http.repo';
-import { UserDashboardData, OrganisationDashboardData } from '../types';
+import {
+  UserDashboardData,
+  OrganisationDashboardData,
+  CompanyChartData,
+} from '../types';
 
 export class DashboardModule extends HttpRepository {
   async getUserDashboardData() {
@@ -11,6 +15,15 @@ export class DashboardModule extends HttpRepository {
   async getCompanyDashboardData() {
     const { data } = await this.get<OrganisationDashboardData>(
       '/dashboards/companies',
+    );
+
+    return data;
+  }
+
+  async getCompanyChartData(params: Record<string, any>) {
+    const { data } = await this.get<CompanyChartData>(
+      '/dashboards/company-chart',
+      { params },
     );
 
     return data;

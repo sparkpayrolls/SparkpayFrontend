@@ -522,3 +522,25 @@ export type Invite = Document & {
   role?: string | Role;
   token: string;
 };
+
+export type CompanyChartData = {
+  barChart: {
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor: string;
+      borderWidth: number;
+      borderRadius: number;
+      borderSkipped: boolean;
+    }[];
+  };
+  pieChart: {
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor: string[];
+    }[];
+  };
+};

@@ -1,48 +1,24 @@
+import { ChartDataset } from 'chart.js';
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 import { Util } from 'src/helpers/util';
 
-export const OrganizationDashboardBarChart = () => {
+interface IOrganizationDashboardBarChart {
+  labels: string[];
+  datasets: ChartDataset<'bar', number[]>[];
+  currency: string;
+}
+
+export const OrganizationDashboardBarChart = (
+  props: IOrganizationDashboardBarChart,
+) => {
+  const { labels, datasets, currency } = props;
+
   return (
     <Bar
       data={{
-        labels: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
-        datasets: [
-          {
-            label: 'Payroll burden',
-            data: [
-              12234567,
-              19234543,
-              30234987,
-              50123435,
-              90345378,
-              30290839,
-              22365478,
-              16234323,
-              70467543,
-              10374565,
-              40435555,
-              19987556,
-            ],
-            backgroundColor: '#64E5D6',
-            borderWidth: 0,
-            borderRadius: Number.MAX_VALUE,
-            borderSkipped: false,
-          },
-        ],
+        labels,
+        datasets: datasets,
       }}
       options={{
         plugins: {
@@ -61,7 +37,7 @@ export const OrganizationDashboardBarChart = () => {
             displayColors: false,
             callbacks: {
               label(data) {
-                data.formattedValue = `${data.dataset.label}: ₦ ${data.formattedValue}`;
+                data.formattedValue = `${data.dataset.label}: ${currency} ${data.formattedValue}`;
 
                 return [data.formattedValue];
               },
@@ -110,6 +86,50 @@ export const OrganizationDashboardBarChart = () => {
         datasets: {
           bar: {
             barPercentage: 0.1,
+          },
+        },
+      }}
+    />
+  );
+};
+
+interface IOrganizationDashboardPieChart {
+  labels: string[];
+  datasets: ChartDataset<'pie', number[]>[];
+  currency: string;
+}
+
+export const OrganizationDashboardPieChart = (
+  props: IOrganizationDashboardPieChart,
+) => {
+  const { labels, datasets, currency } = props;
+
+  return (
+    <Pie
+      data={{
+        labels,
+        datasets,
+      }}
+      options={{
+        cutout: '80%',
+        plugins: {
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            displayColors: false,
+            callbacks: {
+              label(data) {
+                data.formattedValue = `${data.label}: ${currency} ${data.formattedValue}`;
+
+                return [data.formattedValue];
+              },
+            },
+            bodyFont: {
+              lineHeight: 1,
+              size: 12,
+              family: 'karla, Helvetica Neue, Helvetica, Arial, system-ui',
+            },
           },
         },
       }}
