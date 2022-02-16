@@ -7,7 +7,9 @@ import { OrganisationDashboardTable } from '../Table/organisation-dashboard-tabl
 import withPermission from 'src/helpers/HOC/withPermission';
 import { IOrganisationDashboard } from '../types';
 import { Util } from 'src/helpers/util';
-import BarChart from '../Chart/BarChart';
+import { OrganizationDashboardBarChart } from '../Chart/organizationdashoard-chart';
+import { Select } from '../Input/select.component';
+import moment from 'moment';
 
 const ViewMoreButton = withPermission(() => (
   <Link href="/wallet">
@@ -52,8 +54,26 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
           loading={loading}
         />
       </section>
-      <section>
-          <BarChart />
+
+      <section className="dashboard__chart-section">
+        <div className="disbursement">
+          <div className="disbursement__header">
+            <div className="disbursement__info">
+              <p className="disbursement__title">Payroll trend</p>
+              <p className="disbursement__date">
+                {moment().format('MMMM DD, YYYY, hh:mm A')}
+              </p>
+            </div>
+
+            <div className="disbursement__select">
+              <Select value="monthly">
+                <Select.Option value="monthly">Monthly</Select.Option>
+                <Select.Option value="yearly">Yearly</Select.Option>
+              </Select>
+            </div>
+          </div>
+          <OrganizationDashboardBarChart />
+        </div>
       </section>
 
       <section className="dashboard__transactions-section">
@@ -62,7 +82,7 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
 
           <ViewMoreButton />
         </div>
-        
+
         <OrganisationDashboardTable
           loading={!!loading}
           recentTransactions={data.recentTransactions}

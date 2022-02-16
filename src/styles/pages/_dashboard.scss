@@ -82,7 +82,7 @@
     }
 
     .disbursement {
-      width: 764px;
+      // width: 764px;
       overflow-x: scroll;
 
       @media screen and (min-width: 992px) {
@@ -125,7 +125,18 @@
         grid-column-gap: 1rem;
         background: #f5f6fa;
         border-radius: 4px;
-        padding: 12px;
+
+        .app-select {
+          width: 121px;
+
+          .ant-select-selector {
+            height: 40px;
+
+            .ant-select-selection-item {
+              line-height: 40px;
+            }
+          }
+        }
       }
     }
 
