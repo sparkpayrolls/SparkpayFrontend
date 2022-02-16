@@ -8,6 +8,10 @@ import { Administrator } from 'src/api/types';
 import { EmployeeFilterModal } from '../Modals/EmployeeFilterModal.component';
 import { EmployeeTable } from '../Table/employee-table.component';
 import { IEmployeeFilter, IEmployeeTab } from '../types';
+import { confirmation } from '../Modals/ConfirmationModal.component';
+
+
+
 
 export const EmployeeTab = (props: IEmployeeTab) => {
   const {
@@ -21,6 +25,13 @@ export const EmployeeTab = (props: IEmployeeTab) => {
   const [filter, setFilter] = useState<IEmployeeFilter>({});
 
   const onDelete = async (id: string | string[]) => {
+    if (!loading) {
+      const shouldDelete = await confirmation({
+        text: 'Are you sure you want to permanently delete this employee?',
+      });
+      if (shouldDelete) {
+        const toast = (await import('react-toastify')).toast;
+        setIsLoading(true);
     try {
       const ids = Array.isArray(id) ? id : [id];
       setIsLoading(true);
@@ -33,6 +44,8 @@ export const EmployeeTab = (props: IEmployeeTab) => {
     } finally {
       setIsLoading(false);
     }
+  }
+  }
   };
 
   const onStatusToggle = (
