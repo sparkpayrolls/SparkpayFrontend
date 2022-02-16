@@ -249,99 +249,161 @@
         line-height: 16px;
       }
     }
-
-   
   }
 }
 
-.fund-wallet-modal{
-  &__backIcon{
-    display:flex;
+.fund-wallet-modal {
+  &__backIcon {
+    display: flex;
     grid-column-gap: 0.7rem;
-    cursor:pointer;
+    cursor: pointer;
   }
-  &__back-text{
+  &__back-text {
     font-size: 0.9rem;
-line-height: 16px;
-color: #0B2253;
-font-weight: 500;
+    line-height: 16px;
+    color: #0b2253;
+    font-weight: 500;
   }
 
-  &__fund-card{
- display: flex;
- justify-content: space-between;
-width: 400px;
-height: 112px;
-background: #F7F9FB;
-border-radius: 4px;
+  &__fund-card {
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    height: 112px;
+    background: #f7f9fb;
+    border-radius: 4px;
   }
 
-  &__fund-amount{
+  &__fund-amount {
     margin-top: 2rem;
   }
 
-  &__fund-transfer-text{
-font-family: Karla;
-font-style: normal;
-font-weight: normal;
-font-size: 0.8rem;
-line-height: 24px;
-color: #6D7A98;
+  &__fund-transfer-text {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.8rem;
+    line-height: 24px;
+    color: #6d7a98;
   }
 
-  &__fund-title-text{
+  &__fund-title-text {
     padding: 1.4rem 0 1.4rem 1.4rem;
   }
 
-  &__fund-bank-copy-image{
-    margin:2rem 1.4rem 0 0;
-    display:flex;
+  &__fund-bank-copy-image {
+    margin: 2rem 1.4rem 0 0;
+    display: flex;
     grid-column-gap: 0.5rem;
-    cursor:pointer;
+    cursor: pointer;
   }
-  &__fund-bank-copy-text{
-   margin-top: 1.8rem;
-font-style: normal;
-font-weight: normal;
-font-size: 14px;
-line-height: 16px;
-color: #0F42A4;
-  }
-
-  &__fund-title-title{
+  &__fund-bank-copy-text {
+    margin-top: 1.8rem;
+    font-style: normal;
+    font-weight: normal;
     font-size: 14px;
-line-height: 16px;
-color: rgba(22, 42, 86, 0.6);
+    line-height: 16px;
+    color: #0f42a4;
   }
 
-  &__fund-amount-transfer{
+  &__fund-title-title {
+    font-size: 14px;
+    line-height: 16px;
+    color: rgba(22, 42, 86, 0.6);
+  }
+
+  &__fund-amount-transfer {
     font-weight: 600;
-font-size: 24px;
-line-height: 24px;
-color: #162A56;
-padding-top:8px;
+    font-size: 24px;
+    line-height: 24px;
+    color: #162a56;
+    padding-top: 8px;
   }
 
-  &__fund-bank-transfer{
+  &__fund-bank-transfer {
     font-family: Karla;
-font-style: normal;
-font-weight: normal;
-font-size: 14px;
-line-height: 16px;
-color: #162A56;
-padding-top:8px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    color: #162a56;
+    padding-top: 8px;
   }
 
-  &__fund-bank-expire{
+  &__fund-bank-expire {
     font-weight: normal;
     font-size: 14px;
     line-height: 16px;
     text-align: center;
-    color: #6D7A98;
-    padding-top:2rem;
+    color: #6d7a98;
+    padding-top: 2rem;
   }
 }
 
-// .single-employee-upload-form {
-//   margin-top: -3rem;
-// }
+.confirmation-popup {
+  .ant-modal-content {
+    width: 400px;
+    box-shadow: 0px 7.52055px 16.7123px rgba(171, 180, 189, 0.23);
+    border-radius: 4px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .ant-modal-title {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #3a434b;
+    letter-spacing: 0.25px;
+  }
+
+  .ant-modal-body {
+    font-size: 1rem;
+    padding: 16px 0;
+    color: black;
+    line-height: 24px;
+    letter-spacing: -0.048px;
+  }
+
+  .ant-modal-header {
+    border-bottom: 1px solid #d7dce0;
+    padding: 24px 0 16px;
+  }
+
+  .ant-modal-footer {
+    border-top: none;
+    padding: 16px 0 32px;
+
+    button {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.2px;
+      border-color: transparent;
+      box-shadow: unset;
+    }
+
+    button:last-child {
+      background: #ca1b1b;
+      border-radius: 8px;
+      width: 134px;
+      height: 40px;
+
+      &:hover,
+      &:focus {
+        background: #b81a1a;
+      }
+    }
+  }
+
+  .ant-modal-close {
+    // color: #3a434b;
+
+    span {
+      height: 64px;
+      width: 64px;
+      font-size: 18px;
+      line-height: 75px;
+    }
+  }
+}

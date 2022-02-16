@@ -116,8 +116,21 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
                 value={values.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={touched.lastname && errors.email}
+                error={touched.email && errors.email}
                 loading={isSubmitting}
+              />
+            </div>
+
+            <div className="single-employee-upload-form__section">
+              <InputV2
+                type="tel"
+                label="Phone Number"
+                placeholder="Phone Number"
+                name="phoneNumber"
+                value={(values as any).phoneNumber}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={(touched as any).phoneNumber && (errors as any).phoneNumber}
               />
             </div>
 
