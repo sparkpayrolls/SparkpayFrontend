@@ -7,6 +7,7 @@ import { OrganisationDashboardTable } from '../Table/organisation-dashboard-tabl
 import withPermission from 'src/helpers/HOC/withPermission';
 import { IOrganisationDashboard } from '../types';
 import { Util } from 'src/helpers/util';
+import { Bar } from 'react-chartjs-2';
 
 const ViewMoreButton = withPermission(() => (
   <Link href="/wallet">
@@ -49,6 +50,62 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
           value={Util.formatNumber(data.totalNumberOfEmployees)}
           title="Employees"
           loading={loading}
+        />
+      </section>
+
+      <section className="dashboard__chart-section">
+        <Bar
+          data={{
+            labels: [
+              'January',
+              'Febuary',
+              'March',
+              'April',
+              'May',
+              'June',
+              'July',
+              'August',
+              'September',
+              'October',
+              'November',
+              'December',
+            ],
+            datasets: [
+              {
+                label: 'Quantity',
+                data: [12, 19, 3, 5, 9, 3, 22, 16, 7, 10, 4, 19],
+                backgroundColor: '#64E5D6',
+                borderWidth: 0,
+                borderRadius: Number.MAX_VALUE,
+                borderSkipped: false,
+              },
+            ],
+          }}
+          options={{
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              xAxes: {
+                grid: {
+                  display: false,
+                },
+              },
+              yAxes: {
+                beginAtZero: true,
+                grid: {
+                  display: false,
+                },
+              },
+            },
+            datasets: {
+              bar: {
+                barPercentage: 0.2,
+              },
+            },
+          }}
         />
       </section>
 
