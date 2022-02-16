@@ -38,6 +38,7 @@ export const singleEmployeeUploadValidationSchema = Yup.object().shape({
   firstname: format.firstname,
   lastname: format.lastname,
   salary: Yup.string().required('salary is required'),
+  phonenumber: Yup.string().required('phone number is required'),
 });
 
 export const bulkEmployeeFileUploadValidationSchema = Yup.object().shape({
