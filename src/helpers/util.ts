@@ -177,4 +177,25 @@ export class Util {
   static pluraliseTitle(name: string, elem: number) {
     return elem > 1 ? `${name + 's'}` : name;
   }
+
+  static shortenNumber(num: number) {
+    if (num < 1000) {
+      return Util.formatNumber(num);
+    }
+
+    if (num < 1000000) {
+      return Util.formatNumber(num / 1000) + 'K';
+    }
+    if (num < 1000000000) {
+      return Util.formatNumber(num / 1000000) + 'M';
+    }
+    if (num < 1000000000000) {
+      return Util.formatNumber(num / 1000000000) + 'B';
+    }
+    if (num < 1000000000000000) {
+      return Util.formatNumber(num / 1000000000000) + 'T';
+    }
+
+    return Util.formatNumber(num);
+  }
 }
