@@ -11,9 +11,11 @@ import { Payroll } from 'src/api/types';
 import { $api } from 'src/api';
 import { IKebabItem } from '@/components/KebabMenu/KebabMenu.component';
 import withAuth from 'src/helpers/HOC/withAuth';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { HttpError } from 'src/api/repo/http.error';
 import { PayrollTable } from '@/components/Table/payroll-table.component';
+import { confirmation } from '../../src/components/Modals/ConfirmationModal.component';
+
 
 const PayrollDetails: NextPage = () => {
   const defaultMeta = Util.getDefaultPaginationMeta({});
@@ -23,6 +25,13 @@ const PayrollDetails: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
 
   const pausePayroll = async (id: string) => {
+    if (!loading) {
+      const shouldPaused = await confirmation({
+        text: 'Are you sure you want to pause this employees payroll?',
+      });
+      if (shouldPaused) {
+        const toast = (await import('react-toastify')).toast;
+        setLoading(true);
     try {
       setLoading(true);
       await $api.payroll.pausePendingPayroll(id);
@@ -34,9 +43,18 @@ const PayrollDetails: NextPage = () => {
     } finally {
       setLoading(false);
     }
+  }
+}
   };
 
   const resumePayroll = async (id: string) => {
+    if (!loading) {
+      const shouldResume = await confirmation({
+        text: 'Are you sure you want to resume this employees payroll?',
+      });
+      if (shouldResume) {
+        const toast = (await import('react-toastify')).toast;
+        setLoading(true);
     try {
       setLoading(true);
       await $api.payroll.resumePausedPayroll(id);
@@ -48,9 +66,19 @@ const PayrollDetails: NextPage = () => {
     } finally {
       setLoading(false);
     }
+  }
+}
   };
 
   const deletePayroll = async (id: string) => {
+    if (!loading) {
+      const shouldDelete = await confirmation({
+        text: 'Are you sure you want to permanently delete this employees payroll?',
+
+      });
+      if (shouldDelete) {
+        const toast = (await import('react-toastify')).toast;
+        setLoading(true);
     try {
       setLoading(true);
       await $api.payroll.deletePayroll(id);
@@ -62,6 +90,8 @@ const PayrollDetails: NextPage = () => {
     } finally {
       setLoading(false);
     }
+  }
+}
   };
 
   const getPayrollActions = (payroll: Payroll) => {
