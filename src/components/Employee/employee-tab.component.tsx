@@ -69,6 +69,13 @@ export const EmployeeTab = (props: IEmployeeTab) => {
   };
 
   const onSendOnboardingLink = async (id: string | string[]) => {
+    if (!loading) {
+      const shouldDelete = await confirmation({
+        text: 'Are you sure you want to onboarding link to be sent?',
+      });
+      if (shouldDelete) {
+        const toast = (await import('react-toastify')).toast;
+        setIsLoading(true);
     try {
       setIsLoading(true);
       await $api.employee.resendOnboardingLink(id);
@@ -79,6 +86,8 @@ export const EmployeeTab = (props: IEmployeeTab) => {
     } finally {
       setIsLoading(false);
     }
+  }
+}
   };
 
   const onFilter = () => {
