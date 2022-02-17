@@ -94,9 +94,12 @@ export class Util {
     return country?.currencySymbol;
   }
 
-  static formatMoneyNumber(val: number) {
-    const [num, dec] = val.toFixed(2).split('.');
+  static formatMoneyNumber(val: number, precision = 0) {
+    const [num, dec] = val.toFixed(precision).split('.');
     const withComma = (+num).toLocaleString();
+    if (!dec) {
+      return withComma;
+    }
 
     return `${withComma}.${dec}`;
   }
@@ -178,24 +181,24 @@ export class Util {
     return elem > 1 ? `${name + 's'}` : name;
   }
 
-  static shortenNumber(num: number) {
+  static shortenNumber(num: number, precision = 0) {
     if (num < 1000) {
-      return Util.formatNumber(num);
+      return Util.formatMoneyNumber(num, precision);
     }
 
     if (num < 1000000) {
-      return Util.formatNumber(num / 1000) + 'K';
+      return Util.formatMoneyNumber(num / 1000, precision) + 'K';
     }
     if (num < 1000000000) {
-      return Util.formatNumber(num / 1000000) + 'M';
+      return Util.formatMoneyNumber(num / 1000000, precision) + 'M';
     }
     if (num < 1000000000000) {
-      return Util.formatNumber(num / 1000000000) + 'B';
+      return Util.formatMoneyNumber(num / 1000000000, precision) + 'B';
     }
     if (num < 1000000000000000) {
-      return Util.formatNumber(num / 1000000000000) + 'T';
+      return Util.formatMoneyNumber(num / 1000000000000, precision) + 'T';
     }
 
-    return Util.formatNumber(num);
+    return Util.formatMoneyNumber(num, precision);
   }
 }
