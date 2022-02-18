@@ -7,19 +7,25 @@ import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout'
 import { EditEmployeeDetailsModal } from '@/components/Modals/EditDetailsModal.component';
 import withAuth from 'src/helpers/HOC/withAuth';
 import BackIcon from '../../public/svgs/backicon.svg';
-import { SingleDetail } from '@/components/Employee/single-detail.component';
-import { Country, Employee } from 'src/api/types';
+// import { SingleDetail } from '@/components/Employee/single-detail.component';
+import { Employee } from 'src/api/types';
 import { IF } from '@/components/Misc/if.component';
 import { NotFound } from '@/components/Misc/not-found.component';
 import { useRouter } from 'next/router';
 import useApiCall from 'src/helpers/hooks/useapicall.hook';
-import moment from 'moment';
+// import moment from 'moment';
 import { useAppSelector } from 'src/redux/hooks';
-import { Util } from 'src/helpers/util';
+// import { Util } from 'src/helpers/util';
 import {
   getEmployeeEditSubmitHandler,
   getEmployeeMethod,
 } from 'src/helpers/methods';
+import { Tab } from '@/components/Tab/tab.component';
+import { TabPane } from '@/components/Tab/tabpane.component';
+import { stringifyUrl } from 'query-string';
+
+
+
 
 const EmployeeDetails: NextPage = () => {
   const router = useRouter();
@@ -30,8 +36,10 @@ const EmployeeDetails: NextPage = () => {
 
   const employeeId = router.query.id as string;
   const loading = load || !eph;
-  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const salary = Util.formatMoneyNumber(eph?.salary ?? 0);
+  // const currency = Util.getCurrencySymbolFromAdministrator(administrator);
+  // const salary = Util.formatMoneyNumber(eph?.salary ?? 0);
+  const { tab } = router.query;
+  const selectedTab = Array.isArray(tab) ? tab[0] : tab || 'employees';
 
   const getEmployee = useCallback(async () => {
     await getEmployeeMethod({
@@ -46,6 +54,17 @@ const EmployeeDetails: NextPage = () => {
   useEffect(() => {
     getEmployee();
   }, [getEmployee, administrator]);
+
+   const onTabChange = (tab: string) => {
+     const { pathname, query } = router;
+     const url = stringifyUrl({
+       url: pathname,
+       query: { ...query, tab },
+     });
+
+     router.push(url);
+   };
+
 
   const onAddEmployee = () => {
     NiceModal.show(EditEmployeeDetailsModal, {
@@ -86,8 +105,16 @@ const EmployeeDetails: NextPage = () => {
           <div className="employee-details__not-found">
             <NotFound message="Employee not found" />
           </div>
-        </IF>
-        <IF condition={!notFound}>
+        </IF>{' '}
+        <Tab onChange={onTabChange} active={selectedTab} default={'employees'}>
+          <TabPane tab="Employees" key="employees">
+           
+          </TabPane>
+          <TabPane key="groups" tab="Groups">
+            {/* <EmployeeGroup /> */}
+          </TabPane>
+        </Tab>
+        {/* <IF condition={!notFound}>
           <div className="employee-details__employee-settings-details">
             <div className="employee-details__employee-settings-flex">
               <div>
@@ -141,7 +168,7 @@ const EmployeeDetails: NextPage = () => {
             </div>
             <hr />
           </div>
-        </IF>
+        </IF> */}
       </div>
     </DashboardLayout>
   );

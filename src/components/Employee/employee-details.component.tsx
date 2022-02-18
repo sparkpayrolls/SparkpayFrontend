@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import { useCallback, useEffect, useState } from 'react';
-// import { EditEmployeeDetailsModal } from '@/components/Modals/EditDetailsModal.component';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { SingleDetail } from '@/components/Employee/single-detail.component';
 import { Country, Employee } from 'src/api/types';
@@ -12,11 +11,10 @@ import moment from 'moment';
 import { useAppSelector } from 'src/redux/hooks';
 import { Util } from 'src/helpers/util';
 import {
-//   getEmployeeEditSubmitHandler,
   getEmployeeMethod,
 } from 'src/helpers/methods';
 
-const EmployeeDetails: NextPage = () => {
+const EmployeeDetailsTab: NextPage = () => {
   const router = useRouter();
   const administrator = useAppSelector((state) => state.administrator);
   const [eph, setEmployee] = useState<Employee>();
@@ -42,6 +40,7 @@ const EmployeeDetails: NextPage = () => {
     getEmployee();
   }, [getEmployee, administrator]);
 
+  
   return (
     <div>
       <div className="employee-details">
@@ -110,4 +109,4 @@ const EmployeeDetails: NextPage = () => {
   );
 };
 
-export default withAuth(EmployeeDetails);
+export default withAuth(EmployeeDetailsTab);
