@@ -30,8 +30,6 @@ export const EmployeeTab = (props: IEmployeeTab) => {
         text: 'Are you sure you want to permanently delete this employee?',
       });
       if (shouldDelete) {
-        const toast = (await import('react-toastify')).toast;
-        setIsLoading(true);
     try {
       const ids = Array.isArray(id) ? id : [id];
       setIsLoading(true);

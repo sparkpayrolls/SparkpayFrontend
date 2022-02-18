@@ -11,7 +11,7 @@ import { Payroll } from 'src/api/types';
 import { $api } from 'src/api';
 import { IKebabItem } from '@/components/KebabMenu/KebabMenu.component';
 import withAuth from 'src/helpers/HOC/withAuth';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { HttpError } from 'src/api/repo/http.error';
 import { PayrollTable } from '@/components/Table/payroll-table.component';
 import { confirmation } from '../../src/components/Modals/ConfirmationModal.component';
@@ -30,8 +30,6 @@ const PayrollDetails: NextPage = () => {
         text: 'Are you sure you want to pause this employees payroll?',
       });
       if (shouldPaused) {
-        const toast = (await import('react-toastify')).toast;
-        setLoading(true);
     try {
       setLoading(true);
       await $api.payroll.pausePendingPayroll(id);
