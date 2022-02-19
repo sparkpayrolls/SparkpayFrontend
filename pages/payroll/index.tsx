@@ -25,11 +25,6 @@ const PayrollDetails: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
 
   const pausePayroll = async (id: string) => {
-    if (!loading) {
-      const shouldPaused = await confirmation({
-        text: 'Are you sure you want to pause this employees payroll?',
-      });
-      if (shouldPaused) {
     try {
       setLoading(true);
       await $api.payroll.pausePendingPayroll(id);
@@ -41,18 +36,10 @@ const PayrollDetails: NextPage = () => {
     } finally {
       setLoading(false);
     }
-  }
-}
+
   };
 
   const resumePayroll = async (id: string) => {
-    if (!loading) {
-      const shouldResume = await confirmation({
-        text: 'Are you sure you want to resume this employees payroll?',
-      });
-      if (shouldResume) {
-        const toast = (await import('react-toastify')).toast;
-        setLoading(true);
     try {
       setLoading(true);
       await $api.payroll.resumePausedPayroll(id);
@@ -63,15 +50,14 @@ const PayrollDetails: NextPage = () => {
       toast.error(err.message);
     } finally {
       setLoading(false);
-    }
-  }
 }
   };
 
   const deletePayroll = async (id: string) => {
     if (!loading) {
       const shouldDelete = await confirmation({
-        text: 'Are you sure you want to permanently delete this employees payroll?',
+        title:'Delete Payroll',
+        text: 'Are you sure you want to permanently delete this payroll?',
 
       });
       if (shouldDelete) {

@@ -49,11 +49,6 @@ export const EmployeeTab = (props: IEmployeeTab) => {
   const onStatusToggle = (
     action:  'Activate' | 'Deactivate',
   ) => async (id: string | string[]) => {
-    if (!loading) {
-      const onStatusToggle = await confirmation({
-        text: `Are you sure you want to ${action} this employee?`,
-      });
-      if (onStatusToggle) {
     try {
       const ids = Array.isArray(id) ? id : [id];
       setIsLoading(true);
@@ -69,8 +64,6 @@ export const EmployeeTab = (props: IEmployeeTab) => {
     } finally {
       setIsLoading(false);
     }
-  }
-      }
   };
 
   const onSendOnboardingLink = async (id: string | string[]) => {
