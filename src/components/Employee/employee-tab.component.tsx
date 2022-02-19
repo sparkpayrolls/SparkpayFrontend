@@ -27,6 +27,7 @@ export const EmployeeTab = (props: IEmployeeTab) => {
   const onDelete = async (id: string | string[]) => {
     if (!loading) {
       const shouldDelete = await confirmation({
+        title:'Delete employee',
         text: 'Are you sure you want to permanently delete this employee?',
       });
       if (shouldDelete) {

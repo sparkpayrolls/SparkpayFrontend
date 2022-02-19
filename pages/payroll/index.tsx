@@ -61,8 +61,6 @@ const PayrollDetails: NextPage = () => {
 
       });
       if (shouldDelete) {
-        const toast = (await import('react-toastify')).toast;
-        setLoading(true);
     try {
       setLoading(true);
       await $api.payroll.deletePayroll(id);
