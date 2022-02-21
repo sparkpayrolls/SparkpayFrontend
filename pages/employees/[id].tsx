@@ -8,6 +8,7 @@ import { EditEmployeeDetailsModal } from '@/components/Modals/EditDetailsModal.c
 import withAuth from 'src/helpers/HOC/withAuth';
 import BackIcon from '../../public/svgs/backicon.svg';
 // import { SingleDetail } from '@/components/Employee/single-detail.component';
+import EmployeeDetailsTab from '@/components/Employee/EmployeeDetailsTab'
 import { Employee } from 'src/api/types';
 import { IF } from '@/components/Misc/if.component';
 import { NotFound } from '@/components/Misc/not-found.component';
@@ -108,7 +109,7 @@ const EmployeeDetails: NextPage = () => {
         </IF>{' '}
         <Tab onChange={onTabChange} active={selectedTab} default={'employees'}>
           <TabPane tab="Employees" key="employees">
-           
+           <EmployeeDetailsTab/>
           </TabPane>
           <TabPane key="groups" tab="Groups">
             {/* <EmployeeGroup /> */}
