@@ -14,6 +14,8 @@ import withAuth from 'src/helpers/HOC/withAuth';
 import { toast } from 'react-toastify';
 import { HttpError } from 'src/api/repo/http.error';
 import { PayrollTable } from '@/components/Table/payroll-table.component';
+import { confirmation } from '../../src/components/Modals/ConfirmationModal.component';
+
 
 const PayrollDetails: NextPage = () => {
   const defaultMeta = Util.getDefaultPaginationMeta({});
@@ -34,6 +36,7 @@ const PayrollDetails: NextPage = () => {
     } finally {
       setLoading(false);
     }
+
   };
 
   const resumePayroll = async (id: string) => {
@@ -47,10 +50,17 @@ const PayrollDetails: NextPage = () => {
       toast.error(err.message);
     } finally {
       setLoading(false);
-    }
+}
   };
 
   const deletePayroll = async (id: string) => {
+    if (!loading) {
+      const shouldDelete = await confirmation({
+        title:'Delete Payroll',
+        text: 'Are you sure you want to permanently delete this payroll?',
+
+      });
+      if (shouldDelete) {
     try {
       setLoading(true);
       await $api.payroll.deletePayroll(id);
@@ -62,6 +72,8 @@ const PayrollDetails: NextPage = () => {
     } finally {
       setLoading(false);
     }
+  }
+}
   };
 
   const getPayrollActions = (payroll: Payroll) => {

@@ -40,6 +40,7 @@ export const OrganizationTabPane = (props: IOrganizationTabPane) => {
     if (!loading) {
       const shouldDelete = await confirmation({
         text: 'Are you sure you want to permanently delete this organisation?',
+
       });
       if (shouldDelete) {
         const toast = (await import('react-toastify')).toast;
