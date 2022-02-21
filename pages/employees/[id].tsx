@@ -24,8 +24,7 @@ import {
 import { Tab } from '@/components/Tab/tab.component';
 import { TabPane } from '@/components/Tab/tabpane.component';
 import { stringifyUrl } from 'query-string';
-
-
+import EmployeeAddons from './../../src/components/Employee/employee-addons';
 
 
 const EmployeeDetails: NextPage = () => {
@@ -112,7 +111,7 @@ const EmployeeDetails: NextPage = () => {
            <EmployeeDetailsTab/>
           </TabPane>
           <TabPane key="groups" tab="Groups">
-            {/* <EmployeeGroup /> */}
+            <EmployeeAddons/>
           </TabPane>
         </Tab>
         {/* <IF condition={!notFound}>

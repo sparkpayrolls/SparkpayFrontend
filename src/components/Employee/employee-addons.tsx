@@ -14,36 +14,29 @@ const EmployeeAddons: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <TableLayout>
-        <TableV2
-          className="payroll-create-table"
-        >
+        <TableV2 className="payroll-create-table">
           <thead>
             <tr>
               <th>Name</th>
-              <th>Salary </th>
-              <th>Net Salary </th>
-              <th>Payout Status</th>
+              <th>Salary</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Payroll Cycle</th>
+              <th>Frequency</th>
+              <th>Addon Month</th>
+              <th>type</th>
             </tr>
           </thead>
           <tbody>
-            
-
-              return (
-                <tr >
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                  </td>
-                 
-
-                   
-                  <td>
-                   
-                  </td>
-                </tr>
-              );
+            <tr>
+              <td>Abiodun Elijah</td>
+              <td>#150,000</td>
+              <td>Active</td>
+              <td>Onetime</td>
+              <td>Recurrent</td>
+              <td>January</td>
+              <td>Bonus</td>
+            </tr>
           </tbody>
         </TableV2>
       </TableLayout>
