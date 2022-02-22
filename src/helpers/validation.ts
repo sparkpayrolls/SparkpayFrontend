@@ -108,6 +108,12 @@ export const TaxInformationValidationSchema = Yup.object().shape({
   taxOfficeNumber: Yup.string(),
 });
 
+
+export const EmployeeGroupValidationSchema = Yup.object().shape({
+   name: Yup.string().required('Group name is required'),
+    salary: Yup.string().required('Salary is required'),
+});
+
 export const BulkEmployeeAddValidation = Yup.object()
   .shape({
     employees: Yup.array()

@@ -280,6 +280,14 @@ export type WalletBilling = {
   amount: string;
   channel: PaymentMethodName;
 };
+
+export type createEmployeeGroup = {
+  name:string;
+salary : string;
+bonusname: string;
+bonus : string;
+payrollcount : string;
+}
 /** NavListItem */
 export type IDashboardNavigationListItem = {
   router: NextRouter;
