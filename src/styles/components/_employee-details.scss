@@ -90,4 +90,43 @@
     color: #0b2253;
     padding-bottom: 0.95rem;
   }
+
+&__add-bonus{
+  display:flex;
+  gap: 0.5rem;
+}
+
+&__add-bonus > p{
+  font-size:1rem;
+line-height: 24px;
+color: #1D4ED8;
+}
+
+&__employee-section{
+  background: #F7F9FB;
+border-radius: 4px;
+width:400px;
+height:116px;
+padding:2rem 1rem 0rem 1rem;
+}
+&__employee-list{
+  display:flex;
+  gap:1rem;
+  width: 85px;
+  padding-left:0.5rem;
+height: 20px;
+  background: #DDE5EE;
+border-radius: 12px;
+}
+
+&__employee-list > p{
+  font-size:0.8rem;
+}
+&__employee-group-section{
+  margin-top:1.2rem;
+}
+}
+
+.bonus-employee{
+  margin-top: 2rem;
 }
