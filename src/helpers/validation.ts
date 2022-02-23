@@ -74,6 +74,13 @@ export const userChangePasswordValidationSchema = Yup.object().shape({
   confirmPassword: Yup.string().required('Enter new password again'),
 });
 
+export const addonBonusValidationSchema = Yup.object().shape({
+  oldPassword: Yup.string().required('Old password is required'),
+  newPassword: Yup.string().required('New password is required'),
+  confirmPassword: Yup.string().required('Enter new password again'),
+  country: format.country
+});
+
 export const fundWalletValidationSchema = Yup.object().shape({
   amount: Yup.string().required('amount is required'),
   channel: Yup.string().required('select payment method'),
