@@ -16,7 +16,6 @@
 //   return import('formik').then((mod) => mod.Formik);
 // });
 
-// const { Option } = Select;
 // export const AddonBonusModal = NiceModal.create(() => {
 //   return (
 //     <ModalLayout title="Create Addon Bonuses">

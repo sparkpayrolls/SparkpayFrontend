@@ -1,233 +1,29 @@
-// import type { NextPage } from 'next';
-// import { useCallback, useEffect, useState } from 'react';
-// import Image from 'next/image';
-// import Link from 'next/link';
-// import NiceModal from '@ebay/nice-modal-react';
-// import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
-// // import { EditEmployeeDetailsModal } from '@/components/Modals/EditDetailsModal.component';
-// import { AddonBonusModal } from '@/components/Modals/AddonBonusModal.component';
-// import withAuth from 'src/helpers/HOC/withAuth';
-// import BackIcon from '../../public/svgs/backicon.svg';
-// // import { SingleDetail } from '@/components/Employee/single-detail.component';
-// import EmployeeDetailsTab from '@/components/Employee/EmployeeDetailsTab'
-// import { Employee } from 'src/api/types';
-// import { IF } from '@/components/Misc/if.component';
-// import { NotFound } from '@/components/Misc/not-found.component';
-// import { useRouter } from 'next/router';
-// import useApiCall from 'src/helpers/hooks/useapicall.hook';
-// // import moment from 'moment';
-// import { useAppSelector } from 'src/redux/hooks';
-// // import { Util } from 'src/helpers/util';
-// import {
-//   getEmployeeEditSubmitHandler,
-//   getEmployeeMethod,
-// } from 'src/helpers/methods';
-// import { Tab } from '@/components/Tab/tab.component';
-// import { TabPane } from '@/components/Tab/tabpane.component';
-// import { stringifyUrl } from 'query-string';
-// import EmployeeAddons from './../../src/components/Employee/employee-addons';
-
-
-// const EmployeeDetails: NextPage = () => {
-//   const [currentTab, setCurrentTab] = useState('employee-details')
-//   const router = useRouter();
-//   const administrator = useAppSelector((state) => state.administrator);
-//   const [eph, setEmployee] = useState<Employee>();
-//   const [notFound, setNotFound] = useState(false);
-//   const [load, apiCallStarted, apiCallDone] = useApiCall();
-
-//   const employeeId = router.query.id as string;
-//   const loading = load || !eph;
-//   // const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-//   // const salary = Util.formatMoneyNumber(eph?.salary ?? 0);
-//   const { tab } = router.query;
-//   const selectedTab = Array.isArray(tab) ? tab[0] : tab || 'employees';
-
-//   const getEmployee = useCallback(async () => {
-//     await getEmployeeMethod({
-//       employeeId,
-//       apiCallStarted,
-//       setEmployee,
-//       setNotFound,
-//       apiCallDone,
-//     })();
-//   }, [employeeId, apiCallDone, apiCallStarted]);
-
-
-//   useEffect(() => {
-//     getEmployee();
-//   }, [getEmployee, administrator]);
-
-//    const onTabChange = (tab: string) => {
-//     const setCurrentTab = ('addonbonuses')
-//      const { pathname, query } = router;
-//      const url = stringifyUrl({
-//        url: pathname,
-//        query: { ...query, tab },
-//      });
-
-//      router.push(url);
-//    };
-
-
-//   const onAddEmployee = () => {
-//     NiceModal.show(AddonBonusModal, {
-//       administrator,
-//       employee: eph,
-//       onSubmit: getEmployeeEditSubmitHandler(employeeId, getEmployee),
-//     });
-//   };
-
-//   return (
-//     <DashboardLayout pageTitle="Employee Details">
-//       <div className="employee-details">
-//         <div className=" employee-details__employee-details-settings">
-//           <div className="employee-details__employee-details-header">
-//             <Link href="/employees">
-//               <a>
-//                 <Image
-//                   src={BackIcon}
-//                   alt="back-icon"
-//                   className="employee-details__back-icon"
-//                 />
-//               </a>
-//             </Link>
-//             <h5 className="employee-details__employee-header">
-//               Employees Details
-//             </h5>
-//           </div>
-//           {/* <IF condition={!notFound && !loading}>
-//             <button
-//               className="employee-details__employee-button"
-//               onClick={onAddEmployee}
-//             >
-//               Edit Details
-//             </button>
-//           </IF> */}
-//         </div>
-//         {currentTab === 'employee-details' && (
-//           <button
-//             className="employee-details__employee-button"
-//             onClick={onAddEmployee}
-//           >
-//             Do not Edit Details
-//           </button>
-//         )}
-//         {/* {setCurrentTab === 'employee-details' && (
-//           <button
-//             className="employee-details__employee-button"
-//             onClick={onAddEmployee}
-//           >
-//             Edit Details
-//           </button>
-//         )} */}
-//         <IF condition={notFound}>
-//           <div className="employee-details__not-found">
-//             <NotFound message="Employee not found" />
-//           </div>
-//         </IF>{' '}
-//         <Tab onChange={onTabChange} active={selectedTab} default={'employees'}>
-//           <TabPane tab="Employee Details" key="employees">
-//             <EmployeeDetailsTab />
-//           </TabPane>
-//           <TabPane key="addons" tab="Addon Bonuses">
-//             <EmployeeAddons />
-//           </TabPane>
-//         </Tab>
-//         {/* <IF condition={!notFound}>
-//           <div className="employee-details__employee-settings-details">
-//             <div className="employee-details__employee-settings-flex">
-//               <div>
-//                 <SingleDetail
-//                   title="Name"
-//                   details={`${eph?.firstname} ${eph?.lastname}`}
-//                   loading={loading}
-//                 />
-//               </div>
-//               <div>
-//                 <SingleDetail
-//                   title="Email Address"
-//                   details={eph?.email}
-//                   loading={loading}
-//                 />
-//               </div>
-//               <div>
-//                 <SingleDetail
-//                   title="Group(s)"
-//                   details={eph?.groups
-//                     ?.map((group) => group.group.name)
-//                     ?.join(', ')}
-//                   loading={loading}
-//                 />
-//               </div>
-//               <div>
-//                 <SingleDetail
-//                   title="Date Created"
-//                   details={moment(eph?.createdAt).format('MMMM DD, YYYY')}
-//                   loading={loading}
-//                 />
-//               </div>
-//             </div>
-//             <hr />
-
-//             <div className="employee-details__employee-settings-flex">
-//               <div>
-//                 <SingleDetail
-//                   title="Salary Amount"
-//                   details={`${currency} ${salary}`}
-//                   loading={loading}
-//                 />
-//               </div>
-//               <div>
-//                 <SingleDetail
-//                   title="Country"
-//                   details={(eph?.country as Country)?.name}
-//                   loading={loading}
-//                 />
-//               </div>
-//             </div>
-//             <hr />
-//           </div>
-//         </IF> */}
-//       </div>
-//     </DashboardLayout>
-//   );
-// };
-
-// export default withAuth(EmployeeDetails);
-
-
-
-
-
-
-
-
-
-
-
 import type { NextPage } from 'next';
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import NiceModal from '@ebay/nice-modal-react';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
-import { EditEmployeeDetailsModal } from '@/components/Modals/EditDetailsModal.component';
+// import { EditEmployeeDetailsModal } from '@/components/Modals/EditDetailsModal.component';
+import { AddonBonusModal } from '@/components/Modals/AddonBonusModal.component';
 import withAuth from 'src/helpers/HOC/withAuth';
 import BackIcon from '../../public/svgs/backicon.svg';
-import { SingleDetail } from '@/components/Employee/single-detail.component';
-import { Country, Employee } from 'src/api/types';
+import EmployeeDetailsTab from '@/components/Employee/EmployeeDetailsTab'
+import { Employee } from 'src/api/types';
 import { IF } from '@/components/Misc/if.component';
 import { NotFound } from '@/components/Misc/not-found.component';
 import { useRouter } from 'next/router';
 import useApiCall from 'src/helpers/hooks/useapicall.hook';
-import moment from 'moment';
 import { useAppSelector } from 'src/redux/hooks';
-import { Util } from 'src/helpers/util';
 import {
   getEmployeeEditSubmitHandler,
   getEmployeeMethod,
 } from 'src/helpers/methods';
+import { Tab } from '@/components/Tab/tab.component';
+import { TabPane } from '@/components/Tab/tabpane.component';
+import { stringifyUrl } from 'query-string';
+import EmployeeAddons from './../../src/components/Employee/employee-addons';
+
 
 const EmployeeDetails: NextPage = () => {
   const router = useRouter();
@@ -238,8 +34,8 @@ const EmployeeDetails: NextPage = () => {
 
   const employeeId = router.query.id as string;
   const loading = load || !eph;
-  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const salary = Util.formatMoneyNumber(eph?.salary ?? 0);
+  const { tab } = router.query;
+  const selectedTab = Array.isArray(tab) ? tab[0] : tab || 'employees';
 
   const getEmployee = useCallback(async () => {
     await getEmployeeMethod({
@@ -251,12 +47,24 @@ const EmployeeDetails: NextPage = () => {
     })();
   }, [employeeId, apiCallDone, apiCallStarted]);
 
+
   useEffect(() => {
     getEmployee();
   }, [getEmployee, administrator]);
 
+   const onTabChange = (tab: string) => {
+     const { pathname, query } = router;
+     const url = stringifyUrl({
+       url: pathname,
+       query: { ...query, tab },
+     });
+
+     router.push(url);
+   };
+
+
   const onAddEmployee = () => {
-    NiceModal.show(EditEmployeeDetailsModal, {
+    NiceModal.show(AddonBonusModal, {
       administrator,
       employee: eph,
       onSubmit: getEmployeeEditSubmitHandler(employeeId, getEmployee),
@@ -294,65 +102,19 @@ const EmployeeDetails: NextPage = () => {
           <div className="employee-details__not-found">
             <NotFound message="Employee not found" />
           </div>
-        </IF>
-        <IF condition={!notFound}>
-          <div className="employee-details__employee-settings-details">
-            <div className="employee-details__employee-settings-flex">
-              <div>
-                <SingleDetail
-                  title="Name"
-                  details={`${eph?.firstname} ${eph?.lastname}`}
-                  loading={loading}
-                />
-              </div>
-              <div>
-                <SingleDetail
-                  title="Email Address"
-                  details={eph?.email}
-                  loading={loading}
-                />
-              </div>
-              <div>
-                <SingleDetail
-                  title="Group(s)"
-                  details={eph?.groups
-                    ?.map((group) => group.group.name)
-                    ?.join(', ')}
-                  loading={loading}
-                />
-              </div>
-              <div>
-                <SingleDetail
-                  title="Date Created"
-                  details={moment(eph?.createdAt).format('MMMM DD, YYYY')}
-                  loading={loading}
-                />
-              </div>
-            </div>
-            <hr />
-
-            <div className="employee-details__employee-settings-flex">
-              <div>
-                <SingleDetail
-                  title="Salary Amount"
-                  details={`${currency} ${salary}`}
-                  loading={loading}
-                />
-              </div>
-              <div>
-                <SingleDetail
-                  title="Country"
-                  details={(eph?.country as Country)?.name}
-                  loading={loading}
-                />
-              </div>
-            </div>
-            <hr />
-          </div>
-        </IF>
+        </IF>{' '}
+        <Tab onChange={onTabChange} active={selectedTab} default={'employees'}>
+          <TabPane tab="Employee Details" key="employees">
+            <EmployeeDetailsTab />
+          </TabPane>
+          <TabPane key="addons" tab="Addon Bonuses">
+            <EmployeeAddons />
+          </TabPane>
+        </Tab>
       </div>
     </DashboardLayout>
   );
 };
 
 export default withAuth(EmployeeDetails);
+
