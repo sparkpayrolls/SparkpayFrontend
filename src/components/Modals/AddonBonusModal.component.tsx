@@ -6,7 +6,7 @@ import { Input } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
 import { addonBonusValidationSchema } from 'src/helpers/validation';
 import { AddonBonus } from '../types';
-
+import { Select } from '../Input/select.component';
 
 
 export const AddonBonusModal = NiceModal.create(
@@ -27,12 +27,13 @@ export const AddonBonusModal = NiceModal.create(
 
 
 const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
+
+  const countries = [{id: 1, name: 'nigeria'}]
   return (
     <Formik
       initialValues={{
         oldPassword: '',
         newPassword: '',
-        cycle: '',
         country: '',
         confirmPassword: '',
       }}
@@ -97,6 +98,20 @@ const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
                 error={errors.confirmPassword}
               />
             </div>
+             <Select
+                label="Country"
+                error={(touched.country && errors.country) || ''}
+              >
+                {countries.map((country) => {
+                  const { Option } = Select;
+
+                  return (
+                    <Option value={country.id} key={country.id}>
+                      {country.name}
+                    </Option>
+                  );
+                })}
+              </Select>
             <div className="form__submit-button">
               <Button
                 type="submit"
