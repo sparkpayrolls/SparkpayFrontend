@@ -6,9 +6,7 @@ import { TableLayout } from '@/components/Table/table-layout.component';
 // import { EmployeeAddForm } from './../Form/employee-add.form';
 import { KebabMenu } from '../KebabMenu/KebabMenu.component';
 
-
 const EmployeeAddons: NextPage = () => {
-
   return (
     <div className="payroll-section">
       <Head>
@@ -38,19 +36,20 @@ const EmployeeAddons: NextPage = () => {
               <td>Recurrent</td>
               <td>January</td>
               <td>Bonus</td>
-              <td><span>
-                Onetime
-                    <KebabMenu
-                      items={[
-                        {
-                          value: 'Edit',
-                        },
-                        {
-                          value: 'Delete',
-                        },
-                      ]}
-                    />
-                    </span>
+              <td>
+                <span className="d-flex justify-content-space-between align-items-center">
+                  Onetime
+                  <KebabMenu
+                    items={[
+                      {
+                        value: 'Edit',
+                      },
+                      {
+                        value: 'Delete',
+                      },
+                    ]}
+                  />
+                </span>
               </td>
             </tr>
           </tbody>

@@ -458,6 +458,11 @@ export type ITotalCard = {
   type?: 'primary' | 'secondary';
 };
 
+export type TextAreaType = {
+  placeholder?: string;
+  description?: string;
+};
+
 export interface ButtonProps {
   /**
    * Is this the principal call to action on the page?

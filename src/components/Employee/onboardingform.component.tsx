@@ -113,13 +113,13 @@ export const EmployeeOnboardingForm = (props: IEmployeeOnboardingForm) => {
                   onBlur={() =>
                     setTouched({ ...touched, payoutMethod: true }, true)
                   }
-                  onChange={(val: string) => {
-                    const selected = payoutMethods.find((p) => p.id === val);
-                    setPayoutMethod(selected ?? null);
-                    setValues({ ...values, payoutMethod: val }, true);
-                  }}
-                  optionFilterProp="children"
-                  showSearch
+                    onChange={(val: string) => {
+                                const selected = payoutMethods.find((p) => p.id === val);
+                                setPayoutMethod(selected ?? null);
+                                setValues({ ...values, payoutMethod: val }, true);
+                              }}
+                              optionFilterProp="children"
+                              showSearch
                   disabled={!country || !payoutMethods.length}
                   loading={(!!country && !payoutMethods.length) || loading}
                   error={(touched.payoutMethod && errors.payoutMethod) || ''}
