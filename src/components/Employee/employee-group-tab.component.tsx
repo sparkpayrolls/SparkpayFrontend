@@ -1,8 +1,48 @@
 import Image from 'next/image';
-import Link from 'next/link';
+// import Link from 'next/link';
 import SearchInput from '../../../public/svgs/search.svg';
-import avatar from '../../../public/images/avatar-img.png';
-import { MoreMenuSVG } from '../svg';
+import { KebabMenu } from '../KebabMenu/KebabMenu.component';
+
+const EmployeeGroupCard = ({
+  name,
+  date,
+  datetext,
+  salaryamount,
+  salarytext,
+}: {
+  name: string;
+  date: string;
+  datetext: string;
+  salarytext: string;
+  salaryamount: string;
+}) => {
+  return (
+    <div className="employee-details__employee-cards">
+      <div className="employ">
+        <h1>{name}</h1>
+        <p>{date}</p>
+        <p>{datetext}</p>
+      </div>
+      <div>
+        <KebabMenu
+          items={[
+            {
+              value: 'Accept',
+            },
+            {
+              value: 'Reject,',
+            },
+          ]}
+        />
+      </div>
+      <hr />
+      <div>
+        <p>{salarytext}</p>
+        <p>{salaryamount}</p>
+      </div>
+    </div>
+  );
+};
 
 export const EmployeeGroup = () => {
   return (
@@ -29,49 +69,13 @@ export const EmployeeGroup = () => {
       </div>
 
       <section className="employee-group__employee-group-cards">
-        <div className="employee-group__section">
-          <div className="employee-group__group-title">
-            <h5 className="employee-group__header-title">Group Name Here</h5>
-
-            <button className="employee-group__more-menu">
-              <MoreMenuSVG />
-            </button>
-          </div>
-
-          <Link href="/employees/group-details">
-            <a className="employee-group__content">
-              <p className="employee-group__date-created-name">Date Created</p>
-              <p className="employee-group__date-time-created">
-                September 16, 2021 | 12:40 PM{' '}
-              </p>
-              <hr />
-
-              <p className="employee-group__salary-title">Common Salary</p>
-
-              <div className="employee-group__salary-amount-section">
-                <p className="employee-group__salary-amount">₦ 200,000</p>
-                <div className="employee-group__group-images">
-                  <Image
-                    src={avatar}
-                    alt="group-employee-image"
-                    className="employee-image"
-                  />
-                  <Image src={avatar} alt="" className="employee-image" />
-                  <Image
-                    src={avatar}
-                    alt="group-employee-image"
-                    className="employee-image"
-                  />
-                  <Image
-                    src={avatar}
-                    alt="group-employee-image"
-                    className="employee-image"
-                  />
-                </div>
-              </div>
-            </a>
-          </Link>
-        </div>
+        <EmployeeGroupCard
+          name="Group Name Here"
+          date="1997"
+          datetext="hi"
+          salarytext="hrllo"
+          salaryamount="hi"
+        />
       </section>
     </div>
   );

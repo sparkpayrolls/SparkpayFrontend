@@ -114,7 +114,7 @@ const CreateEmployeeGroupForm = () => {
                 <p>Tomike</p>
                   <Image
                     src={removeicon}
-                    className="employee-details__"
+                    className="employee-details__employee-image"
                     alt="group-details-image"
                   />
                 </div>
