@@ -566,3 +566,9 @@ export type CompanyChartData = {
     }[];
   };
 };
+
+export type EmployeeGroupPayload = {
+  name: string;
+  description?: string;
+  commonSalary?: string | number;
+};

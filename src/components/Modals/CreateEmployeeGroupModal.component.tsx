@@ -5,8 +5,15 @@ import { ModalLayout } from './ModalLayout.component';
 export const CreateEmployeeGroupModal = NiceModal.create(() => {
   return (
     <ModalLayout title="Create Employee Group">
-      {() => {
-        return <EmployeeGroupForm />;
+      {(modal) => {
+        return (
+          <EmployeeGroupForm
+            onDone={(group) => {
+              modal.resolve(group);
+              setTimeout(modal.hide, 10, group);
+            }}
+          />
+        );
       }}
     </ModalLayout>
   );

@@ -1,5 +1,10 @@
 import { HttpRepository } from '../repo/http.repo';
-import { Employee, EmployeeStatus, Group } from '../types';
+import {
+  Employee,
+  EmployeeGroupPayload,
+  EmployeeStatus,
+  Group,
+} from '../types';
 
 export class EmployeeModule extends HttpRepository {
   async getEmployees(params: Record<string, any>) {
@@ -88,5 +93,11 @@ export class EmployeeModule extends HttpRepository {
 
   async getEmployeeGroups(params: Record<string, any>) {
     return this.get<Group[]>('/employees/groups', { params });
+  }
+
+  async createEmployeeGroup(payload: EmployeeGroupPayload) {
+    const { data } = await this.post<Group>('/employees/groups', payload);
+
+    return data;
   }
 }

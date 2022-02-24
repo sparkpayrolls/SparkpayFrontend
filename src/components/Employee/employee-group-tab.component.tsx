@@ -15,7 +15,11 @@ import { $api } from 'src/api';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
 
-export const EmployeeGroup = () => {
+interface IEmployeeGroup {
+  refreshList?: any;
+}
+
+export const EmployeeGroup = (props: IEmployeeGroup) => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [meta, setMeta] = useState<PaginationMeta>();
   const [params, setParams] = useState<Record<string, any>>({});
@@ -48,7 +52,7 @@ export const EmployeeGroup = () => {
 
   useEffect(() => {
     getGroups();
-  }, [getGroups, administrator]);
+  }, [getGroups, administrator, props.refreshList]);
 
   return (
     <div className="employee-group-tab">
