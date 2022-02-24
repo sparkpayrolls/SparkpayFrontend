@@ -124,12 +124,34 @@ export type Employee = Document & {
   phoneNumber?: string;
 };
 
-export type Group = Document & {
+export enum GroupTypeEnum {
+  employee = 'employee',
+  tax = 'tax',
+  pension = 'pension',
+  NHF = 'NHF',
+}
+
+export type GroupType = keyof typeof GroupTypeEnum;
+
+export enum GroupStatusEnum {
+  active = 'active',
+  disabled = 'disabled',
+}
+
+export type GroupStatus = keyof typeof GroupStatusEnum;
+
+export type Group<T extends Record<string, any> = {}> = Document & {
   name: string;
+  type: GroupType;
+  status: GroupStatus;
+  company: string | Company;
+  meta: T;
+  employees?: EmployeeGroup[];
 };
 
 export type EmployeeGroup = Document & {
-  group: Group;
+  group: string | Group;
+  employee: string | Employee;
 };
 
 export type Company = Document & {

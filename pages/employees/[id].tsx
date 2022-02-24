@@ -8,7 +8,7 @@ import { EditEmployeeDetailsModal } from '@/components/Modals/EditDetailsModal.c
 import withAuth from 'src/helpers/HOC/withAuth';
 import BackIcon from '../../public/svgs/backicon.svg';
 import { SingleDetail } from '@/components/Employee/single-detail.component';
-import { Country, Employee } from 'src/api/types';
+import { Country, Employee, Group } from 'src/api/types';
 import { IF } from '@/components/Misc/if.component';
 import { NotFound } from '@/components/Misc/not-found.component';
 import { useRouter } from 'next/router';
@@ -36,7 +36,7 @@ const EmployeeDetails: NextPage = () => {
   const getEmployee = useCallback(async () => {
     await getEmployeeMethod({
       employeeId,
-      apiCallStarted, 
+      apiCallStarted,
       setEmployee,
       setNotFound,
       apiCallDone,
@@ -108,7 +108,7 @@ const EmployeeDetails: NextPage = () => {
                 <SingleDetail
                   title="Group(s)"
                   details={eph?.groups
-                    ?.map((group) => group.group.name)
+                    ?.map((group) => (group.group as Group).name)
                     ?.join(', ')}
                   loading={loading}
                 />
