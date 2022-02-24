@@ -1,7 +1,7 @@
 import Image from 'next/image';
-// import Link from 'next/link';
 import SearchInput from '../../../public/svgs/search.svg';
 import { KebabMenu } from '../KebabMenu/KebabMenu.component';
+import { StatusChip } from '../StatusChip/status-chip.component';
 
 const EmployeeGroupCard = ({
   name,
@@ -17,28 +17,37 @@ const EmployeeGroupCard = ({
   salaryamount: string;
 }) => {
   return (
-    <div className="employee-details__employee-cards">
-      <div className="employ">
-        <h1>{name}</h1>
-        <p>{date}</p>
-        <p>{datetext}</p>
+    <div className="employee-details__employee-group-cards">
+      <div className="employee-details__employee-card-flex">
+        <div className="employee-details__employee-card-header">
+          <h1>{name}</h1>
+          <p className="employee-details__employee-card-datetext">{datetext}</p>
+          <p className="employee-details__employee-card-date">{date}</p>
+        </div>
+        <div>
+          <KebabMenu
+            items={[
+              {
+                value: 'view',
+              },
+              {
+                value: 'delete',
+              },
+            ]}
+          />
+        </div>
       </div>
-      <div>
-        <KebabMenu
-          items={[
-            {
-              value: 'Accept',
-            },
-            {
-              value: 'Reject,',
-            },
-          ]}
-        />
-      </div>
-      <hr />
-      <div>
-        <p>{salarytext}</p>
-        <p>{salaryamount}</p>
+      <hr classsName="employee-details__employee-card-hr" />
+      <div className="employee-details__employee-card-flex">
+        <div>
+          <StatusChip status="successful" />
+        </div>
+        <div>
+          <p className="employee-details__employee-salary-text">{salarytext}</p>
+          <p className="employee-details__employee-salary-amount">
+            {salaryamount}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -68,13 +77,27 @@ export const EmployeeGroup = () => {
         </div>
       </div>
 
-      <section className="employee-group__employee-group-cards">
+      <section className="employee-details__employee-cards employee-group-details">
         <EmployeeGroupCard
           name="Group Name Here"
-          date="1997"
-          datetext="hi"
-          salarytext="hrllo"
-          salaryamount="hi"
+          datetext="Date Created"
+          date="September 16, 2021 | 12:40 PM "
+          salarytext="Common Salary"
+          salaryamount="₦ 200,000"
+        />
+        <EmployeeGroupCard
+          name="Group Name Here"
+          datetext="Date Created"
+          date="September 16, 2021 | 12:40 PM "
+          salarytext="Common Salary"
+          salaryamount="₦ 200,000"
+        />
+        <EmployeeGroupCard
+          name="Group Name Here"
+          datetext="Date Created"
+          date="September 16, 2021 | 12:40 PM "
+          salarytext="Common Salary"
+          salaryamount="₦ 200,000"
         />
       </section>
     </div>
