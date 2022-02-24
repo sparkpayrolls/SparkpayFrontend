@@ -1,12 +1,10 @@
-import Image from 'next/image';
 import NiceModal from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
 import { Input } from '../Input/Input.component';
 import { Formik, FormikProps } from 'formik';
 import { createEmployeeGroup } from '../types';
 import { Button } from '../Button/Button.component';
-import { PlusAddBonusSvg } from '@/components/svg';
-import removeicon from '../../../public/svgs/remove-icon.svg';
+
 
 export const CreateEmployeeGroupModal = NiceModal.create(() => {
   return (
@@ -27,9 +25,6 @@ const CreateEmployeeGroupForm = () => {
         initialValues={{
           name: '',
           salary: '',
-          bonusname: '',
-          bonus: '',
-          payrollcount: '',
         }}
         onSubmit={(...args) => {
           console.log(args);
@@ -62,64 +57,12 @@ const CreateEmployeeGroupForm = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="single-employee-upload-form__section fund-wallet-modal__fund-amount">
-                <Input
-                  type="text"
-                  label="Bonus Name"
-                  placeholder="Staff of the month"
-                  name="Bonus Name"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="single-employee-upload-form__section fund-wallet-modal__fund-amount">
-                <Input
-                  type="text"
-                  label="Bonus Name"
-                  placeholder="Staff of the month"
-                  name="Bonus Name"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form__grid single-employee-upload-form__section  bonus-employee">
-                <div className="form__grid__col--6 padding-right-space-1">
-                  <Input
-                    type="text"
-                    label="Bonus (₦) "
-                    placeholder="₦ 10,000"
-                    name="Bonus (₦)"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="form__grid__col--6 padding-left-space-1">
-                  <Input
-                    type="text"
-                    label="Payroll Count"
-                    placeholder="1"
-                    name="Payroll Count"
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              <div className="employee-details__add-bonus">
-                <span>
-                  <PlusAddBonusSvg />
-                </span>
-                <p>Add Bonus</p>
-              </div>
-              <div className ="employee-details__employee-group-section">
-              <p>Employees</p>
-              <div className="employee-details__employee-section">
-                <div className="employee-details__employee-list" >
-                <p>Tomike</p>
-                  <Image
-                    src={removeicon}
-                    className="employee-details__employee-image"
-                    alt="group-details-image"
-                  />
-                </div>
-              </div>
-              </div>
+               <div>
+                 <p className="employee-details__group-description-text">Group description</p>
+                 <textarea className='employee-details__group-text-area'>
+                 </textarea>
+               </div>
+              
               <hr  className="employee-details__hr"/>
               <div className="form__submit-button employee-group-button">
                 <Button

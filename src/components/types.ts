@@ -284,9 +284,6 @@ export type WalletBilling = {
 export type createEmployeeGroup = {
   name:string;
 salary : string;
-bonusname: string;
-bonus : string;
-payrollcount : string;
 }
 /** NavListItem */
 export type IDashboardNavigationListItem = {
