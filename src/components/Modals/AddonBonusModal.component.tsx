@@ -7,6 +7,7 @@ import { Button } from '../Button/Button.component';
 import { addonBonusValidationSchema } from 'src/helpers/validation';
 import { AddonBonus } from '../types';
 import { Select } from '../Input/select.component';
+import { TextAreaAll } from '../Input/textarea.component';
 
 
 export const AddonBonusModal = NiceModal.create(
@@ -72,16 +73,9 @@ const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
             </div>
 
             <div className="change-password-form__section">
-              <Input
-                type="password"
-                label="New Password"
-                placeholder="password"
-                name="password"
-                value={values.newPassword}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                hasError={errors.newPassword && touched.newPassword}
-                error={errors.newPassword}
+              <TextAreaAll 
+              placeholder='Enter description'
+              error={errors.oldPassword}
               />
             </div>
 

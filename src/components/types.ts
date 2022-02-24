@@ -377,6 +377,12 @@ export type ISearchInput = {
   onSearch?(value: string): any;
 };
 
+export type TextArea = {
+  placeholder?: string;
+  value?: string;
+  type?: string;
+};
+
 export type ITableLayout = {
   // eslint-disable-next-line no-undef
   title?: string | JSX.Element;
