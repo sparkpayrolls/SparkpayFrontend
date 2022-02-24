@@ -114,16 +114,17 @@ const CreateEmployeeGroupForm = () => {
                 <p>Tomike</p>
                   <Image
                     src={removeicon}
-                    className="group-details__remove-icon"
+                    className="employee-details__"
                     alt="group-details-image"
                   />
                 </div>
               </div>
               </div>
-              <div className="form__submit-button">
+              <hr  className="employee-details__hr"/>
+              <div className="form__submit-button employee-group-button">
                 <Button
                   type="submit"
-                  label="submit"
+                  label="Save Group"
                   className="form__submit-button form__submit-button--full-width reset-button"
                   primary
                 />
