@@ -6,7 +6,7 @@ export const DateTimeChip = ({
   dateFormat,
   textSize,
 }: {
-  date: string;
+  date?: string;
   dateFormat?: string;
   timeFormat?: string;
   textSize?: 'text-large';

@@ -13,10 +13,12 @@ import { IOrganizationMenu, IProfileMenu } from '../types';
 export type IKebabItem = { value: string; action?(): any; href?: string };
 export type IKebabMenu = {
   items: IKebabItem[];
+  // eslint-disable-next-line no-undef
+  icon?(): JSX.Element;
 };
 
 export const KebabMenu = (props: IKebabMenu) => {
-  const { items } = props;
+  const { items, icon: Icon } = props;
 
   const menu = (
     <ul className="kebabmenu__dropdown">
@@ -35,7 +37,7 @@ export const KebabMenu = (props: IKebabMenu) => {
   return (
     <Dropdown overlay={menu}>
       <span className="kebabmenu__trigger" onClick={(e) => e.preventDefault()}>
-        <KebabMenuSVG />
+        {Icon ? <Icon /> : <KebabMenuSVG />}
       </span>
     </Dropdown>
   );

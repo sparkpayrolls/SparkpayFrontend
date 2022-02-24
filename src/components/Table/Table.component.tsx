@@ -7,9 +7,9 @@ import search_icon from '../../../public/svgs/search-icon.svg';
 import { Button } from '../Button/Button.component';
 import { SelectInput } from '../Input/seletct-input';
 import { KebabMenu } from '../KebabMenu/KebabMenu.component';
-import { Pagination } from '../Pagination/pagination.component';
 import { ITable, ITablePagination, ITablev2, ITR } from '../types';
-import { Dropdown, Menu } from 'antd';
+import { Dropdown } from 'antd';
+import { SearchForm } from '../Form/search.form';
 
 export const TR = (props: PropsWithChildren<ITR>) => {
   return (
@@ -27,7 +27,7 @@ export const TR = (props: PropsWithChildren<ITR>) => {
 };
 
 const TablePagination = (props: ITablePagination) => {
-  if (props.total <= props.perPage) {
+  if (props.total < 11) {
     return null;
   }
 
@@ -141,22 +141,13 @@ export const Table = (props: ITable) => {
   };
 
   const menu = (
-    <Menu>
-      <Menu.Item key="0">
-        <div className="table-component__mobile-search">
-          <input
-            type="search"
-            placeholder="Search by name"
-            className="table-component__search--input"
-            onChange={(event) => {
-              setSearch(event.target.value);
-              searchFunc(props.refresh || (() => {}), event.target.value);
-            }}
-          />
-          <Image src={search_icon} alt="search icon" />
-        </div>
-      </Menu.Item>
-    </Menu>
+    <SearchForm
+      placeholder="Search by name"
+      onChange={(event) => {
+        setSearch(event.target.value);
+        searchFunc(props.refresh || (() => {}), event.target.value);
+      }}
+    />
   );
 
   return (
@@ -184,16 +175,13 @@ export const Table = (props: ITable) => {
               }}
             >
               <div className="table-component__search">
-                <input
-                  type="search"
+                <SearchForm
                   placeholder="Search by name"
-                  className="table-component__search--input"
                   onChange={(event) => {
                     setSearch(event.target.value);
                     searchFunc(props.refresh || (() => {}), event.target.value);
                   }}
                 />
-                <Image src={search_icon} alt="search icon" />
               </div>
 
               <Dropdown
