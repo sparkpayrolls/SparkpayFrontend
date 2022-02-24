@@ -381,6 +381,7 @@ export type TextArea = {
   placeholder?: string;
   value?: string;
   type?: string;
+  error?: string;
 };
 
 export type ITableLayout = {
