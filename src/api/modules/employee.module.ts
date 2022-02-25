@@ -100,4 +100,22 @@ export class EmployeeModule extends HttpRepository {
 
     return data;
   }
+
+  async updateEmployeeGroup(
+    groupId: string,
+    payload: Partial<Pick<Group, 'status'> & EmployeeGroupPayload>,
+  ) {
+    const { data } = await this.put<Group>(
+      `/employees/groups/${groupId}`,
+      payload,
+    );
+
+    return data;
+  }
+
+  async deleteEmployeeGroup(groupId: string) {
+    const { data } = await this.delete<Group>(`/employees/groups/${groupId}`);
+
+    return data;
+  }
 }
