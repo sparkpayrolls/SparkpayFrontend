@@ -1,6 +1,7 @@
 import { HttpRepository } from '../repo/http.repo';
 import {
   Employee,
+  EmployeeGroup,
   EmployeeGroupPayload,
   EmployeeStatus,
   Group,
@@ -121,6 +122,24 @@ export class EmployeeModule extends HttpRepository {
 
   async getEmployeeGroup(groupId: string) {
     const { data } = await this.get<Group>(`/employees/groups/${groupId}`);
+
+    return data;
+  }
+
+  async addEmployeesToGroup(groupId: string, ids: string[]) {
+    const { data } = await this.post<Employee | EmployeeGroup[]>(
+      `/employees/groups/${groupId}/employees`,
+      { ids },
+    );
+
+    return data;
+  }
+
+  async removeEmployeesFromGroup(groupId: string, ids: string[]) {
+    const { data } = await this.delete<Employee | EmployeeGroup[]>(
+      `/employees/groups/${groupId}/employees`,
+      { ids },
+    );
 
     return data;
   }

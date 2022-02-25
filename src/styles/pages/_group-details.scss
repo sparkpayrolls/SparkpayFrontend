@@ -147,8 +147,9 @@
 
   &__user {
     width: 100%;
-    max-width: 85px;
+    max-width: max-content;
     display: flex;
+    gap: 0.5rem;
     justify-content: space-between;
     align-items: center;
     background: #dde5ee;
@@ -188,7 +189,7 @@
     }
 
     .items {
-      padding: 1rem;
+      padding: 0 1rem 1rem;
       display: flex;
       flex-wrap: wrap;
       gap: 0.625rem 0.5rem;

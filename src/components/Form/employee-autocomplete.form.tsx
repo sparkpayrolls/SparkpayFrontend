@@ -9,6 +9,7 @@ interface IEmployeeAutoCompleteForm {
   onSubmit?(e: Employee): any;
   // eslint-disable-next-line no-unused-vars
   onSelect?(e: Employee): any;
+  clearOnSelect?: boolean;
 }
 
 export const EmployeeAutocompleteForm = (props: IEmployeeAutoCompleteForm) => {
@@ -33,6 +34,7 @@ export const EmployeeAutocompleteForm = (props: IEmployeeAutoCompleteForm) => {
         /** */
       });
   };
+
   return (
     <form
       action=""
@@ -58,6 +60,10 @@ export const EmployeeAutocompleteForm = (props: IEmployeeAutoCompleteForm) => {
             setSelectedEmployee(employee);
             if (props.onSelect) {
               props.onSelect(employee);
+            }
+            if (props.clearOnSelect) {
+              setSelectedEmployee(null);
+              setAutoCompleteValue('');
             }
           }
         }}
