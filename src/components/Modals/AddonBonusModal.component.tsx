@@ -73,9 +73,10 @@ const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
             </div>
 
             <div className="change-password-form__section">
-              <TextAreaAll 
-              placeholder='Enter description'
-              error={errors.oldPassword}
+              <TextAreaAll
+                label="description"
+                placeholder="Enter description"
+                error={errors.oldPassword}
               />
             </div>
 
@@ -92,20 +93,20 @@ const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
                 error={errors.confirmPassword}
               />
             </div>
-             <Select
-                label="Country"
-                error={(touched.country && errors.country) || ''}
-              >
-                {countries.map((country) => {
-                  const { Option } = Select;
+            <Select
+              label="Country"
+              error={(touched.country && errors.country) || ''}
+            >
+              {countries.map((country) => {
+                const { Option } = Select;
 
-                  return (
-                    <Option value={country.id} key={country.id}>
-                      {country.name}
-                    </Option>
-                  );
-                })}
-              </Select>
+                return (
+                  <Option value={country.id} key={country.id}>
+                    {country.name}
+                  </Option>
+                );
+              })}
+            </Select>
             <div className="form__submit-button">
               <Button
                 type="submit"

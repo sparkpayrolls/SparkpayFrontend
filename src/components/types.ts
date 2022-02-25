@@ -379,9 +379,8 @@ export type ISearchInput = {
 
 export type TextArea = {
   placeholder?: string;
-  value?: string;
-  type?: string;
   error?: string;
+  label?: string;
 };
 
 export type ITableLayout = {
