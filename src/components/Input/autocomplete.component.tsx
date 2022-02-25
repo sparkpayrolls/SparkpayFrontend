@@ -28,7 +28,7 @@ export function AutoComplete(props: IAutoComplete) {
       <A id={id} {...autoCompleteProps} className={autoCompleteClass} />
       {error && (
         <Text
-          className="input-v2--error__error text__sm text__danger"
+          className="input-v2--error__error text__text-sm text__danger"
           text={error}
         />
       )}

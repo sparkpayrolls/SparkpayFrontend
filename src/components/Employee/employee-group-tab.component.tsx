@@ -178,20 +178,24 @@ export const EmployeeGroup = (props: IEmployeeGroup) => {
               <div className="group-card__footer">
                 <StatusChip status={group.status} />
 
-                {(group.meta as any)?.commonSalary && (
-                  <span className="group-card__common-salary">
-                    <span className="group-card__common-salary__title">
-                      Common Salary
-                    </span>
-
-                    <span className="group-card__common-salary__amount">
-                      {currency}{' '}
-                      {Util.formatMoneyNumber(
-                        (group.meta as any)?.commonSalary,
-                      )}
-                    </span>
+                <span className="group-card__common-salary">
+                  <span className="group-card__common-salary__title">
+                    Common Salary
                   </span>
-                )}
+
+                  <span className="group-card__common-salary__amount">
+                    {(group.meta as any)?.commonSalary ? (
+                      <>
+                        {currency}{' '}
+                        {Util.formatMoneyNumber(
+                          (group.meta as any)?.commonSalary,
+                        )}
+                      </>
+                    ) : (
+                      'N/A'
+                    )}
+                  </span>
+                </span>
               </div>
             </div>
           );

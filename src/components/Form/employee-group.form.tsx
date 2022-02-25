@@ -16,6 +16,7 @@ interface IEmployeeGroupForm {
     description?: string;
     commonSalary?: number;
   };
+  // eslint-disable-next-line no-unused-vars
   onDone?(group: Group): any;
 }
 
@@ -34,7 +35,12 @@ export const EmployeeGroupForm = (props: IEmployeeGroupForm) => {
       onSubmit={async (values, helpers) => {
         try {
           helpers.setSubmitting(true);
-          const data = await $api.employee.createEmployeeGroup(values);
+          let data: Group;
+          if (id) {
+            data = await $api.employee.updateEmployeeGroup(id, values);
+          } else {
+            data = await $api.employee.createEmployeeGroup(values);
+          }
           if (onDone) {
             onDone(data);
           }
@@ -98,6 +104,7 @@ export const EmployeeGroupForm = (props: IEmployeeGroupForm) => {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.commonSalary}
+              helper="Clearing the value defaults employees to salary"
               transformValue={(val) => {
                 const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
                 if (isNaN(valTransformed) || !val || val === '') return '';

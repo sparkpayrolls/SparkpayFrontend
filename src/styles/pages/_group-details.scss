@@ -1,6 +1,7 @@
 .group-details {
-  margin-left: 2rem;
-  margin-right: 2rem;
+  width: 100%;
+  max-width: 1128px;
+  margin: auto;
 
   &__group-detail-title-section {
     display: flex;
@@ -15,6 +16,8 @@
   &__header-content {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
     margin: 0.7rem 0 0 0rem;
     padding: 0;
   }
@@ -44,8 +47,18 @@
   }
 
   &__group-details-flex-body {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    .full-width {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
+
+    @media screen and (min-width: 768px) {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 
   &__group-details-flex-body-inherit {

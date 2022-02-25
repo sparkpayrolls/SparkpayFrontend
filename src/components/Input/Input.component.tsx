@@ -289,13 +289,13 @@ export const InputV2 = (
       </Container>
       {!!error && typeof error === 'string' && (
         <Text
-          className="input-v2--error__error text__sm text__danger"
+          className="input-v2--error__error text__text-sm text__danger"
           text={error}
         />
       )}
       {!!helper && !error && (
         <Text
-          className="input-v2__helper text__sm text__gray400"
+          className="input-v2__helper text__text-sm text__gray400"
           text={helper}
         />
       )}
@@ -359,13 +359,13 @@ export const TextArea = (
       />
       {!!error && typeof error === 'string' && (
         <Text
-          className="textarea--error__error text__sm text__danger"
+          className="textarea--error__error text__text-sm text__danger"
           text={error}
         />
       )}
       {!!helper && !error && (
         <Text
-          className="textarea__helper text__sm text__gray400"
+          className="textarea__helper text__text-sm text__gray400"
           text={helper}
         />
       )}

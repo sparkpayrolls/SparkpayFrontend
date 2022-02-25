@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import backicon from '../../../public/svgs/back-icon.svg';
@@ -8,6 +8,7 @@ import { Tab } from '@/components/Tab/tab.component';
 import { GroupDetails } from '@/components/Employee/group-detail.component';
 
 const GroupDetailsPage = () => {
+  const onEditDetails = useRef<() => any>(() => {});
   const [activeTab, setActiveTab] = useState('details');
 
   return (
@@ -31,7 +32,10 @@ const GroupDetailsPage = () => {
               </h5>
             </div>
             {activeTab === 'details' ? (
-              <button className="group-details__edit-details-btn">
+              <button
+                onClick={onEditDetails.current}
+                className="group-details__edit-details-btn"
+              >
                 Edit Details
               </button>
             ) : (
@@ -45,7 +49,9 @@ const GroupDetailsPage = () => {
             default="details"
           >
             <Tab.TabPane tab="Details" key="details">
-              <GroupDetails />
+              <GroupDetails
+                onEditDetails={(func) => (onEditDetails.current = func)}
+              />
             </Tab.TabPane>
             <Tab.TabPane tab="Addons" key="addons">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit.

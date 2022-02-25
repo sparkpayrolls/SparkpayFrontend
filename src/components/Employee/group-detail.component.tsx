@@ -1,11 +1,38 @@
 import Image from 'next/image';
+import NiceModal from '@ebay/nice-modal-react';
+import { useEffect } from 'react';
 import removeicon from '../../../public/svgs/remove-icon.svg';
 import { DateTimeChip } from '../DateTimeChip/date-time-chip';
 import { EmployeeAutocompleteForm } from '../Form/employee-autocomplete.form';
 import { StatusChip } from '../StatusChip/status-chip.component';
 import { SingleDetail } from './single-detail.component';
+import { CreateEmployeeGroupModal } from '../Modals/CreateEmployeeGroupModal.component';
+import { Container } from '../Shared/container.component';
 
-export const GroupDetails = () => {
+interface IGroupDetails {
+  // eslint-disable-next-line no-unused-vars
+  onEditDetails?(f: () => void): any;
+}
+
+export const GroupDetails = (props: IGroupDetails) => {
+  const { onEditDetails } = props;
+
+  useEffect(() => {
+    if (onEditDetails) {
+      onEditDetails(() => {
+        NiceModal.show(CreateEmployeeGroupModal, {
+          id: 'some-id',
+          initialValues: {
+            name: 'Sales Team',
+            description:
+              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis laboriosam labore sit fuga veniam necessitatibus, ratione voluptatem nesciunt culpa? Expedita quo provident voluptatibus, ut magni laudantium recusandae ratione assumenda error?',
+            commonSalary: 10000,
+          },
+        });
+      });
+    }
+  }, [onEditDetails]);
+
   return (
     <div className="group-details__group-details-property">
       <div className="group-details__group-details-property-section">
@@ -41,7 +68,7 @@ export const GroupDetails = () => {
         </div>
         <hr />
         <div className="group-details__group-details-flex-body">
-          <div>
+          <div className="full-width">
             <SingleDetail
               title="Description"
               details="Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis laboriosam labore sit fuga veniam necessitatibus, ratione voluptatem nesciunt culpa? Expedita quo provident voluptatibus, ut magni laudantium recusandae ratione assumenda error?"
@@ -58,7 +85,11 @@ export const GroupDetails = () => {
           <div className="group-details__employee-header">
             <p className="group-details__employee-number">12 Employees</p>
           </div>
-          <div className="group-details__parent-container">
+          <Container
+            loading={false}
+            showContent
+            className="group-details__parent-container"
+          >
             <EmployeeAutocompleteForm />
 
             <div className="items">
@@ -73,7 +104,7 @@ export const GroupDetails = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </Container>
         </div>
       </div>
     </div>
