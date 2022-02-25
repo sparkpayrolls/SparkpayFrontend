@@ -126,101 +126,108 @@ export const GroupDetails = (props: IGroupDetails) => {
   return (
     <div className="group-details__group-details-property">
       {group === 404 && <NotFound message="Group not found" />}
-      <div className="group-details__group-details-property-section">
-        <div className="group-details__group-details-flex-body">
-          <div>
-            <SingleDetail
-              title="Group Name"
-              details={(group as Group)?.name}
-              loading={loading.group}
-            />
-          </div>
-          <div>
-            <SingleDetail
-              title="Common Salary"
-              details={
-                (((group as Group)?.meta as any)?.commonSalary &&
-                  `${currency} ${Util.formatMoneyNumber(
-                    ((group as Group)?.meta as any)?.commonSalary,
-                  )}`) ||
-                'N/A'
-              }
-              loading={loading.group}
-            />
-          </div>
-          <div>
-            <SingleDetail
-              title="Status"
-              details={<StatusChip status={(group as Group)?.status} />}
-              loading={loading.group}
-            />
-          </div>
-          <div>
-            <SingleDetail
-              title="Date Created"
-              details={<DateTimeChip date={(group as Group)?.createdAt} />}
-              loading={loading.group}
-            />
-          </div>
-        </div>
-        <hr />
-        <div className="group-details__group-details-flex-body">
-          <div className="full-width">
-            <SingleDetail
-              title="Description"
-              details={(group as Group)?.description}
-              loading={loading.group}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* add employee section */}
-
-      <div className="group-details__group-details-property-section">
-        <div className="group-details__add-employee-section">
-          <div className="group-details__employee-header">
-            <p className="group-details__employee-number">
-              {employees.length} Employee{employees.length !== 1 && 's'}
-            </p>
-          </div>
-          <Container
-            loading={loading.employees}
-            showContent
-            className="group-details__parent-container"
-          >
-            <EmployeeAutocompleteForm
-              onSelect={(employee) => addEmployee(employee.id)}
-              clearOnSelect
-            />
-
-            <div className="items">
-              {employees.map((groupEmloyee) => {
-                const employee = groupEmloyee.employee as Employee;
-                if (!employee) return null;
-
-                return (
-                  <div className="group-details__user" key={groupEmloyee.id}>
-                    <p className="group-details__name">
-                      {employee.firstname} {employee.lastname}
-                    </p>
-                    <div
-                      onClick={() => removeEmployee(employee.id)}
-                      className="group-details__image-container"
-                    >
-                      <Image
-                        src={removeicon}
-                        className="group-details__remove-icon"
-                        alt="group-details-image"
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+      {group !== 404 && (
+        <>
+          <div className="group-details__group-details-property-section">
+            <div className="group-details__group-details-flex-body">
+              <div>
+                <SingleDetail
+                  title="Group Name"
+                  details={(group as Group)?.name}
+                  loading={loading.group}
+                />
+              </div>
+              <div>
+                <SingleDetail
+                  title="Common Salary"
+                  details={
+                    (((group as Group)?.meta as any)?.commonSalary &&
+                      `${currency} ${Util.formatMoneyNumber(
+                        ((group as Group)?.meta as any)?.commonSalary,
+                      )}`) ||
+                    'N/A'
+                  }
+                  loading={loading.group}
+                />
+              </div>
+              <div>
+                <SingleDetail
+                  title="Status"
+                  details={<StatusChip status={(group as Group)?.status} />}
+                  loading={loading.group}
+                />
+              </div>
+              <div>
+                <SingleDetail
+                  title="Date Created"
+                  details={<DateTimeChip date={(group as Group)?.createdAt} />}
+                  loading={loading.group}
+                />
+              </div>
             </div>
-          </Container>
-        </div>
-      </div>
+            <hr />
+            <div className="group-details__group-details-flex-body">
+              <div className="full-width">
+                <SingleDetail
+                  title="Description"
+                  details={(group as Group)?.description}
+                  loading={loading.group}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* add employee section */}
+
+          <div className="group-details__group-details-property-section">
+            <div className="group-details__add-employee-section">
+              <div className="group-details__employee-header">
+                <p className="group-details__employee-number">
+                  {employees.length} Employee{employees.length !== 1 && 's'}
+                </p>
+              </div>
+              <Container
+                loading={loading.employees}
+                showContent
+                className="group-details__parent-container"
+              >
+                <EmployeeAutocompleteForm
+                  onSelect={(employee) => addEmployee(employee.id)}
+                  clearOnSelect
+                />
+
+                <div className="items">
+                  {employees.map((groupEmloyee) => {
+                    const employee = groupEmloyee.employee as Employee;
+                    if (!employee) return null;
+
+                    return (
+                      <div
+                        className="group-details__user"
+                        key={groupEmloyee.id}
+                      >
+                        <p className="group-details__name">
+                          {employee.firstname} {employee.lastname}
+                        </p>
+                        <div
+                          onClick={() => removeEmployee(employee.id)}
+                          className="group-details__image-container"
+                        >
+                          <Image
+                            src={removeicon}
+                            className="group-details__remove-icon"
+                            alt="group-details-image"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </Container>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
