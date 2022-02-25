@@ -6,6 +6,7 @@ import { StatusChip } from '../StatusChip/status-chip.component';
 import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IEmployeeTable } from '../types';
 import { Table, TR } from './Table.component';
+import { Group } from 'src/api/types';
 
 export const EmployeeTable = (props: IEmployeeTable) => {
   const {
@@ -164,7 +165,10 @@ export const EmployeeTable = (props: IEmployeeTable) => {
                     </td>
                     <td>
                       {employee.groups
-                        .map((employeeGroup) => employeeGroup.group.name)
+                        .map(
+                          (employeeGroup) =>
+                            (employeeGroup.group as Group).name,
+                        )
                         .join(', ')}
                     </td>
                     <td>

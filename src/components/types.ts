@@ -24,6 +24,7 @@ import {
   Company,
   Employee,
   EmployeeStatus,
+  GroupStatus,
   InviteTypeStatus,
   OrganisationDashboardData,
   PaginationMeta,
@@ -332,7 +333,8 @@ export type IStatusChip = {
     | EmployeeStatus
     | WalletTransactionStatus
     | AuditAction
-    | InviteTypeStatus;
+    | InviteTypeStatus
+    | GroupStatus;
 };
 
 /** TransactionMethod */

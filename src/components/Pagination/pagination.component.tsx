@@ -13,7 +13,7 @@ export const Pagination = (props: IPagination) => {
     previousPage = null,
     nextPage = null,
   } = props.meta || {};
-  if (total <= perPage) {
+  if (total < 11) {
     return null;
   }
 
