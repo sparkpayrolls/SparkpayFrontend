@@ -118,4 +118,10 @@ export class EmployeeModule extends HttpRepository {
 
     return data;
   }
+
+  async getEmployeeGroup(groupId: string) {
+    const { data } = await this.get<Group>(`/employees/groups/${groupId}`);
+
+    return data;
+  }
 }
