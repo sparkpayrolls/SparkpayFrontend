@@ -246,6 +246,7 @@
     flex-wrap: wrap;
     gap: 1.5rem;
     position: relative;
+    align-items: flex-start;
 
     .group-card {
       @media screen and (min-width: 768px) {

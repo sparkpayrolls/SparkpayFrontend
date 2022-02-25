@@ -155,7 +155,7 @@ export const EmployeeGroup = (props: IEmployeeGroup) => {
             <div className="group-card" key={group.id}>
               <div className="group-card__header">
                 <p>
-                  <Link href="/employees/group-details">
+                  <Link href={`/employees/groups/${group.id}`}>
                     <a>{group.name}</a>
                   </Link>
                 </p>
