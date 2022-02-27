@@ -143,6 +143,7 @@ export type GroupStatus = keyof typeof GroupStatusEnum;
 export type Group<T extends Record<string, any> = {}> = Document & {
   name: string;
   type: GroupType;
+  description?: string;
   status: GroupStatus;
   company: string | Company;
   meta: T;
@@ -565,4 +566,10 @@ export type CompanyChartData = {
       backgroundColor: string[];
     }[];
   };
+};
+
+export type EmployeeGroupPayload = {
+  name: string;
+  description?: string;
+  commonSalary?: string | number;
 };

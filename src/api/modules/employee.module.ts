@@ -1,5 +1,11 @@
 import { HttpRepository } from '../repo/http.repo';
-import { Employee, EmployeeStatus, Group } from '../types';
+import {
+  Employee,
+  EmployeeGroup,
+  EmployeeGroupPayload,
+  EmployeeStatus,
+  Group,
+} from '../types';
 
 export class EmployeeModule extends HttpRepository {
   async getEmployees(params: Record<string, any>) {
@@ -88,5 +94,53 @@ export class EmployeeModule extends HttpRepository {
 
   async getEmployeeGroups(params: Record<string, any>) {
     return this.get<Group[]>('/employees/groups', { params });
+  }
+
+  async createEmployeeGroup(payload: EmployeeGroupPayload) {
+    const { data } = await this.post<Group>('/employees/groups', payload);
+
+    return data;
+  }
+
+  async updateEmployeeGroup(
+    groupId: string,
+    payload: Partial<Pick<Group, 'status'> & EmployeeGroupPayload>,
+  ) {
+    const { data } = await this.put<Group>(
+      `/employees/groups/${groupId}`,
+      payload,
+    );
+
+    return data;
+  }
+
+  async deleteEmployeeGroup(groupId: string) {
+    const { data } = await this.delete<Group>(`/employees/groups/${groupId}`);
+
+    return data;
+  }
+
+  async getEmployeeGroup(groupId: string) {
+    const { data } = await this.get<Group>(`/employees/groups/${groupId}`);
+
+    return data;
+  }
+
+  async addEmployeesToGroup(groupId: string, ids: string[]) {
+    const { data } = await this.post<Employee | EmployeeGroup[]>(
+      `/employees/groups/${groupId}/employees`,
+      { ids },
+    );
+
+    return data;
+  }
+
+  async removeEmployeesFromGroup(groupId: string, ids: string[]) {
+    const { data } = await this.delete<Employee | EmployeeGroup[]>(
+      `/employees/groups/${groupId}/employees`,
+      { ids },
+    );
+
+    return data;
   }
 }

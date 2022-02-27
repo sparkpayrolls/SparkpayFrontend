@@ -135,3 +135,11 @@ export const BulkEmployeeAddValidation = Yup.object()
       .required(),
   })
   .required();
+
+export const EmployeeGroupValidation = Yup.object()
+  .shape({
+    name: Yup.string().required('Group name is required'),
+    description: Yup.string(),
+    commonSalary: Yup.string(),
+  })
+  .required();

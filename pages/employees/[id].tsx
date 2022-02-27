@@ -116,5 +116,4 @@ const EmployeeDetails: NextPage = () => {
   );
 };
 
-export default withAuth(EmployeeDetails);
-
+export default withAuth(EmployeeDetails, ['Employee', 'read']);

@@ -1,6 +1,6 @@
 import { Button } from '@/components/Button/Button.component';
 import { TableEmptyState } from '@/components/EmptyState/table-emptystate.component';
-import { AutoComplete } from '@/components/Input/autocomplete.component';
+import { EmployeeAutocompleteForm } from '@/components/Form/employee-autocomplete.form';
 import { EditableField } from '@/components/Input/editable-field.component';
 import { InputV2 } from '@/components/Input/Input.component';
 import { NameValueInputGroup } from '@/components/Input/name-value.component';
@@ -30,10 +30,7 @@ export const TaxPane = () => {
   const [errors, setErrors] = useState({ whTaxRate: '' });
   const [updateCallId, setUpdateCallId] = useState<Record<string, any>>({});
   const [states, setStates] = useState<State[] | null>(null);
-  const [employees, setEmployees] = useState<Employee[]>([]);
   const [taxEmployees, setTaxEmployees] = useState<EmployeeTaxDetail[]>([]);
-  const [autoCompleteValue, setAutoCompleteValue] = useState('');
-  const [selectedEmployee, setSelectedEmployee] = useState('');
   const [employeePaginationMeta, setEmployeePaginationMeta] = useState<
     Record<string, any>
   >({});
@@ -72,22 +69,6 @@ export const TaxPane = () => {
         /** */
       })
       .finally(() => setEmployeesLoading(false));
-  };
-
-  const handleSearch = (search: string) => {
-    if (!search) {
-      setEmployees([]);
-      return;
-    }
-
-    $api.employee
-      .getEmployees({ search, limit: 5 })
-      .then(({ data: employees }) => {
-        setEmployees(employees);
-      })
-      .catch(() => {
-        /** */
-      });
   };
 
   const addEmployeeToTax = useCallback(
@@ -399,50 +380,9 @@ export const TaxPane = () => {
             element="h6"
           />
 
-          <form
-            action=""
-            className="employee-auto-complete-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (selectedEmployee) {
-                addEmployeeToTax({ employee: selectedEmployee });
-                setSelectedEmployee('');
-                setAutoCompleteValue('');
-              }
-            }}
-          >
-            <AutoComplete
-              id="autocomplete-employee"
-              placeholder="Search by employee name or email"
-              onSearch={handleSearch}
-              onSelect={(name, option) => {
-                setSelectedEmployee(option.key as string);
-              }}
-              value={autoCompleteValue}
-              onChange={(e) => {
-                setSelectedEmployee('');
-                setAutoCompleteValue(e);
-              }}
-              label="Employee"
-            >
-              {employees.map((employee) => {
-                return (
-                  <AutoComplete.Option
-                    key={employee.id}
-                    value={`${employee.firstname} ${employee.lastname}`}
-                  >
-                    {employee.firstname} {employee.lastname}
-                  </AutoComplete.Option>
-                );
-              })}
-            </AutoComplete>
-            <Button
-              label={<>Add</>}
-              type="submit"
-              disabled={!selectedEmployee}
-              primary
-            />
-          </form>
+          <EmployeeAutocompleteForm
+            onSubmit={(e) => addEmployeeToTax({ employee: e.id })}
+          />
         </Container>
 
         <Container>
