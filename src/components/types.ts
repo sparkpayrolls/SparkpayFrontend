@@ -253,7 +253,7 @@ export type AddonBonus = {
   addonMonths: string;
   payrollCycle: string;
   amount: string;
-  addonType: string;
+  addontype: string;
   addonfrequency: string;
 };
 

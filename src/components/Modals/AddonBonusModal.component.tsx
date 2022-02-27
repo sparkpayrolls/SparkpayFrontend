@@ -50,7 +50,7 @@ const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
         addonMonths: '',
         payrollCycle: '',
         amount: '',
-        addonType: '',
+        addontype: '',
         addonfrequency: ''
         
       }}
