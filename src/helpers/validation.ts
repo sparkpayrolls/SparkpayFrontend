@@ -75,10 +75,13 @@ export const userChangePasswordValidationSchema = Yup.object().shape({
 });
 
 export const addonBonusValidationSchema = Yup.object().shape({
-  oldPassword: Yup.string().required('Old password is required'),
-  newPassword: Yup.string().required('New password is required'),
-  confirmPassword: Yup.string().required('Enter new password again'),
-  country: format.country
+  addonName: Yup.string().required('addon name is required'),
+  addonDescription: Yup.string().required('description is required'),
+  addonMonths: Yup.string().required('addon month is required'),
+  payrollCycle: Yup.string().required('payroll cycle is required'),
+  amount: Yup.string().required('amount is required'),
+  addonType: Yup.string().required('addon type is required'),
+  addonfrequency: Yup.string().required('addon frequency is required'),
 });
 
 export const fundWalletValidationSchema = Yup.object().shape({

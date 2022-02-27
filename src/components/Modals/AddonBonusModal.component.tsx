@@ -29,14 +29,30 @@ export const AddonBonusModal = NiceModal.create(
 
 const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
 
-  const countries = [{id: 1, name: 'nigeria'}]
+  const payrollCycle = [
+    { id: 1, cycle: '1' },
+    { id: 2, cycle: '2' },
+  ];
+  const addonFrequency = [
+    { id: 1, frequency: 'interval' },
+    { id: 2, frequency: 'recurring' },
+  ];
+  const addonType = [
+    { id: 1, type: 'bonus' },
+    { id: 2, type: 'deduction' },
+  ];
+  
   return (
     <Formik
       initialValues={{
-        oldPassword: '',
-        newPassword: '',
-        country: '',
-        confirmPassword: '',
+        addonName: '',
+        addonDescription: '',
+        addonMonths: '',
+        payrollCycle: '',
+        amount: '',
+        addonType: '',
+        addonfrequency: ''
+        
       }}
       validationSchema={addonBonusValidationSchema}
       onSubmit={(values) => {(modal)
@@ -60,15 +76,15 @@ const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
           >
             <div className="change-password-form__section">
               <Input
-                type="password"
-                label="Old Password"
-                placeholder="password"
-                name="password"
-                value={values.oldPassword}
+                type="text"
+                label="Addon Name"
+                placeholder="name"
+                name="name"
+                value={values.addonName}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                hasError={errors.oldPassword && touched.oldPassword}
-                error={errors.oldPassword}
+                hasError={errors.addonName && touched.addonName}
+                error={errors.addonName}
               />
             </div>
 
@@ -76,33 +92,48 @@ const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
               <TextAreaAll
                 label="description"
                 placeholder="Enter description"
-                error={errors.oldPassword}
+                error={errors.addonDescription}
               />
             </div>
 
-            <div className="change-password-form__section">
-              <Input
-                type="password"
-                label="Confirm New Password"
-                placeholder="password"
-                name="password"
-                value={values.confirmPassword}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                hasError={errors.confirmPassword && touched.confirmPassword}
-                error={errors.confirmPassword}
-              />
-            </div>
             <Select
-              label="Country"
-              error={(touched.country && errors.country) || ''}
+              label="Payroll Cycle"
+              error={(touched.payrollCycle && errors.payrollCycle) || ''}
             >
-              {countries.map((country) => {
+              {payrollCycle.map((cycle) => {
                 const { Option } = Select;
 
                 return (
-                  <Option value={country.id} key={country.id}>
-                    {country.name}
+                  <Option value={cycle.id} key={cycle.id}>
+                    {cycle.cycle}
+                  </Option>
+                );
+              })}
+            </Select>
+            <Select
+              label="Addon Frequency"
+              error={(touched.addonfrequency && errors.addonfrequency) || ''}
+            >
+              {addonFrequency.map((frequency) => {
+                const { Option } = Select;
+
+                return (
+                  <Option value={frequency.id} key={frequency.id}>
+                    {frequency.frequency}
+                  </Option>
+                );
+              })}
+            </Select>
+            <Select
+              label="Addon Type"
+              error={(touched.addontype && errors.addontype) || ''}
+            >
+              {addonType.map((type) => {
+                const { Option } = Select;
+
+                return (
+                  <Option value={type.id} key={type.id}>
+                    {type.type}
                   </Option>
                 );
               })}
@@ -110,7 +141,7 @@ const AddonBonusForm = ({ modal }: { modal: NiceModalHandler }) => {
             <div className="form__submit-button">
               <Button
                 type="submit"
-                label="Reset Password"
+                label="Create Addon Bonus"
                 className="form__submit-button form__submit-button--full-width"
                 primary
               />

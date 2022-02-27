@@ -248,10 +248,13 @@ export type IUserProfile = {
 };
  /**Addon Bonus */
 export type AddonBonus = {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-  country: string;
+  addonName: string;
+  addonDescription: string;
+  addonMonths: string;
+  payrollCycle: string;
+  amount: string;
+  addonType: string;
+  addonfrequency: string;
 };
 
 /** Tax */
