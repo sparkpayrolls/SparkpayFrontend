@@ -1,4 +1,4 @@
-import { DatePicker as ADP } from 'antd';
+import { DatePicker as ADP, DatePickerProps } from 'antd';
 import classNames from 'classnames';
 import Image from 'next/image';
 import { FocusEvent, useState } from 'react';
@@ -6,7 +6,7 @@ import calendar from '../../../public/svgs/Calendar.svg';
 import { Spinner } from '../Spinner/Spinner.component';
 import { IDatePicker } from '../types';
 
-export const DatePicker = (props: IDatePicker) => {
+export const DatePicker = (props: IDatePicker & DatePickerProps) => {
   const {
     error,
     onBlur,

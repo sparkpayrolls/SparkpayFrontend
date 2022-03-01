@@ -421,6 +421,8 @@ export type ProcessPayrollPayload = {
   employeeIds?: string[] | null;
   excludedEmployeeIds?: string[] | null;
   proRateMonth: string;
+  year: number;
+  cycle: number;
 };
 
 export type PayrollSummary = {
@@ -572,4 +574,11 @@ export type EmployeeGroupPayload = {
   name: string;
   description?: string;
   commonSalary?: string | number;
+};
+
+export type ProcessPayrollResponse = {
+  cycle: number;
+  year: number;
+  payrollEmployees: PayrollEmployee[];
+  proRateMonth: string;
 };

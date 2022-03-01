@@ -1,5 +1,7 @@
 import { Button } from '@/components/Button/Button.component';
 import { TotalCard } from '@/components/Card/total-card.component';
+import { DatePicker } from '@/components/Input/date-picker.component';
+import { InputV2 } from '@/components/Input/Input.component';
 import { IF } from '@/components/Misc/if.component';
 import { FileStorageSVG } from '@/components/svg';
 import { CheckboxTableColumn } from '@/components/Table/check-box-table-col.component';
@@ -12,31 +14,92 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { useCallback, useEffect, useState } from 'react';
 import { $api } from 'src/api';
-import {
-  Employee,
-  PayrollEmployee,
-  ProcessPayrollPayload,
-} from 'src/api/types';
+import { Employee, ProcessPayrollResponse } from 'src/api/types';
 import withAuth from 'src/helpers/HOC/withAuth';
+import useApiCall from 'src/helpers/hooks/useapicall.hook';
 import { Util } from 'src/helpers/util';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 import { useAppSelector } from 'src/redux/hooks';
 
 const CreatePayroll: NextPage = () => {
-  const [walletBalance, setWalletBalance] = useState(0);
-  const [employees, setEmployees] = useState<PayrollEmployee[]>([]);
-  const [apiCalls, setApiCalls] = useState(0);
   const administrator = useAppSelector((state) => state.administrator);
   const router = useRouter();
-  const [exclude, setExclude] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [loading, startLoading, endLoading] = useApiCall();
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [payroll, setPayroll] = useState<ProcessPayrollResponse>();
+  const [params, setParams] = useState({
+    proRateMonth: moment().format('MMMM'),
+    excludedEmployeeIds: [] as string[],
+    cycle: 0,
+    year: NaN,
+  });
+
+  const getCompanyWallet = useCallback(async () => {
+    try {
+      startLoading();
+      const wallet = await $api.payroll.getCompanyWallet();
+
+      setWalletBalance(wallet.balance);
+    } catch (error) {
+      // ...
+    } finally {
+      endLoading();
+    }
+  }, [startLoading, endLoading]);
+
+  const getPayroll = useCallback(async () => {
+    if (isNaN(params.year)) return;
+    try {
+      startLoading();
+      const payroll = await $api.payroll.processPayroll(params);
+
+      setPayroll(payroll);
+    } catch (error) {
+      // ...
+    } finally {
+      endLoading();
+    }
+  }, [startLoading, params, endLoading]);
+
+  useEffect(() => {
+    getPayroll();
+  }, [getPayroll, administrator]);
+
+  useEffect(() => {
+    getCompanyWallet();
+  }, [getCompanyWallet]);
+
+  useEffect(() => {
+    if (router.isReady) {
+      const query: Record<string, any> = {
+        excludedEmployeeIds: Util.getQueryArrayValue(
+          router.query.excludedEmployeeIds,
+        ),
+        year: 0,
+      };
+      if (Number(router.query.cycle) >= 1) {
+        query.cycle = Number(router.query.cycle);
+      }
+      if (Number(router.query.year) >= 1) {
+        query.year = Number(router.query.year);
+      }
+      setParams((params) => ({ ...params, ...query }));
+    }
+  }, [router]);
 
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
+  const { payrollEmployees: employees = [] } = payroll || {};
   const hasEmployees = !!employees.length;
-  const loading = apiCalls > 0;
-  const allExcluded = employees.length === exclude.length;
+  const allExcluded = employees.length === selected.length;
   const summaryUrl = stringifyUrl({
     url: '/payroll/summary',
-    query: { exclude },
+    query: {
+      excludedEmployeeIds: selected,
+      cycle: params.cycle || payroll?.cycle || 1,
+      year: params.year || payroll?.year || moment().year(),
+      proRateMonth: params.proRateMonth,
+    },
   });
 
   const totals: Record<string, number> = {
@@ -47,7 +110,7 @@ const CreatePayroll: NextPage = () => {
   const remittanceRows: string[] = [];
 
   employees.forEach((employee) => {
-    if (exclude.includes((employee.employee as Employee).id)) {
+    if (selected.includes((employee.employee as Employee).id)) {
       return;
     }
 
@@ -83,73 +146,23 @@ const CreatePayroll: NextPage = () => {
     }
   });
 
-  const getCompanyWallet = useCallback(async () => {
-    try {
-      setApiCalls((c) => c + 1);
-      const wallet = await $api.payroll.getCompanyWallet();
-
-      setWalletBalance(wallet.balance);
-    } catch (error) {
-      // ...
-    } finally {
-      setApiCalls((c) => c - 1);
-    }
-  }, [setWalletBalance]);
-
-  const getEmployees = useCallback(
-    async (payload: ProcessPayrollPayload) => {
-      try {
-        setApiCalls((c) => c + 1);
-        const employees = await $api.payroll.processPayroll(payload);
-
-        setEmployees(employees);
-      } catch (error) {
-        // ...
-      } finally {
-        setApiCalls((c) => c - 1);
-      }
-    },
-    [setEmployees],
-  );
-
-  const updateUrl = (exclude: string[]) => {
-    const { pathname, query } = router;
-    const url = stringifyUrl({
-      url: pathname,
-      query: { ...query, exclude },
-    });
-
-    router.push(url);
-  };
-
   const onCheckall = () => {
-    if (exclude.length !== 0) {
-      updateUrl([]);
+    if (selected.length !== 0) {
+      setSelected([]);
     } else {
-      updateUrl(employees.map((e) => (e.employee as Employee).id));
+      setSelected(employees.map((e) => (e.employee as Employee).id));
     }
   };
 
   const onCheck = (id: string) => {
     return () => {
-      if (exclude.includes(id)) {
-        updateUrl(exclude.filter((e) => e !== id));
+      if (selected.includes(id)) {
+        setSelected(selected.filter((e: any) => e !== id));
       } else {
-        updateUrl([...exclude, id]);
+        setSelected([...selected, id]);
       }
     };
   };
-
-  useEffect(() => {
-    getEmployees({ proRateMonth: moment().format('MMMM') });
-    getCompanyWallet();
-  }, [getCompanyWallet, getEmployees, administrator]);
-
-  useEffect(() => {
-    const { query } = router;
-    const exclude = Util.getQueryArrayValue(query.exclude);
-    setExclude(exclude);
-  }, [router]);
 
   return (
     <DashboardLayoutV2 title="Create payroll" href="/payroll">
@@ -181,85 +194,119 @@ const CreatePayroll: NextPage = () => {
           }
         >
           {hasEmployees ? (
-            <TableV2 className="payroll-create-table" loading={loading}>
-              <thead>
-                <tr>
-                  <CheckboxTableColumn
-                    checked={!exclude.length}
-                    onChange={onCheckall}
-                    element="th"
-                  >
-                    Name
-                  </CheckboxTableColumn>
-                  <th>Salary ({currency})</th>
-                  <th>Net Salary ({currency}) </th>
-                  {headerRow.map((row) => {
-                    return <th key={row}>{row}</th>;
-                  })}
-                  {remittanceRows.map((row) => {
-                    return <th key={row}>{row}</th>;
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {employees.map((e) => {
-                  const employee = e.employee as Employee;
+            <>
+              <div className="inputs">
+                <InputV2
+                  label="Cycle"
+                  type="number"
+                  placeholder="Cycle"
+                  value={params.cycle || payroll?.cycle || 1}
+                  onChange={(event) =>
+                    setParams({ ...params, cycle: +event.target.value })
+                  }
+                />
+                <DatePicker
+                  label="Prorate Month"
+                  picker="month"
+                  value={moment()
+                    .month(params.proRateMonth)
+                    .year(params.year || payroll?.year || moment().year())}
+                  onChange={(value) => {
+                    if (value) {
+                      setParams({
+                        ...params,
+                        proRateMonth: value.format('MMMM'),
+                        year: value.year(),
+                      });
+                    }
+                  }}
+                  format={(value) => value.format('MM-YYYY')}
+                />
+              </div>
+              <TableV2 className="payroll-create-table" loading={loading}>
+                <thead>
+                  <tr>
+                    <CheckboxTableColumn
+                      checked={!selected.length}
+                      onChange={onCheckall}
+                      element="th"
+                    >
+                      Name
+                    </CheckboxTableColumn>
+                    <th>Salary ({currency})</th>
+                    <th>Net Salary ({currency}) </th>
+                    {headerRow.map((row) => {
+                      return <th key={row}>{row}</th>;
+                    })}
+                    {remittanceRows.map((row) => {
+                      return <th key={row}>{row}</th>;
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {employees.map((e) => {
+                    const employee = e.employee as Employee;
 
-                  return (
-                    <tr key={employee.id}>
-                      <CheckboxTableColumn
-                        checked={!exclude.includes(employee.id)}
-                        onChange={onCheck(employee.id)}
-                        element="td"
-                      >
-                        {employee.firstname} {employee.lastname}
-                      </CheckboxTableColumn>
-                      <td>
-                        {currency} {Util.formatMoneyNumber(e.salary)}
-                      </td>
-                      <td>
-                        {currency} {Util.formatMoneyNumber(e.netSalary)}
-                      </td>
-                      <IF
-                        condition={headerRow.includes(
-                          `Deductions (${currency})`,
-                        )}
-                      >
+                    return (
+                      <tr key={employee.id}>
+                        <CheckboxTableColumn
+                          checked={!selected.includes(employee.id)}
+                          onChange={onCheck(employee.id)}
+                          element="td"
+                        >
+                          {employee.firstname} {employee.lastname}
+                        </CheckboxTableColumn>
                         <td>
-                          {currency}{' '}
-                          {Util.formatMoneyNumber(
-                            Util.sum(e.deductions?.map((d) => d.amount) || []),
-                          )}
+                          {currency} {Util.formatMoneyNumber(e.salary)}
                         </td>
-                      </IF>
-                      <IF
-                        condition={headerRow.includes(`Bonuses (${currency})`)}
-                      >
                         <td>
-                          {currency}{' '}
-                          {Util.formatMoneyNumber(
-                            Util.sum(e.bonuses?.map((d) => d.amount) || []),
-                          )}
+                          {currency} {Util.formatMoneyNumber(e.netSalary)}
                         </td>
-                      </IF>
-                      {remittanceRows.map((row) => {
-                        const remittances = e.remittances || [];
-                        const remittance = remittances.find(
-                          (r) => r.name === row.replace(` (${currency})`, ''),
-                        );
-
-                        return (
-                          <td key={`${employee.id}-${row}`}>
+                        <IF
+                          condition={headerRow.includes(
+                            `Deductions (${currency})`,
+                          )}
+                        >
+                          <td>
                             {currency}{' '}
-                            {Util.formatMoneyNumber(remittance?.amount || 0)}
+                            {Util.formatMoneyNumber(
+                              Util.sum(
+                                e.deductions?.map((d) => d.amount) || [],
+                              ),
+                            )}
                           </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </TableV2>
+                        </IF>
+                        <IF
+                          condition={headerRow.includes(
+                            `Bonuses (${currency})`,
+                          )}
+                        >
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(
+                              Util.sum(e.bonuses?.map((d) => d.amount) || []),
+                            )}
+                          </td>
+                        </IF>
+                        {remittanceRows.map((row) => {
+                          const remittances = e.remittances || [];
+                          const remittance = remittances.find(
+                            (r) => r.name === row.replace(` (${currency})`, ''),
+                          );
+
+                          return (
+                            <td key={`${employee.id}-${row}`}>
+                              {currency}{' '}
+                              {Util.formatMoneyNumber(remittance?.amount || 0)}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </TableV2>
+            </>
           ) : (
             <div className="create-payroll-page__empty-state">
               <div className="create-payroll-page__empty-state__icon">
