@@ -5,6 +5,7 @@ import { FocusEvent, useState } from 'react';
 import calendar from '../../../public/svgs/Calendar.svg';
 import { Spinner } from '../Spinner/Spinner.component';
 import { IDatePicker } from '../types';
+import { Text } from '../Typography/Text';
 
 export const DatePicker = (props: IDatePicker & DatePickerProps) => {
   const {
@@ -14,6 +15,7 @@ export const DatePicker = (props: IDatePicker & DatePickerProps) => {
     disabled,
     loading,
     className,
+    helper,
     ...inputProps
   } = props;
 
@@ -47,11 +49,16 @@ export const DatePicker = (props: IDatePicker & DatePickerProps) => {
           onBlur={handlerBlur}
           {...inputProps}
           className="date-picker__input"
-          format="DD/M/YYYY"
         />
       </div>
 
       {!!error && <p className="date-picker__error">{error}</p>}
+      {!!helper && !error && (
+        <Text
+          className="textarea__helper text__text-sm text__gray400"
+          text={helper}
+        />
+      )}
     </div>
   );
 };

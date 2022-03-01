@@ -305,6 +305,7 @@ const PayrollSummaryPage: NextPage = () => {
                         label="Prorate Month"
                         placeholder="Prorate Month"
                         name="payDate"
+                        format={'MMMM/YYYY'}
                         value={
                           (values.proRateMonth &&
                             moment()
@@ -346,6 +347,7 @@ const PayrollSummaryPage: NextPage = () => {
                         label="Pay Date"
                         placeholder="Pay Date"
                         name="payDate"
+                        format={'DD/MMMM/YYYY'}
                         onChange={(val) => {
                           setValues({
                             ...values,

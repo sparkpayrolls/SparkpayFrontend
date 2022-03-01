@@ -211,6 +211,7 @@ const CreatePayroll: NextPage = () => {
                 <DatePicker
                   label="Prorate Month"
                   picker="month"
+                  format={'MMMM/YYYY'}
                   value={moment()
                     .month(params.proRateMonth)
                     .year(params.year || payroll?.year || moment().year())}
@@ -223,7 +224,6 @@ const CreatePayroll: NextPage = () => {
                       });
                     }
                   }}
-                  format={(value) => value.format('MM-YYYY')}
                 />
               </div>
               <TableV2 className="payroll-create-table" loading={loading}>
