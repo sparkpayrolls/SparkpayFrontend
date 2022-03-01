@@ -17,62 +17,85 @@ import { savePayrollValidationSchema } from 'src/helpers/validation';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { stringifyUrl } from 'query-string';
-import { Select } from '@/components/Input/select.component';
 import withAuth from 'src/helpers/HOC/withAuth';
+import useApiCall from 'src/helpers/hooks/useapicall.hook';
+import { InputV2 } from '@/components/Input/Input.component';
 
 const PayrollSummaryPage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
   const router = useRouter();
   const formRef = useRef<HTMLInputElement>(null);
   const [summary, setSummary] = useState<PayrollSummary | null>(null);
-  const [apiCalls, setApiCalls] = useState(0);
+  const [loading, startLoading, endLoading] = useApiCall();
   const [walletBalance, setWalletBalance] = useState(0);
-
-  const excludedEmployeeIds = Util.getQueryArrayValue(router.query.exclude);
-  const loading = apiCalls > 0;
-  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const createUrl = stringifyUrl({
-    url: '/payroll/create',
-    query: { exclude: excludedEmployeeIds },
+  const [params, setParams] = useState<ProcessPayrollPayload>({
+    cycle: 0,
+    year: NaN,
+    excludedEmployeeIds: [],
+    proRateMonth: moment().format('MMMM'),
   });
 
   const getCompanyWallet = useCallback(async () => {
     try {
-      setApiCalls((c) => c + 1);
+      startLoading();
       const wallet = await $api.payroll.getCompanyWallet();
 
       setWalletBalance(wallet.balance);
     } catch (error) {
       // ...
     } finally {
-      setApiCalls((c) => c - 1);
+      endLoading();
     }
-  }, [setWalletBalance]);
+  }, [startLoading, endLoading]);
 
-  const getSummary = useCallback(
-    async (payload: ProcessPayrollPayload) => {
-      try {
-        setApiCalls((c) => c + 1);
-        const summary = await $api.payroll.getSummary(payload);
+  const getSummary = useCallback(async () => {
+    if (isNaN(params.year)) return;
+    try {
+      startLoading();
+      const summary = await $api.payroll.getSummary(params);
 
-        setSummary(summary);
-      } catch (error) {
-        // ...
-      } finally {
-        setApiCalls((c) => c - 1);
-      }
-    },
-    [setSummary],
-  );
+      setSummary(summary);
+    } catch (error) {
+      // ...
+    } finally {
+      endLoading();
+    }
+  }, [endLoading, params, startLoading]);
 
   useEffect(() => {
-    const excludedEmployeeIds = Util.getQueryArrayValue(router.query.exclude);
     getCompanyWallet();
-    getSummary({
-      excludedEmployeeIds,
-      proRateMonth: moment().format('MMMM'),
-    });
-  }, [getCompanyWallet, getSummary, router, administrator]);
+  }, [getCompanyWallet, administrator]);
+
+  useEffect(() => {
+    getSummary();
+  }, [getSummary, administrator]);
+
+  useEffect(() => {
+    if (router.isReady) {
+      const query: Record<string, any> = {
+        excludedEmployeeIds: Util.getQueryArrayValue(
+          router.query.excludedEmployeeIds,
+        ),
+        year: 0,
+        proRateMonth: moment()
+          .month(`${router.query.proRateMonth}`)
+          .format('MMMM'),
+      };
+      if (Number(router.query.cycle) >= 1) {
+        query.cycle = Number(router.query.cycle);
+      }
+      if (Number(router.query.year) >= 1) {
+        query.year = Number(router.query.year);
+      }
+      setParams((params) => ({ ...params, ...query }));
+    }
+  }, [router]);
+
+  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
+  const createUrl = stringifyUrl({
+    url: '/payroll/create',
+    query: params,
+  });
 
   return (
     <DashboardLayoutV2 title="Payroll Summary" href={createUrl}>
@@ -85,6 +108,8 @@ const PayrollSummaryPage: NextPage = () => {
                 submit.click();
               }
             }}
+            disabled={loading}
+            showSpinner={loading}
             type="button"
             label="Save Payroll"
             primary
@@ -203,110 +228,142 @@ const PayrollSummaryPage: NextPage = () => {
               </div>
             </div>
           </div>
-
-          <Formik
-            initialValues={{
-              proRateMonth: moment().format('MMMM'),
-              payDate: '',
-            }}
-            validationSchema={savePayrollValidationSchema}
-            onSubmit={async (values, helpers) => {
-              try {
-                helpers.setSubmitting(true);
-                const payroll = await $api.payroll.createPayroll({
-                  ...values,
-                  excludedEmployeeIds,
-                });
-                toast.success(`payroll created - ${payroll.id}`);
-                router.push(`/payroll/${payroll.id}`);
-              } catch (error) {
-                const err = error as HttpError;
-                if (err.status === 422) {
-                  helpers.setErrors(err.errors);
-                  return;
+          {(params.year && (
+            <Formik
+              initialValues={{
+                ...params,
+                payDate: '',
+              }}
+              validationSchema={savePayrollValidationSchema}
+              onSubmit={async (values, helpers) => {
+                if (loading) return;
+                try {
+                  startLoading();
+                  const payroll = await $api.payroll.createPayroll(values);
+                  toast.success(`payroll created - ${payroll.id}`);
+                  router.push(`/payroll/${payroll.id}`);
+                } catch (error) {
+                  const err = error as HttpError;
+                  if (err.status === 422) {
+                    helpers.setErrors(err.errors);
+                    return;
+                  }
+                  toast.error(err.message);
+                  endLoading();
                 }
-                toast.error(`${err.message}`);
-              } finally {
-                helpers.setSubmitting(false);
-              }
-            }}
-          >
-            {(props) => {
-              const {
-                handleSubmit,
-                isSubmitting,
-                handleBlur,
-                setValues,
-                setTouched,
-                values,
-                errors,
-                touched,
-              } = props;
+              }}
+            >
+              {(props) => {
+                const {
+                  handleSubmit,
+                  handleBlur,
+                  setValues,
+                  setTouched,
+                  values,
+                  errors,
+                  touched,
+                } = props;
 
-              return (
-                <form onSubmit={handleSubmit} className="payroll-summary__form">
-                  <div className="payroll-summary__form__header">
-                    <p className="payroll-summary__form__header__title">
-                      Set Paydate
-                    </p>
-                    <p className="payroll-summary__form__header__sub-title">
-                      Enter date for salary to be disbursed
-                    </p>
-                  </div>
+                return (
+                  <form
+                    onSubmit={handleSubmit}
+                    className="payroll-summary__form"
+                  >
+                    <div className="payroll-summary__form__header">
+                      <p className="payroll-summary__form__header__title">
+                        Set Paydate
+                      </p>
+                      <p className="payroll-summary__form__header__sub-title">
+                        Enter date for salary to be disbursed
+                      </p>
+                    </div>
 
-                  <div className="payroll-summary__form__input">
-                    <DatePicker
-                      label="Pay Date"
-                      disabled={loading || isSubmitting}
-                      loading={loading || isSubmitting}
-                      placeholder="Pay Date"
-                      name="payDate"
-                      onChange={(val) => {
-                        setValues({
-                          ...values,
-                          payDate: val?.toISOString() || '',
-                        });
-                      }}
-                      onBlur={handleBlur}
-                      error={(touched.payDate && errors.payDate) || ''}
-                    />
-                  </div>
+                    <div className="payroll-summary__form__input">
+                      <InputV2
+                        label="Cycle"
+                        placeholder="Cycle"
+                        value={values.cycle}
+                        type="number"
+                        onChange={(event) => {
+                          setValues({
+                            ...values,
+                            cycle: +event.target.value || ('' as any),
+                          });
+                          setParams({
+                            ...params,
+                            cycle: +event.target.value || 0,
+                          });
+                        }}
+                        onBlur={handleBlur}
+                        name="cycle"
+                        error={touched.cycle && errors.cycle}
+                      />
+                    </div>
 
-                  <div className="payroll-summary__form__input">
-                    <Select
-                      label="Prorate Month"
-                      onBlur={() =>
-                        setTouched({ ...touched, proRateMonth: true }, true)
-                      }
-                      onChange={(val: string) =>
-                        setValues({ ...values, proRateMonth: val }, true)
-                      }
-                      optionFilterProp="children"
-                      placeholder="Select Prorate Month"
-                      showSearch
-                      loading={loading || isSubmitting}
-                      defaultValue={values.proRateMonth}
-                      error={
-                        (touched.proRateMonth && errors.proRateMonth) || ''
-                      }
-                    >
-                      {Util.prorateMonths().map((month) => {
-                        const { Option } = Select;
+                    <div className="payroll-summary__form__input">
+                      <DatePicker
+                        label="Prorate Month"
+                        placeholder="Prorate Month"
+                        name="payDate"
+                        value={
+                          (values.proRateMonth &&
+                            moment()
+                              .month(values.proRateMonth)
+                              .year(values.year)) ||
+                          null
+                        }
+                        picker="month"
+                        onChange={(val) => {
+                          setValues({
+                            ...values,
+                            proRateMonth: val?.format('MMMM') || '',
+                            year: val?.year() || NaN,
+                          });
+                          if (val) {
+                            setParams({
+                              ...params,
+                              proRateMonth: val.format('MMMM'),
+                              year: val.year(),
+                            });
+                          }
+                        }}
+                        onBlur={() =>
+                          setTouched(
+                            { ...touched, proRateMonth: true, year: true },
+                            true,
+                          )
+                        }
+                        error={
+                          (touched.proRateMonth && errors.proRateMonth) ||
+                          (touched.year && errors.year) ||
+                          ''
+                        }
+                      />
+                    </div>
 
-                        return (
-                          <Option value={month} key={month}>
-                            {month}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </div>
+                    <div className="payroll-summary__form__input">
+                      <DatePicker
+                        label="Pay Date"
+                        placeholder="Pay Date"
+                        name="payDate"
+                        onChange={(val) => {
+                          setValues({
+                            ...values,
+                            payDate: val?.toISOString() || '',
+                          });
+                        }}
+                        onBlur={handleBlur}
+                        error={(touched.payDate && errors.payDate) || ''}
+                      />
+                    </div>
 
-                  <input type="submit" value="submit" hidden ref={formRef} />
-                </form>
-              );
-            }}
-          </Formik>
+                    <input type="submit" value="submit" hidden ref={formRef} />
+                  </form>
+                );
+              }}
+            </Formik>
+          )) ||
+            ''}
         </div>
       </div>
     </DashboardLayoutV2>

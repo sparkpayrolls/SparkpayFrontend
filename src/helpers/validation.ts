@@ -81,7 +81,9 @@ export const fundWalletValidationSchema = Yup.object().shape({
 
 export const savePayrollValidationSchema = Yup.object().shape({
   payDate: Yup.string().required('pay date is required'),
-  proRateMonth: Yup.string().required('select a pro rate month'),
+  proRateMonth: Yup.string().required('select a prorate month'),
+  year: Yup.number().required('select a prorate month'),
+  cycle: Yup.number().required('enter payroll cycle'),
 });
 export const EmployeeOnboardingValidationSchema = Yup.object().shape({
   country: format.country,
