@@ -77,6 +77,9 @@ const CreatePayroll: NextPage = () => {
           router.query.excludedEmployeeIds,
         ),
         year: 0,
+        proRateMonth: moment()
+          .month(`${router.query.proRateMonth}`)
+          .format('MMMM'),
       };
       if (Number(router.query.cycle) >= 1) {
         query.cycle = Number(router.query.cycle);
