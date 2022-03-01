@@ -451,6 +451,7 @@ export type IDatePicker = {
   loading?: boolean;
   disabled?: boolean;
   className?: string;
+  helper?: string;
 };
 
 export type ITotalCard = {
