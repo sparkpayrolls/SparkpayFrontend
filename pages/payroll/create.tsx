@@ -68,7 +68,7 @@ const CreatePayroll: NextPage = () => {
 
   useEffect(() => {
     getCompanyWallet();
-  }, [getCompanyWallet]);
+  }, [getCompanyWallet, administrator]);
 
   useEffect(() => {
     if (router.isReady) {
