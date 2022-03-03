@@ -563,6 +563,31 @@
     }
   }
 
+  .rmdp-container {
+    width: 100%;
+
+    .rmdp-input {
+      width: 100%;
+      padding: 16px;
+      margin: 0px;
+      outline: none;
+      box-shadow: none;
+      border-color: transparent;
+      border-radius: 4px;
+      background: transparent;
+      line-height: 1.5rem;
+      height: auto;
+
+      &:focus {
+        border-color: $primary;
+      }
+    }
+  }
+
+  .rmdp-ym .rmdp-day span {
+    border-radius: 4px;
+  }
+
   &__calendar {
     display: block;
     position: absolute;
@@ -596,6 +621,29 @@
     .date-picker__input {
       border-color: $red;
     }
+  }
+}
+
+.hide-second-panel {
+  .ant-picker-panels > *:first-child button.ant-picker-header-next-btn {
+    visibility: visible !important;
+  }
+
+  .ant-picker-panels > *:first-child button.ant-picker-header-super-next-btn {
+    visibility: visible !important;
+  }
+
+  .ant-picker-panels > *:last-child {
+    display: none;
+  }
+
+  .ant-picker-panel-container,
+  .ant-picker-footer {
+    width: 280px !important;
+  }
+
+  .ant-picker-footer-extra > div {
+    flex-wrap: wrap !important;
   }
 }
 

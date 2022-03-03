@@ -112,3 +112,15 @@
     margin-top: 7.5rem;
   }
 }
+
+.addon-form {
+  > *:not(:first-child) {
+    margin-top: 1.25rem;
+  }
+
+  .button {
+    margin-top: 2rem;
+    width: 100%;
+    height: 56px;
+  }
+}

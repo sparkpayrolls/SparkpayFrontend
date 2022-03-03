@@ -135,3 +135,52 @@ export const EmployeeGroupValidation = Yup.object()
     commonSalary: Yup.string(),
   })
   .required();
+
+export const SalaryAddonValidation = Yup.object().shape({
+  name: Yup.string().required('Addon name is required'),
+  description: Yup.string(),
+  type: Yup.string().required('Addon type is required'),
+  amount: Yup.string().required('Amount is required'),
+  payrollCycle: Yup.string()
+    .matches(
+      /^(all|[1-9]+[0-9]*)$/gi,
+      '`all` for all payroll cycles or a positive number from 1 up',
+    )
+    .required('payroll cycle is required'),
+  frequency: Yup.string().required('Frequency is required'),
+  startYear: Yup.string().when(
+    ['frequency'],
+    (
+      frequency: string,
+      schema: Yup.StringSchema<
+        string | undefined,
+        Record<string, any>,
+        string | undefined
+      >,
+    ) => {
+      if (frequency !== 'recurring') return schema;
+
+      return schema.required('Start year is required');
+    },
+  ),
+  dates: Yup.array()
+    .of(
+      Yup.object().shape({
+        month: Yup.string().required(),
+        year: Yup.number(),
+        days: Yup.lazy((value) => {
+          if (value === undefined) return Yup.mixed();
+          if (
+            (Array.isArray(value) ? value : [value]).some(
+              (v: string) => typeof v !== 'string',
+            )
+          ) {
+            return Yup.object().required();
+          }
+          return Yup.array();
+        }),
+      }),
+    )
+    .required()
+    .min(1),
+});

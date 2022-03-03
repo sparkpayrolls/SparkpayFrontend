@@ -339,17 +339,12 @@ export enum PayrollEmployeePayoutStatusEnum {
 export enum SalaryAddOnTypeEnum {
   deduction = 'deduction',
   bonus = 'bonus',
+  prorate = 'prorate',
 }
 
 export enum SalaryAddOnStatusEnum {
   active = 'active',
   disabled = 'disabled',
-}
-
-export enum SalaryAddOnPayrollCycleEnum {
-  all = 'all',
-  first = 'first',
-  second = 'second',
 }
 
 export enum SalaryAddOnFrequencyEnum {
@@ -360,10 +355,6 @@ export enum SalaryAddOnFrequencyEnum {
 export type SalaryAddOnFrequency =
   | SalaryAddOnFrequencyEnum
   | keyof typeof SalaryAddOnFrequencyEnum;
-
-export type SalaryAddOnPayrollCycle =
-  | SalaryAddOnPayrollCycleEnum
-  | keyof typeof SalaryAddOnPayrollCycleEnum;
 
 export type SalaryAddOnStatus =
   | SalaryAddOnStatusEnum
@@ -377,6 +368,12 @@ export type PayrollEmployeePayoutStatus =
   | PayrollEmployeePayoutStatusEnum
   | keyof typeof PayrollEmployeePayoutStatusEnum;
 
+export type SalaryAddonDate = {
+  month: string;
+  year?: number;
+  days?: string[];
+};
+
 export type SalaryAddOn = Document & {
   name: string;
   description?: string;
@@ -385,9 +382,10 @@ export type SalaryAddOn = Document & {
   status?: SalaryAddOnStatus;
   amount: number;
   meta?: unknown;
-  payrollCycle?: SalaryAddOnPayrollCycle;
-  frequency?: SalaryAddOnFrequency;
-  addonMonths: string[];
+  payrollCycle?: string;
+  frequency: SalaryAddOnFrequency;
+  dates: SalaryAddonDate[];
+  startYear?: number;
 };
 
 export type Addon = {

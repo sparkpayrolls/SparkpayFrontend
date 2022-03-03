@@ -6,9 +6,11 @@ import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { Tab } from '@/components/Tab/tab.component';
 import { GroupDetails } from '@/components/Employee/group-detail.component';
+import { GroupAddon } from '@/components/Employee/group-addon.component';
 
 const GroupDetailsPage = () => {
   const [editGroup, setEditGroup] = useState(false);
+  const [editAddon, setEditAddon] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
 
   return (
@@ -41,7 +43,12 @@ const GroupDetailsPage = () => {
                 Edit Details
               </button>
             ) : (
-              <button className="group-details__edit-details-btn">
+              <button
+                onClick={() => {
+                  setEditAddon(true);
+                }}
+                className="group-details__edit-details-btn"
+              >
                 Create Addon
               </button>
             )}
@@ -56,10 +63,9 @@ const GroupDetailsPage = () => {
               />
             </Tab.TabPane>
             <Tab.TabPane tab="Addons" key="addons">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Voluptatibus, autem ipsam. Corporis possimus quam impedit
-              explicabo nostrum tempora dolore tenetur quod ea rem ex quos fuga,
-              voluptas facilis ad vero.
+              <GroupAddon
+                editHandler={{ edit: editAddon, setEdit: setEditAddon }}
+              />
             </Tab.TabPane>
           </Tab>
         </div>

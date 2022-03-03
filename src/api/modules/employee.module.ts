@@ -5,6 +5,7 @@ import {
   EmployeeGroupPayload,
   EmployeeStatus,
   Group,
+  SalaryAddOn,
 } from '../types';
 
 export class EmployeeModule extends HttpRepository {
@@ -139,6 +140,50 @@ export class EmployeeModule extends HttpRepository {
     const { data } = await this.delete<Employee | EmployeeGroup[]>(
       `/employees/groups/${groupId}/employees`,
       { ids },
+    );
+
+    return data;
+  }
+
+  async createSalaryAddon(
+    entity: string,
+    payload: Pick<
+      SalaryAddOn,
+      | 'name'
+      | 'description'
+      | 'amount'
+      | 'type'
+      | 'frequency'
+      | 'payrollCycle'
+      | 'startYear'
+      | 'dates'
+    >,
+  ) {
+    const { data } = await this.post<SalaryAddOn>('/employees/addons', {
+      ...payload,
+      entity,
+    });
+
+    return data;
+  }
+
+  async updateSalaryAddon(
+    id: string,
+    payload: Pick<
+      SalaryAddOn,
+      | 'name'
+      | 'description'
+      | 'amount'
+      | 'type'
+      | 'frequency'
+      | 'payrollCycle'
+      | 'startYear'
+      | 'dates'
+    >,
+  ) {
+    const { data } = await this.put<SalaryAddOn>(
+      `/employees/addons/${id}`,
+      payload,
     );
 
     return data;
