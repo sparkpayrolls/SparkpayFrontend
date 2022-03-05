@@ -6,7 +6,7 @@ import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { Tab } from '@/components/Tab/tab.component';
 import { GroupDetails } from '@/components/Employee/group-detail.component';
-import { GroupAddon } from '@/components/Employee/group-addon.component';
+import { Addon } from '@/components/Employee/addon.component';
 
 const GroupDetailsPage = () => {
   const [editGroup, setEditGroup] = useState(false);
@@ -63,9 +63,7 @@ const GroupDetailsPage = () => {
               />
             </Tab.TabPane>
             <Tab.TabPane tab="Addons" key="addons">
-              <GroupAddon
-                editHandler={{ edit: editAddon, setEdit: setEditAddon }}
-              />
+              <Addon editHandler={{ edit: editAddon, setEdit: setEditAddon }} />
             </Tab.TabPane>
           </Tab>
         </div>

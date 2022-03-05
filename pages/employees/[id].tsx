@@ -1,59 +1,18 @@
-import type { NextPage } from 'next';
-import { useCallback, useEffect, useState } from 'react';
-import Image from 'next/image';
+import { EmployeeDetail } from '@/components/Employee/employee-detail.component';
+import { Tab } from '@/components/Tab/tab.component';
+import { NextPage } from 'next';
 import Link from 'next/link';
-import NiceModal from '@ebay/nice-modal-react';
-import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
-import { EditEmployeeDetailsModal } from '@/components/Modals/EditDetailsModal.component';
+import Image from 'next/image';
+import { useState } from 'react';
 import withAuth from 'src/helpers/HOC/withAuth';
+import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import BackIcon from '../../public/svgs/backicon.svg';
-import { SingleDetail } from '@/components/Employee/single-detail.component';
-import { Country, Employee, Group } from 'src/api/types';
-import { IF } from '@/components/Misc/if.component';
-import { NotFound } from '@/components/Misc/not-found.component';
-import { useRouter } from 'next/router';
-import useApiCall from 'src/helpers/hooks/useapicall.hook';
-import moment from 'moment';
-import { useAppSelector } from 'src/redux/hooks';
-import { Util } from 'src/helpers/util';
-import {
-  getEmployeeEditSubmitHandler,
-  getEmployeeMethod,
-} from 'src/helpers/methods';
+import { Addon } from '@/components/Employee/addon.component';
 
-const EmployeeDetails: NextPage = () => {
-  const router = useRouter();
-  const administrator = useAppSelector((state) => state.administrator);
-  const [eph, setEmployee] = useState<Employee>();
-  const [notFound, setNotFound] = useState(false);
-  const [load, apiCallStarted, apiCallDone] = useApiCall();
-
-  const employeeId = router.query.id as string;
-  const loading = load || !eph;
-  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const salary = Util.formatMoneyNumber(eph?.salary ?? 0);
-
-  const getEmployee = useCallback(async () => {
-    await getEmployeeMethod({
-      employeeId,
-      apiCallStarted,
-      setEmployee,
-      setNotFound,
-      apiCallDone,
-    })();
-  }, [employeeId, apiCallDone, apiCallStarted]);
-
-  useEffect(() => {
-    getEmployee();
-  }, [getEmployee, administrator]);
-
-  const onAddEmployee = () => {
-    NiceModal.show(EditEmployeeDetailsModal, {
-      administrator,
-      employee: eph,
-      onSubmit: getEmployeeEditSubmitHandler(employeeId, getEmployee),
-    });
-  };
+const EmployeeDetailPage: NextPage = () => {
+  const [showEditGroupModal, setShowEditGroupModal] = useState(false);
+  const [showCreateAddonModal, setShowCreateAddonModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('details');
 
   return (
     <DashboardLayout pageTitle="Employee Details">
@@ -73,78 +32,41 @@ const EmployeeDetails: NextPage = () => {
               Employees Details
             </h5>
           </div>
-          <IF condition={!notFound && !loading}>
-            <button
-              className="employee-details__employee-button"
-              onClick={onAddEmployee}
-            >
-              Edit Details
-            </button>
-          </IF>
+          <button
+            className="employee-details__employee-button"
+            onClick={() =>
+              activeTab === 'details'
+                ? setShowEditGroupModal(true)
+                : setShowCreateAddonModal(true)
+            }
+          >
+            {activeTab === 'details' ? 'Edit Details' : 'Create Addon'}
+          </button>
         </div>
-        <IF condition={notFound}>
-          <div className="employee-details__not-found">
-            <NotFound message="Employee not found" />
-          </div>
-        </IF>
-        <IF condition={!notFound}>
-          <div className="employee-details__employee-settings-details">
-            <div className="employee-details__employee-settings-flex">
-              <div>
-                <SingleDetail
-                  title="Name"
-                  details={`${eph?.firstname} ${eph?.lastname}`}
-                  loading={loading}
-                />
-              </div>
-              <div>
-                <SingleDetail
-                  title="Email Address"
-                  details={eph?.email}
-                  loading={loading}
-                />
-              </div>
-              <div>
-                <SingleDetail
-                  title="Group(s)"
-                  details={eph?.groups
-                    ?.map((group) => (group.group as Group).name)
-                    ?.join(', ')}
-                  loading={loading}
-                />
-              </div>
-              <div>
-                <SingleDetail
-                  title="Date Created"
-                  details={moment(eph?.createdAt).format('MMMM DD, YYYY')}
-                  loading={loading}
-                />
-              </div>
-            </div>
-            <hr />
-
-            <div className="employee-details__employee-settings-flex">
-              <div>
-                <SingleDetail
-                  title="Salary Amount"
-                  details={`${currency} ${salary}`}
-                  loading={loading}
-                />
-              </div>
-              <div>
-                <SingleDetail
-                  title="Country"
-                  details={(eph?.country as Country)?.name}
-                  loading={loading}
-                />
-              </div>
-            </div>
-            <hr />
-          </div>
-        </IF>
+        <Tab
+          onChange={(activeKey) => setActiveTab(activeKey)}
+          default="details"
+        >
+          <Tab.TabPane tab="Details" key="details">
+            <EmployeeDetail
+              editHandler={{
+                edit: showEditGroupModal,
+                setEdit: setShowEditGroupModal,
+              }}
+            />
+          </Tab.TabPane>
+          <Tab.TabPane tab="Addons" key="addons">
+            <Addon
+              editHandler={{
+                edit: showCreateAddonModal,
+                setEdit: setShowCreateAddonModal,
+              }}
+            />
+          </Tab.TabPane>
+        </Tab>
       </div>
     </DashboardLayout>
   );
 };
 
-export default withAuth(EmployeeDetails, ['Employee', 'read']);
+export default withAuth(EmployeeDetailPage, ['Employee', 'read']);

@@ -19,7 +19,7 @@ import { $api } from 'src/api';
 import { useAppSelector } from 'src/redux/hooks';
 import { confirmation } from '../Modals/ConfirmationModal.component';
 
-interface IGroupAddon {
+interface IAddon {
   editHandler?: {
     edit: boolean;
     // eslint-disable-next-line no-unused-vars
@@ -27,7 +27,7 @@ interface IGroupAddon {
   };
 }
 
-export const GroupAddon = (props: IGroupAddon) => {
+export const Addon = (props: IAddon) => {
   const { editHandler } = props;
   const router = useRouter();
   const entity = router.query.id as string;
@@ -144,7 +144,9 @@ export const GroupAddon = (props: IGroupAddon) => {
   return (
     <div className="addon">
       <TableLayout
-        title={`${meta?.total} Addon${(meta?.total as any) === 1 ? '' : 's'}`}
+        title={`${meta?.total || 0} Addon${
+          (meta?.total as any) === 1 ? '' : 's'
+        }`}
         onSearch={(search) => setParams({ ...params, search })}
         searchPlaceholder="Search by name"
       >
