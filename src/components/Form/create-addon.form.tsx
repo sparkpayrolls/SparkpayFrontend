@@ -52,7 +52,7 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
           const payload = {
             name: values.name,
             description: values.description,
-            amount: values.amount,
+            amount: values.amount || 0,
             type: values.type,
             frequency: values.frequency,
             payrollCycle: values.payrollCycle,
@@ -142,17 +142,18 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
               ]}
               error={(touched.type && errors.type) || ''}
             />
-
-            <InputV2
-              label="Amount"
-              type="number"
-              name="amount"
-              placeholder="Amount"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.amount}
-              error={touched.amount && errors.amount}
-            />
+            {values.type !== 'prorate' && (
+              <InputV2
+                label="Amount"
+                type="number"
+                name="amount"
+                placeholder="Amount"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.amount}
+                error={touched.amount && errors.amount}
+              />
+            )}
 
             <InputV2
               label="Payroll Cycle"

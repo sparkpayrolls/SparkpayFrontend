@@ -35,6 +35,7 @@ import {
   PayrollStatus,
   PermissionGroup,
   PermissionLevel,
+  SalaryAddOnStatus,
   UserDashboardData,
   WalletTransaction,
   WalletTransactionStatus,
@@ -327,7 +328,8 @@ export type IStatusChip = {
     | WalletTransactionStatus
     | AuditAction
     | InviteTypeStatus
-    | GroupStatus;
+    | GroupStatus
+    | SalaryAddOnStatus;
 };
 
 /** TransactionMethod */

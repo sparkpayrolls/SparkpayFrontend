@@ -1,6 +1,9 @@
 .d-flex {
   display: flex;
 }
+.d-inline-flex {
+  display: inline-flex;
+}
 .justify-content-center {
   justify-content: center;
 }
@@ -19,7 +22,12 @@
 .padding-right-space-1 {
   padding-right: $space-1;
 }
-
+.gap {
+  gap: var(--gap, 1rem);
+}
+.text-center {
+  text-align: center;
+}
 .container {
   width: 100%;
   margin-inline: auto;
@@ -39,4 +47,8 @@
   overflow: hidden;
   position: fixed;
   left: -100vw;
+}
+
+.white-space-nowrap {
+  white-space: nowrap;
 }

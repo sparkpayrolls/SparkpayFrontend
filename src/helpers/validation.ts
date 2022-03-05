@@ -140,7 +140,21 @@ export const SalaryAddonValidation = Yup.object().shape({
   name: Yup.string().required('Addon name is required'),
   description: Yup.string(),
   type: Yup.string().required('Addon type is required'),
-  amount: Yup.string().required('Amount is required'),
+  amount: Yup.string().when(
+    ['type'],
+    (
+      type: string,
+      schema: Yup.StringSchema<
+        string | undefined,
+        Record<string, any>,
+        string | undefined
+      >,
+    ) => {
+      if (type === 'prorate') return schema;
+
+      return schema.required('Amount is required');
+    },
+  ),
   payrollCycle: Yup.string()
     .matches(
       /^(all|[1-9]+[0-9]*)$/gi,

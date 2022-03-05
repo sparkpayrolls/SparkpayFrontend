@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IAllowedPermissions } from '@/components/types';
+import type momentNamespace from 'moment';
 import { NextRouter } from 'next/router';
 import {
   Administrator,
@@ -8,6 +9,7 @@ import {
   PaginationMeta,
   Permission,
   Role,
+  SalaryAddOn,
 } from 'src/api/types';
 import { DebouncedFunc } from './types';
 
@@ -200,5 +202,58 @@ export class Util {
     }
 
     return Util.formatMoneyNumber(num, precision);
+  }
+
+  static getNextAddonDate(
+    payload: Pick<SalaryAddOn, 'type' | 'frequency' | 'dates' | 'startYear'>,
+    moment: typeof momentNamespace,
+  ) {
+    let nextDate: { date: momentNamespace.Moment; days?: string[] };
+    if (payload.frequency === 'once') {
+      [nextDate] = payload.dates
+        .map((date) => {
+          return {
+            date: moment()
+              .month(date.month)
+              .year(date.year || moment().year()),
+            days: date.days,
+          };
+        })
+        .sort((dateOne, dateTwo) =>
+          dateOne.date.isBefore(dateTwo.date) ? -1 : 1,
+        )
+        .filter(
+          (date, i, arr) =>
+            date.date.isBefore(moment().subtract(1, 'minute')) ||
+            i === arr.length - 1,
+        );
+    } else {
+      const currentYear = moment().year();
+      const startYear =
+        payload.startYear && payload.startYear > currentYear
+          ? payload.startYear
+          : currentYear;
+      [nextDate] = payload.dates
+        .map((date) => {
+          const d = moment().month(date.month).year(startYear);
+          return d.isBefore(moment().subtract(1, 'minute'))
+            ? { date: d.year(startYear + 1), days: date.days }
+            : { date: d, days: date.days };
+        })
+        .sort((dateOne, dateTwo) =>
+          dateOne.date.isBefore(dateTwo.date) ? -1 : 1,
+        );
+    }
+    const { date, days = [] } = nextDate;
+    if (payload.type === 'prorate') {
+      const [start = '01', end = '02'] = days;
+
+      return [
+        `${date.year()}-${date.format('MM')}-${start}`,
+        `${date.year()}-${date.format('MM')}-${end}`,
+      ] as [string, string];
+    }
+
+    return date.format('YYYY-MM-DD');
   }
 }

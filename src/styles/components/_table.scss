@@ -356,6 +356,10 @@
         @media screen and (min-width: 1024px) {
           width: 384px;
         }
+
+        .search-component input {
+          padding: 0.4375rem 1rem;
+        }
       }
 
       &__options-button {

@@ -196,3 +196,48 @@
     }
   }
 }
+
+.addon {
+  .table td:not(.white-space-nowrap) {
+    white-space: normal;
+  }
+
+  &__description {
+    min-width: 180px;
+  }
+  .table-layout {
+    &__top-bar {
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 0.5rem;
+
+      p {
+        flex-grow: 0.2;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: karla, Helvetica Neue, Helvetica, Arial, system-ui,
+          sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 1.125rem;
+        line-height: 1.5rem;
+        letter-spacing: 0.25px;
+        color: #0d0f11;
+      }
+
+      &__actions {
+        flex-grow: 0.75;
+        margin-left: unset;
+        max-width: 384px;
+
+        &__search {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .pagination {
+    padding-bottom: 3rem;
+  }
+}

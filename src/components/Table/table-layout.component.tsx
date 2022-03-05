@@ -1,7 +1,8 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useCallback } from 'react';
+import { Util } from 'src/helpers/util';
 import { Button } from '../Button/Button.component';
 import { FilterButton } from '../Button/filter-button';
-import { SearchInput } from '../Input/search-input.component';
+import { SearchForm } from '../Form/search.form';
 import { KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { ITableLayout } from '../types';
 
@@ -14,6 +15,16 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
     props.buttons ||
     props.title;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onSearch = useCallback(
+    Util.debounce((search: string) => {
+      if (props.onSearch) {
+        props.onSearch(search);
+      }
+    }, 500),
+    [props.onSearch],
+  );
+
   return (
     <div className="table-layout">
       {showTopBar && (
@@ -25,9 +36,9 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
           <div className="table-layout__top-bar__actions">
             {(props.onSearch || props.searchPlaceholder) && (
               <div className="table-layout__top-bar__actions__search">
-                <SearchInput
+                <SearchForm
                   placeholder={props.searchPlaceholder}
-                  onSearch={props.onSearch}
+                  onChange={(e) => onSearch(e.target.value)}
                 />
               </div>
             )}

@@ -169,16 +169,19 @@ export class EmployeeModule extends HttpRepository {
 
   async updateSalaryAddon(
     id: string,
-    payload: Pick<
-      SalaryAddOn,
-      | 'name'
-      | 'description'
-      | 'amount'
-      | 'type'
-      | 'frequency'
-      | 'payrollCycle'
-      | 'startYear'
-      | 'dates'
+    payload: Partial<
+      Pick<
+        SalaryAddOn,
+        | 'name'
+        | 'description'
+        | 'amount'
+        | 'type'
+        | 'frequency'
+        | 'payrollCycle'
+        | 'startYear'
+        | 'dates'
+        | 'status'
+      >
     >,
   ) {
     const { data } = await this.put<SalaryAddOn>(
@@ -187,5 +190,15 @@ export class EmployeeModule extends HttpRepository {
     );
 
     return data;
+  }
+
+  async deleteSalaryAddon(id: string) {
+    const { data } = await this.delete<SalaryAddOn>(`/employees/addons/${id}`);
+
+    return data;
+  }
+
+  async getSalaryAddons(entity: string, params: Record<string, any>) {
+    return this.get<SalaryAddOn[]>(`/employees/${entity}/addons`, { params });
   }
 }
