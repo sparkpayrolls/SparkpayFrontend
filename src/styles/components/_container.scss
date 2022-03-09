@@ -29,6 +29,12 @@
       animation: unset;
     }
   }
+
+  &--show-content {
+    &::before {
+      height: 0;
+    }
+  }
 }
 
 .line-loader {

@@ -89,7 +89,8 @@
   }
 
   &--paused,
-  &--Withdrawn {
+  &--Withdrawn,
+  &--disabled {
     color: $gray-600;
 
     .status-chip__indicator {

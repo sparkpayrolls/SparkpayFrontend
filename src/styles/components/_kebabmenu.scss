@@ -4,6 +4,7 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
 .kebabmenu {
   &__trigger {
     cursor: pointer;
+    line-height: 0;
   }
 
   &__dropdown {

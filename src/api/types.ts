@@ -124,12 +124,35 @@ export type Employee = Document & {
   phoneNumber?: string;
 };
 
-export type Group = Document & {
+export enum GroupTypeEnum {
+  employee = 'employee',
+  tax = 'tax',
+  pension = 'pension',
+  NHF = 'NHF',
+}
+
+export type GroupType = keyof typeof GroupTypeEnum;
+
+export enum GroupStatusEnum {
+  active = 'active',
+  disabled = 'disabled',
+}
+
+export type GroupStatus = keyof typeof GroupStatusEnum;
+
+export type Group<T extends Record<string, any> = {}> = Document & {
   name: string;
+  type: GroupType;
+  description?: string;
+  status: GroupStatus;
+  company: string | Company;
+  meta: T;
+  employees?: EmployeeGroup[];
 };
 
 export type EmployeeGroup = Document & {
-  group: Group;
+  group: string | Group;
+  employee: string | Employee;
 };
 
 export type Company = Document & {
@@ -316,17 +339,12 @@ export enum PayrollEmployeePayoutStatusEnum {
 export enum SalaryAddOnTypeEnum {
   deduction = 'deduction',
   bonus = 'bonus',
+  prorate = 'prorate',
 }
 
 export enum SalaryAddOnStatusEnum {
   active = 'active',
   disabled = 'disabled',
-}
-
-export enum SalaryAddOnPayrollCycleEnum {
-  all = 'all',
-  first = 'first',
-  second = 'second',
 }
 
 export enum SalaryAddOnFrequencyEnum {
@@ -337,10 +355,6 @@ export enum SalaryAddOnFrequencyEnum {
 export type SalaryAddOnFrequency =
   | SalaryAddOnFrequencyEnum
   | keyof typeof SalaryAddOnFrequencyEnum;
-
-export type SalaryAddOnPayrollCycle =
-  | SalaryAddOnPayrollCycleEnum
-  | keyof typeof SalaryAddOnPayrollCycleEnum;
 
 export type SalaryAddOnStatus =
   | SalaryAddOnStatusEnum
@@ -354,6 +368,12 @@ export type PayrollEmployeePayoutStatus =
   | PayrollEmployeePayoutStatusEnum
   | keyof typeof PayrollEmployeePayoutStatusEnum;
 
+export type SalaryAddonDate = {
+  month: string;
+  year?: number;
+  days?: string[];
+};
+
 export type SalaryAddOn = Document & {
   name: string;
   description?: string;
@@ -362,9 +382,10 @@ export type SalaryAddOn = Document & {
   status?: SalaryAddOnStatus;
   amount: number;
   meta?: unknown;
-  payrollCycle?: SalaryAddOnPayrollCycle;
-  frequency?: SalaryAddOnFrequency;
-  addonMonths: string[];
+  payrollCycle?: string;
+  frequency: SalaryAddOnFrequency;
+  dates: SalaryAddonDate[];
+  startYear?: number;
 };
 
 export type Addon = {
@@ -398,6 +419,8 @@ export type ProcessPayrollPayload = {
   employeeIds?: string[] | null;
   excludedEmployeeIds?: string[] | null;
   proRateMonth: string;
+  year: number;
+  cycle: number;
 };
 
 export type PayrollSummary = {
@@ -543,4 +566,17 @@ export type CompanyChartData = {
       backgroundColor: string[];
     }[];
   };
+};
+
+export type EmployeeGroupPayload = {
+  name: string;
+  description?: string;
+  commonSalary?: string | number;
+};
+
+export type ProcessPayrollResponse = {
+  cycle: number;
+  year: number;
+  payrollEmployees: PayrollEmployee[];
+  proRateMonth: string;
 };

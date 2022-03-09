@@ -24,6 +24,7 @@ import {
   Company,
   Employee,
   EmployeeStatus,
+  GroupStatus,
   InviteTypeStatus,
   OrganisationDashboardData,
   PaginationMeta,
@@ -34,6 +35,7 @@ import {
   PayrollStatus,
   PermissionGroup,
   PermissionLevel,
+  SalaryAddOnStatus,
   UserDashboardData,
   WalletTransaction,
   WalletTransactionStatus,
@@ -333,7 +335,9 @@ export type IStatusChip = {
     | EmployeeStatus
     | WalletTransactionStatus
     | AuditAction
-    | InviteTypeStatus;
+    | InviteTypeStatus
+    | GroupStatus
+    | SalaryAddOnStatus;
 };
 
 /** TransactionMethod */
@@ -457,6 +461,7 @@ export type IDatePicker = {
   loading?: boolean;
   disabled?: boolean;
   className?: string;
+  helper?: string;
 };
 
 export type ITotalCard = {

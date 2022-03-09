@@ -47,4 +47,30 @@
       margin-bottom: 3rem;
     }
   }
+
+  .inputs {
+    display: flex;
+    justify-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+
+    .input-v2__input,
+    .date-picker__input {
+      padding: 10px;
+    }
+
+    .date-picker__calendar {
+      right: 10px;
+      top: 10px;
+    }
+
+    > div {
+      &:first-child {
+        max-width: 100px;
+      }
+      max-width: 150px;
+      flex-grow: 1;
+      margin: unset;
+    }
+  }
 }

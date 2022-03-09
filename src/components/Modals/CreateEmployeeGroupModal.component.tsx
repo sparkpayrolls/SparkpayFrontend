@@ -1,140 +1,33 @@
-import Image from 'next/image';
 import NiceModal from '@ebay/nice-modal-react';
+import { EmployeeGroupForm } from '../Form/employee-group.form';
 import { ModalLayout } from './ModalLayout.component';
-import { Input } from '../Input/Input.component';
-import { Formik, FormikProps } from 'formik';
-import { createEmployeeGroup } from '../types';
-import { Button } from '../Button/Button.component';
-import { PlusAddBonusSvg } from '@/components/svg';
-import removeicon from '../../../public/svgs/remove-icon.svg';
 
-export const CreateEmployeeGroupModal = NiceModal.create(() => {
-  return (
-    <ModalLayout title="Create Employee Group">
-      {() => {
-        return <CreateEmployeeGroupForm />;
-      }}
-    </ModalLayout>
-  );
-});
-
-
-
-const CreateEmployeeGroupForm = () => {
-  return (
-    <>
-      <Formik
-        initialValues={{
-          name: '',
-          salary: '',
-          bonusname: '',
-          bonus: '',
-          payrollcount: '',
-        }}
-        onSubmit={(...args) => {
-          console.log(args);
-        }}
-      >
-        {(props: FormikProps<createEmployeeGroup>) => {
-          const { handleChange, handleSubmit } = props;
-
-          return (
-            <form
-              onSubmit={handleSubmit}
-              className="single-employee-upload-form"
-              autoComplete="off"
-            >
-              <div className="single-employee-upload-form__section fund-wallet-modal__fund-amount">
-                <Input
-                  type="text"
-                  label=" Group Name"
-                  placeholder="Group Name"
-                  name="salary"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="single-employee-upload-form__section fund-wallet-modal__fund-amount">
-                <Input
-                  type="text"
-                  label="Common Salary Amount (₦) "
-                  placeholder="N50,000"
-                  name="salary"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="single-employee-upload-form__section fund-wallet-modal__fund-amount">
-                <Input
-                  type="text"
-                  label="Bonus Name"
-                  placeholder="Staff of the month"
-                  name="Bonus Name"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="single-employee-upload-form__section fund-wallet-modal__fund-amount">
-                <Input
-                  type="text"
-                  label="Bonus Name"
-                  placeholder="Staff of the month"
-                  name="Bonus Name"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form__grid single-employee-upload-form__section  bonus-employee">
-                <div className="form__grid__col--6 padding-right-space-1">
-                  <Input
-                    type="text"
-                    label="Bonus (₦) "
-                    placeholder="₦ 10,000"
-                    name="Bonus (₦)"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="form__grid__col--6 padding-left-space-1">
-                  <Input
-                    type="text"
-                    label="Payroll Count"
-                    placeholder="1"
-                    name="Payroll Count"
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              <div className="employee-details__add-bonus">
-                <span>
-                  <PlusAddBonusSvg />
-                </span>
-                <p>Add Bonus</p>
-              </div>
-              <div className ="employee-details__employee-group-section">
-              <p>Employees</p>
-              <div className="employee-details__employee-section">
-                <div className="employee-details__employee-list" >
-                <p>Tomike</p>
-                  <Image
-                    src={removeicon}
-                    className="employee-details__employee-image"
-                    alt="group-details-image"
-                  />
-                </div>
-              </div>
-              </div>
-              <hr  className="employee-details__hr"/>
-              <div className="form__submit-button employee-group-button">
-                <Button
-                  type="submit"
-                  label="Save Group"
-                  className="form__submit-button form__submit-button--full-width reset-button"
-                  primary
-                />
-              </div>
-            </form>
-          );
-        }}
-      </Formik>
-    </>
-  );
+type ICreateEmployeeGroupModal = {
+  id?: string;
+  initialValues?: {
+    name: string;
+    description?: string;
+    commonSalary?: number;
+  };
 };
 
-export default CreateEmployeeGroupForm;
+export const CreateEmployeeGroupModal = NiceModal.create<ICreateEmployeeGroupModal>(
+  (props) => {
+    return (
+      <ModalLayout title="Create Employee Group">
+        {(modal) => {
+          return (
+            <EmployeeGroupForm
+              onDone={(group) => {
+                modal.resolve(group);
+                setTimeout(modal.hide, 10, group);
+              }}
+              id={props.id}
+              initialValues={props.initialValues}
+            />
+          );
+        }}
+      </ModalLayout>
+    );
+  },
+);

@@ -91,13 +91,36 @@
 }
 
 .single-employee-upload-form,
-.create-organization-form, 
+.create-organization-form,
 .organisation-detail,
-.change-password-form{
+.change-password-form {
   &__section:not(:last-child) {
     margin-bottom: $space-2;
   }
 }
 .reset-button {
-      height: 56px;
+  height: 56px;
+}
+
+.employee-group-form {
+  row-gap: 1.25rem;
+  display: flex;
+  flex-direction: column;
+
+  button {
+    height: 56px;
+    margin-top: 7.5rem;
+  }
+}
+
+.addon-form {
+  > *:not(:first-child) {
+    margin-top: 1.25rem;
+  }
+
+  .button {
+    margin-top: 2rem;
+    width: 100%;
+    height: 56px;
+  }
 }

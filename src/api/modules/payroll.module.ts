@@ -5,6 +5,7 @@ import {
   PayrollEmployee,
   PayrollSummary,
   ProcessPayrollPayload,
+  ProcessPayrollResponse,
 } from '../types';
 
 export class PayrollModule extends HttpRepository {
@@ -37,8 +38,11 @@ export class PayrollModule extends HttpRepository {
     return data;
   }
 
-  async processPayroll(payload: ProcessPayrollPayload) {
-    const { data } = await this.post<PayrollEmployee[]>(
+  async processPayroll(
+    payload: Omit<ProcessPayrollPayload, 'cycle' | 'year'> &
+      Partial<Pick<ProcessPayrollPayload, 'cycle' | 'year'>>,
+  ) {
+    const { data } = await this.post<ProcessPayrollResponse>(
       '/payrolls/process',
       payload,
     );

@@ -6,6 +6,7 @@ import {
   DetailedHTMLProps,
   FocusEvent,
   InputHTMLAttributes,
+  TextareaHTMLAttributes,
   useEffect,
   useState,
 } from 'react';
@@ -288,16 +289,86 @@ export const InputV2 = (
       </Container>
       {!!error && typeof error === 'string' && (
         <Text
-          className="input-v2--error__error text__sm text__danger"
+          className="input-v2--error__error text__text-sm text__danger"
           text={error}
         />
       )}
       {!!helper && !error && (
         <Text
-          className="input-v2__helper text__sm text__gray400"
+          className="input-v2__helper text__text-sm text__gray400"
           text={helper}
         />
       )}
     </Container>
+  );
+};
+
+interface ITextArea {
+  label?: string;
+  labelFor?: string;
+  error?: boolean | string;
+  helper?: string;
+}
+
+export const TextArea = (
+  props: DetailedHTMLProps<
+    TextareaHTMLAttributes<HTMLTextAreaElement>,
+    HTMLTextAreaElement
+  > &
+    ITextArea,
+) => {
+  const { className, label, error, helper, labelFor, ...textAreaProps } = props;
+  const [focused, setFocused] = useState<boolean>(false);
+  const textareaClassname = classNames(
+    'textarea__textarea',
+    {
+      'textarea--focused__textarea': focused,
+      'textarea--error__textarea': !!error,
+    },
+    className,
+  );
+  const labelClassname = classNames('text__label', {
+    'textarea--focused__label text__black': focused,
+  });
+  const containerClass = classNames('textarea', {
+    'textarea--focused': focused,
+    'textarea--error': !!error,
+  });
+
+  return (
+    <div className={containerClass}>
+      {label && (
+        <Text
+          className={labelClassname}
+          htmlFor={labelFor}
+          text={label}
+          element="label"
+        />
+      )}
+      <textarea
+        {...textAreaProps}
+        onBlur={(e) => {
+          props.onBlur && props.onBlur(e);
+          setFocused(false);
+        }}
+        className={textareaClassname}
+        onFocus={(e) => {
+          props.onFocus && props.onFocus(e);
+          setFocused(true);
+        }}
+      />
+      {!!error && typeof error === 'string' && (
+        <Text
+          className="textarea--error__error text__text-sm text__danger"
+          text={error}
+        />
+      )}
+      {!!helper && !error && (
+        <Text
+          className="textarea__helper text__text-sm text__gray400"
+          text={helper}
+        />
+      )}
+    </div>
   );
 };

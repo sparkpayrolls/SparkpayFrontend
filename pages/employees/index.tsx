@@ -5,8 +5,8 @@ import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout'
 import withAuth from 'src/helpers/HOC/withAuth';
 import { Employee } from 'src/api/types';
 import { $api } from 'src/api';
-import { CreateEmployeeGroupModal } from '../../src/components/Modals/CreateEmployeeGroupModal.component';
 import { AddEmployeeModal } from '@/components/Modals/AddEmployeeModal.component';
+import { CreateEmployeeGroupModal } from '@/components/Modals/CreateEmployeeGroupModal.component';
 import { useAppSelector } from 'src/redux/hooks';
 import { EmployeeTab } from '@/components/Employee/employee-tab.component';
 import { Util } from 'src/helpers/util';
@@ -27,6 +27,7 @@ import { Dropdown, Menu } from 'antd';
 const EmployeePage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
   const [loading, setLoading] = useState(false);
+  const [groupTabControl, setGroupTabControl] = useState('');
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [paginationMeta, setPaginationMeta] = useState(
     Util.getDefaultPaginationMeta({}),
@@ -85,8 +86,10 @@ const EmployeePage: NextPage = () => {
     });
   };
 
-  const CreateEmployeeGroup = () => {
-    NiceModal.show(CreateEmployeeGroupModal);
+  const onCreateGroup = () => {
+    NiceModal.show(CreateEmployeeGroupModal).then((group: any) => {
+      setGroupTabControl(group?.id);
+    });
   };
 
   const menu = (
@@ -98,7 +101,7 @@ const EmployeePage: NextPage = () => {
       </Menu.Item>
 
       <Menu.Item key="1">
-        <button className="employee-menu-list" onClick={() => {}}>
+        <button className="employee-menu-list" onClick={onCreateGroup}>
           <EditSquareSVG /> Create employee group
         </button>
       </Menu.Item>
@@ -114,7 +117,7 @@ const EmployeePage: NextPage = () => {
             <div className="employee-section__employee-button">
               <Button
                 label="Create Employee Group"
-                onClick={CreateEmployeeGroup}
+                onClick={onCreateGroup}
                 className="employee-section__employee-button1"
                 type="submit"
               />
@@ -158,7 +161,7 @@ const EmployeePage: NextPage = () => {
               />
             </TabPane>
             <TabPane key="groups" tab="Groups">
-              <EmployeeGroup />
+              <EmployeeGroup refreshList={groupTabControl} />
             </TabPane>
           </Tab>
         </div>
