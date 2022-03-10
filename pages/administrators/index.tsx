@@ -5,16 +5,18 @@ import { Button } from '../../src/components/Button/Button.component';
 import { Tab } from '@/components/Tab/tab.component';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-
+import AdminRoleTab from "../../src/components/admin/role"
+import {  useState } from 'react';
 
 const validTabs = ['Admin Users', 'Roles'];
-
-
 const Admin: NextPage = () => {
+  const [loading] = useState(false);
     const router = useRouter();
   const tab = router.query.tab as string;
   const activeTab = validTabs.includes(tab) ? tab : validTabs[0];
 
+
+  
   const onTabChange = (tab: string) => {
     const { pathname, query } = router;
     const url = stringifyUrl({
@@ -24,6 +26,8 @@ const Admin: NextPage = () => {
 
     router.push(url);
   };
+
+
   return (
     <DashboardLayout pageTitle="Admin">
       <div className="employee-section">
@@ -53,6 +57,9 @@ const Admin: NextPage = () => {
             <Tab.TabPane tab="Admin Users" key="Admin Users">
             </Tab.TabPane>
             <Tab.TabPane tab="Roles" key="Roles">
+              <AdminRoleTab
+                loading={loading}
+              />
             </Tab.TabPane>
           </Tab>
       </div>

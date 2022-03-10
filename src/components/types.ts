@@ -207,6 +207,11 @@ export type IEmployeeTable = {
   ): (id: string | string[]) => any;
 };
 
+export type IRoleTable = {
+   paginationMeta: PaginationMeta;
+  loading: boolean;
+  onFilter(): any;
+}
 export type ITransactionTable = {
   transactions: WalletTransaction[];
   meta: PaginationMeta;
@@ -353,6 +358,11 @@ export type IEmployeeTab = {
   paginationMeta: PaginationMeta;
   refreshEmployees: IGetEmployees;
 };
+
+export type IRoleTab ={
+   loading?: boolean;
+
+}
 
 export type ITab = {
   default?: string;
