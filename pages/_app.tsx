@@ -19,7 +19,6 @@ import {
   commitCompanies,
   refreshCompanies,
 } from 'src/redux/slices/companies/companies.slice';
-import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { AxiosError } from 'axios';
 import { Company } from 'src/api/types';
 import { Util } from 'src/helpers/util';
@@ -34,28 +33,24 @@ const AuthManager = () => {
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
-    const companySelected = companies.find((company) => company.selected);
-    const company = administrator?.company as Company;
-    const selectedCompany = companySelected?.company as Company;
     const tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
       config.headers.Authorization = `Bearer ${authToken}`;
       return config;
     });
+
+    return () => {
+      $api.$axios.interceptors.request.eject(tokenInterceptor);
+    };
+  }, [user]);
+
+  useEffect(() => {
+    const authToken = Cookies.get('auth_token') as string;
     const authInterceptor = $api.$axios.interceptors.response.use(
       (res) => res,
       (error) => {
         if (error.response?.status === 401) {
           Cookies.remove('auth_token');
           dispatch(commitUser(null));
-        }
-        return Promise.reject(error);
-      },
-    );
-    const permitInterceptor = $api.$axios.interceptors.response.use(
-      (res) => res,
-      (error: AxiosError) => {
-        if (error.response?.status === 403) {
-          refreshCompanies(dispatch);
         }
         return Promise.reject(error);
       },
@@ -68,13 +63,28 @@ const AuthManager = () => {
             dispatch(commitUser(newUser));
           }
         })
-        .catch(() => {
-          /* do nothing */
-        });
-    } else if (user) {
+        .catch(() => {});
+    } else {
       dispatch(commitUser(null));
     }
+
+    return () => {
+      $api.$axios.interceptors.request.eject(authInterceptor);
+    };
+  }, [dispatch, user]);
+
+  useEffect(() => {
     if (user) {
+      const permitInterceptor = $api.$axios.interceptors.response.use(
+        (res) => res,
+        (error: AxiosError) => {
+          if (error.response?.status === 403) {
+            refreshCompanies(dispatch);
+          }
+          return Promise.reject(error);
+        },
+      );
+
       $api.company
         .getCompanies()
         .then((newCompanies) => {
@@ -82,33 +92,30 @@ const AuthManager = () => {
             dispatch(commitCompanies(newCompanies));
           }
         })
-        .catch(() => {
-          /* do nothing */
-        });
-      $api.company
-        .getCurrentCompany()
-        .then((newAdministrator) => {
-          if (!Util.deepEquals(newAdministrator, administrator)) {
-            dispatch(commitAministrator(newAdministrator));
-          }
-        })
-        .catch(() => {
-          /* do nothing */
-        });
+        .catch(() => {});
+
+      return () => {
+        $api.$axios.interceptors.request.eject(permitInterceptor);
+      };
     }
-    if (selectedCompany && company?.id !== selectedCompany?.id) {
-      getCurrentAdministrator(dispatch);
-    }
+  }, [dispatch, user, companies]);
+
+  useEffect(() => {
+    const companySelected = companies.find((company) => company.selected);
+    const selectedCompany = companySelected?.company as Company;
     if (!selectedCompany) {
       dispatch(commitAministrator(null));
     }
 
-    return () => {
-      $api.$axios.interceptors.request.eject(tokenInterceptor);
-      $api.$axios.interceptors.request.eject(authInterceptor);
-      $api.$axios.interceptors.request.eject(permitInterceptor);
-    };
-  }, [user, companies, administrator, dispatch]);
+    $api.company
+      .getCurrentCompany()
+      .then((newAdministrator) => {
+        if (!Util.deepEquals(newAdministrator, administrator)) {
+          dispatch(commitAministrator(newAdministrator));
+        }
+      })
+      .catch(() => {});
+  }, [dispatch, companies, administrator]);
 
   return (
     <Detector
