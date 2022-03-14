@@ -1,13 +1,14 @@
 import { Administrators } from '@/components/Administrator/administrators.component';
+import { Roles } from '@/components/Administrator/roles.component';
 import { Button } from '@/components/Button/Button.component';
 import { CreateAdminModal } from '@/components/Modals/CreateAdminModal.component';
+import { CreateRoleModal } from '@/components/Modals/CreateRoleModal.component';
 import { PlusSvg } from '@/components/svg';
 import { Tab } from '@/components/Tab/tab.component';
 import NiceModal from '@ebay/nice-modal-react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { useEffect } from 'react';
 import withAuth from 'src/helpers/HOC/withAuth';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 
@@ -27,13 +28,17 @@ const AdministratorsPage: NextPage = () => {
     router.push(url);
   };
 
-  useEffect(() => {
-    NiceModal.show(CreateAdminModal);
-  }, []);
-
   if (!router.isReady) {
     return null;
   }
+
+  const onCreateClick = () => {
+    if (selectedTab === 'roles') {
+      NiceModal.show(CreateRoleModal);
+      return;
+    }
+    NiceModal.show(CreateAdminModal);
+  };
 
   return (
     <DashboardLayout pageTitle="Administrators">
@@ -44,9 +49,13 @@ const AdministratorsPage: NextPage = () => {
             <Button
               label={
                 <>
-                  <PlusSvg /> <span>Create Admin</span>
+                  <PlusSvg />{' '}
+                  <span>
+                    Create {selectedTab === 'roles' ? 'Role' : 'Admin'}
+                  </span>
                 </>
               }
+              onClick={onCreateClick}
               type="button"
               primary
               className="create-admin-button"
@@ -59,7 +68,9 @@ const AdministratorsPage: NextPage = () => {
             <Tab.TabPane tab="Admin Users" key="admins">
               <Administrators />
             </Tab.TabPane>
-            <Tab.TabPane key="roles" tab="Roles"></Tab.TabPane>
+            <Tab.TabPane key="roles" tab="Roles">
+              <Roles />
+            </Tab.TabPane>
           </Tab>
         </div>
       </div>

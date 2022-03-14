@@ -16,7 +16,7 @@ export const ModalLayout = (props: IModalLayout) => {
       onClose={modal.hide}
       destroyOnClose
       placement="right"
-      className="modal-layout"
+      className={`modal-layout ${props.className}`}
       maskStyle={{
         background: '#0d0f114d',
       }}

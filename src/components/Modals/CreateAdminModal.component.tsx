@@ -1,4 +1,4 @@
-import NiceModal, { NiceModalHandler } from '@ebay/nice-modal-react';
+import NiceModal from '@ebay/nice-modal-react';
 import { CreateAdministratorForm } from '../Form/create-administrator.form';
 import { ModalLayout } from './ModalLayout.component';
 

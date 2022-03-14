@@ -1,42 +1,40 @@
 import { DateTimeChip } from '../DateTimeChip/date-time-chip';
-import { Identity } from '../Identity/identity.component';
 import { KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { Pagination } from '../Pagination/pagination.component';
 import { StatusChip } from '../StatusChip/status-chip.component';
 import { TableLayout } from '../Table/table-layout.component';
 import { TableV2 } from '../Table/Table.component';
 
-export const Administrators = () => {
+export const Roles = () => {
   return (
-    <div className="administrators">
-      <TableLayout title="12 Administrators" searchPlaceholder="Search by name">
-        <TableV2 className="administrators__table">
+    <div className="roles">
+      <TableLayout title="12 Roles" searchPlaceholder="Search by name">
+        <TableV2 className="roles__table">
           <thead>
             <tr>
               <th>Name</th>
-              <th>Email Address</th>
-              <th>Role</th>
+              <th>Permissions</th>
+              <th>No. of Users</th>
               <th>Status</th>
               <th>Date</th>
             </tr>
           </thead>
           <tbody>
             <tr>
+              <td>Human Resource</td>
               <td>
-                <Identity
-                  className="administrators__identity"
-                  name="Esther Howard"
-                  image="https://picsum.photos/32/32"
-                  initial="E"
-                />
+                <span className="roles__permissions">
+                  <span>Employee: R,W</span>
+                  <span>Payroll: R,W</span>
+                  <span>Audit: R,W</span>
+                </span>
               </td>
-              <td>estherhoward@gmail.com</td>
-              <td>Super Admin</td>
+              <td>2</td>
               <td>
                 <StatusChip status="active" />
               </td>
               <td>
-                <span className="administrators__last-table-column">
+                <span className="roles__last-table-column">
                   <DateTimeChip />
                   <KebabMenu
                     items={[
@@ -52,7 +50,7 @@ export const Administrators = () => {
         </TableV2>
       </TableLayout>
 
-      <div className="administrators__pagination">
+      <div className="roles__pagination">
         <Pagination />
       </div>
     </div>

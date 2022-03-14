@@ -106,6 +106,7 @@ export type IMultiSelect = {
 export type IModalLayout = {
   title: string;
   children?: (modal: NiceModalHandler) => ReactNode;
+  className?: string;
 };
 
 export type IRangeInput = { label: string } & InputRangeProps;
