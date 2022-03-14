@@ -1,0 +1,88 @@
+.dashboard-page-layout {
+  &__title {
+    font-family: $font-family-Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    letter-spacing: -0.01em;
+    color: #0e347e;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+
+    @media screen and (min-width: 768px) {
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    @media screen and (min-width: 768px) {
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+}
+
+.create-admin-button {
+  gap: 0.5rem;
+}
+
+.administrators {
+  &__table {
+    td,
+    th {
+      padding: 1rem;
+      vertical-align: middle;
+    }
+  }
+
+  &__identity {
+    grid-column-gap: 0.75rem;
+
+    img {
+      max-height: 32px;
+    }
+
+    .identity__image {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &__last-table-column {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.6875rem;
+  }
+
+  &__pagination {
+    padding: 1rem;
+  }
+
+  padding-bottom: 1.5rem;
+}
+
+.create-administrator-form {
+  > *:not(:last-child) {
+    margin-bottom: 1.25rem;
+  }
+
+  button {
+    width: 100%;
+    min-height: 56px;
+    margin-top: 2rem;
+  }
+}
