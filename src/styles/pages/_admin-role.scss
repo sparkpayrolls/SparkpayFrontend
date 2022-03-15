@@ -1,0 +1,22 @@
+.admin-role-page{
+&__admin-table-header{
+font-weight: 600;
+font-size: 18px;
+line-height: 20px;
+margin-top:2rem;
+color: #0E347E;
+padding-bottom:1rem;
+}
+
+&__admin-button{
+    display: flex;
+    justify-content: flex-end;
+}
+&__admin-role-button{
+    width:261px;
+    margin-top:2.5rem;
+}
+    td{
+        padding: 0.8rem;
+    }
+}

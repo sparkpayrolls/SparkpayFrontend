@@ -22,7 +22,7 @@ const EmployeeTaxList = () => {
   return (
 
     <DashboardLayout pageTitle="remittances-tax">
-      <div className="remittances-tax-page">
+      <div className="remit-page">
         <div className="remittances-tax-section">
           <div className="group-details__header-content">
             <div className="group-details__group-detail-title-section">

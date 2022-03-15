@@ -41,6 +41,7 @@ import {
   WalletTransactionStatus,
 } from 'src/api/types';
 import { IKebabItem } from './KebabMenu/KebabMenu.component';
+import AdminRole from './admin/role';
 
 export interface ITable {
   children: () => ReactElement;
@@ -294,6 +295,11 @@ salary : string;
 bonusname: string;
 bonus : string;
 payrollcount : string;
+}
+
+/** Admin Role */
+export type adminRole ={
+role:string;
 }
 /** NavListItem */
 export type IDashboardNavigationListItem = {

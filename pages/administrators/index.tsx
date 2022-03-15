@@ -1,3 +1,4 @@
+import NiceModal from '@ebay/nice-modal-react';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import type { NextPage } from 'next';
 import { PlusSvg } from '@/components/svg';
@@ -7,6 +8,7 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import AdminRoleTab from "../../src/components/admin/role"
 import {  useState } from 'react';
+import { AdminRoleModal } from '@/components/Modals/CreateRoleModal.component';
 
 const validTabs = ['Admin Users', 'Roles'];
 const Admin: NextPage = () => {
@@ -27,7 +29,9 @@ const Admin: NextPage = () => {
     router.push(url);
   };
 
-
+ const onAdminRole = () => {
+    NiceModal.show(AdminRoleModal);
+  };
   return (
     <DashboardLayout pageTitle="Admin">
       <div className="employee-section">
@@ -42,6 +46,7 @@ const Admin: NextPage = () => {
                     &nbsp;{'Create Role'}
                   </>
                 }
+                onClick={ onAdminRole}
                 className="employee-section__submit-btn"
                 primary
                 type="submit"
