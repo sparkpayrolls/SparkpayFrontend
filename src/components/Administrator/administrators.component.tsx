@@ -123,35 +123,37 @@ export const Administrators = (props: IAdministrators) => {
             </tr>
           </thead>
           <tbody>
-            {administrators.map((administrator) => {
-              const user = administrator.user as User;
-              const role = administrator.role as Role;
+            {administrators.map((admin) => {
+              const user = admin.user as User;
+              const role = admin.role as Role;
 
               return (
-                <tr key={administrator.id}>
+                <tr key={admin.id}>
                   <td>
                     <Identity
                       className="administrators__identity"
-                      name={`${user.firstname} ${user.lastname}`}
+                      name={`${user.firstname} ${user.lastname}${
+                        administrator?.id === admin.id ? ' (You)' : ''
+                      }`}
                       image={user.avatar}
                       initial={user.firstname.slice(0, 1)}
                     />
                   </td>
                   <td>{user.email}</td>
-                  <td>{administrator.isRoot ? 'Owner' : role?.name}</td>
+                  <td>{admin.isRoot ? 'Owner' : role?.name}</td>
                   <td>
                     <span className="administrators__last-table-column">
-                      <DateTimeChip date={administrator.createdAt} />
-                      {!administrator.isRoot && (
+                      <DateTimeChip date={admin.createdAt} />
+                      {!admin.isRoot && admin.id !== administrator?.id && (
                         <KebabMenu
                           items={[
                             {
                               value: 'Edit',
-                              action: onEditAdministrator(administrator),
+                              action: onEditAdministrator(admin),
                             },
                             {
                               value: 'Delete',
-                              action: onDeleteAdministrator(administrator.id),
+                              action: onDeleteAdministrator(admin.id),
                             },
                           ]}
                         />
