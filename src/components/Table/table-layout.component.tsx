@@ -21,8 +21,8 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
       if (props.onSearch) {
         props.onSearch(search);
       }
-    }, 500),
-    [props.onSearch],
+    }, props.searchDelay || 500),
+    [props.onSearch, props.searchDelay],
   );
 
   return (

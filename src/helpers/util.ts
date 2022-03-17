@@ -128,7 +128,7 @@ export class Util {
     );
     const url = stringifyUrl({
       url: '/login',
-      query: { goto: router.pathname },
+      query: { goto: router.asPath },
     });
     router.replace(url);
   }

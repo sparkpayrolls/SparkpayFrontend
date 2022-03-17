@@ -1,4 +1,7 @@
-import { Administrators } from '@/components/Administrator/administrators.component';
+import {
+  Administrators,
+  IAdministratorsRef,
+} from '@/components/Administrator/administrators.component';
 import { Roles } from '@/components/Administrator/roles.component';
 import { Button } from '@/components/Button/Button.component';
 import { CreateAdminModal } from '@/components/Modals/CreateAdminModal.component';
@@ -9,12 +12,15 @@ import NiceModal from '@ebay/nice-modal-react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
+import { useRef } from 'react';
 import withAuth from 'src/helpers/HOC/withAuth';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 
 const validTabs = ['admins', 'roles'];
 const AdministratorsPage: NextPage = () => {
   const router = useRouter();
+  const adminsRef = useRef<IAdministratorsRef>();
+
   const tab = router.query.tab as string;
   const selectedTab = validTabs.includes(tab) ? tab : 'admins';
 
@@ -37,7 +43,12 @@ const AdministratorsPage: NextPage = () => {
       NiceModal.show(CreateRoleModal);
       return;
     }
-    NiceModal.show(CreateAdminModal);
+
+    NiceModal.show(CreateAdminModal).then(() => {
+      if (adminsRef.current) {
+        adminsRef.current.refreshAdministrators();
+      }
+    });
   };
 
   return (
@@ -51,7 +62,9 @@ const AdministratorsPage: NextPage = () => {
                 <>
                   <PlusSvg />{' '}
                   <span>
-                    Create {selectedTab === 'roles' ? 'Role' : 'Admin'}
+                    {selectedTab === 'roles'
+                      ? 'Create Role'
+                      : 'Invite Administrator'}
                   </span>
                 </>
               }
@@ -65,8 +78,12 @@ const AdministratorsPage: NextPage = () => {
 
         <div className="dashboard-page-layout__body">
           <Tab onChange={onTabChange} active={selectedTab} default={'admins'}>
-            <Tab.TabPane tab="Admin Users" key="admins">
-              <Administrators />
+            <Tab.TabPane tab="Admininistrators" key="admins">
+              <Administrators
+                getRef={(ref) => {
+                  adminsRef.current = ref;
+                }}
+              />
             </Tab.TabPane>
             <Tab.TabPane key="roles" tab="Roles">
               <Roles />
@@ -78,4 +95,4 @@ const AdministratorsPage: NextPage = () => {
   );
 };
 
-export default withAuth(AdministratorsPage);
+export default withAuth(AdministratorsPage, ['Admin', 'read']);

@@ -13,4 +13,8 @@ export class UserModule extends HttpRepository {
 
     return data;
   }
+
+  getUsers(params: Record<string, any>) {
+    return this.get<User[]>('/users', { params });
+  }
 }

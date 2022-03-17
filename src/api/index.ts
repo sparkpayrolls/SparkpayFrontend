@@ -16,6 +16,7 @@ import { FileModule } from './modules/file.module';
 import { RemittanceModule } from './modules/remittances/remittance.module';
 import { Admin } from './modules/admin.module';
 import { GroupModule } from './modules/group.module';
+import { RolesModule } from './modules/roles.module';
 
 export class $api {
   static $axios = axios.create({
@@ -51,6 +52,8 @@ export class $api {
   static admin = new Admin(this.$axios);
 
   static group = new GroupModule(this.$axios);
+
+  static role = new RolesModule(this.$axios);
 
   static async joinWaitList(email: string, name: string) {
     await $api.$axios.post('/join-wait-list', { email, name });

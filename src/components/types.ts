@@ -386,6 +386,7 @@ export type ITableLayout = {
   })[];
   menuItems?: IKebabItem[];
   searchPlaceholder?: string;
+  searchDelay?: number;
 };
 
 export type ICheckboxTableColumn = {
@@ -563,6 +564,7 @@ export type IAutoComplete = AutoCompleteProps &
   RefAttributes<RefSelectProps> & {
     label?: string;
     error?: string;
+    loading?: boolean;
   };
 export type IEmployeeAddForm = {
   initialValues: AddEmployee;

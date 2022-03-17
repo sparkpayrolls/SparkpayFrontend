@@ -198,3 +198,10 @@ export const SalaryAddonValidation = Yup.object().shape({
     .required()
     .min(1),
 });
+
+export const CreateAdministratorValidation = Yup.object().shape({
+  role: Yup.string(),
+  user: Yup.string(),
+  email: Yup.string().email().required('Email is required'),
+  name: Yup.string().required('Name is required'),
+});

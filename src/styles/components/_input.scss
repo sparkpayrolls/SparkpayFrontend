@@ -719,6 +719,18 @@
       border: 1px solid #ca1b1b;
     }
   }
+
+  &__input {
+    position: relative;
+  }
+
+  &__add-on {
+    position: absolute;
+    left: auto;
+    top: 60%;
+    transform: translateY(-50%);
+    right: 16px;
+  }
 }
 
 .app-select-container--focused {
