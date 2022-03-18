@@ -2,6 +2,7 @@ import {
   Administrators,
   IAdministratorsRef,
 } from '@/components/Administrator/administrators.component';
+import { Invitations } from '@/components/Administrator/invitations.component';
 import { IRolesRef, Roles } from '@/components/Administrator/roles.component';
 import { Button } from '@/components/Button/Button.component';
 import { CreateAdminModal } from '@/components/Modals/CreateAdminModal.component';
@@ -16,7 +17,7 @@ import { useRef } from 'react';
 import withAuth from 'src/helpers/HOC/withAuth';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 
-const validTabs = ['admins', 'roles'];
+const validTabs = ['admins', 'roles', 'invitations'];
 const AdministratorsPage: NextPage = () => {
   const router = useRouter();
   const adminsRef = useRef<IAdministratorsRef>();
@@ -85,6 +86,9 @@ const AdministratorsPage: NextPage = () => {
                   adminsRef.current = ref;
                 }}
               />
+            </Tab.TabPane>
+            <Tab.TabPane key="invitations" tab="Invitations">
+              <Invitations />
             </Tab.TabPane>
             <Tab.TabPane key="roles" tab="Roles">
               <Roles
