@@ -197,6 +197,7 @@ export type Role = Document & {
   company: string | Company;
   permissions: string[] | Permission[];
   description: string;
+  userCount?: number;
 };
 
 export type Administrator = Document & {

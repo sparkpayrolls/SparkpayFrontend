@@ -205,3 +205,10 @@ export const CreateAdministratorValidation = Yup.object().shape({
   email: Yup.string().email().required('Email is required'),
   name: Yup.string().required('Name is required'),
 });
+
+export const CreateRoleValidation = Yup.object().shape({
+  name: Yup.string().required('Name is required'),
+  permissions: Yup.array()
+    .of(Yup.string())
+    .min(1, 'Select at least one permission'),
+});

@@ -152,7 +152,7 @@ export const CreateAdministratorForm = (props: ICreateAdministratorForm) => {
             />
 
             <Button
-              disabled={isSubmitting}
+              disabled={isSubmitting || values.role === initialValues?.role}
               showSpinner={isSubmitting}
               type="submit"
               label={!id ? 'Invite Administrator' : 'Save Administrator'}

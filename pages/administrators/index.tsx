@@ -2,7 +2,7 @@ import {
   Administrators,
   IAdministratorsRef,
 } from '@/components/Administrator/administrators.component';
-import { Roles } from '@/components/Administrator/roles.component';
+import { IRolesRef, Roles } from '@/components/Administrator/roles.component';
 import { Button } from '@/components/Button/Button.component';
 import { CreateAdminModal } from '@/components/Modals/CreateAdminModal.component';
 import { CreateRoleModal } from '@/components/Modals/CreateRoleModal.component';
@@ -20,6 +20,7 @@ const validTabs = ['admins', 'roles'];
 const AdministratorsPage: NextPage = () => {
   const router = useRouter();
   const adminsRef = useRef<IAdministratorsRef>();
+  const rolesRef = useRef<IRolesRef>();
 
   const tab = router.query.tab as string;
   const selectedTab = validTabs.includes(tab) ? tab : 'admins';
@@ -40,14 +41,14 @@ const AdministratorsPage: NextPage = () => {
 
   const onCreateClick = () => {
     if (selectedTab === 'roles') {
-      NiceModal.show(CreateRoleModal);
+      NiceModal.show(CreateRoleModal).then(() => {
+        rolesRef.current?.refreshRoles();
+      });
       return;
     }
 
     NiceModal.show(CreateAdminModal).then(() => {
-      if (adminsRef.current) {
-        adminsRef.current.refreshAdministrators();
-      }
+      adminsRef.current?.refreshAdministrators();
     });
   };
 
@@ -86,7 +87,11 @@ const AdministratorsPage: NextPage = () => {
               />
             </Tab.TabPane>
             <Tab.TabPane key="roles" tab="Roles">
-              <Roles />
+              <Roles
+                getRef={(ref) => {
+                  rolesRef.current = ref;
+                }}
+              />
             </Tab.TabPane>
           </Tab>
         </div>
