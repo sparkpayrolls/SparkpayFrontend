@@ -2,7 +2,10 @@ import {
   Administrators,
   IAdministratorsRef,
 } from '@/components/Administrator/administrators.component';
-import { Invitations } from '@/components/Administrator/invitations.component';
+import {
+  Invitations,
+  IInvitationsRef,
+} from '@/components/Administrator/invitations.component';
 import { IRolesRef, Roles } from '@/components/Administrator/roles.component';
 import { Button } from '@/components/Button/Button.component';
 import { CreateAdminModal } from '@/components/Modals/CreateAdminModal.component';
@@ -22,6 +25,7 @@ const AdministratorsPage: NextPage = () => {
   const router = useRouter();
   const adminsRef = useRef<IAdministratorsRef>();
   const rolesRef = useRef<IRolesRef>();
+  const invitationsRef = useRef<IInvitationsRef>();
 
   const tab = router.query.tab as string;
   const selectedTab = validTabs.includes(tab) ? tab : 'admins';
@@ -50,6 +54,7 @@ const AdministratorsPage: NextPage = () => {
 
     NiceModal.show(CreateAdminModal).then(() => {
       adminsRef.current?.refreshAdministrators();
+      invitationsRef.current?.refreshInvitations();
     });
   };
 
@@ -88,7 +93,11 @@ const AdministratorsPage: NextPage = () => {
               />
             </Tab.TabPane>
             <Tab.TabPane key="invitations" tab="Invitations">
-              <Invitations />
+              <Invitations
+                getRef={(ref) => {
+                  invitationsRef.current = ref;
+                }}
+              />
             </Tab.TabPane>
             <Tab.TabPane key="roles" tab="Roles">
               <Roles

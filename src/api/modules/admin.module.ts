@@ -59,4 +59,24 @@ export class Admin extends HttpRepository {
 
     return data;
   }
+
+  async getInvitations(params: Record<string, any>) {
+    return this.get<Invite[]>('administrators/invitations', { params });
+  }
+
+  async withdrawInvitation(id: string) {
+    const { data } = await this.put<Invite>(
+      `administrators/invitations/${id}/withdraw`,
+    );
+
+    return data;
+  }
+
+  async deleteInvitation(id: string) {
+    const { data } = await this.delete<Invite>(
+      `administrators/invitations/${id}`,
+    );
+
+    return data;
+  }
 }

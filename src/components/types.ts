@@ -330,7 +330,8 @@ export type IStatusChip = {
     | AuditAction
     | InviteTypeStatus
     | GroupStatus
-    | SalaryAddOnStatus;
+    | SalaryAddOnStatus
+    | InviteTypeStatus;
 };
 
 /** TransactionMethod */
