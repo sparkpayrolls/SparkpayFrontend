@@ -4,7 +4,10 @@ import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2
 import { Tab } from '@/components/Tab/tab.component';
 import { Text } from '@/components/Typography/Text';
 import { Container } from '@/components/Shared/container.component';
-import { TaxPane } from '@/components/remittances/nigeria/taxpane.component';
+import {
+  TaxGroup,
+  TaxSettings,
+} from '@/components/remittances/nigeria/taxpane.component';
 
 const Tax: NextPage = () => {
   return (
@@ -18,9 +21,11 @@ const Tax: NextPage = () => {
 
         <Tab>
           <Tab.TabPane tab="Settings" key="settings">
-            <TaxPane />
+            <TaxSettings />
           </Tab.TabPane>
-          <Tab.TabPane key="groups" tab="Groups"></Tab.TabPane>
+          <Tab.TabPane key="groups" tab="Groups">
+            <TaxGroup />
+          </Tab.TabPane>
         </Tab>
       </Container>
     </DashboardLayoutV2>

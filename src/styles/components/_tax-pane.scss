@@ -18,7 +18,7 @@
     @media screen and (min-width: 768px) {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px 16px;
+      gap: 24px 16px;
     }
   }
 
@@ -79,6 +79,10 @@
       overflow-y: auto;
     }
   }
+}
+
+.tax-group {
+
 }
 
 .employee-auto-complete-form {

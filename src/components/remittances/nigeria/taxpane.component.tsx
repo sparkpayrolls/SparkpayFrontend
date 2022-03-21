@@ -1,3 +1,6 @@
+import Link from 'next/link';
+import NiceModal from '@ebay/nice-modal-react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/Button/Button.component';
 import { TableEmptyState } from '@/components/EmptyState/table-emptystate.component';
 import { EmployeeAutocompleteForm } from '@/components/Form/employee-autocomplete.form';
@@ -10,8 +13,8 @@ import { Container } from '@/components/Shared/container.component';
 import { TableLayout } from '@/components/Table/table-layout.component';
 import { TableV2 } from '@/components/Table/Table.component';
 import { Text } from '@/components/Typography/Text';
+import { GroupCardMoreIcon } from '../../svg';
 import { Radio, Space } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import {
@@ -24,8 +27,14 @@ import {
 } from 'src/api/types';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
+import { KebabMenu } from '@/components/KebabMenu/KebabMenu.component';
+import { DateTimeChip } from '@/components/DateTimeChip/date-time-chip';
+import { confirmation } from '@/components/Modals/ConfirmationModal.component';
+import { HttpError } from 'src/api/repo/http.error';
+import { Avatar, Tooltip } from 'antd';
+import { TaxGroupModal } from '@/components/Modals/TaxGroupModal.component';
 
-export const TaxPane = () => {
+export const TaxSettings = () => {
   const [settings, setSettings] = useState<NigerianTaxSettings | null>(null);
   const [errors, setErrors] = useState({ whTaxRate: '' });
   const [updateCallId, setUpdateCallId] = useState<Record<string, any>>({});
@@ -488,6 +497,128 @@ export const TaxPane = () => {
             )}
           </Container>
         </Container>
+      </Container>
+    </Container>
+  );
+};
+
+export const TaxGroup = () => {
+  const [loading, setLoading] = useState(false);
+
+  const getGroups = useCallback(async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
+
+  useEffect(() => {
+    getGroups();
+  }, []);
+
+  const onViewTaxGroup = () => {
+    return async () => {
+      NiceModal.show(TaxGroupModal, {
+        id: '12356',
+      }).then(() => {
+        // Do something
+      });
+    };
+  };
+
+  const getDeleteHandler = (id = '123') => {
+    return async () => {
+      const shouldDelete = await confirmation({
+        title: 'Delete employee group',
+        text: 'Are you sure you want to permanently delete this group?',
+      });
+      if (shouldDelete) {
+        try {
+          setLoading(true);
+          await $api.employee.deleteEmployeeGroup(id);
+          getGroups();
+          toast.success('group deleted successfully.');
+        } catch (error) {
+          const httpError = error as HttpError;
+          toast.error(httpError.message);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+  };
+
+  const menuItems = [
+    { value: 'View', action: onViewTaxGroup() },
+    { value: 'Edit', href: '#' },
+    {
+      value: 'Delete',
+      writeAccess: true,
+      action: getDeleteHandler(),
+    },
+  ];
+
+  return (
+    <Container className="tax-group" loading={loading} showContent>
+      <Text className="tax-group__page-title " element="h2" text="3 Group(s)" />
+
+      <Container className="employee-group-tab__cards    tax-group__body-content">
+        {/* {!groups.length && (
+          <TableEmptyState
+            text={
+              loading
+                ? 'Getting employee groups...'
+                : 'Your employee groups will appear here'
+            }
+          />
+        )} */}
+        <div className="group-card">
+          <div className="group-card__header">
+            <p>
+              <Link href="#">
+                <a>Tax Group</a>
+              </Link>
+            </p>
+
+            <button>
+              <KebabMenu
+                icon={GroupCardMoreIcon}
+                items={menuItems.filter((item) => !item.writeAccess || true)}
+              />
+            </button>
+          </div>
+
+          <div className="group-card__date">
+            <span className="group-card__date__title">Date Created</span>
+            <DateTimeChip date={Date.now().toString()} />
+          </div>
+
+          <div className="group-card__footer">
+            <span className="group-card__common-salary">
+              <span className="group-card__common-salary__title">
+                Common Salary
+              </span>
+
+              <span className="group-card__common-salary__amount">
+                ₦ 200,000
+              </span>
+            </span>
+            <Avatar.Group
+              maxCount={2}
+              maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
+            >
+              <Avatar src="https://joeschmoe.io/api/v1/random" />
+              <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
+              <Tooltip title="Ant User" placement="top">
+                <Avatar style={{ backgroundColor: '#87d068' }}>E</Avatar>
+              </Tooltip>
+              <Avatar style={{ backgroundColor: '#1890ff' }}>O</Avatar>
+            </Avatar.Group>
+          </div>
+        </div>
+        {/* <div className="employee-group-tab__cards__pagination">
+          <Pagination refresh={setParams} meta={meta} />
+        </div> */}
       </Container>
     </Container>
   );
