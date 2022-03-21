@@ -82,7 +82,14 @@
 }
 
 .tax-group {
-
+  &__page-title {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0.25px;
+    color: #0d0f11;
+    margin-bottom: 1rem;
+  }
 }
 
 .employee-auto-complete-form {
