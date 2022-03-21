@@ -604,7 +604,7 @@ export const TaxGroup = () => {
               </span>
             </span>
             <Avatar.Group
-              maxCount={2}
+              maxCount={4}
               maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
             >
               <Avatar src="https://joeschmoe.io/api/v1/random" />
