@@ -2,8 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { User } from 'src/api/types';
 import { AppDispatch } from 'src/redux/store';
+import { commitAministrator } from '../administrator/administrator.slice';
+import { commitCompanies } from '../companies/companies.slice';
 
-export const CountrySlice = createSlice({
+export const UserSlice = createSlice({
   name: 'user',
   initialState: null as User | null,
   // The `reducers` field lets us define reducers and generate associated actions
@@ -14,11 +16,13 @@ export const CountrySlice = createSlice({
   },
 });
 
-export const { commitUser } = CountrySlice.actions;
+export const { commitUser } = UserSlice.actions;
 
 export const logOut = (dispatch: AppDispatch) => {
   Cookies.remove('auth_token');
   dispatch(commitUser(null));
+  dispatch(commitCompanies([]));
+  dispatch(commitAministrator(null));
 };
 
-export default CountrySlice.reducer;
+export default UserSlice.reducer;

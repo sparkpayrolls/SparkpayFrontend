@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
-import { commitUser } from 'src/redux/slices/user/user.slice';
+import { commitUser, logOut } from 'src/redux/slices/user/user.slice';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import {
   commitCompanies,
@@ -21,8 +21,9 @@ import {
 } from 'src/redux/slices/companies/companies.slice';
 import { AxiosError } from 'axios';
 import { Company } from 'src/api/types';
-import { Util } from 'src/helpers/util';
 import { Detector } from 'react-detect-offline';
+import { Util } from 'src/helpers/util';
+import { useRouter } from 'next/router';
 
 let persistor = persistStore(store);
 let lastStatus = true;
@@ -30,6 +31,7 @@ let lastStatus = true;
 const AuthManager = () => {
   const { user, companies, administrator } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
@@ -44,17 +46,37 @@ const AuthManager = () => {
   }, [user]);
 
   useEffect(() => {
-    const authToken = Cookies.get('auth_token') as string;
     const authInterceptor = $api.$axios.interceptors.response.use(
       (res) => res,
       (error) => {
         if (error.response?.status === 401) {
-          Cookies.remove('auth_token');
-          dispatch(commitUser(null));
+          logOut(dispatch);
+          Util.redirectToLogin(router);
+        }
+
+        return Promise.reject(error);
+      },
+    );
+
+    const permitInterceptor = $api.$axios.interceptors.response.use(
+      (res) => res,
+      (error: AxiosError) => {
+        if (error.response?.status === 403) {
+          dispatch(commitAministrator(null));
+          refreshCompanies(dispatch);
         }
         return Promise.reject(error);
       },
     );
+
+    return () => {
+      $api.$axios.interceptors.request.eject(authInterceptor);
+      $api.$axios.interceptors.request.eject(permitInterceptor);
+    };
+  }, [dispatch, router]);
+
+  useEffect(() => {
+    const authToken = Cookies.get('auth_token') as string;
     if (authToken) {
       $api.user
         .getProfile()
@@ -67,24 +89,10 @@ const AuthManager = () => {
     } else {
       dispatch(commitUser(null));
     }
-
-    return () => {
-      $api.$axios.interceptors.request.eject(authInterceptor);
-    };
   }, [dispatch, user]);
 
   useEffect(() => {
     if (user) {
-      const permitInterceptor = $api.$axios.interceptors.response.use(
-        (res) => res,
-        (error: AxiosError) => {
-          if (error.response?.status === 403) {
-            refreshCompanies(dispatch);
-          }
-          return Promise.reject(error);
-        },
-      );
-
       $api.company
         .getCompanies()
         .then((newCompanies) => {
@@ -93,28 +101,35 @@ const AuthManager = () => {
           }
         })
         .catch(() => {});
-
-      return () => {
-        $api.$axios.interceptors.request.eject(permitInterceptor);
-      };
     }
   }, [dispatch, user, companies]);
 
   useEffect(() => {
-    const companySelected = companies.find((company) => company.selected);
-    const selectedCompany = companySelected?.company as Company;
-    if (!selectedCompany) {
-      dispatch(commitAministrator(null));
+    if (companies.length) {
+      const companySelected = companies.find((company) => company.selected);
+      const selectedCompany = companySelected?.company as Company;
+      if (!selectedCompany) {
+        dispatch(commitAministrator(null));
+      }
     }
+  }, [dispatch, companies]);
 
-    $api.company
-      .getCurrentCompany()
-      .then((newAdministrator) => {
-        if (!Util.deepEquals(newAdministrator, administrator)) {
-          dispatch(commitAministrator(newAdministrator));
-        }
-      })
-      .catch(() => {});
+  useEffect(() => {
+    if (companies.length) {
+      $api.company
+        .getCurrentCompany()
+        .then((newAdministrator) => {
+          if (
+            !newAdministrator ||
+            !Util.deepEquals(newAdministrator, administrator)
+          ) {
+            dispatch(
+              commitAministrator(newAdministrator ? newAdministrator : null),
+            );
+          }
+        })
+        .catch(() => {});
+    }
   }, [dispatch, companies, administrator]);
 
   return (

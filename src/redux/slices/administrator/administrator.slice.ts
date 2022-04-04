@@ -21,7 +21,7 @@ export const getCurrentAdministrator = async (dispatch: AppDispatch) => {
   try {
     const admin = await $api.company.getCurrentCompany();
 
-    dispatch(commitAministrator(admin));
+    dispatch(commitAministrator(admin ? admin : null));
   } catch (error) {
     const err = error as HttpError;
     if (err.status === 403) {
