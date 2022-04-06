@@ -39,25 +39,20 @@ const AuthManager = () => {
       config.headers.Authorization = `Bearer ${authToken}`;
       return config;
     });
-
-    return () => {
-      $api.$axios.interceptors.request.eject(tokenInterceptor);
-    };
-  }, [user]);
-
-  useEffect(() => {
     const authInterceptor = $api.$axios.interceptors.response.use(
       (res) => res,
       (error) => {
         if (error.response?.status === 401) {
+          const authToken = Cookies.get('auth_token');
           logOut(dispatch);
-          Util.redirectToLogin(router);
+          if (authToken) {
+            Util.redirectToLogin(router);
+          }
         }
 
         return Promise.reject(error);
       },
     );
-
     const permitInterceptor = $api.$axios.interceptors.response.use(
       (res) => res,
       (error: AxiosError) => {
@@ -70,10 +65,11 @@ const AuthManager = () => {
     );
 
     return () => {
+      $api.$axios.interceptors.request.eject(tokenInterceptor);
       $api.$axios.interceptors.request.eject(authInterceptor);
       $api.$axios.interceptors.request.eject(permitInterceptor);
     };
-  }, [dispatch, router]);
+  }, [dispatch, router, user]);
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
@@ -120,7 +116,7 @@ const AuthManager = () => {
         .getCurrentCompany()
         .then((newAdministrator) => {
           if (
-            !newAdministrator ||
+            (!newAdministrator && administrator) ||
             !Util.deepEquals(newAdministrator, administrator)
           ) {
             dispatch(
