@@ -2,6 +2,7 @@
 import { IAllowedPermissions } from '@/components/types';
 import type momentNamespace from 'moment';
 import { NextRouter } from 'next/router';
+import { HttpError } from 'src/api/repo/http.error';
 import {
   Administrator,
   Company,
@@ -255,5 +256,15 @@ export class Util {
     }
 
     return date.format('YYYY-MM-DD');
+  }
+
+  static onNonAuthError(
+    error: unknown,
+    callback: (httpError: HttpError) => unknown,
+  ) {
+    const httpError = error as HttpError;
+    if (![401, 403].includes(httpError.status)) {
+      callback(httpError);
+    }
   }
 }

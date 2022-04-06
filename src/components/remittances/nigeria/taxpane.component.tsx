@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/Button/Button.component';
 import { TableEmptyState } from '@/components/EmptyState/table-emptystate.component';
 import { EmployeeAutocompleteForm } from '@/components/Form/employee-autocomplete.form';
@@ -11,7 +12,6 @@ import { TableLayout } from '@/components/Table/table-layout.component';
 import { TableV2 } from '@/components/Table/Table.component';
 import { Text } from '@/components/Typography/Text';
 import { Radio, Space } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import {
@@ -25,7 +25,7 @@ import {
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
 
-export const TaxPane = () => {
+export const TaxSettings = () => {
   const [settings, setSettings] = useState<NigerianTaxSettings | null>(null);
   const [errors, setErrors] = useState({ whTaxRate: '' });
   const [updateCallId, setUpdateCallId] = useState<Record<string, any>>({});
