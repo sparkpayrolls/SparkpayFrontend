@@ -1,5 +1,16 @@
 {
-  "extends": ["eslint:recommended", "next"],
+  "extends": [
+    "eslint:recommended",
+    "next"
+  ],
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ]
+  },
   "env": {
     "jest": true
   }
