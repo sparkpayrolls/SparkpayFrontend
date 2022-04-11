@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import NiceModal, { NiceModalHandler } from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
-import type { FormikValues, FormikHelpers, FormikProps } from 'formik';
+import { FormikHelpers, FormikProps, Formik } from 'formik';
 import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
 import { createOrganizationValidationSchema } from 'src/helpers/validation';
@@ -11,12 +11,6 @@ import { $api } from 'src/api';
 import { getCountries } from 'src/redux/slices/countries/countries.slice';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { Select } from '../Input/select.component';
-import dynamic from 'next/dynamic';
-
-// @ts-ignore
-const Formik = dynamic<FormikValues>(() => {
-  return import('formik').then((mod) => mod.Formik);
-});
 
 export const CreateOrgnizationModal = NiceModal.create(() => {
   return (

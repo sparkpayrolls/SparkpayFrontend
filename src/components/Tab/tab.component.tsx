@@ -1,15 +1,6 @@
-import type { TabsProps, TabPaneProps } from 'antd';
-import dynamic from 'next/dynamic';
+import { Tabs } from 'antd';
 import { PropsWithChildren } from 'react';
 import { ITab } from '../types';
-
-const Tabs = dynamic<TabsProps>(() => {
-  return import('antd').then((mod) => mod.Tabs);
-});
-
-const TabPane = dynamic<TabPaneProps>(() => {
-  return import('antd').then((mod) => mod.Tabs.TabPane);
-});
 
 export const Tab = (props: PropsWithChildren<ITab>) => {
   return (
@@ -25,4 +16,4 @@ export const Tab = (props: PropsWithChildren<ITab>) => {
   );
 };
 
-Tab.TabPane = TabPane;
+Tab.TabPane = Tabs.TabPane;

@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import { useCallback, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -12,27 +11,10 @@ import { Company, Country } from 'src/api/types';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { HttpError } from 'src/api/repo/http.error';
 import { $api } from 'src/api';
-import { ISingleDetail } from '@/components/Employee/single-detail.component';
+import { SingleDetail } from '@/components/Employee/single-detail.component';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
-
-// @ts-ignore
-const NotFound = dynamic<any>(() => {
-  return import('@/components/Misc/not-found.component').then(
-    (mod) => mod.NotFound,
-  );
-});
-// @ts-ignore
-const SingleDetail = dynamic<ISingleDetail>(() => {
-  return import('@/components/Employee/single-detail.component').then(
-    (mod) => mod.SingleDetail,
-  );
-});
-// @ts-ignore
-const OrganisationDetailsModal = dynamic(() => {
-  return import('@/components/Modals/OrganisationDetailsModal.component').then(
-    (mod) => mod.OrganisationDetailsModal,
-  );
-});
+import { OrganisationDetailsModal } from '@/components/Modals/OrganisationDetailsModal.component';
+import { NotFound } from '@/components/Misc/not-found.component';
 
 const OrganisationDetails: NextPage = () => {
   const router = useRouter();
