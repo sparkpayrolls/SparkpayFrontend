@@ -1,11 +1,6 @@
-import type { DrawerProps } from 'antd';
+import { Drawer } from 'antd';
 import { useModal } from '@ebay/nice-modal-react';
 import { IModalLayout } from '../types';
-import dynamic from 'next/dynamic';
-
-const Drawer = dynamic<DrawerProps>(() => {
-  return import('antd').then((mod) => mod.Drawer);
-});
 
 export const ModalLayout = (props: IModalLayout) => {
   const modal = useModal();

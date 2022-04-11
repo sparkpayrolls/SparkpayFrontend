@@ -148,6 +148,10 @@
     }
   }
 
+  .ant-drawer-header-close-only {
+    display: none;
+  }
+
   &__content {
     height: 100%;
     // overflow-y: auto;
@@ -156,18 +160,26 @@
   &__title-section {
     background: #f7f9fb;
     width: 100%;
-    padding: 32px 32px 24px 32px;
+    padding: 2rem 1.25rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: fixed;
     z-index: 99;
+
+    @media screen and (min-width: 768px) {
+      padding: 2rem 2rem 1.5rem;
+    }
   }
 
   &__body-section {
-    padding: 104px 32px;
+    padding: 6.5rem 1.25rem;
     overflow-y: auto;
     height: 100%;
+
+    @media screen and (min-width: 768px) {
+      padding: 6.5rem 2rem;
+    }
   }
 
   &__title-text {

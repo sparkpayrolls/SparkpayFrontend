@@ -36,8 +36,13 @@ const AuthManager = () => {
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
     const tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
-      config.headers.Authorization = `Bearer ${authToken}`;
-      return config;
+      return {
+        ...config,
+        headers: {
+          ...(config?.headers || {}),
+          Authorization: `Bearer ${authToken}`,
+        },
+      };
     });
     const authInterceptor = $api.$axios.interceptors.response.use(
       (res) => res,
