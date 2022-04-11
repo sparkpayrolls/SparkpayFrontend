@@ -54,8 +54,10 @@ export const EmployeeAutocompleteForm = (props: IEmployeeAutoCompleteForm) => {
         id="autocomplete-employee"
         placeholder="Search by employee name or email"
         onSearch={handleSearch}
-        onSelect={(_name, option) => {
-          const employee = employees.find((e) => e.id === option.key);
+        onSelect={(_name: unknown, option: unknown) => {
+          const employee = employees.find(
+            (e) => e.id === (option as { key: string }).key,
+          );
           if (employee) {
             setSelectedEmployee(employee);
             if (props.onSelect) {

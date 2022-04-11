@@ -272,7 +272,7 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
                     setValues({ ...values, dates: [] });
                     return;
                   }
-                  const [start, end] = value as moment.Moment[];
+                  const [start, end] = (value as unknown) as moment.Moment[];
                   setValues({
                     ...values,
                     dates: [

@@ -103,8 +103,7 @@ export const CreateAdministratorForm = (props: ICreateAdministratorForm) => {
               onChange={(value) => {
                 setValues({ ...values, name: value });
               }}
-              onSelect={(u) => {
-                const user = u as User;
+              onSelect={(user: User) => {
                 setValues({
                   ...values,
                   user: user.id,
@@ -123,8 +122,7 @@ export const CreateAdministratorForm = (props: ICreateAdministratorForm) => {
               onChange={(value) => {
                 setValues({ ...values, email: value });
               }}
-              onSelect={(u) => {
-                const user = u as User;
+              onSelect={(user: User) => {
                 setValues({
                   ...values,
                   user: user.id,

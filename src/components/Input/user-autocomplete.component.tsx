@@ -51,7 +51,7 @@ export const UserAutoComplete = (props: IUserAutoComplete) => {
         value: user.id,
         label: `${user.firstname} ${user.lastname}`,
       }))}
-      onSelect={(value) => {
+      onSelect={(value: string) => {
         const user = users.find((u) => u.id === value);
         if (user && onSelect) {
           onSelect(user);
