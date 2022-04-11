@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { ChangeEventHandler, FormEventHandler } from 'react';
-import search_icon from '../../../public/svgs/search.svg';
+import search_icon from '../../../public/svgs/search-icon.svg';
 import { InputV2 } from '../Input/Input.component';
 
 interface ISearchForm {
