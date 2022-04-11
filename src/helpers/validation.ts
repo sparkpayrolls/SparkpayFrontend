@@ -231,3 +231,8 @@ export const CreateRoleValidation = Yup.object().shape({
     .of(Yup.string())
     .min(1, 'Select at least one permission'),
 });
+
+export const RequestAccessValidation = Yup.object().shape({
+  name: Yup.string().required('Full name is required'),
+  email: Yup.string().email().required('Email is required'),
+});

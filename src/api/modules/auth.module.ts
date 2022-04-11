@@ -53,4 +53,8 @@ export class AuthModule extends HttpRepository {
   async resetPassword(code: string, password: string): Promise<void> {
     await this.put('/auth/reset-password', { code, password });
   }
+
+  async requestAccess(payload: { email: string; name: string }): Promise<void> {
+    await this.post('/auth/request-access', payload);
+  }
 }
