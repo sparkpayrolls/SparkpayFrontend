@@ -21,6 +21,7 @@ import { Select } from '@/components/Input/select.component';
 import auth_frame from '../../public/svgs/auth-frame.svg';
 import logo_white from '../../public/svgs/logo-white.svg';
 import logo from '../../public/svgs/logo.svg';
+import { stringifyUrl } from 'query-string';
 
 interface ISignUpForm {
   firstname: string;
@@ -28,6 +29,7 @@ interface ISignUpForm {
   country: string;
   email: string;
   password: string;
+  inviteCode: string;
 }
 
 const CreateAccount: NextPage = () => {
@@ -35,10 +37,41 @@ const CreateAccount: NextPage = () => {
   const dispatch = useAppDispatch();
   const { user, countries } = useAppSelector((state) => state);
   const { loading } = useAppSelector((state) => state.createAccount);
+  const [inviteCodeValid, setInviteCodeValid] = React.useState({
+    loading: false,
+    valid: false,
+    details: { name: '', email: '' },
+  });
 
   React.useEffect(() => {
     getCountries(dispatch);
   }, [dispatch]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const validateInviteCode = React.useCallback(
+    Util.debounce(async (code) => {
+      try {
+        setInviteCodeValid((i) => ({ ...i, loading: true }));
+        const details = await $api.auth.validateInviteCode(code);
+        setInviteCodeValid((i) => ({ ...i, valid: true, details }));
+      } catch (error) {
+        setInviteCodeValid((i) => ({
+          ...i,
+          valid: false,
+          details: { email: '', name: '' },
+        }));
+      } finally {
+        setInviteCodeValid((i) => ({ ...i, loading: false }));
+      }
+    }, 500),
+    [],
+  );
+
+  React.useEffect(() => {
+    if (router.isReady) {
+      validateInviteCode(router.query.inviteCode as string);
+    }
+  }, [router, validateInviteCode]);
 
   if (user) {
     router.replace('/');
@@ -90,6 +123,11 @@ const CreateAccount: NextPage = () => {
       actions.setSubmitting(false);
     }
   };
+  if (!router.isReady) {
+    return null;
+  }
+
+  const [firstname, ...lastname] = inviteCodeValid.details.name.split(' ');
 
   return (
     <div className="create-account">
@@ -135,12 +173,16 @@ const CreateAccount: NextPage = () => {
           </p>
 
           <Formik
+            key={`${firstname}-${lastname.join('-')}-${
+              inviteCodeValid.details.email
+            }`}
             initialValues={{
-              firstname: '',
-              lastname: '',
+              firstname: firstname,
+              lastname: lastname.join(' '),
               country: '',
-              email: '',
+              email: inviteCodeValid.details.email,
               password: '',
+              inviteCode: (router.query.inviteCode as string) || '',
             }}
             onSubmit={onSubmit}
             validationSchema={signupValidationSchema}
@@ -245,6 +287,33 @@ const CreateAccount: NextPage = () => {
                       hideValue
                       error={touched.password && errors.password}
                     />
+
+                    <InputV2
+                      type="text"
+                      label="Invite Code"
+                      name="inviteCode"
+                      value={values.inviteCode}
+                      onChange={(event) => {
+                        handleChange(event);
+
+                        const { pathname, query } = router;
+                        const url = stringifyUrl({
+                          url: pathname,
+                          query: { ...query, inviteCode: event.target.value },
+                        });
+
+                        router.push(url);
+                      }}
+                      onBlur={handleBlur}
+                      error={
+                        (!!values.inviteCode &&
+                          !inviteCodeValid.loading &&
+                          !inviteCodeValid.valid &&
+                          'invalid invite code') ||
+                        (touched.inviteCode && errors.inviteCode)
+                      }
+                      loading={inviteCodeValid.loading}
+                    />
                   </div>
 
                   <Button
@@ -252,8 +321,18 @@ const CreateAccount: NextPage = () => {
                     label="Create Account"
                     className="create-account__submit-btn"
                     primary
-                    disabled={isSubmitting || !countries.length}
-                    showSpinner={loading || isSubmitting || !countries.length}
+                    disabled={
+                      isSubmitting ||
+                      !countries.length ||
+                      inviteCodeValid.loading ||
+                      !inviteCodeValid.valid
+                    }
+                    showSpinner={
+                      loading ||
+                      isSubmitting ||
+                      !countries.length ||
+                      inviteCodeValid.loading
+                    }
                   />
                 </form>
               );

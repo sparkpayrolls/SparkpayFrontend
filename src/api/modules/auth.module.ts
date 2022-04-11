@@ -57,4 +57,12 @@ export class AuthModule extends HttpRepository {
   async requestAccess(payload: { email: string; name: string }): Promise<void> {
     await this.post('/auth/request-access', payload);
   }
+
+  async validateInviteCode(code: string) {
+    const { data } = await this.get('/auth/validate-access-request-code', {
+      params: { code },
+    });
+
+    return data as { email: string; name: string };
+  }
 }
