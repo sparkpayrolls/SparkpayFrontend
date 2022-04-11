@@ -193,7 +193,8 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
 .profile-menu {
   position: fixed;
   left: 0;
-  width: 16rem;
+  max-width: 100%;
+  width: 378px;
   bottom: 0;
   border-top: 1px solid #dde5ee;
   background: #f8fafc;
@@ -278,7 +279,8 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
     transition: all 0.25s ease-out;
     transform: scale(0);
     transform-origin: 100% 100%;
-    width: 250px;
+    width: 370px;
+    max-width: calc(100% - 8px);
 
     &__item {
       padding: 10px;
