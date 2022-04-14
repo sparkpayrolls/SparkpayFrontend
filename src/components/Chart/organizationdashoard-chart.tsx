@@ -1,6 +1,6 @@
 import { ChartDataset } from 'chart.js';
 import React from 'react';
-import { Bar, Pie } from 'react-chartjs-2';
+import { Area, Pie } from '@ant-design/plots';
 import { Util } from 'src/helpers/util';
 
 interface IOrganizationDashboardBarChart {
@@ -14,83 +14,44 @@ export const OrganizationDashboardBarChart = (
 ) => {
   const { labels, datasets, currency } = props;
 
-  return (
-    <Bar
-      data={{
-        labels,
-        datasets: datasets,
-      }}
-      options={{
-        plugins: {
-          legend: {
-            display: false,
-            labels: {
-              font: {
-                size: 16,
-                lineHeight: 24,
-                weight: 'bold',
-                family: 'karla, Helvetica Neue, Helvetica, Arial, system-ui',
-              },
-            },
-          },
-          tooltip: {
-            displayColors: false,
-            callbacks: {
-              label(data) {
-                data.formattedValue = `${data.dataset.label}: ${currency} ${data.formattedValue}`;
+  const data = datasets[0].data.map((data, idx) => {
+    return { timePeriod: labels[idx], value: Util.shortenNumber(data) };
+  });
 
-                return [data.formattedValue];
-              },
-            },
-            bodyFont: {
-              lineHeight: 1,
-              size: 12,
-              family: 'karla, Helvetica Neue, Helvetica, Arial, system-ui',
-            },
-            titleFont: {
-              size: 16,
-              family: 'karla, Helvetica Neue, Helvetica, Arial, system-ui',
-            },
+  const config = {
+    data,
+    xField: 'timePeriod',
+    yField: 'value',
+    xAxis: {
+      range: [0, 1],
+    },
+    yAxis: {
+      grid: {
+        line: {
+          style: {
+            lineDash: [6, 8],
+            cursor: 'pointer',
           },
         },
-        scales: {
-          xAxes: {
-            grid: {
-              display: false,
-            },
-            ticks: {
-              font: {
-                lineHeight: 1,
-                size: 10,
-                family: 'karla, Helvetica Neue, Helvetica, Arial, system-ui',
-              },
-            },
-          },
-          yAxes: {
-            beginAtZero: true,
-            grid: {
-              display: false,
-            },
-            ticks: {
-              callback(item) {
-                return Util.shortenNumber(+item);
-              },
-              font: {
-                lineHeight: 1,
-                size: 12,
-                family: 'karla, Helvetica Neue, Helvetica, Arial, system-ui',
-              },
-            },
-          },
-        },
-        datasets: {
-          bar: {
-            barPercentage: 0.1,
-          },
-        },
-      }}
-    />
-  );
+      },
+    },
+    line: {
+      color: '#2563EB',
+    },
+    color: '#B9CFF9',
+    tooltip: {
+      formatter: (data: IToolTip) => {
+        console.log('ToolTip Data: ', data);
+
+        return {
+          name: 'value',
+          value: `${currency} ${data.value}`,
+        };
+      },
+    },
+  };
+
+  return <Area {...config} />;
 };
 
 interface IOrganizationDashboardPieChart {
@@ -99,40 +60,69 @@ interface IOrganizationDashboardPieChart {
   currency: string;
 }
 
+interface IToolTip {
+  value: number;
+  type?: string;
+  timePeriod?: string;
+}
+
 export const OrganizationDashboardPieChart = (
   props: IOrganizationDashboardPieChart,
 ) => {
   const { labels, datasets, currency } = props;
 
-  return (
-    <Pie
-      data={{
-        labels,
-        datasets,
-      }}
-      options={{
-        cutout: '80%',
-        plugins: {
-          legend: {
-            display: false,
-          },
-          tooltip: {
-            displayColors: false,
-            callbacks: {
-              label(data) {
-                data.formattedValue = `${data.label}: ${currency} ${data.formattedValue}`;
+  const data = datasets[0].data.map((elem, idx) => {
+    return { type: labels[idx], value: elem };
+  });
 
-                return [data.formattedValue];
-              },
-            },
-            bodyFont: {
-              lineHeight: 1,
-              size: 12,
-              family: 'karla, Helvetica Neue, Helvetica, Arial, system-ui',
-            },
-          },
+  const config = {
+    appendPadding: 10,
+    data,
+    angleField: 'value',
+    colorField: 'type', // or seriesField in some cases
+    color: datasets[0].backgroundColor,
+    radius: 1,
+    innerRadius: 0.7,
+    autoFit: false,
+    height: 380,
+    label: {
+      type: 'inner',
+      offset: '-50%',
+      content: '{value}',
+      style: {
+        textAlign: 'center',
+        fontSize: 0,
+      },
+    },
+    tooltip: {
+      formatter: (data: IToolTip) => {
+        return {
+          name: data.type,
+          value: `${currency} ${Util.shortenNumber(data.value)}`,
+        };
+      },
+    },
+    legend: false,
+    interactions: [
+      {
+        type: 'element-selected',
+      },
+      {
+        type: 'element-active',
+      },
+    ],
+    statistic: {
+      title: false,
+      content: {
+        style: {
+          whiteSpace: 'pre-wrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
         },
-      }}
-    />
-  );
+        content: '',
+      },
+    },
+  };
+
+  return <Pie {...config} />;
 };

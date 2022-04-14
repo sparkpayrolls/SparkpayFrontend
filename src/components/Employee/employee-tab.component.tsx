@@ -10,9 +10,6 @@ import { EmployeeTable } from '../Table/employee-table.component';
 import { IEmployeeFilter, IEmployeeTab } from '../types';
 import { confirmation } from '../Modals/ConfirmationModal.component';
 
-
-
-
 export const EmployeeTab = (props: IEmployeeTab) => {
   const {
     administrator,
@@ -27,29 +24,37 @@ export const EmployeeTab = (props: IEmployeeTab) => {
   const onDelete = async (id: string | string[]) => {
     if (!loading) {
       const shouldDelete = await confirmation({
-        title:'Delete employee',
+        title: 'Delete employee',
         text: 'Are you sure you want to permanently delete this employee?',
       });
       if (shouldDelete) {
-    try {
-      const ids = Array.isArray(id) ? id : [id];
-      setIsLoading(true);
-      await $api.employee.removeMultipleEmployees(ids);
-      toast.success(`employee(s) deleted successfully`);
-      refreshEmployees();
-    } catch (error) {
-      const err = error as HttpError;
-      toast.error(err.message);
-    } finally {
-      setIsLoading(false);
+        try {
+          const ids = Array.isArray(id) ? id : [id];
+          setIsLoading(true);
+          await $api.employee.removeMultipleEmployees(ids);
+          toast.success(`employee(s) deleted successfully`, {
+            position: 'bottom-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          refreshEmployees();
+        } catch (error) {
+          const err = error as HttpError;
+          toast.error(err.message);
+        } finally {
+          setIsLoading(false);
+        }
+      }
     }
-  }
-  }
   };
 
-  const onStatusToggle = (
-    action:  'Activate' | 'Deactivate',
-  ) => async (id: string | string[]) => {
+  const onStatusToggle = (action: 'Activate' | 'Deactivate') => async (
+    id: string | string[],
+  ) => {
     try {
       const ids = Array.isArray(id) ? id : [id];
       setIsLoading(true);
