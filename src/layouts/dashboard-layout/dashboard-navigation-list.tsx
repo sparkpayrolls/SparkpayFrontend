@@ -40,12 +40,20 @@ export const navListItems = (
   router: NextRouter,
 ): (IDashboardNavigationListItem & { permissions: IAllowedPermissions })[] => [
   {
+    Icon: OrganizationSettingsSvg,
+    href: '/organisations',
+    match: '/organisations',
+    router,
+    title: 'Organisations',
+    permissions: [],
+  },
+  {
     Icon: DashboardSvg,
-    href: '/',
-    match: '(\\/dashboard|^\\/$)',
+    href: '/overview',
+    match: '(\\/overview|^\\/$)',
     router,
     title: 'Overview',
-    permissions: [],
+    permissions: [['Overview', 'read']],
   },
   {
     Icon: EmployeeSvg,
@@ -78,14 +86,6 @@ export const navListItems = (
     router,
     title: 'Admin\xa0Management',
     permissions: [['Admin', 'read']],
-  },
-  {
-    Icon: OrganizationSettingsSvg,
-    href: '/organisations',
-    match: '/organisations',
-    router,
-    title: 'Organisations',
-    permissions: [],
   },
   {
     Icon: RemittancesSvg,

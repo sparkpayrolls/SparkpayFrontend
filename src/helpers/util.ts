@@ -71,17 +71,30 @@ export class Util {
     allowedPermissions: IAllowedPermissions,
     administrator: Administrator | null,
   ) {
+    if (!allowedPermissions.length) {
+      return true;
+    }
     if (administrator?.isRoot) {
+      return true;
+    }
+    if (
+      !administrator &&
+      allowedPermissions.some(([group]) => group === 'Overview')
+    ) {
       return true;
     }
 
     const role = administrator?.role as Role;
     const permissions = role?.permissions as Permission[];
+    if (!permissions?.length) {
+      return false;
+    }
 
     const canActivate = allowedPermissions.every(([group, level]) => {
       return permissions?.some(
         (permission) =>
-          permission.group === group && (level === level || level === 'write'),
+          permission.group === group &&
+          (permission.level === level || permission.level === 'write'),
       );
     });
 

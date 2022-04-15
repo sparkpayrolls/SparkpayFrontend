@@ -74,10 +74,10 @@ const Dashboard: NextPage = () => {
   }, [companies, dispatch, getUserDashboardData]);
 
   return (
-    <DashboardLayout pageTitle="Dashboard">
+    <DashboardLayout pageTitle="Overview">
       <div className="dashboard">
         <div className="dashboard__top-bar">
-          <h2 className="dashboard__title">Payroll Overview</h2>
+          <h2 className="dashboard__title">Overview</h2>
 
           {!administrator && (
             <CreateOrganisationButton onCreate={getUserDashboardData} />
@@ -103,4 +103,4 @@ const Dashboard: NextPage = () => {
   );
 };
 
-export default withAuth(Dashboard);
+export default withAuth(Dashboard, ['Overview', 'read']);

@@ -48,11 +48,7 @@ const AuthManager = () => {
       (res) => res,
       (error) => {
         if (error.response?.status === 401) {
-          const authToken = Cookies.get('auth_token');
           logOut(dispatch);
-          if (authToken) {
-            Util.redirectToLogin(router);
-          }
         }
 
         return Promise.reject(error);
@@ -132,6 +128,23 @@ const AuthManager = () => {
         .catch(() => {});
     }
   }, [dispatch, companies, administrator]);
+
+  useEffect(() => {
+    const { 'email-verification-code': code } = router.query;
+    if (user && !user?.emailVerified && code) {
+      $api.auth
+        .verifyEmail(code as string)
+        .then(({ user, token }) => {
+          Cookies.set('auth_token', token);
+          dispatch(commitUser(user));
+          toast.success('Email verified');
+          router.replace('/');
+        })
+        .catch(() => {
+          // error verifying user...
+        });
+    }
+  }, [user, router, dispatch]);
 
   return (
     <Detector

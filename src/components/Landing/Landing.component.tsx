@@ -27,8 +27,6 @@ export const Landing = () => {
       setName('');
       setEmail('');
     } catch (error) {
-      console.log(error);
-
       toast.error('Please try that again.');
     } finally {
       setShowSpinner(false);
@@ -36,7 +34,7 @@ export const Landing = () => {
   };
 
   return (
-    <DefaultLayout >
+    <DefaultLayout>
       <Head>
         <title>SparkPay</title>
         <meta name="description" content="Sparkpay homepage" />
@@ -52,10 +50,7 @@ export const Landing = () => {
             and remitting statutory deductions.
           </p>
 
-          <form
-            className="hero-section__join-list"
-            onSubmit={handleSubmit}
-          >
+          <form className="hero-section__join-list" onSubmit={handleSubmit}>
             <input
               type="text"
               name="name"

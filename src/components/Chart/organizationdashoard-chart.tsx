@@ -41,8 +41,6 @@ export const OrganizationDashboardBarChart = (
     color: '#B9CFF9',
     tooltip: {
       formatter: (data) => {
-        console.log('ToolTip Data: ', data);
-
         return {
           name: 'value',
           value: `${currency} ${data.value}`,

@@ -60,8 +60,8 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
       .then((data) => {
         setChartData(data);
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((_e) => {
+        // ...
       })
       .finally(() => setLoadingData(false));
   }, [filter]);

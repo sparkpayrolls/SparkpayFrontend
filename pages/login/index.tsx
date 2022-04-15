@@ -29,7 +29,7 @@ const Login: NextPage = () => {
   const goto = router.query.goto as string;
   const isLoggedIn = !!user;
   if (isLoggedIn) {
-    router.replace(goto ? goto : '/');
+    router.replace(goto ? goto : '/organisations');
     return null;
   }
 

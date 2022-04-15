@@ -174,6 +174,7 @@ export enum PermissionGroupEnum {
   AuditTrail = 'AuditTrail',
   Remittance = 'Remittance',
   Admin = 'Admin',
+  Overview = 'Overview',
 }
 
 export enum PermissionLevelEnum {

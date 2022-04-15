@@ -35,10 +35,7 @@ function withAuth<T>(
       }
 
       if (allowedPermissions.length) {
-        if (
-          !administrator ||
-          !Util.canActivate(allowedPermissions, administrator)
-        ) {
+        if (!Util.canActivate(allowedPermissions, administrator)) {
           // Router.replace('/');
           return <Forbidden />;
         }
