@@ -192,6 +192,7 @@ interface IInputV2 {
   loading?: boolean;
   hideValue?: boolean;
   showVisibilityToggle?: boolean;
+  checkbox?: boolean;
   transformValue?(val: string | number | readonly string[] | undefined): any;
 }
 
@@ -215,6 +216,7 @@ export const InputV2 = (
     type,
     labelFor,
     transformValue,
+    checkbox,
     ...inputProps
   } = props;
   const inputClassname = classNames(
@@ -228,6 +230,7 @@ export const InputV2 = (
   const containerClass = classNames('input-v2', {
     'input-v2--focused': focused,
     'input-v2--error': !!error,
+    'checkbox-input': checkbox,
   });
   const isNumberInput = type === 'number';
   let contentVisibleInputType = props.type === 'password' ? 'text' : props.type;

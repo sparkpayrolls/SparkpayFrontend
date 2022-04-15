@@ -1,6 +1,6 @@
 import { ChartDataset } from 'chart.js';
 import React from 'react';
-import { Area, Pie } from '@ant-design/plots';
+import { Area, AreaConfig, Pie, PieConfig } from '@ant-design/plots';
 import { Util } from 'src/helpers/util';
 
 interface IOrganizationDashboardBarChart {
@@ -18,7 +18,7 @@ export const OrganizationDashboardBarChart = (
     return { timePeriod: labels[idx], value: Util.shortenNumber(data) };
   });
 
-  const config = {
+  const config: AreaConfig = {
     data,
     xField: 'timePeriod',
     yField: 'value',
@@ -40,7 +40,7 @@ export const OrganizationDashboardBarChart = (
     },
     color: '#B9CFF9',
     tooltip: {
-      formatter: (data: IToolTip) => {
+      formatter: (data) => {
         console.log('ToolTip Data: ', data);
 
         return {
@@ -60,12 +60,6 @@ interface IOrganizationDashboardPieChart {
   currency: string;
 }
 
-interface IToolTip {
-  value: number;
-  type?: string;
-  timePeriod?: string;
-}
-
 export const OrganizationDashboardPieChart = (
   props: IOrganizationDashboardPieChart,
 ) => {
@@ -75,12 +69,12 @@ export const OrganizationDashboardPieChart = (
     return { type: labels[idx], value: elem };
   });
 
-  const config = {
+  const config: PieConfig = {
     appendPadding: 10,
     data,
     angleField: 'value',
     colorField: 'type', // or seriesField in some cases
-    color: datasets[0].backgroundColor,
+    color: datasets[0].backgroundColor as string,
     radius: 1,
     innerRadius: 0.7,
     // autoFit: false,
@@ -95,7 +89,7 @@ export const OrganizationDashboardPieChart = (
       },
     },
     tooltip: {
-      formatter: (data: IToolTip) => {
+      formatter: (data) => {
         return {
           name: data.type,
           value: `${currency} ${Util.shortenNumber(data.value)}`,

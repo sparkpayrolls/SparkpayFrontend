@@ -30,6 +30,7 @@ interface ISignUpForm {
   email: string;
   password: string;
   inviteCode: string;
+  subcribeToMailList: boolean;
 }
 
 const CreateAccount: NextPage = () => {
@@ -183,6 +184,7 @@ const CreateAccount: NextPage = () => {
               email: inviteCodeValid.details.email,
               password: '',
               inviteCode: (router.query.inviteCode as string) || '',
+              subcribeToMailList: true,
             }}
             onSubmit={onSubmit}
             validationSchema={signupValidationSchema}
@@ -313,6 +315,22 @@ const CreateAccount: NextPage = () => {
                         (touched.inviteCode && errors.inviteCode)
                       }
                       loading={inviteCodeValid.loading}
+                    />
+
+                    <InputV2
+                      type="checkbox"
+                      checkbox
+                      id="subscribe"
+                      labelFor="subscribe"
+                      label="Subscribe to hearing about exciting new features and offers"
+                      name="subcribeToMailList"
+                      checked={values.subcribeToMailList}
+                      onChange={() => {
+                        setValues({
+                          ...values,
+                          subcribeToMailList: !values.subcribeToMailList,
+                        });
+                      }}
                     />
                   </div>
 
