@@ -44,7 +44,7 @@ export const navListItems = (
     href: '/',
     match: '(\\/dashboard|^\\/$)',
     router,
-    title: 'Dashboard',
+    title: 'Overview',
     permissions: [],
   },
   {

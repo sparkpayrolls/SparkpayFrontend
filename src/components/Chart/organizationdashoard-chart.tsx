@@ -83,8 +83,8 @@ export const OrganizationDashboardPieChart = (
     color: datasets[0].backgroundColor,
     radius: 1,
     innerRadius: 0.7,
-    autoFit: false,
-    height: 380,
+    // autoFit: false,
+    // height: 380,
     label: {
       type: 'inner',
       offset: '-50%',
