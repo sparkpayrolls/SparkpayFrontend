@@ -102,7 +102,6 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 2.5rem;
         width: 100%;
       }
 
@@ -125,6 +124,7 @@
         font-size: 16px;
         line-height: 16px;
         color: #6d7a98;
+        margin-top: 0.5rem;
       }
 
       &__select {
