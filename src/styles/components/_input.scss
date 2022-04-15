@@ -787,3 +787,16 @@
     }
   }
 }
+
+.checkbox-input {
+  display: grid;
+  grid-template-columns: 0.2fr 0.9fr;
+  grid-auto-flow: dense;
+  gap: 0;
+
+  .app-container {
+    margin-top: 0.5rem;
+    grid-column-start: 1;
+    grid-row-start: 1;
+  }
+}

@@ -72,6 +72,8 @@ export type SignupDTO = {
   password: string;
 
   country: string;
+
+  subcribeToMailList?: boolean;
 };
 
 export type PaginateParams = {
