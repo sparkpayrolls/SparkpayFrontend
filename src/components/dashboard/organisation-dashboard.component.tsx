@@ -158,7 +158,7 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
               />
             )}
             {loadingData && (
-              <Skeleton width={250} borderRadius="50%" count={1} height={250} />
+              <Skeleton width={300} borderRadius="50%" count={1} height={300} />
             )}
 
             <div className="payroll__legend">
