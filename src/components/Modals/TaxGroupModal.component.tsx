@@ -1,5 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react';
-import { CustomTaxRelief, SalaryBreakdown } from 'src/api/types';
+import { NigerianTaxGroupMeta } from 'src/api/types';
 import { EmployeeTaxGroupForm } from '../Form/employee-tax-group.form';
 import { ModalLayout } from './ModalLayout.component';
 
@@ -8,8 +8,7 @@ type ITaxGroupModal = {
   initialValues?: {
     name: string;
     description?: string;
-    salaryBreakdown?: SalaryBreakdown[];
-    customTaxRelief?: CustomTaxRelief[];
+    meta: NigerianTaxGroupMeta;
   };
 };
 

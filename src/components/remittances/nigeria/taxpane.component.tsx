@@ -271,19 +271,21 @@ export const TaxSettings = () => {
 
         <InputV2
           label="Withholding Tax Rate"
-          value={settings?.whTaxRate}
+          value={(settings?.whTaxRate || 0) * 100}
           onChange={(e) => {
             validateWhTaxRate(e);
             if (settings) {
               const { value } = e.target;
               const whTaxRate = +value;
               if (whTaxRate > 0 && whTaxRate <= 100) {
+                e.target.value = (+e.target.value / 100).toFixed(2);
                 getInputHandler('whTaxRate')(e);
               }
             }
           }}
           onBlur={validateWhTaxRate}
           type="number"
+          transformValue={(val) => `${val}%`}
           placeholder="Withholding Tax Rate"
           error={errors.whTaxRate}
         />

@@ -5,15 +5,20 @@ import { Tab } from '@/components/Tab/tab.component';
 import { Text } from '@/components/Typography/Text';
 import { Container } from '@/components/Shared/container.component';
 import { TaxSettings } from '@/components/remittances/nigeria/taxpane.component';
-import { TaxGroup } from '@/components/remittances/nigeria/taxgroup.component';
+import {
+  ITaxGroupRef,
+  TaxGroup,
+} from '@/components/remittances/nigeria/taxgroup.component';
 import { Button } from '@/components/Button/Button.component';
 import NiceModal from '@ebay/nice-modal-react';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { TaxGroupModal } from '@/components/Modals/TaxGroupModal.component';
+import { useRef } from 'react';
 
 const Tax: NextPage = () => {
   const router = useRouter();
+  const groupRef = useRef<ITaxGroupRef>();
   const { tab } = router.query;
   const selectedTab = Array.isArray(tab) ? tab[0] : tab || 'settings';
   const onTabChange = (tab: string) => {
@@ -43,7 +48,11 @@ const Tax: NextPage = () => {
           <Button
             type="button"
             className="nigerian-tax__button"
-            onClick={() => NiceModal.show(TaxGroupModal)}
+            onClick={() =>
+              NiceModal.show(TaxGroupModal).then(
+                groupRef.current?.refreshGroups,
+              )
+            }
             primary
             label={'Create Tax Group'}
           />
@@ -54,7 +63,7 @@ const Tax: NextPage = () => {
             <TaxSettings />
           </Tab.TabPane>
           <Tab.TabPane key="groups" tab="Groups">
-            <TaxGroup />
+            <TaxGroup getRef={(ref) => (groupRef.current = ref)} />
           </Tab.TabPane>
         </Tab>
       </Container>

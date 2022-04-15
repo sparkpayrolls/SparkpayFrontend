@@ -10,10 +10,12 @@ import { Container } from '../Shared/container.component';
 
 export type IGroupEmployees = {
   groupId?: string;
+  addEmployee?(_id: string): Promise<unknown>;
+  removeEmployee?(_id: string): Promise<unknown>;
 };
 
 export const GroupEmployees = (props: IGroupEmployees) => {
-  const { groupId } = props;
+  const { groupId, addEmployee, removeEmployee } = props;
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState<EmployeeGroup[]>([]);
 
@@ -38,11 +40,15 @@ export const GroupEmployees = (props: IGroupEmployees) => {
     getEmployees();
   }, [getEmployees]);
 
-  const addEmployee = async (id: string) => {
+  const onAddEmployee = async (id: string) => {
     if (!groupId) return;
     try {
       setLoading(true);
-      await $api.employee.addEmployeesToGroup(groupId, [id]);
+      if (addEmployee) {
+        await addEmployee(id);
+      } else {
+        await $api.employee.addEmployeesToGroup(groupId, [id]);
+      }
       await getEmployees();
       toast.success('employee added successfully.');
     } catch (error) {
@@ -53,11 +59,15 @@ export const GroupEmployees = (props: IGroupEmployees) => {
       setLoading(false);
     }
   };
-  const removeEmployee = async (id: string) => {
+  const onRemoveEmployee = async (id: string) => {
     if (!groupId) return;
     try {
       setLoading(true);
-      await $api.employee.removeEmployeesFromGroup(groupId, [id]);
+      if (removeEmployee) {
+        await removeEmployee(id);
+      } else {
+        await $api.employee.removeEmployeesFromGroup(groupId, [id]);
+      }
       await getEmployees();
       toast.success('employee removed successfully.');
     } catch (error) {
@@ -82,7 +92,7 @@ export const GroupEmployees = (props: IGroupEmployees) => {
         className="group-details__parent-container"
       >
         <EmployeeAutocompleteForm
-          onSelect={(employee) => addEmployee(employee.id)}
+          onSelect={(employee) => onAddEmployee(employee.id)}
           clearOnSelect
         />
 
@@ -97,7 +107,7 @@ export const GroupEmployees = (props: IGroupEmployees) => {
                   {employee.firstname} {employee.lastname}
                 </p>
                 <div
-                  onClick={() => removeEmployee(employee.id)}
+                  onClick={() => onRemoveEmployee(employee.id)}
                   className="group-details__image-container"
                 >
                   <Image

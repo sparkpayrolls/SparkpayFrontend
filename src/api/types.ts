@@ -583,3 +583,15 @@ export type ProcessPayrollResponse = {
   payrollEmployees: PayrollEmployee[];
   proRateMonth: string;
 };
+
+export type NigerianTaxGroupMeta = {
+  taxId?: string;
+  taxState?: string;
+  salaryBreakdown?: SalaryBreakdown[];
+  customTaxRelief?: CustomTaxRelief[];
+  taxOffice?: string;
+  payrollFrequency?: number;
+  status?: TaxStatus;
+  type?: TaxType;
+  whTaxRate?: number;
+};

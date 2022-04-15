@@ -141,18 +141,20 @@ export const EmployeeTaxGroupValidation = Yup.object()
   .shape({
     name: Yup.string().required('Group name is required'),
     description: Yup.string(),
-    salaryBreakdown: Yup.array().of(
-      Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        value: Yup.string().required('Value is required'),
-      }),
-    ),
-    customTaxRelief: Yup.array().of(
-      Yup.object().shape({
-        amount: Yup.string().required(),
-        name: Yup.string().required(),
-      }),
-    ),
+    meta: Yup.object().shape({
+      salaryBreakdown: Yup.array().of(
+        Yup.object().shape({
+          name: Yup.string().required('Name is required'),
+          value: Yup.string().required('Value is required'),
+        }),
+      ),
+      customTaxRelief: Yup.array().of(
+        Yup.object().shape({
+          amount: Yup.string().required(),
+          name: Yup.string().required(),
+        }),
+      ),
+    }),
   })
   .required();
 
