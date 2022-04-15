@@ -77,7 +77,7 @@ const Dashboard: NextPage = () => {
     <DashboardLayout pageTitle="Dashboard">
       <div className="dashboard">
         <div className="dashboard__top-bar">
-          <h2 className="dashboard__title">Dashboard</h2>
+          <h2 className="dashboard__title">Payroll Overview</h2>
 
           {!administrator && (
             <CreateOrganisationButton onCreate={getUserDashboardData} />

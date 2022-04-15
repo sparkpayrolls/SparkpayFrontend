@@ -102,29 +102,31 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
         <div className="disbursement">
           {!chartDataEmpty && (
             <>
-              <div className="disbursement__header">
-                <div className="disbursement__info">
-                  <p className="disbursement__title">Payroll trend</p>
-                  <p className="disbursement__date">
-                    {moment().format('MMMM DD, YYYY, hh:mm A')}
-                  </p>
-                </div>
+              <div style={{ marginBottom: '2.5rem' }}>
+                <div className="disbursement__header">
+                  <div className="disbursement__info">
+                    <p className="disbursement__title">Payroll trend</p>
+                  </div>
 
-                <div className="disbursement__select">
-                  <Select
-                    value={filter.filterBy}
-                    onChange={(filterBy) => {
-                      const filter = {
-                        filterBy,
-                        filterFormat: filterBy === 'years' ? 'YYYY' : 'MMM',
-                      };
-                      setFilter(filter);
-                    }}
-                  >
-                    <Select.Option value="months">Monthly</Select.Option>
-                    <Select.Option value="years">Yearly</Select.Option>
-                  </Select>
+                  <div className="disbursement__select">
+                    <Select
+                      value={filter.filterBy}
+                      onChange={(filterBy) => {
+                        const filter = {
+                          filterBy,
+                          filterFormat: filterBy === 'years' ? 'YYYY' : 'MMM',
+                        };
+                        setFilter(filter);
+                      }}
+                    >
+                      <Select.Option value="months">Monthly</Select.Option>
+                      <Select.Option value="years">Yearly</Select.Option>
+                    </Select>
+                  </div>
                 </div>
+                <p className="disbursement__date">
+                  {moment().format('MMMM DD, YYYY, hh:mm A')}
+                </p>
               </div>
 
               {!loadingData && chartData && (
@@ -158,7 +160,7 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
               />
             )}
             {loadingData && (
-              <Skeleton width={250} borderRadius="50%" count={1} height={250} />
+              <Skeleton width={300} borderRadius="50%" count={1} height={300} />
             )}
 
             <div className="payroll__legend">
