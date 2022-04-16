@@ -35,8 +35,7 @@ const DashboardLayout: React.FC<Props> = ({
   pageTitle,
   loading,
 }: Props) => {
-  const companies = useAppSelector((state) => state.companies);
-  const user = useAppSelector((state) => state.user);
+  const { user, companies } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [loadingCompanySelect, setLoadingCompanySelect] = useState('');

@@ -19,6 +19,7 @@ import {
   EmployeeTaxDetail,
   EmployeeTaxDetailPayload,
   NigerianTaxSettings,
+  SalaryBreakdown,
   SetupTaxPayload,
   State,
 } from 'src/api/types';
@@ -102,14 +103,10 @@ export const TaxSettings = () => {
     [employeeCurrentPageInfo],
   );
 
-  const updateDetails = async (update: SetupTaxPayload) => {
+  const trackChangesSave = async (func: () => Promise<unknown>) => {
     await toast
       .promise(
-        async () => {
-          const details = await $api.remittance.nigeria.tax.setupTax(update);
-
-          setSettings(details);
-        },
+        func,
         {
           success: 'Changes saved',
           pending: 'Saving changes',
@@ -122,11 +119,22 @@ export const TaxSettings = () => {
           closeOnClick: true,
           pauseOnHover: true,
           draggable: false,
+          toastId: settings?.id,
         },
       )
       .catch((e) => {
-        toast.error(e.message);
+        Util.onNonAuthError(e, (httpError) => {
+          toast.error(httpError.message);
+        });
       });
+  };
+
+  const updateDetails = (update: SetupTaxPayload) => {
+    trackChangesSave(async () => {
+      const details = await $api.remittance.nigeria.tax.setupTax(update);
+
+      setSettings(details);
+    });
   };
 
   const getRadioHandler = (name: string) => {
@@ -237,6 +245,10 @@ export const TaxSettings = () => {
     }
   });
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
+  const canEditSalaryBreakdown = Util.canActivate(
+    [['Company', 'write']],
+    administrator,
+  );
 
   return (
     <Container className="tax-pane">
@@ -268,27 +280,6 @@ export const TaxSettings = () => {
             </Space>
           </Radio.Group>
         </Container>
-
-        <InputV2
-          label="Withholding Tax Rate"
-          value={(settings?.whTaxRate || 0) * 100}
-          onChange={(e) => {
-            validateWhTaxRate(e);
-            if (settings) {
-              const { value } = e.target;
-              const whTaxRate = +value;
-              if (whTaxRate > 0 && whTaxRate <= 100) {
-                e.target.value = (+e.target.value / 100).toFixed(2);
-                getInputHandler('whTaxRate')(e);
-              }
-            }
-          }}
-          onBlur={validateWhTaxRate}
-          type="number"
-          transformValue={(val) => `${val}%`}
-          placeholder="Withholding Tax Rate"
-          error={errors.whTaxRate}
-        />
 
         <InputV2
           label="Tax ID"
@@ -340,6 +331,31 @@ export const TaxSettings = () => {
           })}
         </Select>
 
+        {settings?.type === 'WITHHOLDING' ? (
+          <InputV2
+            label="Withholding Tax Rate"
+            value={(settings?.whTaxRate || 0) * 100}
+            onChange={(e) => {
+              validateWhTaxRate(e);
+              if (settings) {
+                const { value } = e.target;
+                const whTaxRate = +value;
+                if (whTaxRate > 0 && whTaxRate <= 100) {
+                  e.target.value = (+e.target.value / 100).toFixed(2);
+                  getInputHandler('whTaxRate')(e);
+                }
+              }
+            }}
+            onBlur={validateWhTaxRate}
+            type="number"
+            transformValue={(val) => `${val}%`}
+            placeholder="Withholding Tax Rate"
+            error={errors.whTaxRate}
+          />
+        ) : (
+          <div></div>
+        )}
+
         <Container>
           <NameValueInputGroup
             label="Custom tax relief items"
@@ -369,7 +385,51 @@ export const TaxSettings = () => {
             transformValue={(v: number) => {
               return `${(+v).toFixed(1)}%`;
             }}
-            readonly
+            readonly={!canEditSalaryBreakdown}
+            onChange={(e) => {
+              if (settings && canEditSalaryBreakdown) {
+                const { value } = e.target;
+                setSettings({
+                  ...settings,
+                  company: {
+                    ...settings.company,
+                    salaryBreakdown: value as SalaryBreakdown[],
+                  },
+                });
+                clearTimeout(updateCallId['company']);
+                setUpdateCallId({
+                  ...updateCallId,
+                  company: setTimeout(
+                    () =>
+                      trackChangesSave(async () => {
+                        await $api.company
+                          .updateCompanyById(settings.company.id, {
+                            salaryBreakdown: value.map((item) => ({
+                              name: item.name,
+                              value: item.value as number,
+                            })),
+                          })
+                          .catch((e) => {
+                            Util.onNonAuthError(e, (httpError) => {
+                              if (httpError.status === 422) {
+                                throw new Error(
+                                  httpError.errors.salaryBreakdown,
+                                );
+                              }
+                              throw httpError;
+                            });
+                          });
+                      }),
+                    1000,
+                  ),
+                });
+              }
+            }}
+            helper={
+              canEditSalaryBreakdown
+                ? ''
+                : 'Not permitted to edit company salary breakdown'
+            }
           />
         </Container>
       </Container>

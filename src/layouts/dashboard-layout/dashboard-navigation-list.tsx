@@ -15,7 +15,9 @@ import {
 import classNames from 'classnames';
 import Link from 'next/link';
 import { NextRouter, useRouter } from 'next/router';
+import { Administrator } from 'src/api/types';
 import withPermission from 'src/helpers/HOC/withPermission';
+import { useAppSelector } from 'src/redux/hooks';
 
 export const DashboardNavigationListItem = (
   props: IDashboardNavigationListItem,
@@ -38,14 +40,15 @@ export const DashboardNavigationListItem = (
 
 export const navListItems = (
   router: NextRouter,
+  administrator: Administrator | null,
 ): (IDashboardNavigationListItem & { permissions: IAllowedPermissions })[] => [
   {
     Icon: OrganizationSettingsSvg,
     href: '/organisations',
     match: '/organisations',
     router,
-    title: 'Organisations',
-    permissions: [],
+    title: administrator ? 'Organisation' : 'Organisations',
+    permissions: administrator ? [['Company', 'read']] : [],
   },
   {
     Icon: DashboardSvg,
@@ -73,11 +76,11 @@ export const navListItems = (
   },
   {
     Icon: WalletBillingsSvg,
-    href: '/wallet',
-    match: '/wallet',
+    href: '/transactions',
+    match: '/transactions',
     router,
-    title: 'Wallet\xa0&\xa0Billings',
-    permissions: [['Wallet & Billing', 'read']],
+    title: 'Transactions',
+    permissions: [['Transaction', 'read']],
   },
   {
     Icon: AdminManagementSvg,
@@ -107,10 +110,11 @@ export const navListItems = (
 
 export const NavList = () => {
   const router = useRouter();
+  const administrator = useAppSelector((state) => state.administrator);
 
   return (
     <ul className="dashboard-navigation__list">
-      {navListItems(router).map((item) => {
+      {navListItems(router, administrator).map((item) => {
         const Comp = withPermission(
           DashboardNavigationListItem,
           ...item.permissions,

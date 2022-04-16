@@ -169,7 +169,7 @@ export type Company = Document & {
 export enum PermissionGroupEnum {
   Company = 'Company',
   Employee = 'Employee',
-  'Wallet & Billing' = 'Wallet & Billing',
+  Transaction = 'Transaction',
   Payroll = 'Payroll',
   AuditTrail = 'AuditTrail',
   Remittance = 'Remittance',
@@ -493,9 +493,11 @@ export type NigerianTaxSettings = {
   taxOffice: string;
   taxState: State;
   company: {
+    id: string;
     salaryBreakdown: SalaryBreakdown[];
   };
   customTaxRelief: CustomTaxRelief[];
+  id: string;
 };
 
 export type SetupTaxPayload = Partial<Omit<NigerianTaxSettings, 'company'>>;

@@ -20,7 +20,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { TableEmptyState } from '../EmptyState/table-emptystate.component';
 
 const ViewMoreButton = withPermission(() => (
-  <Link href="/wallet">
+  <Link href="/transactions">
     <a className="transactions__link">View More</a>
   </Link>
 ));

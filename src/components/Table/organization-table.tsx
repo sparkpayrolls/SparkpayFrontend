@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { Company, Country, Role } from 'src/api/types';
 import { Identity } from '../Identity/identity.component';
-import { KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IOrganizationTable } from '../types';
 import { Table } from './Table.component';
 
@@ -24,17 +23,6 @@ export const OrganizationTable = (props: IOrganizationTable) => {
     'Date Created',
   ];
 
-  const kebabMenuItems = (id: string) => {
-    return [
-      { href: `/organisations/${id}`, value: 'Edit' },
-      {
-        action() {
-          deleteOrganisation(id);
-        },
-        value: 'Delete',
-      },
-    ];
-  };
   const refresh = (
     page?: number,
     perPage?: number,
@@ -109,9 +97,17 @@ export const OrganizationTable = (props: IOrganizationTable) => {
                           {moment(company?.createdAt).format('MMMM DD, YYYY')}
                         </span>
 
-                        <div className="organization-table__item__date-column__menu">
-                          <KebabMenu items={kebabMenuItems(company?.id)} />
-                        </div>
+                        {organization.isRoot && (
+                          <div className="organization-table__item__date-column__menu">
+                            <button
+                              onClick={() => deleteOrganisation(company?.id)}
+                              className="button organization-table__delete"
+                            >
+                              <i className="fa fa-trash"></i>
+                              Delete
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </td>
                   </tr>

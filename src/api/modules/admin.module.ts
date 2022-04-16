@@ -11,6 +11,7 @@ export class Admin extends HttpRepository {
   async acceptInvitation(inviteToken: string) {
     const { data } = await this.put<Administrator>(
       '/administrators/invites/accept',
+      null,
       {
         params: { inviteToken },
       },
@@ -22,6 +23,7 @@ export class Admin extends HttpRepository {
   async rejectInvitation(inviteToken: string) {
     const { data } = await this.put<Administrator>(
       '/administrators/invites/reject',
+      null,
       {
         params: { inviteToken },
       },

@@ -34,7 +34,7 @@ export const WalletCard = (props: IWalletCard) => {
         </div>
 
         <Button
-          label={<>{'Fund Wallet'}</>}
+          label={<>{'Fund Payroll'}</>}
           onClick={() => {
             NiceModal.show(WalletBillingModal, {
               administrator,

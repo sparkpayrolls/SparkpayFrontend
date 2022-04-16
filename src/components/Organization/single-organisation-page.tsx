@@ -1,28 +1,26 @@
-import type { NextPage } from 'next';
+import NiceModal from '@ebay/nice-modal-react';
+import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import useApiCall from 'src/helpers/hooks/useapicall.hook';
-import { useAppDispatch } from 'src/redux/hooks';
-import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
-import BackIcon from '../../public/svgs/backicon.svg';
+import { toast } from 'react-toastify';
+import { $api } from 'src/api';
 import { Company, Country } from 'src/api/types';
 import withAuth from 'src/helpers/HOC/withAuth';
-import { HttpError } from 'src/api/repo/http.error';
-import { $api } from 'src/api';
-import { SingleDetail } from '@/components/Employee/single-detail.component';
+import useApiCall from 'src/helpers/hooks/useapicall.hook';
+import { Util } from 'src/helpers/util';
+import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
-import { OrganisationDetailsModal } from '@/components/Modals/OrganisationDetailsModal.component';
-import { NotFound } from '@/components/Misc/not-found.component';
+import { SingleDetail } from '../Employee/single-detail.component';
+import { NotFound } from '../Misc/not-found.component';
+import { OrganisationDetailsModal } from '../Modals/OrganisationDetailsModal.component';
 
-const OrganisationDetails: NextPage = () => {
-  const router = useRouter();
+const OrganisationDetailsUnsecured = () => {
+  const administrator = useAppSelector((state) => state.administrator);
   const [loading, apiCallStarted, apiCallDone] = useApiCall();
   const [organization, setOrganization] = useState<Company | null>();
-  const [createdDateFormatted, setCreatedDateFormatted] = useState('');
   const dispatch = useAppDispatch();
-  const organisationId = router.query.id as string;
+  const organisationId = (administrator?.company as Company)?.id;
+  const canEdit = Util.canActivate([['Company', 'write']], administrator);
 
   const getOrganization = useCallback(async () => {
     try {
@@ -34,64 +32,45 @@ const OrganisationDetails: NextPage = () => {
       const organization = await $api.company.getCompanyById(organisationId);
       setOrganization(organization);
     } catch (error) {
-      const httpError = error as HttpError;
-      if (httpError.status === 404) {
-        setOrganization(null);
-        return;
-      }
+      Util.onNonAuthError(error, (httpError) => {
+        if (httpError.status === 404) {
+          setOrganization(null);
+          return;
+        }
 
-      const toast = await import('react-toastify').then((mod) => mod.toast);
-      toast.error(httpError.message);
+        toast.error(httpError.message);
+      });
     } finally {
       apiCallDone();
     }
   }, [organisationId, apiCallStarted, apiCallDone]);
 
   const onEditDetails = async () => {
-    const NiceModal = (await import('@ebay/nice-modal-react')).default;
-    NiceModal.show(OrganisationDetailsModal as any, {
-      organization,
-    }).then(() => {
-      getOrganization();
-      refreshCompanies(dispatch);
-    });
+    if (canEdit) {
+      NiceModal.show(OrganisationDetailsModal, {
+        organization,
+      }).then(() => {
+        getOrganization();
+        refreshCompanies(dispatch);
+      });
+    }
   };
 
   useEffect(() => {
     getOrganization();
   }, [getOrganization]);
 
-  useEffect(() => {
-    if (organization) {
-      import('moment').then((mod) => {
-        const moment = mod.default;
-        setCreatedDateFormatted(
-          moment(organization.createdAt).format('MMMM DD, YYYY'),
-        );
-      });
-    }
-  }, [organization]);
-
   return (
     <DashboardLayout loading={loading} pageTitle="Organisation Details">
       <div className="organisation-details">
         <div className=" organisation-details__organisation-details-container">
           <div className="organisation-details__organisation-details-header">
-            <Link href="/organisations">
-              <a>
-                <Image
-                  src={BackIcon}
-                  alt="back-icon"
-                  className="organisation-details__back-icon"
-                />
-              </a>
-            </Link>
             <h5 className="organisation-details__organisation-header">
               Organisation Details
             </h5>
           </div>
           <div>
-            {!loading && !!organization && (
+            {!loading && !!organization && canEdit && (
               <button
                 className="organisation-details__organisation-button"
                 onClick={onEditDetails}
@@ -151,7 +130,9 @@ const OrganisationDetails: NextPage = () => {
                 <div>
                   <SingleDetail
                     title="Date Created"
-                    details={createdDateFormatted}
+                    details={moment(organization.createdAt).format(
+                      'MMMM DD, YYYY',
+                    )}
                   />
                 </div>
               </div>
@@ -185,4 +166,7 @@ const OrganisationDetails: NextPage = () => {
   );
 };
 
-export default withAuth(OrganisationDetails);
+export const OrganisationDetail = withAuth(OrganisationDetailsUnsecured, [
+  'Company',
+  'read',
+]);

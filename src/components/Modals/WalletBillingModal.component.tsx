@@ -20,7 +20,7 @@ import { Util } from 'src/helpers/util';
 export const WalletBillingModal = NiceModal.create(
   (props: IWalletBillingModal) => {
     return (
-      <ModalLayout title="Fund Wallet">
+      <ModalLayout title="Fund Payroll">
         {(modal) => {
           return (
             <WalletBillingForm

@@ -6,7 +6,7 @@ import cryptocurrency from '/public/images/cryptocurrency.png';
 import { ITransactionMethod } from '../types';
 
 const MethodImage = ({ method }: Pick<ITransactionMethod, 'method'>) => {
-  if (new RegExp('^wallet$', 'gi').test(method)) {
+  if (new RegExp('^balance$', 'gi').test(method)) {
     return <Image src={wallet} alt="" />;
   }
   if (new RegExp('^card$', 'gi').test(method)) {

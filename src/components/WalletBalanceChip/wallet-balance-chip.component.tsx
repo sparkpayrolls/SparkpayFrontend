@@ -18,7 +18,7 @@ export const WalletBalanceChip = (props: {
 
         {!props.loading && (
           <span className="wallet-balance-chip__balance">
-            (wallet balance{' '}
+            (balance{' '}
             <span className="wallet-balance-chip__balance__amount">
               {props.currency}&nbsp;{Util.formatMoneyNumber(props.balance)}
             </span>

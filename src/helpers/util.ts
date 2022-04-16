@@ -86,19 +86,25 @@ export class Util {
 
     const role = administrator?.role as Role;
     const permissions = role?.permissions as Permission[];
-    if (!permissions?.length) {
+
+    return Util.hasAllowedPermission(allowedPermissions, permissions || []);
+  }
+
+  static hasAllowedPermission(
+    allowedPermissions: IAllowedPermissions,
+    permissions: Permission[],
+  ) {
+    if (!permissions.length) {
       return false;
     }
 
-    const canActivate = allowedPermissions.every(([group, level]) => {
-      return permissions?.some(
+    return !allowedPermissions.some(([group, level]) => {
+      return !permissions.some(
         (permission) =>
           permission.group === group &&
           (permission.level === level || permission.level === 'write'),
       );
     });
-
-    return canActivate;
   }
 
   static getCurrencySymbolFromAdministrator(

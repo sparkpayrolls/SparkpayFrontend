@@ -98,17 +98,17 @@ const WalletBilling: NextPage = () => {
   }, [getWallet, administrator, getPaymentMethods]);
 
   return (
-    <DashboardLayout pageTitle="Wallet & billing">
+    <DashboardLayout pageTitle="Transactions">
       <div className="wallet-billing-page">
         <h1 className="wallet-billing-page__wallet-header-title">
-          Wallet & Billings
+          Transactions
         </h1>
         <div
           className="wallet-billing-page__wallet-cards
     "
         >
           <WalletCard
-            title="Wallet Balance"
+            title="Balance"
             amount={`${currency}${Util.formatMoneyNumber(
               wallet?.balance ?? 0,
             )}`}
@@ -130,4 +130,4 @@ const WalletBilling: NextPage = () => {
   );
 };
 
-export default withAuth(WalletBilling, ['Wallet & Billing', 'read']);
+export default withAuth(WalletBilling, ['Transaction', 'read']);

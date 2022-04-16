@@ -94,14 +94,16 @@ const InvitationTab: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    const { action, inviteToken: token, ...others } = router.query;
-    if (['accept', 'reject'].includes(action as string)) {
-      const url = stringifyUrl({
-        url: router.pathname,
-        query: others,
-      });
-      getActionHandler(action as 'accept', token as string)();
-      router.push(url);
+    if (router.isReady) {
+      const { action, inviteToken: token, ...others } = router.query;
+      if (['accept', 'reject'].includes(action as string)) {
+        const url = stringifyUrl({
+          url: router.pathname,
+          query: others,
+        });
+        getActionHandler(action as 'accept', token as string)();
+        router.push(url);
+      }
     }
   }, [router, getActionHandler]);
 
