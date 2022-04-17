@@ -212,8 +212,10 @@
   .table-layout {
     &__top-bar {
       justify-content: space-between;
-      align-items: center;
       column-gap: 0.5rem;
+      @media screen and (min: 768px) {
+        align-items: center;
+      }
 
       p {
         flex-grow: 0.2;
