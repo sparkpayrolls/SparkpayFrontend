@@ -121,13 +121,14 @@
 
   &__body {
     margin-inline: 1.25rem;
-
+    max-width: 1368px;
     min-height: calc(100vh - 127px);
 
-    @media screen and(min-width: 992px) {
-      padding-inline: 32px;
-      margin-left: 16rem;
-      margin-right: 0;
+    @media screen and (min-width: 992px) {
+      padding-left: 18rem;
+      padding-right: 2rem;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 }
