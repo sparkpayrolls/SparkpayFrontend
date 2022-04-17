@@ -65,7 +65,7 @@
 
   &__chart-section {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     flex-direction: column;
     grid-row-gap: 1.25rem;
     margin: 0 0 1.5rem;
@@ -87,7 +87,8 @@
     .disbursement {
       // width: 764px;
       width: 100%;
-      overflow-x: scroll;
+      overflow-x: auto;
+      overflow-y: hidden;
 
       .table-empty-state {
         max-height: 300px;

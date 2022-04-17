@@ -159,9 +159,7 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
                 currency={currency}
               />
             )}
-            {loadingData && (
-              <Skeleton width={300} borderRadius="50%" count={1} height={300} />
-            )}
+            {loadingData && <Skeleton width="100%" count={1} height={200} />}
 
             <div className="payroll__legend">
               {loadingData && (
