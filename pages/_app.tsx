@@ -9,7 +9,7 @@ import { store } from '../src/redux/store';
 import NiceModal from '@ebay/nice-modal-react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
-import { useEffect } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
@@ -24,57 +24,58 @@ import { Company } from 'src/api/types';
 import { Detector } from 'react-detect-offline';
 import { Util } from 'src/helpers/util';
 import { useRouter } from 'next/router';
+import useApiCall from 'src/helpers/hooks/useapicall.hook';
 
 let persistor = persistStore(store);
 let lastStatus = true;
 
-const AuthManager = () => {
+const AuthManager = (props: PropsWithChildren<unknown>) => {
   const { user, companies, administrator } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [loading, startLoading, stopLoading] = useApiCall();
+  const [hasInitAuth, setHasInitAuth] = useState(false);
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
-    const tokenInterceptor = $api.$axios.interceptors.request.use((config) => {
-      return {
-        ...config,
-        headers: {
-          ...(config?.headers || {}),
-          Authorization: `Bearer ${authToken}`,
+    if (authToken) {
+      $api.$axios.interceptors.request.use((config) => {
+        return {
+          ...config,
+          headers: {
+            ...(config?.headers || {}),
+            Authorization: `Bearer ${authToken}`,
+          },
+        };
+      });
+      $api.$axios.interceptors.response.use(
+        (res) => res,
+        (error) => {
+          if (error.response?.status === 401) {
+            logOut(dispatch);
+          }
+
+          return Promise.reject(error);
         },
-      };
-    });
-    const authInterceptor = $api.$axios.interceptors.response.use(
-      (res) => res,
-      (error) => {
-        if (error.response?.status === 401) {
-          logOut(dispatch);
-        }
-
-        return Promise.reject(error);
-      },
-    );
-    const permitInterceptor = $api.$axios.interceptors.response.use(
-      (res) => res,
-      (error: AxiosError) => {
-        if (error.response?.status === 403) {
-          dispatch(commitAministrator(null));
-          refreshCompanies(dispatch);
-        }
-        return Promise.reject(error);
-      },
-    );
-
-    return () => {
-      $api.$axios.interceptors.request.eject(tokenInterceptor);
-      $api.$axios.interceptors.request.eject(authInterceptor);
-      $api.$axios.interceptors.request.eject(permitInterceptor);
-    };
+      );
+      $api.$axios.interceptors.response.use(
+        (res) => res,
+        (error: AxiosError) => {
+          if (error.response?.status === 403) {
+            dispatch(commitAministrator(null));
+            refreshCompanies(dispatch);
+          }
+          return Promise.reject(error);
+        },
+      );
+    }
+    setHasInitAuth(true);
   }, [dispatch, router, user]);
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
     if (authToken) {
+      startLoading();
       $api.user
         .getProfile()
         .then((newUser) => {
@@ -82,14 +83,16 @@ const AuthManager = () => {
             dispatch(commitUser(newUser));
           }
         })
-        .catch(() => {});
+        .catch(() => {})
+        .finally(stopLoading);
     } else {
       dispatch(commitUser(null));
     }
-  }, [dispatch, user]);
+  }, [dispatch, startLoading, stopLoading, user]);
 
   useEffect(() => {
     if (user) {
+      startLoading();
       $api.company
         .getCompanies()
         .then((newCompanies) => {
@@ -97,9 +100,10 @@ const AuthManager = () => {
             dispatch(commitCompanies(newCompanies));
           }
         })
-        .catch(() => {});
+        .catch(() => {})
+        .finally(stopLoading);
     }
-  }, [dispatch, user, companies]);
+  }, [dispatch, user, companies, startLoading, stopLoading]);
 
   useEffect(() => {
     if (companies.length) {
@@ -113,6 +117,7 @@ const AuthManager = () => {
 
   useEffect(() => {
     if (companies.length) {
+      startLoading();
       $api.company
         .getCurrentCompany()
         .then((newAdministrator) => {
@@ -125,13 +130,15 @@ const AuthManager = () => {
             );
           }
         })
-        .catch(() => {});
+        .catch(() => {})
+        .finally(stopLoading);
     }
-  }, [dispatch, companies, administrator]);
+  }, [dispatch, companies, administrator, startLoading, stopLoading]);
 
   useEffect(() => {
     const { 'email-verification-code': code } = router.query;
     if (user && !user?.emailVerified && code) {
+      startLoading();
       $api.auth
         .verifyEmail(code as string)
         .then(({ user, token }) => {
@@ -142,37 +149,50 @@ const AuthManager = () => {
         })
         .catch(() => {
           // error verifying user...
-        });
+        })
+        .finally(stopLoading);
     }
-  }, [user, router, dispatch]);
+  }, [user, router, dispatch, startLoading, stopLoading]);
 
   return (
-    <Detector
-      render={({ online }) => {
-        if (lastStatus === online) {
-          return null;
-        }
-        lastStatus = online;
-        if (online) {
-          toast.dismiss('online-false');
-        }
+    <>
+      <Detector
+        render={({ online }) => {
+          if (lastStatus === online) {
+            return null;
+          }
+          lastStatus = online;
+          if (online) {
+            toast.dismiss('online-false');
+          }
 
-        toast(online ? 'You are back online' : 'You are currently offline', {
-          toastId: `online-${online}`,
-          autoClose: online ? 3000 : false,
-          draggable: online,
-          closeOnClick: online,
-          closeButton: online,
-          delay: online ? 600 : 0,
-          pauseOnFocusLoss: false,
-          pauseOnHover: false,
-          position: 'top-center',
-          type: online ? 'success' : 'warning',
-          transition: Slide,
-        });
-        return null;
-      }}
-    />
+          toast(online ? 'You are back online' : 'You are currently offline', {
+            toastId: `online-${online}`,
+            autoClose: online ? 3000 : false,
+            draggable: online,
+            closeOnClick: online,
+            closeButton: online,
+            delay: online ? 600 : 0,
+            pauseOnFocusLoss: false,
+            pauseOnHover: false,
+            position: 'top-center',
+            type: online ? 'success' : 'warning',
+            transition: Slide,
+          });
+          return null;
+        }}
+      />
+      {loading || !hasInitAuth ? (
+        <div className="app-loader">
+          {
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src="/logo-icon.svg" alt="logo-loader" />
+          }
+        </div>
+      ) : (
+        props.children
+      )}
+    </>
   );
 };
 
@@ -187,8 +207,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <NiceModal.Provider>
-            <AuthManager />
-            <Component {...pageProps} />
+            <AuthManager>
+              <Component {...pageProps} />
+            </AuthManager>
             <ToastContainer hideProgressBar={true} autoClose={3000} />
           </NiceModal.Provider>
         </PersistGate>

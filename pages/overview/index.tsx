@@ -74,7 +74,7 @@ const Dashboard: NextPage = () => {
   }, [companies, dispatch, getUserDashboardData]);
 
   return (
-    <DashboardLayout pageTitle="Overview">
+    <DashboardLayout loading={loading} pageTitle="Overview">
       <div className="dashboard">
         <div className="dashboard__top-bar">
           <h2 className="dashboard__title">Overview</h2>
