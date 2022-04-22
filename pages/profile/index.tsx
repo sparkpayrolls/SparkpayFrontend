@@ -32,13 +32,15 @@ const UserProfile: NextPage = () => {
   useEffect(() => {
     $api.user
       .getProfile()
-      .then((user) => {
-        dispatch(commitUser(user));
+      .then((newUser) => {
+        if (!Util.deepEquals(user, newUser)) {
+          dispatch(commitUser(newUser));
+        }
       })
       .catch(() => {
         // ...
       });
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   return (
     <DashboardLayout pageTitle="Profile">
