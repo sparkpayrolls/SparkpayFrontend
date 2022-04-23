@@ -1,8 +1,4 @@
 .user-profile {
-  margin-right: 2rem;
-  margin-left: 2rem;
-  margin-top: 1.5rem;
-
   &__profile-header {
     font-weight: 500;
     font-size: 28px;
@@ -17,7 +13,6 @@
   &__image-upload-link-parent {
     display: flex;
     margin-top: 2rem;
-    width: 30%;
     align-items: center;
 
     &__image {
@@ -53,8 +48,10 @@
   }
 
   &__form-grid {
+    justify-content: space-between;
     display: flex;
-    grid-column-gap: 1.25rem;
+    flex-wrap: wrap;
+    gap: 1.25rem;
   }
 
   &__submit-btn {
@@ -63,12 +60,15 @@
     margin-top: 32px;
   }
   &__input-width {
-    width: 35%;
+    width: 100%;
+    @media screen and (min-width: 768px) {
+      width: calc(50% - 1.25rem);
+    }
   }
   &__button-container {
     display: flex;
     justify-content: flex-end;
-    width: 71.8%;
+    width: 100%;
     margin-top: 2rem;
   }
   &__button {
@@ -90,11 +90,17 @@
     letter-spacing: -0.117188px;
     color: #6d7a98;
     margin-top: 2rem;
+    display: none;
+
+    @media screen and (min-width: 768px) {
+      display: block;
+    }
   }
   &__change-password-container {
     display: flex;
     margin-top: 1rem;
     padding-bottom: 4rem;
+    gap: 8rem;
   }
   &__change-new-password {
     font-weight: 500;
@@ -102,6 +108,11 @@
     line-height: 24px;
     color: #0b2253;
     cursor: pointer;
+    display: none;
+
+    @media screen and (min-width: 768px) {
+      display: block;
+    }
   }
   &__change-password-text {
     font-weight: 600;
@@ -109,7 +120,6 @@
     line-height: 24px;
     letter-spacing: -0.01em;
     color: #1d4ed8;
-    margin-left: 8rem;
     cursor: pointer;
   }
 }
