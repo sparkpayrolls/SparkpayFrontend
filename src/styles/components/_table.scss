@@ -628,8 +628,15 @@
 
 .audit-table {
   &__table {
+    td {
+      vertical-align: middle;
+    }
     &__description-col {
       white-space: normal !important;
+
+      div {
+        min-width: 150px;
+      }
     }
   }
 }

@@ -5,7 +5,6 @@ import { Identity } from '../Identity/identity.component';
 import { Pagination } from '../Pagination/pagination.component';
 import { StatusChip } from '../StatusChip/status-chip.component';
 import { IAuditTable } from '../types';
-import { MenuTableColumn } from './menu-table-col.component';
 import { TableLayout } from './table-layout.component';
 import { TableV2 } from './Table.component';
 
@@ -22,8 +21,6 @@ export const AuditTable = (props: IAuditTable) => {
       <TableLayout
         title={`${meta.total} Logs`}
         onSearch={onSearch}
-        onFilter={() => {}}
-        menuItems={[]}
         searchPlaceholder="Search by name"
       >
         <TableV2 className="audit-table__table" loading={loading}>
@@ -51,15 +48,15 @@ export const AuditTable = (props: IAuditTable) => {
                     />
                   </th>
                   <td className="audit-table__table__description-col">
-                    {log.description}
+                    <div>{log.description}</div>
                   </td>
                   <td>{log.role}</td>
                   <td>
                     <StatusChip status={log.action} />
                   </td>
-                  <MenuTableColumn items={[]} element="td">
+                  <td>
                     <DateTimeChip date={log.createdAt} />
-                  </MenuTableColumn>
+                  </td>
                 </tr>
               );
             })}

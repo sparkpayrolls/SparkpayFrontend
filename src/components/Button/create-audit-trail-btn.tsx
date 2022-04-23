@@ -10,7 +10,6 @@ export const CreateAuditTrailButton = () => {
           <PlusSvg />
         </>
       }
-      className="employee-section__submit-btn"
       primary
       type="submit"
     />
