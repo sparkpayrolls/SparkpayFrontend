@@ -1,8 +1,14 @@
 .payroll-details-section {
+  padding-bottom: 9rem;
+
   &__payroll-details-header {
     display: flex;
-    justify-content: space-between;
-    margin-top: -10px;
+    flex-direction: column;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 
   &__table-empty-state {
@@ -45,12 +51,16 @@
   }
 
   &__payroll-settings-details {
-    height: 11.2rem;
     background: #ffffff;
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid #eaedf4;
     margin-top: 1rem;
+    padding-inline: 0.5rem;
+
+    @media screen and (min-width: 768px) {
+      padding-inline: 1.25rem;
+    }
   }
   &__employee-status {
     display: flex;

@@ -189,24 +189,14 @@
   }
 
   &__pagination {
-    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 2rem;
     padding-bottom: 0.5rem;
 
-    bottom: 2rem;
-    right: 1.25rem;
-    left: 1.25rem;
-
     @media screen and(min-width: 600px) {
       justify-content: space-between;
-    }
-
-    @media screen and(min-width: 992px) {
-      right: 2rem;
-      left: 18rem;
     }
 
     &--page-summary {
@@ -551,7 +541,10 @@
 
   &__buttons {
     display: flex;
-    grid-column-gap: 0.2rem;
+
+    @media screen and (min-width: 768px) {
+      grid-column-gap: 0.2rem;
+    }
 
     button {
       font-weight: normal;
