@@ -9,7 +9,7 @@ import { store } from '../src/redux/store';
 import NiceModal from '@ebay/nice-modal-react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
@@ -34,12 +34,14 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [loading, startLoading, stopLoading] = useApiCall();
-  const [hasInitAuth, setHasInitAuth] = useState(false);
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
+    let authTokenInterceptor: number;
+    let authErrorHandlerInterceptor: number;
+    let forbiddenErrorHandlerInterceptor: number;
     if (authToken) {
-      $api.$axios.interceptors.request.use((config) => {
+      authTokenInterceptor = $api.$axios.interceptors.request.use((config) => {
         return {
           ...config,
           headers: {
@@ -48,7 +50,7 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
           },
         };
       });
-      $api.$axios.interceptors.response.use(
+      authErrorHandlerInterceptor = $api.$axios.interceptors.response.use(
         (res) => res,
         (error) => {
           if (error.response?.status === 401) {
@@ -58,7 +60,7 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
           return Promise.reject(error);
         },
       );
-      $api.$axios.interceptors.response.use(
+      forbiddenErrorHandlerInterceptor = $api.$axios.interceptors.response.use(
         (res) => res,
         (error: AxiosError) => {
           if (error.response?.status === 403) {
@@ -69,8 +71,13 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
         },
       );
     }
-    setHasInitAuth(true);
-  }, [dispatch, router, user]);
+
+    return () => {
+      $api.$axios.interceptors.request.eject(authTokenInterceptor);
+      $api.$axios.interceptors.response.eject(authErrorHandlerInterceptor);
+      $api.$axios.interceptors.response.eject(forbiddenErrorHandlerInterceptor);
+    };
+  }, [dispatch, user]);
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
@@ -182,7 +189,7 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
           return null;
         }}
       />
-      {loading || !hasInitAuth ? (
+      {loading ? (
         <div className="app-loader">
           {
             // eslint-disable-next-line @next/next/no-img-element
