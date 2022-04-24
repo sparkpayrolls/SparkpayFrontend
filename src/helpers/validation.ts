@@ -120,6 +120,7 @@ export const BulkEmployeeAddValidation = Yup.object()
             firstname: format.firstname,
             lastname: format.lastname,
             email: format.email,
+            phoneNumber: format.phonenumber,
             salary: Yup.string().required('Salary is required'),
           })
           .required(),
