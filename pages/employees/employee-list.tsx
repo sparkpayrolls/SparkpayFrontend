@@ -17,6 +17,7 @@ interface BulkEmployeeUploadList {
   firstname: string;
   lastname: string;
   email: string;
+  phoneNumber: string;
   salary: string;
 }
 
@@ -24,6 +25,7 @@ const emptyEmployee = {
   firstname: '',
   lastname: '',
   email: '',
+  phoneNumber: '',
   salary: '',
 };
 
@@ -44,25 +46,23 @@ function EmployeeList() {
   const router = useRouter();
   const administrator = useAppSelector((state) => state.administrator);
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const [employees, setEmployees] = useState<BulkEmployeeUploadList[] | null>(
-    null,
-  );
+  const [employees, setEmployees] = useState<BulkEmployeeUploadList[]>();
 
   const getEmployees = useCallback(async () => {
     try {
-      const jwt = router.query.file;
-      if (jwt && typeof jwt === 'string') {
+      const file = router.query.file;
+      if (file && typeof file === 'string') {
         const parsed = await $api.file.parseSavedXlsxFile<Record<string, any>>(
-          jwt,
+          file,
         );
-        const employees = parsed['Employee data'].map(
-          (data: Record<string, string>) => ({
-            firstname: data.Firstname,
-            lastname: data.Lastname,
-            email: data.Email,
-            salary: data.Salary,
-          }),
-        );
+        const employees =
+          parsed['Employee data']?.map((data: Record<string, string>) => ({
+            firstname: data?.Firstname,
+            lastname: data?.Lastname,
+            email: data?.Email,
+            salary: data?.Salary,
+            phoneNumber: data?.Phone,
+          })) || [];
         setEmployees(employees);
         return;
       }
@@ -83,6 +83,10 @@ function EmployeeList() {
   useEffect(() => {
     getEmployees();
   }, [getEmployees]);
+
+  if (!router.isReady) {
+    return null;
+  }
 
   return (
     <DashboardLayoutV2 title="Employee list" href="/employees">
@@ -163,6 +167,7 @@ function EmployeeList() {
                                   <th>First Name</th>
                                   <th>Last Name</th>
                                   <th>Email Address</th>
+                                  <th>Phone</th>
                                   <th>Salary Amount ({currency})</th>
                                   <th></th>
                                 </tr>
@@ -260,6 +265,28 @@ function EmployeeList() {
                                           error={emailTouched && emailError}
                                         />
                                       </td>
+
+                                      <td>
+                                        <EditableField
+                                          type="phone"
+                                          placeholder="Phone"
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          name={`employees.${i}.phoneNumber`}
+                                          value={employee.phoneNumber}
+                                          error={
+                                            getIn(
+                                              touched,
+                                              `employees.${i}.phoneNumber`,
+                                            ) &&
+                                            getIn(
+                                              errors,
+                                              `employees.${i}.phoneNumber`,
+                                            )
+                                          }
+                                        />
+                                      </td>
+
                                       <td>
                                         <EditableField
                                           type="number"
