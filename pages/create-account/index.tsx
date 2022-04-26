@@ -149,11 +149,11 @@ const CreateAccount: NextPage = () => {
 
         <div className="create-account__side-info--txt-area">
           <h3 className="create-account__side-info--text">
-            Lorem ipsum dolor sit amet, consectetur.
+            Simple and Effective Payroll Management
           </h3>
           <p className="create-account__side-info--subtext">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dui est eu
-            ante purus.
+            Ease from payroll stress from manual computation through a
+            synchronised and automated payroll system.
           </p>
         </div>
         <div className="create-account__side-info--gradient"></div>
