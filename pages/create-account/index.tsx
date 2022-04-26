@@ -152,7 +152,7 @@ const CreateAccount: NextPage = () => {
             Simple and Effective Payroll Management
           </h3>
           <p className="create-account__side-info--subtext">
-            Ease from payroll stress from manual computation through a
+            Ease from payroll stress and manual computation through a
             synchronised and automated payroll system.
           </p>
         </div>
