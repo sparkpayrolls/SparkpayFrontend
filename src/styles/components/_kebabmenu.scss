@@ -5,6 +5,9 @@ $cubic-in: cubic-bezier(0.72, 1.2, 0.71, 0.72);
   &__trigger {
     cursor: pointer;
     line-height: 0;
+    background: transparent;
+    padding: 0.5rem;
+    border-color: transparent;
   }
 
   &__dropdown {

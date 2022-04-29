@@ -36,9 +36,12 @@ export const KebabMenu = (props: IKebabMenu) => {
 
   return (
     <Dropdown overlay={menu}>
-      <span className="kebabmenu__trigger" onClick={(e) => e.preventDefault()}>
+      <button
+        className="kebabmenu__trigger"
+        onClick={(e) => e.preventDefault()}
+      >
         {Icon ? <Icon /> : <KebabMenuSVG />}
-      </span>
+      </button>
     </Dropdown>
   );
 };
