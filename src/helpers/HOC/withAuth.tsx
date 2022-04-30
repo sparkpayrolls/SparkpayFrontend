@@ -36,7 +36,12 @@ function withAuth<T>(
 
       if (allowedPermissions.length) {
         if (!Util.canActivate(allowedPermissions, administrator)) {
-          // Router.replace('/');
+          const availableRoute = Util.getAvailableRoute(administrator);
+          if (availableRoute) {
+            Router.replace(availableRoute);
+            return null;
+          }
+
           return <Forbidden />;
         }
       }

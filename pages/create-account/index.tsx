@@ -75,7 +75,7 @@ const CreateAccount: NextPage = () => {
   }, [router, validateInviteCode]);
 
   if (user) {
-    router.replace('/organisations');
+    router.replace('/overview');
     return null;
   }
 

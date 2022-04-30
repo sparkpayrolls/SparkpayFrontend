@@ -204,10 +204,10 @@ export const Table = (props: ITable) => {
               )}
 
               {!!props.kebabMenuItems?.length && (
-                <button className="table-component__option-btn">
+                <div className="table-component__option-btn">
                   {/* <KebabMenuSVG /> */}
                   <KebabMenu items={props.kebabMenuItems} />
-                </button>
+                </div>
               )}
             </div>
           )}

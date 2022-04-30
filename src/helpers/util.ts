@@ -286,4 +286,43 @@ export class Util {
       callback(httpError);
     }
   }
+
+  static getRoutesAndPermissions(): Map<string, IAllowedPermissions> {
+    const map = new Map();
+
+    map.set('/overview', [['Overview', 'read']]);
+    map.set('/organisations', [['Company', 'read']]);
+    map.set('/employees', [['Employee', 'read']]);
+    map.set('/payroll', [['Payroll', 'read']]);
+    map.set('/transactions', [['Transaction', 'read']]);
+    map.set('/administrators', [['Admin', 'read']]);
+    map.set('/remittances', [['Remittance', 'read']]);
+    map.set('/audit', [['AuditTrail', 'read']]);
+
+    return map;
+  }
+
+  static getAvailableRoute(administrator?: Administrator | null) {
+    if (!administrator) {
+      return null;
+    }
+
+    const routesAndPermissions = Util.getRoutesAndPermissions();
+    const keys = routesAndPermissions.keys();
+    let current = keys.next();
+    while (!current.done) {
+      if (
+        Util.canActivate(
+          routesAndPermissions.get(current.value) || [],
+          administrator,
+        )
+      ) {
+        return current.value;
+      }
+
+      current = keys.next();
+    }
+
+    return null;
+  }
 }

@@ -43,20 +43,20 @@ export const navListItems = (
   administrator: Administrator | null,
 ): (IDashboardNavigationListItem & { permissions: IAllowedPermissions })[] => [
   {
-    Icon: OrganizationSettingsSvg,
-    href: '/organisations',
-    match: '/organisations',
-    router,
-    title: administrator ? 'Organisation' : 'Organisations',
-    permissions: administrator ? [['Company', 'read']] : [],
-  },
-  {
     Icon: DashboardSvg,
     href: '/overview',
     match: '(\\/overview|^\\/$)',
     router,
     title: 'Overview',
     permissions: [['Overview', 'read']],
+  },
+  {
+    Icon: OrganizationSettingsSvg,
+    href: '/organisations',
+    match: '/organisations',
+    router,
+    title: administrator ? 'Organisation' : 'Organisations',
+    permissions: administrator ? [['Company', 'read']] : [],
   },
   {
     Icon: EmployeeSvg,

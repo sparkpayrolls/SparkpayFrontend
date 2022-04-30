@@ -32,7 +32,8 @@ export const Forbidden = (props: { message?: string }) => {
             </h1>
           </div>
           <h2 className="not-found__content__message">
-            {props.message || 'You do not have permission to view this page'}
+            {props.message ||
+              'You do not have permission to see or do anything.'}
           </h2>
         </div>
       </div>
