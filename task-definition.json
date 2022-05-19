@@ -75,7 +75,6 @@
   "placementConstraints": [],
   "memory": "512",
   "taskRoleArn": null,
-  "compatibilities": ["EC2", "FARGATE"],
   "family": "sparkpay-fe",
   "requiresAttributes": [
     {
@@ -128,7 +127,6 @@
     }
   ],
   "pidMode": null,
-  "requiresCompatibilities": ["FARGATE"],
   "networkMode": "awsvpc",
   "runtimePlatform": null,
   "cpu": "256",
