@@ -22,6 +22,6 @@ COPY  --from=builder /usr/src/app/node_modules ./node_modules
 COPY  --from=builder /usr/src/app/.next ./.next
 COPY  --from=builder /usr/src/app/public ./public
 
-EXPOSE 3000
+EXPOSE 80
 
-CMD [ "npx", "next", "start", "-p", "3000"]
+CMD [ "npx", "next", "start", "-p", "80"]
