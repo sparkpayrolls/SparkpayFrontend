@@ -73,7 +73,7 @@
     }
   ],
   "placementConstraints": [],
-  "memory": "128",
+  "memory": "512",
   "taskRoleArn": null,
   "compatibilities": ["EC2", "FARGATE"],
   "family": "sparkpay-fe",
