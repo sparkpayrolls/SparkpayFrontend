@@ -33,7 +33,6 @@
     "moment": "^2.29.2",
     "multiselect-react-dropdown": "^2.0.7",
     "next": "^12.1.4",
-    "next-absolute-url": "^1.2.2",
     "query-string": "^7.0.1",
     "react": "17.0.2",
     "react-detect-offline": "^2.4.5",
