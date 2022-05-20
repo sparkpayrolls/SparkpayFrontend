@@ -130,7 +130,9 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
                 value={(values as any).phoneNumber}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={(touched as any).phoneNumber && (errors as any).phoneNumber}
+                error={
+                  (touched as any).phoneNumber && (errors as any).phoneNumber
+                }
               />
             </div>
 
@@ -262,7 +264,7 @@ export const EmployeeBulkAddForm = (props: { onSubmit?: () => void }) => {
             <a
               className="form__sample-btn"
               download="employee_upload_format.xlsx"
-              href={config.employeeUploadSample}
+              href={config().employeeUploadSample}
             >
               Download Format
             </a>

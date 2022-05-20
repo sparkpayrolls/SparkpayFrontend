@@ -20,7 +20,7 @@ import { RolesModule } from './modules/roles.module';
 
 export class $api {
   static $axios = axios.create({
-    baseURL: config.apiUrl,
+    baseURL: config().apiUrl,
   });
 
   static auth = new AuthModule($api.$axios);

@@ -45,7 +45,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
     return new Promise((resolve, reject) => {
       // @ts-ignore
       const handler = PaystackPop.setup({
-        key: config.paystackKey,
+        key: config().paystackKey,
         email: company.email,
         amount: amount * 100,
         currency: 'NGN',
