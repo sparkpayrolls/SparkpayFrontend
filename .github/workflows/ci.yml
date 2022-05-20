@@ -54,6 +54,6 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: sparkpay-fe-service
+          service: sparkpay-fe
           cluster: sparkpay-fe
           wait-for-service-stability: true
