@@ -4,7 +4,7 @@ import { $api } from 'src/api';
 import { Bank } from 'src/api/types';
 import { Util } from 'src/helpers/util';
 import { bankPayoutMethodMetaValidationSchema } from 'src/helpers/validation';
-import { Input } from '../Input/Input.component';
+import { InputV2 } from '../Input/Input.component';
 import { Select } from '../Input/select.component';
 import { IBankPayoutMethodMeta } from '../types';
 
@@ -65,6 +65,13 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
     getBanks();
   }, [getBanks]);
 
+  useEffect(() => {
+    if (props.initialValues) {
+      validate(method.id, props.initialValues);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Formik
       initialValues={
@@ -101,6 +108,7 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
                 setVals(newVals, true);
                 validate(method.id, newVals);
               }}
+              value={values.bankId}
               optionFilterProp="children"
               showSearch
               disabled={!banks.length}
@@ -118,9 +126,10 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
               })}
             </Select>
 
-            <Input
+            <InputV2
               type="tel"
-              label={accountName || 'Account Number'}
+              label={'Account Number'}
+              helper={accountName}
               placeholder="Account Number"
               value={values.accountNumber}
               name="accountNumber"
@@ -132,11 +141,12 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
                 });
               }}
               onBlur={handleBlur}
-              hasError={
-                !!err ||
-                ((error || touched.accountNumber) && !!errors.accountNumber)
+              error={
+                (!!err ||
+                  ((!!error || touched.accountNumber) &&
+                    !!errors.accountNumber)) &&
+                (err || errors.accountNumber)
               }
-              error={err || errors.accountNumber}
             />
           </>
         );

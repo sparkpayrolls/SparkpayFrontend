@@ -17,6 +17,7 @@ import { config } from 'src/helpers/config';
 import { getBulkEmployeeFileUploadHandler } from 'src/helpers/methods';
 import { $api } from 'src/api';
 import { toast } from 'react-toastify';
+import { PayoutDetails } from '../Employee/payout-details.component';
 
 const emailExists = Util.debounce(
   // eslint-disable-next-line no-unused-vars
@@ -31,12 +32,13 @@ const emailExists = Util.debounce(
 const lastEmail: string[] = [];
 
 export const EmployeeAddForm = (props: IEmployeeAddForm) => {
-  const { initialValues, onSubmit, currency } = props;
+  const { initialValues, onSubmit, currency, country } = props;
   const isEditing =
     initialValues.firstname ||
     initialValues.lastname ||
     initialValues.email ||
     initialValues.salary;
+  const [showPayoutDetails, setShowPayoutDetails] = useState(false);
 
   return (
     <Formik
@@ -55,6 +57,8 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
           isSubmitting,
           setErrors,
           setSubmitting,
+          setTouched,
+          setValues,
         } = props;
         if (
           !errors.email &&
@@ -109,6 +113,50 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
 
             <div className="single-employee-upload-form__section">
               <InputV2
+                type="number"
+                label={`Salary Amount (${currency})`}
+                placeholder={`Salary Amount (${currency})`}
+                name="salary"
+                value={values.salary}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.salary && errors.salary}
+                transformValue={(val) => {
+                  const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
+                  if (isNaN(valTransformed) || val === '') return '';
+
+                  return `${currency} ${valTransformed.toLocaleString()}`;
+                }}
+              />
+
+              {!showPayoutDetails && (
+                <button
+                  className="single-employee-upload-form__linklike-button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowPayoutDetails(true);
+                  }}
+                >
+                  Set payment information
+                </button>
+              )}
+            </div>
+
+            {showPayoutDetails && (
+              <div className="single-employee-upload-form__payout-details">
+                <PayoutDetails
+                  setTouched={setTouched}
+                  setValues={setValues}
+                  touched={touched}
+                  errors={errors}
+                  values={values}
+                  country={country}
+                />
+              </div>
+            )}
+
+            <div className="single-employee-upload-form__section">
+              <InputV2
                 type="email"
                 label="Email Address"
                 placeholder="Email Address"
@@ -127,31 +175,10 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
                 label="Phone Number"
                 placeholder="Phone Number"
                 name="phoneNumber"
-                value={(values as any).phoneNumber}
+                value={values.phoneNumber}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={
-                  (touched as any).phoneNumber && (errors as any).phoneNumber
-                }
-              />
-            </div>
-
-            <div className="single-employee-upload-form__section">
-              <InputV2
-                type="number"
-                label={`Salary Amount (${currency})`}
-                placeholder={`Salary Amount (${currency})`}
-                name="salary"
-                value={values.salary}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.salary && errors.salary}
-                transformValue={(val) => {
-                  const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
-                  if (isNaN(valTransformed) || val === '') return '';
-
-                  return `${currency} ${valTransformed.toLocaleString()}`;
-                }}
+                error={touched.phoneNumber && errors.phoneNumber}
               />
             </div>
 

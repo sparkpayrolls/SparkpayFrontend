@@ -149,6 +149,7 @@ export type AddEmployee = {
   lastname: string;
   email: string;
   salary: string;
+  phoneNumber?: string;
 };
 
 /** Kebab Menus */
@@ -571,6 +572,7 @@ export type IEmployeeAddForm = {
   initialValues: AddEmployee;
   onSubmit(vals: AddEmployee, helpers: FormikHelpers<AddEmployee>): any;
   currency: string;
+  country?: string;
 };
 
 export type IEditEmployeeDetailsModal = {

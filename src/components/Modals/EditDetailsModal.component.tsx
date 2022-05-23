@@ -4,6 +4,7 @@ import { ModalLayout } from './ModalLayout.component';
 import { IEditEmployeeDetailsModal } from '../types';
 import { Util } from 'src/helpers/util';
 import { EmployeeAddForm } from '../Form/employee-add.form';
+import { Country } from 'src/api/types';
 
 export const EditEmployeeDetailsModal = NiceModal.create(
   (props: IEditEmployeeDetailsModal) => {
@@ -20,6 +21,10 @@ export const EditEmployeeDetailsModal = NiceModal.create(
                 currency={Util.getCurrencySymbolFromAdministrator(
                   props.administrator,
                 )}
+                country={
+                  (props.employee.country as Country)?.id ||
+                  Util.getCountryFromAdministrator(props.administrator)?.id
+                }
                 onSubmit={(...args) => props.onSubmit(modal, ...args)}
               />
             </div>

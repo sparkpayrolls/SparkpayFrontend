@@ -58,7 +58,14 @@ export const getEmployeeEditSubmitHandler = (
     try {
       helpers.setSubmitting(true);
       await $api.employee.updateSingleEmployee(id, {
-        ...pick(values, ['firstname', 'lastname', 'email']),
+        ...pick(values, [
+          'firstname',
+          'lastname',
+          'email',
+          'payoutMethod',
+          'payoutMethodMeta',
+          'phoneNumber',
+        ]),
         salary: +values.salary,
       });
       await getEmployee();

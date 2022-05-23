@@ -107,13 +107,16 @@ export class Util {
     });
   }
 
+  static getCountryFromAdministrator(administrator: Administrator | null) {
+    const company = administrator?.company as Company;
+
+    return company?.country as Country;
+  }
+
   static getCurrencySymbolFromAdministrator(
     administrator: Administrator | null,
   ) {
-    const company = administrator?.company as Company;
-    const country = company?.country as Country;
-
-    return country?.currencySymbol;
+    return Util.getCountryFromAdministrator(administrator)?.currencySymbol;
   }
 
   static formatMoneyNumber(val: number, precision = 0) {

@@ -32,7 +32,9 @@ export class EmployeeModule extends HttpRepository {
 
   async updateSingleEmployee(
     id: string,
-    employee: Pick<Employee, 'firstname' | 'lastname' | 'salary' | 'email'>,
+    employee: Partial<
+      Pick<Employee, 'firstname' | 'lastname' | 'salary' | 'email'>
+    >,
   ) {
     const { data } = await this.put<Employee>(`/employees/${id}`, employee);
 

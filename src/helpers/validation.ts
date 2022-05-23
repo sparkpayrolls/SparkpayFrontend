@@ -35,11 +35,11 @@ export const resetPasswordValidationSchema = Yup.object().shape({
 });
 
 export const singleEmployeeUploadValidationSchema = Yup.object().shape({
-  email: format.email,
+  email: Yup.string().email(),
   firstname: format.firstname,
   lastname: format.lastname,
   salary: Yup.string().required('Salary is Required'),
-  phoneNumber: Yup.string().required('Phone Number is Required'),
+  phoneNumber: Yup.string(),
 });
 
 export const bulkEmployeeFileUploadValidationSchema = Yup.object().shape({

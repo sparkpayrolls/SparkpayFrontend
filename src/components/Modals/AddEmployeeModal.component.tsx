@@ -61,12 +61,14 @@ const AddEmployeeForm = ({
             lastname: '',
             email: '',
             salary: '',
+            phoneNumber: '',
           }}
           onSubmit={getEmployeeAddSubmitHandler((employee) => {
             modal.resolve(employee);
             setTimeout(modal.hide, 20);
           })}
           currency={Util.getCurrencySymbolFromAdministrator(administrator)}
+          country={Util.getCountryFromAdministrator(administrator)?.id}
         />
       </IF>
 
