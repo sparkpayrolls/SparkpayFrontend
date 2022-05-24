@@ -25,6 +25,7 @@ const CreatePayroll: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
   const router = useRouter();
   const [selected, setSelected] = useState<string[]>([]);
+  const [search, setSearch] = useState('');
   const [loading, startLoading, endLoading] = useApiCall();
   const [walletBalance, setWalletBalance] = useState(0);
   const [payroll, setPayroll] = useState<ProcessPayrollResponse>();
@@ -201,6 +202,7 @@ const CreatePayroll: NextPage = () => {
               <div className="inputs">
                 <InputV2
                   label="Cycle"
+                  className="inputs__cycle"
                   type="number"
                   placeholder="Cycle"
                   value={params.cycle || payroll?.cycle || 1}
@@ -212,6 +214,7 @@ const CreatePayroll: NextPage = () => {
                   label="Prorate Month"
                   picker="month"
                   format={'MMMM/YYYY'}
+                  className="inputs__prorate-month"
                   value={moment()
                     .month(params.proRateMonth)
                     .year(params.year || payroll?.year || moment().year())}
@@ -224,6 +227,14 @@ const CreatePayroll: NextPage = () => {
                       });
                     }
                   }}
+                />
+                <InputV2
+                  label="Search"
+                  className="inputs__search"
+                  type="search"
+                  placeholder="Search by Employee Name"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
               <TableV2 className="payroll-create-table" loading={loading}>
@@ -247,66 +258,77 @@ const CreatePayroll: NextPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {employees.map((e) => {
-                    const employee = e.employee as Employee;
+                  {employees
+                    .filter(({ employee }) => {
+                      const { firstname, lastname } = (employee ||
+                        {}) as Employee;
+                      const name = `${firstname} ${lastname}`;
 
-                    return (
-                      <tr key={employee.id}>
-                        <CheckboxTableColumn
-                          checked={!selected.includes(employee.id)}
-                          onChange={onCheck(employee.id)}
-                          element="td"
-                        >
-                          {employee.firstname} {employee.lastname}
-                        </CheckboxTableColumn>
-                        <td>
-                          {currency} {Util.formatMoneyNumber(e.salary)}
-                        </td>
-                        <td>
-                          {currency} {Util.formatMoneyNumber(e.netSalary)}
-                        </td>
-                        <IF
-                          condition={headerRow.includes(
-                            `Deductions (${currency})`,
-                          )}
-                        >
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              Util.sum(
-                                e.deductions?.map((d) => d.amount) || [],
-                              ),
-                            )}
-                          </td>
-                        </IF>
-                        <IF
-                          condition={headerRow.includes(
-                            `Bonuses (${currency})`,
-                          )}
-                        >
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              Util.sum(e.bonuses?.map((d) => d.amount) || []),
-                            )}
-                          </td>
-                        </IF>
-                        {remittanceRows.map((row) => {
-                          const remittances = e.remittances || [];
-                          const remittance = remittances.find(
-                            (r) => r.name === row.replace(` (${currency})`, ''),
-                          );
+                      return !search || name.toLowerCase().includes(search);
+                    })
+                    .map((e) => {
+                      const employee = e.employee as Employee;
 
-                          return (
-                            <td key={`${employee.id}-${row}`}>
+                      return (
+                        <tr key={employee.id}>
+                          <CheckboxTableColumn
+                            checked={!selected.includes(employee.id)}
+                            onChange={onCheck(employee.id)}
+                            element="td"
+                          >
+                            {employee.firstname} {employee.lastname}
+                          </CheckboxTableColumn>
+                          <td>
+                            {currency} {Util.formatMoneyNumber(e.salary)}
+                          </td>
+                          <td>
+                            {currency} {Util.formatMoneyNumber(e.netSalary)}
+                          </td>
+                          <IF
+                            condition={headerRow.includes(
+                              `Deductions (${currency})`,
+                            )}
+                          >
+                            <td>
                               {currency}{' '}
-                              {Util.formatMoneyNumber(remittance?.amount || 0)}
+                              {Util.formatMoneyNumber(
+                                Util.sum(
+                                  e.deductions?.map((d) => d.amount) || [],
+                                ),
+                              )}
                             </td>
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
+                          </IF>
+                          <IF
+                            condition={headerRow.includes(
+                              `Bonuses (${currency})`,
+                            )}
+                          >
+                            <td>
+                              {currency}{' '}
+                              {Util.formatMoneyNumber(
+                                Util.sum(e.bonuses?.map((d) => d.amount) || []),
+                              )}
+                            </td>
+                          </IF>
+                          {remittanceRows.map((row) => {
+                            const remittances = e.remittances || [];
+                            const remittance = remittances.find(
+                              (r) =>
+                                r.name === row.replace(` (${currency})`, ''),
+                            );
+
+                            return (
+                              <td key={`${employee.id}-${row}`}>
+                                {currency}{' '}
+                                {Util.formatMoneyNumber(
+                                  remittance?.amount || 0,
+                                )}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </TableV2>
             </>
