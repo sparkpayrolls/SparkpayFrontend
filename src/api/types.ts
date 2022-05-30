@@ -397,13 +397,22 @@ export type Addon = {
   name: string;
   description: string;
   amount: number;
+  type: string;
   meta?: unknown;
+  id: string;
+  dates: {
+    days: [string?, string?];
+    month: string;
+    year: number;
+  }[];
+  customAddonIndex?: number;
 };
 
 export type Remittance = {
   name: string;
   amount: number;
   meta?: unknown;
+  groupId?: string;
 };
 
 export type PayrollEmployee = Document & {
@@ -423,8 +432,8 @@ export type ProcessPayrollPayload = {
   employeeIds?: string[] | null;
   excludedEmployeeIds?: string[] | null;
   proRateMonth: string;
-  year: number;
-  cycle: number;
+  year?: number;
+  cycle?: number;
 };
 
 export type PayrollSummary = {
@@ -580,11 +589,18 @@ export type EmployeeGroupPayload = {
   commonSalary?: string | number;
 };
 
+export type EnabledRemittance = {
+  name: string;
+  hasGroupsFeature: boolean;
+  groups: { id: string; name: string }[];
+};
+
 export type ProcessPayrollResponse = {
   cycle: number;
   year: number;
   payrollEmployees: PayrollEmployee[];
   proRateMonth: string;
+  enabledRemittances: EnabledRemittance[];
 };
 
 export type NigerianTaxGroupMeta = {
@@ -598,3 +614,5 @@ export type NigerianTaxGroupMeta = {
   type?: TaxType;
   whTaxRate?: number;
 };
+
+export type ICreatePayrollPayload = { payDate: string } & ProcessPayrollPayload;

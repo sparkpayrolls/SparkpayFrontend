@@ -240,3 +240,7 @@ export const RequestAccessValidation = Yup.object().shape({
   name: Yup.string().required('Full name is required'),
   email: Yup.string().email().required('Email is required'),
 });
+
+export const UpdateSalaryValidation = Yup.object().shape({
+  salary: Yup.number().min(10).required('a salary is required'),
+});

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { IAllowedPermissions } from '@/components/types';
+import { sign, verify } from 'jsonwebtoken';
 import type momentNamespace from 'moment';
 import { NextRouter } from 'next/router';
 import { HttpError } from 'src/api/repo/http.error';
@@ -12,6 +13,7 @@ import {
   Role,
   SalaryAddOn,
 } from 'src/api/types';
+import { config } from './config';
 import { DebouncedFunc } from './types';
 
 export class Util {
@@ -327,5 +329,36 @@ export class Util {
     }
 
     return null;
+  }
+
+  static formatMoneyString(currency: string) {
+    return (val?: unknown) => {
+      const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
+      if (isNaN(valTransformed) || val === '') return '';
+
+      return `${currency} ${valTransformed.toLocaleString()}`;
+    };
+  }
+
+  static signPayload<T extends Record<string, unknown>>(payload: T) {
+    const { jwtSecretKey } = config();
+
+    return sign(payload, jwtSecretKey as string);
+  }
+
+  static decodePayload<T extends Record<string, unknown>>(payload: string) {
+    const { jwtSecretKey } = config();
+
+    try {
+      const decoded = verify(payload, jwtSecretKey as string) as T & {
+        iat?: string;
+      };
+
+      delete decoded.iat;
+
+      return decoded;
+    } catch (error) {
+      return null;
+    }
   }
 }

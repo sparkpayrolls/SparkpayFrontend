@@ -9,7 +9,7 @@ import { store } from '../src/redux/store';
 import NiceModal from '@ebay/nice-modal-react';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { $api } from 'src/api';
@@ -34,6 +34,7 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [loading, startLoading, stopLoading] = useApiCall();
+  const [hasSetupAuth, setHasSetupAuth] = useState(false);
 
   useEffect(() => {
     const authToken = Cookies.get('auth_token') as string;
@@ -71,6 +72,7 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
         },
       );
     }
+    setHasSetupAuth(true);
 
     return () => {
       $api.$axios.interceptors.request.eject(authTokenInterceptor);
@@ -189,7 +191,7 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
           return null;
         }}
       />
-      {loading ? (
+      {loading || !hasSetupAuth ? (
         <div className="app-loader">
           {
             // eslint-disable-next-line @next/next/no-img-element
