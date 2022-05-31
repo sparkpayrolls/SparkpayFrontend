@@ -8,8 +8,6 @@ __pages__
 
 .storybook
 
-node_modules
-
 .env
 
 .env.example
