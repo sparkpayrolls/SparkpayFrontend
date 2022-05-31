@@ -1,0 +1,145 @@
+.dashboard-page-layout {
+  &__title {
+    font-family: $font-family-Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    letter-spacing: -0.01em;
+    color: #0e347e;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+
+    @media screen and (min-width: 768px) {
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    @media screen and (min-width: 768px) {
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+}
+
+.create-admin-button {
+  gap: 0.5rem;
+}
+
+.administrators,
+.roles,
+.invitations {
+  &__table {
+    td,
+    th {
+      padding: 1rem;
+      vertical-align: middle;
+    }
+  }
+
+  &__identity {
+    grid-column-gap: 0.75rem;
+
+    img {
+      max-height: 32px;
+    }
+
+    .identity__image {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &__last-table-column {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.6875rem;
+  }
+
+  &__pagination {
+    padding: 1rem;
+  }
+
+  padding-bottom: 1.5rem;
+}
+
+.roles {
+  &__permissions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    min-width: 187px;
+  }
+}
+
+.create-administrator-form {
+  > *:not(:last-child) {
+    margin-bottom: 1.25rem;
+  }
+
+  button {
+    width: 100%;
+    min-height: 56px;
+    margin-top: 2rem;
+  }
+}
+
+.create-role-modal {
+  .ant-drawer-content-wrapper {
+    max-width: 644px;
+  }
+}
+
+.create-role-form {
+  > *:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  button {
+    margin-left: auto;
+    min-height: 56px;
+    margin-top: 2.5rem;
+    min-width: 261px;
+  }
+
+  &__permissions {
+    p {
+      font-weight: 600;
+      font-size: 1.125rem;
+      line-height: 1.25rem;
+      color: #0e347e;
+      margin-bottom: 1.25rem;
+    }
+
+    table {
+      th,
+      td {
+        padding: 1.5rem 1rem;
+        font-weight: 400;
+        font-size: 0.875rem;
+        line-height: 1rem;
+        color: #0b2253;
+
+        input[type='checkbox'] {
+          border: 1px solid #dde5ee;
+          background: #ffffff;
+          border-radius: 4px;
+        }
+      }
+    }
+  }
+}

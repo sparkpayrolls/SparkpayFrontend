@@ -1,0 +1,48 @@
+.text {
+  font-family: $font-family-Karla;
+  font-style: normal;
+  font-weight: normal;
+
+  &__page-title {
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: #0e347e;
+    margin-bottom: 10px;
+
+    @media screen and (min-width: 1024px) {
+      margin-bottom: 20px;
+    }
+  }
+  &__label {
+    font-size: 14px;
+    line-height: 16px;
+    color: #81909d;
+    margin-bottom: 8px;
+    display: block;
+  }
+  &__text-sm {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -0.117188px;
+  }
+  &__section-title {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0.25px;
+    color: $black;
+    margin-bottom: 16px;
+  }
+
+  &__gray400 {
+    color: $n-400;
+  }
+  &__danger {
+    color: $red-600;
+  }
+  &__black {
+    color: $black;
+  }
+}

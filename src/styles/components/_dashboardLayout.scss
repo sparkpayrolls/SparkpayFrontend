@@ -1,0 +1,202 @@
+.dashboardLayout {
+  .dashboard-navigation {
+    display: none;
+    position: fixed;
+    width: 16rem;
+    height: 100vh;
+    background: #f8fafc;
+    transition: all 500ms;
+    overflow-y: auto;
+
+    @media screen and (min-width: 992px) {
+      display: block;
+    }
+
+    &__brand {
+      position: fixed;
+      width: 16rem;
+      display: block;
+      padding: 1.4375rem 2.25rem;
+      background: inherit;
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      grid-row-gap: 0.75rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      height: 100%;
+      overflow-y: hidden;
+      padding-top: 6.25rem;
+      padding-bottom: 5.875rem;
+    }
+    &__list:hover {
+      overflow-y: auto;
+    }
+    &__list-item {
+      margin: 0 1rem;
+    }
+
+    &__link {
+      display: flex;
+      align-items: center;
+      grid-column-gap: 1.125rem;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      color: #0b2253;
+      padding: 0.75rem 1rem;
+      transition: all 500ms;
+      > svg {
+        color: #b9c8d4;
+        transition: all 500ms;
+      }
+
+      &:hover,
+      &.active {
+        color: $primary;
+        background: #eff6ff;
+        border-radius: 0.25rem;
+        > svg {
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  &__logo {
+    padding: 1.25rem 1.25rem 0.5rem;
+
+    @media screen and (min-width: 992px) {
+      display: none;
+    }
+  }
+
+  &__top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $white;
+    padding: 1.25rem;
+
+    @media screen and(min-width: 992px) {
+      justify-content: flex-end;
+      margin-left: 16rem;
+      padding-inline: 2rem;
+    }
+
+    &--logo {
+      @media screen and(min-width: 992px) {
+        display: none;
+      }
+    }
+
+    &--menu-btn {
+      background: unset;
+      padding: unset;
+      border: unset;
+      @media screen and (min-width: 992px) {
+        display: none;
+      }
+    }
+
+    &--name {
+      font-size: 0.875rem;
+      line-height: 1rem;
+      letter-spacing: -0.01em;
+      color: #0b2253;
+    }
+
+    &--avatar {
+      margin-left: 0.875rem;
+    }
+
+    &--dropdown {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  &__body {
+    margin-inline: 1.25rem;
+    max-width: 1368px;
+    min-height: calc(100vh - 127px);
+
+    @media screen and (min-width: 992px) {
+      padding-left: 18rem;
+      padding-right: 2rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+.drawer-menu {
+  .dashboard-navigation {
+    // width: 16rem;
+    // height: 100vh;
+
+    &__brand {
+      position: fixed;
+      width: 16rem;
+      display: block;
+      padding: 1.4375rem 2.25rem;
+      background: inherit;
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      grid-row-gap: 0.75rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      height: 100%;
+      overflow-y: hidden;
+      padding-top: 4.25rem;
+      padding-bottom: 5.875rem;
+    }
+    &__list:hover {
+      overflow-y: auto;
+    }
+    &__list-item {
+      margin: 0 1rem;
+    }
+
+    &__link {
+      display: flex;
+      align-items: center;
+      grid-column-gap: 1.125rem;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      color: #0b2253;
+      padding: 0.75rem 1rem;
+      transition: all 500ms;
+      > svg {
+        color: #b9c8d4;
+        transition: all 500ms;
+      }
+
+      &:hover,
+      &.active {
+        color: $primary;
+        background: #eff6ff;
+        border-radius: 0.25rem;
+        > svg {
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  .ant-drawer-body {
+    padding: unset;
+    background: #f8fafc;
+  }
+
+  .ant-drawer-header-close-only {
+    display: none;
+  }
+}

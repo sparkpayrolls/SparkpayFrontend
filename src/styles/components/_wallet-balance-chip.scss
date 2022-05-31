@@ -1,0 +1,25 @@
+.wallet-balance-chip {
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  font-family: $font-family-Karla;
+  color: #0e347e;
+  line-height: 28px;
+  flex-wrap: wrap;
+
+  &__title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    margin-right: 10px;
+  }
+
+  &__balance {
+    color: $gray;
+
+    &__amount {
+      font-weight: 600;
+    }
+  }
+}

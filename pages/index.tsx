@@ -1,7 +1,7 @@
-import Home from "./Home/Home";
+import { Landing } from '@/components/Landing/Landing.component';
 
-const Landing = () => {
-  return <Home />;
+const Index = () => {
+  return <Landing />;
 };
 
-export default Landing;
+export default Index;

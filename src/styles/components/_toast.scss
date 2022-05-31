@@ -1,0 +1,98 @@
+// @mixin toast($color, $background) {
+//   border: 1px solid $color;
+//   border-radius: 0.5rem;
+//   background: $background;
+
+//   .Toastify__toast-body {
+//     color: $color;
+//   }
+
+//   .Toastify__toast-icon {
+//     display: none;
+//   }
+// }
+
+// .Toastify {
+//   &__toast {
+//     align-items: center;
+//     box-shadow: none;
+//     > button > svg {
+//       display: none;
+//     }
+//   }
+
+//   &__toast--error {
+//     @include toast($error, #fce9e9);
+
+//     &::before {
+//       content: url('../../../public/svgs/toast-error-icon.svg');
+//       position: relative;
+//       z-index: 100000;
+//     }
+
+//     &::after {
+//       content: url('../../../public/svgs/close-line-error.svg');
+//       position: absolute;
+//       color: $error;
+//       font-size: 15px;
+//       font-weight: 700;
+//       right: 8px;
+//     }
+//   }
+
+//   &__toast--success {
+//     @include toast($success, #eafbf1);
+
+//     &::before {
+//       content: url('../../../public/svgs/toast-success-icon.svg');
+//       position: relative;
+//       z-index: 100000;
+//     }
+
+//     &::after {
+//       content: url('../../../public/svgs/close-line-success.svg');
+//       position: absolute;
+//       color: $success !important;
+//       font-size: 15px;
+//       font-weight: 700;
+//       right: 8px;
+//     }
+//   }
+
+//   &__toast--warning {
+//     @include toast($warning, #fdf2e7);
+
+//     &__toast--warning::before {
+//       content: url('../../../public/svgs/toast-warning-icon.svg');
+//       position: relative;
+//       z-index: 100000;
+//     }
+
+//     &::after {
+//       content: url('../../../public/svgs/close-line-warning.svg');
+//       position: absolute;
+//       color: $warning;
+//       font-size: 15px;
+//       font-weight: 700;
+//       right: 8px;
+//     }
+//   }
+
+//   &__toast-body {
+//     div {
+//       font-weight: 600;
+//       letter-spacing: 0.002em;
+//       font-size: 0.875rem;
+//       line-height: 1rem;
+//       font-family: $font-family-Karla;
+//     }
+//     padding: 0px;
+//     margin: 10px;
+//     width: 100%;
+//   }
+
+//   &__toast-container {
+//     width: 100%;
+//     max-width: 442px;
+//   }
+// }

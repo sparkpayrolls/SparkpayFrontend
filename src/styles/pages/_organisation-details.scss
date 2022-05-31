@@ -1,0 +1,217 @@
+.organisation-details {
+  hr {
+    border: 1px solid #f4f5f6;
+    width: calc(100% - 3rem);
+  }
+  &__back-icon {
+    cursor: pointer;
+    margin: 0;
+  }
+  &__single-details-container {
+    background: #ffffff;
+    border: 1px solid #eaedf4;
+    box-sizing: border-box;
+    border-radius: 8px;
+    margin-bottom: 3rem;
+  }
+  &__organisation-details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1.25rem;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: unset;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  &__organisation-details-header {
+    display: flex;
+    align-items: center;
+    column-gap: 1.5rem;
+
+    a {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__organisation-header {
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    letter-spacing: -0.01em;
+    color: #0e347e;
+    // margin-top: 0.6rem;
+  }
+  &__organisation-button {
+    width: 100%;
+    height: 46px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    border-radius: 8px;
+    font-style: normal;
+    font-weight: normal;
+    text-align: center;
+    letter-spacing: -0.01em;
+    background: #1d4ed8;
+    border: none;
+    cursor: pointer;
+
+    @media screen and (min-width: 768px) {
+      width: 204px;
+    }
+  }
+  &__organisation-settings-flex {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-top: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+  &__user-image {
+    border: 4px solid #e1fbeb !important;
+    border-radius: 50%;
+  }
+  &__image-upload-link-parent {
+    display: flex;
+    margin-top: 1rem;
+    width: 30%;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    &__image {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+  &__input-upload {
+    display: none;
+  }
+  &__upload-image-text {
+    margin-top: 2.1rem;
+    margin-left: 2rem;
+    color: #1d4ed8;
+    font-weight: 500;
+    border-bottom: 1px solid #1d4ed8;
+    margin-bottom: 2.2rem;
+    cursor: pointer;
+  }
+}
+
+.custom-field {
+  border: 1px solid #dceaf8;
+  border-top: none;
+  margin: 32px 2px;
+  padding: 8px;
+}
+
+.custom-field h1 {
+  margin: -16px -8px 0;
+  color: #0b2253;
+  font-size: 15px;
+}
+
+.custom-field h1 span {
+  float: left;
+}
+
+.custom-field h1:before {
+  border-top: 1px solid #dceaf8;
+  content: ' ';
+  float: left;
+  margin: 8px 2px 0 -1px;
+  width: 12px;
+}
+
+.custom-field h1:after {
+  border-top: 1px solid #dceaf8;
+  content: ' ';
+  display: block;
+  height: 24px;
+  left: 2px;
+  margin: 0 1px 0 0;
+  overflow: hidden;
+  position: relative;
+  top: 8px;
+}
+
+#shipping_name {
+  padding-left: 10px;
+  background: #ebf1f7;
+  border-radius: 4px;
+  border: none;
+  height: 35px;
+  outline: none;
+  color: #6d7a98;
+}
+
+#percentage {
+  width: 60px;
+  margin-left: 20px;
+  padding-left: 10px;
+  background: #ebf1f7;
+  border-radius: 4px;
+  border: none;
+  height: 35px;
+  outline: none;
+  color: #6d7a98;
+}
+.fas {
+  color: #1d4ed8;
+  margin-left: 20px;
+  padding-top: 5px;
+  cursor: pointer;
+  // width: 20%;
+}
+.salary-breakdown {
+  margin-top: 2rem;
+  padding-left: 1.35rem;
+  font-size: 1.2rem;
+}
+
+.image-upload-input {
+  cursor: pointer;
+  display: block;
+
+  div {
+    border: 1px solid #dceaf8;
+    border-radius: 4px;
+    padding: 8px;
+    position: relative;
+    height: 46px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+    &::before {
+      width: 100%;
+      height: 100%;
+      content: '';
+      background-color: rgba(0, 0, 0, 0.4);
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .placeholder {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      color: #fff;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

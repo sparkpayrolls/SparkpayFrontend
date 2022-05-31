@@ -1,0 +1,23 @@
+.nigerian-tax {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__button {
+    width: 100%;
+    height: 56px;
+  }
+
+  @media screen and (min-width: 768px) {
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__button {
+      width: initial;
+    }
+  }
+}

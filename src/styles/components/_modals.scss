@@ -1,0 +1,421 @@
+.JoinWaitListModal {
+  @media screen and (min-width: 768px) and (max-width: 1500px) {
+    width: 60vw !important;
+  }
+  .ant-modal-content {
+    border-radius: 0.5rem;
+  }
+
+  .ant-modal-header,
+  .ant-modal-footer {
+    display: none;
+  }
+
+  // .ant-modal-mask {
+  // }
+
+  &__content {
+    align-items: center;
+    justify-content: center;
+    margin: 1.5rem 0;
+
+    @media screen and (min-width: 768px) {
+      display: flex;
+      margin: 1.5rem;
+    }
+  }
+
+  &__text {
+    @media screen and (min-width: 768px) {
+      margin-left: 2.5rem;
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.3rem;
+    line-height: 2rem;
+    letter-spacing: -0.01em;
+    color: #0e347e;
+
+    @media screen and (min-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  &__subtext {
+    font-weight: normal;
+    font-size: 0.9rem;
+    line-height: 1.5rem;
+    letter-spacing: -0.01em;
+    color: #0b2253;
+  }
+
+  &__svg {
+    width: 45%;
+    margin: auto;
+    // transform: rotate(-8deg);
+  }
+
+  &__share {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+
+    span {
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 0.8rem;
+      letter-spacing: -0.01em;
+      color: #0e347e;
+      margin-left: 0.5rem;
+    }
+  }
+
+  &__btn-area {
+    display: flex;
+    flex-direction: column;
+    grid-row-gap: 1rem;
+    margin-top: 1.2rem;
+
+    button,
+    .linkedin__share-button,
+    .twitter__share-button {
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        grid-column-gap: 4px;
+        color: #0e347e;
+        background: none;
+        border: 1px solid #0e347e;
+        border-radius: 0.5rem;
+        padding: 0.75rem 0;
+        cursor: pointer;
+        transition: all 500ms;
+
+        @media screen and (min-width: 768px) {
+          width: 65%;
+        }
+      }
+
+      // &:first-child {
+      //   color: #00acee;
+      //   border: 1px solid #00acee;
+      //   &:hover {
+      //     color: #ffffff;
+      //     background: #00acee;
+      //   }
+      // }
+
+      // &:last-child {
+      // }
+    }
+
+    .linkedin__share-button {
+      div {
+        color: #0077b5;
+        border: 1px solid #0077b5;
+        &:hover {
+          color: #ffffff;
+          background: #0077b5;
+        }
+      }
+    }
+
+    .twitter__share-button {
+      div {
+        color: #00acee;
+        border: 1px solid #00acee;
+        &:hover {
+          color: #ffffff;
+          background: #00acee;
+        }
+      }
+    }
+  }
+}
+
+.modal-layout {
+  .ant-drawer-content-wrapper {
+    width: 100% !important;
+    max-width: 464px;
+
+    .ant-drawer-body {
+      padding: 0;
+    }
+  }
+
+  .ant-drawer-header-close-only {
+    display: none;
+  }
+
+  &__content {
+    height: 100%;
+    // overflow-y: auto;
+  }
+
+  &__title-section {
+    background: #f7f9fb;
+    width: 100%;
+    padding: 2rem 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    z-index: 99;
+
+    @media screen and (min-width: 768px) {
+      padding: 2rem 2rem 1.5rem;
+    }
+  }
+
+  &__body-section {
+    padding: 6.5rem 1.25rem;
+    overflow-y: auto;
+    height: 100%;
+
+    @media screen and (min-width: 768px) {
+      padding: 6.5rem 2rem;
+    }
+  }
+
+  &__title-text {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 24px;
+    color: #0b2253;
+  }
+
+  &__close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    @media screen and (min-width: 768px) {
+      position: absolute;
+      top: 0;
+      left: -56px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ffffff;
+
+      &:hover {
+        background: #f7f9fb;
+        transition: background 0.2s ease-in-out;
+      }
+    }
+  }
+}
+
+.employee-filter-modal {
+  height: 100%;
+
+  &__section {
+    margin-bottom: 40px;
+  }
+
+  &__btn {
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    button {
+      margin-right: 10px;
+    }
+  }
+}
+
+.add-employee-modal {
+  &__upload-type-input {
+    margin-bottom: 32px;
+
+    > label {
+      font-family: $font-family-Karla;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 24px;
+      color: $gray;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    &__radio-group {
+      label {
+        color: $black !important;
+        font-family: $font-family-Karla;
+        font-style: normal;
+        font-weight: normal;
+        font-size: $font-size-16;
+        line-height: 16px;
+      }
+    }
+  }
+}
+
+.fund-wallet-modal {
+  &__backIcon {
+    display: flex;
+    grid-column-gap: 0.7rem;
+    cursor: pointer;
+  }
+  &__back-text {
+    font-size: 0.9rem;
+    line-height: 16px;
+    color: #0b2253;
+    font-weight: 500;
+  }
+
+  &__fund-card {
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    height: 112px;
+    background: #f7f9fb;
+    border-radius: 4px;
+  }
+
+  &__fund-amount {
+    margin-top: 2rem;
+  }
+
+  &__fund-transfer-text {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.8rem;
+    line-height: 24px;
+    color: #6d7a98;
+  }
+
+  &__fund-title-text {
+    padding: 1.4rem 0 1.4rem 1.4rem;
+  }
+
+  &__fund-bank-copy-image {
+    margin: 2rem 1.4rem 0 0;
+    display: flex;
+    grid-column-gap: 0.5rem;
+    cursor: pointer;
+  }
+  &__fund-bank-copy-text {
+    margin-top: 1.8rem;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    color: #0f42a4;
+  }
+
+  &__fund-title-title {
+    font-size: 14px;
+    line-height: 16px;
+    color: rgba(22, 42, 86, 0.6);
+  }
+
+  &__fund-amount-transfer {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 24px;
+    color: #162a56;
+    padding-top: 8px;
+  }
+
+  &__fund-bank-transfer {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    color: #162a56;
+    padding-top: 8px;
+  }
+
+  &__fund-bank-expire {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #6d7a98;
+    padding-top: 2rem;
+  }
+}
+
+.confirmation-popup {
+  .ant-modal-content {
+    width: 400px;
+    box-shadow: 0px 7.52055px 16.7123px rgba(171, 180, 189, 0.23);
+    border-radius: 4px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .ant-modal-title {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #3a434b;
+    letter-spacing: 0.25px;
+  }
+
+  .ant-modal-body {
+    font-size: 1rem;
+    padding: 16px 0;
+    color: black;
+    line-height: 24px;
+    letter-spacing: -0.048px;
+  }
+
+  .ant-modal-header {
+    border-bottom: 1px solid #d7dce0;
+    padding: 24px 0 16px;
+  }
+
+  .ant-modal-footer {
+    border-top: none;
+    padding: 16px 0 32px;
+
+    button {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.2px;
+      border-color: transparent;
+      box-shadow: unset;
+    }
+
+    button:last-child {
+      background: #ca1b1b;
+      border-radius: 8px;
+      width: 134px;
+      height: 40px;
+
+      &:hover,
+      &:focus {
+        background: #b81a1a;
+      }
+    }
+  }
+
+  .ant-modal-close {
+    // color: #3a434b;
+
+    span {
+      height: 64px;
+      width: 64px;
+      font-size: 18px;
+      line-height: 75px;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+.audit-trail {
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2.25rem;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+    }
+  }
+
+  &__title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    color: #0e347e;
+    margin: 0;
+  }
+
+  &__employee-button {
+    button {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+
+      @media screen and (max-width: 768px) {
+        width: 100%;
+      }
+    }
+  }
+}

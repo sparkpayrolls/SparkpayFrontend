@@ -1,0 +1,195 @@
+.payroll-details-section {
+  padding-bottom: 9rem;
+
+  &__payroll-details-header {
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__table-empty-state {
+    height: 27vh;
+  }
+
+  &__payroll-header {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2rem;
+    color: #0e347e;
+    padding-top: 1.5rem;
+  }
+
+  &__payroll-wallet {
+    font-size: 1.1rem;
+    font-weight: normal;
+    margin-left: 1px;
+    color: #6d7a98;
+  }
+
+  &__payroll-cost {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 32px;
+    color: #6d7a98;
+    margin-top: 2rem;
+  }
+
+  &__payroll-amount {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.1rem;
+    line-height: 32px;
+    color: #0e347e;
+  }
+
+  &__payroll-settings-details {
+    background: #ffffff;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid #eaedf4;
+    margin-top: 1rem;
+    padding-inline: 0.5rem;
+
+    @media screen and (min-width: 768px) {
+      padding-inline: 1.25rem;
+    }
+  }
+  &__employee-status {
+    display: flex;
+    grid-column-gap: 0.3rem;
+    margin-top: -15px;
+  }
+
+  &__payroll-breakdown {
+    margin-top: 3rem;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+
+    hr {
+      width: 1000px;
+    }
+  }
+  hr {
+    border: 1px solid #f4f5f6;
+  }
+  th {
+    // border: 1px solid #dddddd;
+    text-align: left;
+    padding: 17px;
+    font-weight: 500;
+  }
+
+  td {
+    text-align: left;
+    padding: 17px;
+    border-bottom: 1px solid #f7f9fb;
+    padding-top: 30px;
+  }
+  &__payroll-breakdown-text {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 32px;
+    color: #0e347e;
+    margin-top: 2rem;
+  }
+
+  &__payroll-sum-total {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 16px;
+    color: #0b2253;
+    background: #ffffff;
+    position: relative;
+    top: 40px;
+    // box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  &__payroll cost-total {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.1rem;
+    line-height: 32px;
+    color: #6d7a98;
+  }
+
+  &__payroll-cost-total {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 32px;
+    color: #6d7a98;
+    margin-top: 4rem;
+    padding-left: 0.5rem;
+  }
+  &__payroll-cost-amount {
+    font-family: Karla;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1.1rem;
+    line-height: 32px;
+    color: #0e347e;
+    padding-bottom: 2rem;
+  }
+
+  //add employee page styles
+  &__payroll-inbox {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__add-employee-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+
+  &__add-employee-total-text {
+    font-weight: 600;
+    height: 80px;
+    background: #ffffff;
+    box-shadow: 6px 0px 10px 2px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0rem 0rem 3rem;
+    font-size: 1rem;
+    color: #0b2253;
+  }
+  &__successful-image {
+    margin-top: 13px;
+  }
+  &__successful-icon {
+    display: flex;
+    grid-column-gap: 0.2rem;
+    margin-top: -10px;
+  }
+
+  &__successful-text {
+    margin-top: 13px;
+    color: #27be63;
+    font-size: 14px;
+  }
+
+  &__status-text {
+    font-size: 1rem;
+    color: #9da9b3;
+    margin-top: 2.3rem;
+  }
+  &__month-text {
+    margin-top: 1rem;
+  }
+}
