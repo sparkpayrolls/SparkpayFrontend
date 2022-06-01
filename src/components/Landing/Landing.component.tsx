@@ -71,7 +71,6 @@ export const Landing = () => {
         <meta name="description" content="Sparkpay homepage" />
       </Head>
 
-
       <main className="home">
         <section className="hero-section">
           <div className="hero-section__text-column">
@@ -278,8 +277,8 @@ export const Landing = () => {
               payroll while you focus on other things.
               <br />
               <br />
-              You don't require any prior payroll management experience. Our
-              system is simple to use, and we offer 24/7 support if you ever
+              You don&apos;t require any prior payroll management experience.
+              Our system is simple to use, and we offer 24/7 support if you ever
               need it.
               <br />
               <br />
