@@ -1,26 +1,13 @@
-FROM node:14.19-alpine as builder
+FROM node:14.19-alpine
 
 RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
 COPY package.json .
-COPY yarn.lock .
-
-RUN yarn install
-
-COPY . .
-RUN yarn run build
-
-FROM node:14.19-alpine
-
-RUN mkdir -p /usr/src/app
-
-WORKDIR /usr/src/app
-COPY  --from=builder /usr/src/app/package.json ./package.json
-COPY  --from=builder /usr/src/app/node_modules ./node_modules
-COPY  --from=builder /usr/src/app/.next ./.next
-COPY  --from=builder /usr/src/app/public ./public
+COPY node_modules ./node_modules
+COPY .next ./.next
+COPY public ./public
 
 EXPOSE 80
 
