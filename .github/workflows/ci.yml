@@ -33,7 +33,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: sparkpay-fe
           IMAGE_TAG: ${{ github.run_number }}
-          NODE_ENV: production
           NEXT_PUBLIC_API_URL: https://api.sparkpayhq.com
           NEXT_PUBLIC_PAYSTACK_KEY: pk_live_c084fb719880036900c1f93f16018447e6760ecd
           NEXT_PUBLIC_JWT_KEY: cGtfdGVzdF8zMmRhNWY5N2Q0ZDIyYjE3ZDYzYjdlYTRkMmQ1MTAzNmY3YWZmOTE0
@@ -90,7 +89,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: sparkpay-fe
           IMAGE_TAG: ${{ github.run_number }}
-          NODE_ENV: production
           NEXT_PUBLIC_API_URL: http://devapi.sparkpayhq.com
           NEXT_PUBLIC_PAYSTACK_KEY: pk_test_32da5f97d4d22b17d63b7ea4d2d51036f7aff914
           NEXT_PUBLIC_JWT_KEY: cGtfdGVzdF8zMmRhNWY5N2Q0ZDIyYjE3ZDYzYjdlYTRkMmQ1MTAzNmY3YWZmOTE0
