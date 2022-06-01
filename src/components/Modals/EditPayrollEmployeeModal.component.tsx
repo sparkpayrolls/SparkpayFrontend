@@ -84,7 +84,10 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                     } = props;
 
                     return (
-                      <form onSubmit={handleSubmit}>
+                      <form
+                        onSubmit={handleSubmit}
+                        className="edit-payroll-employee__form"
+                      >
                         <InputV2
                           type="number"
                           label={`Salary Amount (${currency})`}
@@ -120,14 +123,14 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                 </h3>
 
                 <table>
-                  <thead>
+                  {/* <thead>
                     <tr>
                       <th>Type</th>
                       <th>Amount</th>
                       <th>Name</th>
                       <th>Actions</th>
                     </tr>
-                  </thead>
+                  </thead> */}
                   <tbody>
                     {addons.map((addon, i) => {
                       const [date] = addon.dates;
@@ -221,7 +224,10 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                     });
 
                     return (
-                      <form onSubmit={handleSubmit}>
+                      <form
+                        onSubmit={handleSubmit}
+                        className="edit-payroll-employee__form2"
+                      >
                         <Select
                           label="Type"
                           placeholder="Type"
@@ -336,6 +342,7 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                                 <Select
                                   label="Tax Group (optional)"
                                   placeholder="Tax Group (optional)"
+                                  containerClassName="edit-payroll-employee__select"
                                   disabled={!remittance || loadingPayroll}
                                   options={groups.map((group) => ({
                                     value: group.id,
@@ -350,6 +357,7 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                                 />
                                 {remittance?.groupId && (
                                   <button
+                                    className="edit-payroll-employee__clear-btn"
                                     onClick={onClearGroup({
                                       employee,
                                       hook,
@@ -358,7 +366,7 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                                     })}
                                     disabled={loadingPayroll}
                                   >
-                                    clear
+                                    Clear
                                   </button>
                                 )}
                               </>

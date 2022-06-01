@@ -258,6 +258,7 @@ export const InputV2 = (
           element="label"
         />
       )}
+
       <Container className="input-v2__input-container">
         <input
           {...inputProps}
@@ -273,6 +274,7 @@ export const InputV2 = (
           type={contentVisible ? contentVisibleInputType : 'password'}
           value={value}
         />
+        
         <Container className="input-v2__add-on">
           {loading && <Spinner color="--green" />}
           {showVisibilityToggle && !loading && (
@@ -290,12 +292,14 @@ export const InputV2 = (
           )}
         </Container>
       </Container>
+
       {!!error && typeof error === 'string' && (
         <Text
           className="input-v2--error__error text__text-sm text__danger"
           text={error}
         />
       )}
+
       {!!helper && !error && (
         <Text
           className="input-v2__helper text__text-sm text__gray400"
