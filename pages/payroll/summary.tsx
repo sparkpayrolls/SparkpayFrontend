@@ -158,6 +158,7 @@ const PayrollSummaryPage: NextPage = () => {
             </div>
           </div>
           <Formik
+            key={JSON.stringify(params)}
             initialValues={{
               ...params,
               payDate: '',
