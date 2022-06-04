@@ -4,7 +4,7 @@ import Head from 'next/head';
 import NiceModal from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
 import { Radio } from 'antd';
-import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
 import {
@@ -13,9 +13,8 @@ import {
   WalletBilling,
 } from '../types';
 import { fundWalletValidationSchema } from 'src/helpers/validation';
-import { config } from '../../helpers/config';
-import { Company, Country } from 'src/api/types';
 import { Util } from 'src/helpers/util';
+import { useWalletBillingFormLogic } from 'src/helpers/hooks/use-wallet-billing-form-logic.hook';
 
 export const WalletBillingModal = NiceModal.create(
   (props: IWalletBillingModal) => {
@@ -36,78 +35,11 @@ export const WalletBillingModal = NiceModal.create(
 );
 
 const WalletBillingForm = (props: IWalletBillingForm) => {
-  const { administrator, modal, paymentMethods } = props;
-  const company = administrator.company as Company;
-  const country = company.country as Country;
-  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-
-  const triggerPaystackNGCheckout = (amount: number, channels: string[]) => {
-    return new Promise((resolve, reject) => {
-      // @ts-ignore
-      const handler = PaystackPop.setup({
-        key: config().paystackKey,
-        email: company.email,
-        amount: amount * 100,
-        currency: 'NGN',
-        channels,
-        metadata: {
-          companyId: company.id,
-          userId: administrator.user,
-          chargeType: 'wallet-topup',
-        },
-        callback: resolve,
-        onClose: () => reject(new Error()),
-      });
-
-      handler.openIframe();
-    });
-  };
-
-  const handleNigeriaSubmit = (
-    values: WalletBilling,
-    helpers: FormikHelpers<WalletBilling>,
-  ) => {
-    const amount = +values.amount;
-    if (amount < 100) {
-      helpers.setErrors({
-        amount: `amount must be at least ${currency} 100`,
-      });
-      helpers.setSubmitting(false);
-      return;
-    }
-    let channel: string;
-    switch (values.channel) {
-      case 'Bank Transfer': {
-        channel = 'bank';
-        break;
-      }
-      default:
-        channel = 'card';
-    }
-
-    triggerPaystackNGCheckout(amount, [channel])
-      .then(() => {
-        modal.resolve(true);
-        setTimeout(modal.hide, 100);
-      })
-      .catch(() => helpers.setSubmitting(false));
-  };
-
-  const handleSubmit = (
-    values: WalletBilling,
-    helpers: FormikHelpers<WalletBilling>,
-  ) => {
-    helpers.setSubmitting(true);
-
-    switch (country.name) {
-      case 'Nigeria': {
-        handleNigeriaSubmit(values, helpers);
-        break;
-      }
-      default:
-        console.log(`unsupported country - ${country.name}`);
-    }
-  };
+  const {
+    paymentMethods,
+    handleWalletBillingFormSubmit,
+    currency,
+  } = useWalletBillingFormLogic(props);
 
   return (
     <div className="add-employee-modal">
@@ -121,7 +53,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
           // @ts-ignore
           channel: '',
         }}
-        onSubmit={handleSubmit}
+        onSubmit={handleWalletBillingFormSubmit}
         validationSchema={fundWalletValidationSchema}
       >
         {(props: FormikProps<WalletBilling>) => {
@@ -132,7 +64,13 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
             errors,
             touched,
             handleBlur,
+            values,
           } = props;
+          const error =
+            ((errors.amount && touched.amount) ||
+              (errors.channel && touched.channel)) &&
+            [errors.amount, errors.channel].filter((e) => !!e).join(' and ');
+
           return (
             <form
               onSubmit={handleSubmit}
@@ -144,6 +82,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                 <Radio.Group
                   name="channel"
                   onChange={handleChange}
+                  value={values.channel}
                   className="add-employee-modal__upload-type-input__radio-group"
                 >
                   {paymentMethods.map((paymentMethod) => {
@@ -162,21 +101,11 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                   label={`Amount (${currency})`}
                   placeholder={`Amount (${currency})`}
                   name="amount"
-                  transformValue={(val) => {
-                    const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
-                    if (!valTransformed) return '';
-
-                    return `${currency} ${valTransformed.toLocaleString()}`;
-                  }}
+                  value={values.amount}
+                  transformValue={Util.formatMoneyString(currency)}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  error={
-                    ((errors.amount && touched.amount) ||
-                      (errors.channel && touched.channel)) &&
-                    [errors.amount, errors.channel]
-                      .filter((e) => !!e)
-                      .join(' and ')
-                  }
+                  error={error}
                 />
               </div>
 
