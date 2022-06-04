@@ -1,5 +1,5 @@
 .create-payroll-page {
-  padding-bottom: 128px;
+  padding-bottom: 15rem;
 
   .table-layout__top-bar__actions {
     flex-grow: unset;
@@ -98,5 +98,43 @@
     background: transparent;
     cursor: pointer;
     border: none;
+    transition: all 500ms;
+
+    &:hover {
+      color: #1d4ed8;
+    }
+  }
+}
+
+.edit-payroll-employee {
+  &__section-title {
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+
+  &__form,
+  &__form2 {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    margin-bottom: 2rem;
+  }
+
+  &__form2 {
+    row-gap: 20px;
+  }
+
+  &__select {
+    margin-top: 20px;
+  }
+
+  &__clear-btn {
+    margin-top: 16px;
+    color: white;
+    background: #ff2c2c;
+    border: unset;
+    border-radius: 8px;
+    padding: 8px 20px;
+    cursor: pointer;
   }
 }

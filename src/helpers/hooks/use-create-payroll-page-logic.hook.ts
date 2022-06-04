@@ -127,9 +127,11 @@ export const useCreatePayrollPageLogic = () => {
       remittances: payrollEmployee.remittances || [],
       enabledRemittances: payroll?.enabledRemittances,
     };
+
     if (modalParamUpdateRef.current?.id === employee.id) {
       modalParamUpdateRef.current.setParams(modalParams);
     }
+    
     return () => {
       NiceModal.show(EditPayrollEmployeeModal, {
         getParams: () => modalParams,

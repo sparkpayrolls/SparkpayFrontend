@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+//@ts-ignore
+import TawkTo from 'tawkto-react';
 import NiceModal from '@ebay/nice-modal-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,6 +10,13 @@ import close from '../../../public/svgs/Close.svg';
 import { useState } from 'react';
 import classNames from 'classnames';
 import { RequestAccessModal } from '@/components/Modals/RequestAccessModal.component';
+import {
+  FacebookSVG,
+  InstagramSVG,
+  LinkedinSVG,
+  SparkpaySVG,
+  TwitterSVG,
+} from '@/components/svg';
 
 // eslint-disable-next-line no-undef
 const DefaultLayout: React.FC = ({ children }) => {
@@ -14,6 +24,15 @@ const DefaultLayout: React.FC = ({ children }) => {
     'navigation--attach': false,
     'navigation--show': false,
   });
+
+  useEffect(() => {
+    var tawk = new TawkTo('627a74667b967b11798ea98e', '1g2n5dcgr');
+
+    tawk.onStatusChange((status: string) => {
+      console.log(status);
+    });
+  }, []);
+
   const navigationClassName = classNames('navigation', navigation);
 
   const showNavigation = () => {
@@ -86,10 +105,117 @@ const DefaultLayout: React.FC = ({ children }) => {
         </button>
       </header>
       {children}
-      <footer className="default-layout__footer">
-        <p className="default-layout__footer-text">
-          2021 SparkPay - All Rights Reserved.
-        </p>
+
+      <footer className="footer">
+        <section className="footer__menu">
+          <div className="footer__column1">
+            <Link href="/">
+              <a className="default-layout__header-brand">
+                <SparkpaySVG />
+              </a>
+            </Link>
+
+            {/* <p className="footer__address">
+              23B, Jayqueens Road, Ikeja, Lagos State, Nigeria.
+            </p> */}
+          </div>
+
+          <div className="footer__column2">
+            <div className="footer__elements">
+              <h3 className="footer__title">LINKS</h3>
+
+              <ul>
+                <li>
+                  <Link href="#">
+                    <a className="footer__link">Home</a>
+                  </Link>
+                </li>
+                {/* <li>
+                  <Link href="#">
+                    <a className="footer__link">About us</a>
+                  </Link>
+                </li> */}
+                <li>
+                  <Link href="#">
+                    <a className="footer__link">FAQ</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="footer__elements">
+              <h3 className="footer__title">TERMS OF SERVICE</h3>
+
+              <ul>
+                <li>
+                  <Link href="#">
+                    <a className="footer__link">Terms &amp; Condition</a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#">
+                    <a className="footer__link">Privacy Policy</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="footer__elements">
+              <h3 className="footer__title">CONTACT US</h3>
+
+              <ul>
+                <li>
+                  <Link href="#">
+                    <a className="footer__link">support@sparkpayhq.com</a>
+                  </Link>
+                </li>
+                {/* <li>
+                  <Link href="#">
+                    <a className="footer__link">+234 802 100 0001</a>
+                  </Link>
+                </li> */}
+                <li>
+                  <ul className="footer__social-link">
+                    <li>
+                      <Link href="#">
+                        <a>
+                          <FacebookSVG />
+                        </a>
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link href="#">
+                        <a>
+                          <TwitterSVG />
+                        </a>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="#">
+                        <a>
+                          <LinkedinSVG />
+                        </a>
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link href="#">
+                        <a>
+                          <InstagramSVG />
+                        </a>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <div className="footer__copyright">
+          &copy; {new Date().getFullYear()} SparkPay - All Rights Reserved.
+        </div>
       </footer>
     </>
   );

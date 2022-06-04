@@ -30,7 +30,7 @@ export const usePayrollSummaryPageLogic = () => {
       try {
         helpers.setSubmitting(true);
         const payroll = await $api.payroll.createPayroll(values);
-        toast.success(`payroll created - ${payroll.id}`);
+        toast.success('payroll created');
         router.push(`/payroll/${payroll.id}`);
       } catch (error) {
         Util.onNonAuthError(error, (err) => {

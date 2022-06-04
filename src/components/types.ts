@@ -560,6 +560,7 @@ export type ISelect<T> = SelectProps<T> & {
   ref?: React.Ref<RefSelectProps>;
   label?: string;
   error?: string;
+  containerClassName?: string;
 };
 
 export type IAutoComplete = AutoCompleteProps &
