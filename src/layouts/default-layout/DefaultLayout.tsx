@@ -18,12 +18,38 @@ import {
   TwitterSVG,
 } from '@/components/svg';
 
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
+
+function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions(),
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
+}
+
 // eslint-disable-next-line no-undef
 const DefaultLayout: React.FC = ({ children }) => {
   const [navigation, setNavigation] = useState({
     'navigation--attach': false,
     'navigation--show': false,
   });
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     var tawk = new TawkTo('627a74667b967b11798ea98e', '1g2n5dcgr');
@@ -111,7 +137,11 @@ const DefaultLayout: React.FC = ({ children }) => {
           <div className="footer__column1">
             <Link href="/">
               <a className="default-layout__header-brand">
-                <SparkpaySVG />
+                {width < 800 ? (
+                  <Image src={Logo} alt="logo" />
+                ) : (
+                  <SparkpaySVG />
+                )}
               </a>
             </Link>
 
