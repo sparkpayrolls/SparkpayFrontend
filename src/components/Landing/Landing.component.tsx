@@ -157,8 +157,8 @@ export const Landing = () => {
 
               <h3 className="services__feature-title">Pension</h3>
               <p className="services__feature-subtext">
-                Deduct your pension from your employee's income and remit it to
-                the right channels if required.
+                Deduct your pension from your employee&apos;s income and remit
+                it to the right channels if required.
               </p>
             </div>
             <div className="services__card">
