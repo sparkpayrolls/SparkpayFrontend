@@ -208,9 +208,9 @@ $font-family-Rubik: "Rubik", sans-serif;
       @media screen and (min-width: 768px) {
         grid-template-columns: repeat(2, 1fr);
       }
-      @media screen and (min-width: 1024px) {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      // @media screen and (min-width: 1024px) {
+      //   grid-template-columns: repeat(3, 1fr);
+      // }
     }
 
     &__card {
@@ -358,6 +358,19 @@ $font-family-Rubik: "Rubik", sans-serif;
 
     &__image {
       width: 50%;
+      display: none;
+      @media screen and (min-width: 1024px) {
+        display: block;
+      }
+    }
+
+    &__image-mobile {
+      width: 80%;
+      margin: 2.5rem auto;
+
+      @media screen and (min-width: 1024px) {
+        display: none;
+      }
       // @media screen and (min-width: 1440px) and (max-width: 1600px) {
       //   max-width: 1440px;
       //   margin-inline: auto;
@@ -365,14 +378,18 @@ $font-family-Rubik: "Rubik", sans-serif;
     }
 
     &__text {
-      width: 50%;
-      padding-right: 10%;
+      @include spacing();
+      @media screen and (min-width: 1024px) {
+        width: 50%;
+        padding-right: 10%;
+      }
     }
 
     &__text-title {
       font-weight: 500;
       font-size: 34px;
       line-height: 44px;
+      text-align: center;
       color: #1d4ed8;
       margin-bottom: 32px;
     }
@@ -425,11 +442,17 @@ $font-family-Rubik: "Rubik", sans-serif;
   .testimonial {
     @include spacing();
     display: flex;
-    padding-inline: 30px;
+    flex-direction: column;
+    row-gap: 2rem;
 
-    &__column1,
-    &__column2 {
-      width: 50%;
+    @media screen and (min-width: 1095px) {
+      flex-direction: row;
+      padding-inline: 30px;
+
+      &__column1,
+      &__column2 {
+        width: 50%;
+      }
     }
 
     &__title {
