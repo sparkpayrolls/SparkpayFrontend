@@ -27,7 +27,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Restore Cache
+      - name: Restore cache
         uses: actions/cache@v2
         with:
           path: |
@@ -92,7 +92,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Restore Cache
+      - name: Restore cache
         uses: actions/cache@v2
         with:
           path: |
