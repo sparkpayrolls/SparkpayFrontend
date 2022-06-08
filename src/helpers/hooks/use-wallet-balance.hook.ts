@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { $api } from 'src/api';
+import { CompanyWallet } from 'src/api/types';
 import { useAppSelector } from 'src/redux/hooks';
+import { useSocket } from './use-socket.hook';
 
 export const useWalletBalance = () => {
   const administrator = useAppSelector((state) => state.administrator);
   const [walletBalance, setWalletBalance] = useState(0);
   const [loading, setLoading] = useState(true);
+  const socket = useSocket();
 
   const getCompanyWallet = useCallback(async () => {
     try {
@@ -23,6 +26,14 @@ export const useWalletBalance = () => {
   useEffect(() => {
     getCompanyWallet();
   }, [getCompanyWallet, administrator]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('CompanyWallet', (data: CompanyWallet) => {
+        setWalletBalance(data.balance);
+      });
+    }
+  }, [socket]);
 
   return { loading, walletBalance };
 };

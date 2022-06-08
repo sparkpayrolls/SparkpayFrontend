@@ -12,6 +12,11 @@
     color: #0e347e;
   }
 
+  &__wallet-amount-skeleton {
+    --base-color: #d1cece !important;
+    margin-top: 0.5rem;
+  }
+
   &__wallet-amount-text {
     font-family: Karla;
     font-style: normal;

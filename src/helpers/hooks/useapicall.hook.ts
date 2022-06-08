@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 
 type IUseApiCall = [boolean, () => void, () => void];
 
-const useApiCall = (): IUseApiCall => {
-  const [apiCalls, setApiCalls] = useState(0);
+const useApiCall = (initialCalls = 0): IUseApiCall => {
+  const [apiCalls, setApiCalls] = useState(initialCalls);
 
   const apiCallStarted = useCallback(() => {
     setApiCalls((calls) => calls + 1);

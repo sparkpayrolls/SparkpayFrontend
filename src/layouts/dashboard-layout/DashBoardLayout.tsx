@@ -12,7 +12,6 @@ import { Administrator, Company, Role } from 'src/api/types';
 import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
-import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { logOut } from 'src/redux/slices/user/user.slice';
 import { NavList } from './dashboard-navigation-list';
 import { useRouter } from 'next/router';
@@ -22,6 +21,7 @@ import { Drawer } from 'antd';
 import Logo from '../../../public/svgs/logo.svg';
 import close from '../../../public/svgs/Close.svg';
 import classNames from 'classnames';
+import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 interface Props {
   children?: ReactNode;
@@ -35,7 +35,7 @@ const DashboardLayout: React.FC<Props> = ({
   pageTitle,
   loading,
 }: Props) => {
-  const { user, companies } = useAppSelector((state) => state);
+  const { user, companies, administrator } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [loadingCompanySelect, setLoadingCompanySelect] = useState('');
@@ -59,16 +59,16 @@ const DashboardLayout: React.FC<Props> = ({
     },
   ];
 
-  const handleSelect = async (administrator: Administrator) => {
+  const handleSelect = async (_administrator: Administrator) => {
     try {
-      const company = administrator.company as Company;
+      const company = _administrator.company as Company;
       setLoadingCompanySelect(company.id);
-      if (administrator.selected) {
+      if (_administrator.id === administrator?.id) {
         await $api.company.unselectCompany(company.id);
       } else {
         await $api.company.selectCompany(company.id);
       }
-      await refreshCompanies(dispatch);
+      await getCurrentAdministrator(dispatch);
     } catch (error) {
       const err = error as HttpError;
       toast.error(`error toggling company - ${err.message}`);
@@ -139,6 +139,7 @@ const DashboardLayout: React.FC<Props> = ({
             companies={companies}
             onSelect={handleSelect}
             loading={loadingCompanySelect}
+            administrator={administrator}
           />
         </div>
 

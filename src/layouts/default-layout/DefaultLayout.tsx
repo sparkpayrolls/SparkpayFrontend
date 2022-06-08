@@ -26,11 +26,7 @@ const DefaultLayout: React.FC = ({ children }) => {
   });
 
   useEffect(() => {
-    var tawk = new TawkTo('627a74667b967b11798ea98e', '1g2n5dcgr');
-
-    tawk.onStatusChange((status: string) => {
-      console.log(status);
-    });
+    new TawkTo('627a74667b967b11798ea98e', '1g2n5dcgr');
   }, []);
 
   const navigationClassName = classNames('navigation', navigation);

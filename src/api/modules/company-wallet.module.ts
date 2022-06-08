@@ -1,5 +1,5 @@
 import { HttpRepository } from '../repo/http.repo';
-import { CompanyWallet, WalletTransaction } from '../types';
+import { CompanyWallet, PaginateParams, WalletTransaction } from '../types';
 
 export class CompanyWalletModule extends HttpRepository {
   async getCompanyWallet() {
@@ -8,7 +8,7 @@ export class CompanyWalletModule extends HttpRepository {
     return data;
   }
 
-  async getCompanyWalletTransactions(params: Record<string, any>) {
+  async getCompanyWalletTransactions(params: PaginateParams) {
     const query = this.parseQueryObject(params);
 
     return this.get<WalletTransaction[]>(

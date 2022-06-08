@@ -17,11 +17,47 @@ import { RemittanceModule } from './modules/remittances/remittance.module';
 import { Admin } from './modules/admin.module';
 import { GroupModule } from './modules/group.module';
 import { RolesModule } from './modules/roles.module';
+import type { useAppDispatch } from 'src/redux/hooks';
+import { logOut } from 'src/redux/slices/user/user.slice';
+import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
+import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 
 export class $api {
   static $axios = axios.create({
     baseURL: config().apiUrl,
   });
+
+  static registerInterceptors(
+    authToken: string,
+    dispatch: ReturnType<typeof useAppDispatch>,
+  ) {
+    $api.$axios.interceptors.request.use((config) => {
+      return {
+        ...config,
+        headers: {
+          ...(config?.headers || {}),
+          Authorization: `Bearer ${authToken}`,
+        },
+      };
+    });
+    $api.$axios.interceptors.response.use(
+      (res) => res,
+      (error) => {
+        switch (error.response?.status) {
+          case 401: {
+            logOut(dispatch);
+            break;
+          }
+          case 403: {
+            dispatch(commitAministrator(null));
+            refreshCompanies(dispatch);
+          }
+        }
+
+        return Promise.reject(error);
+      },
+    );
+  }
 
   static auth = new AuthModule($api.$axios);
 

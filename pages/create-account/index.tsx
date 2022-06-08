@@ -108,6 +108,7 @@ const CreateAccount: NextPage = () => {
       actions.setSubmitting(true);
       const { user, token } = await $api.auth.signup(values);
       Cookies.set('auth_token', token);
+      $api.registerInterceptors(token, dispatch);
       dispatch(commitUser(user));
     } catch (error) {
       const err = error as HttpError;
