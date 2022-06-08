@@ -1,12 +1,19 @@
 import { IWalletBillingForm, WalletBilling } from '@/components/types';
 import { FormikHelpers } from 'formik';
 import { Company, Country } from 'src/api/types';
+import { useAppSelector } from 'src/redux/hooks';
 import { config } from '../config';
 import { Util } from '../util';
+import { usePaymentMethods } from './use-payment-methods.hooks';
 
 export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
-  const { administrator, modal, paymentMethods } = params;
-  const company = administrator.company as Company;
+  const { modal } = params;
+  const administrator = useAppSelector((state) => state.administrator);
+  const {
+    paymentMethods,
+    loading: loadingPaymentMethods,
+  } = usePaymentMethods();
+  const company = administrator?.company as Company;
   const country = company.country as Country;
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
 
@@ -21,7 +28,7 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
         channels,
         metadata: {
           companyId: company.id,
-          userId: administrator.user,
+          userId: administrator?.user,
           chargeType: 'wallet-topup',
         },
         callback: resolve,
@@ -78,5 +85,10 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
     }
   };
 
-  return { paymentMethods, handleWalletBillingFormSubmit, currency };
+  return {
+    paymentMethods,
+    handleWalletBillingFormSubmit,
+    currency,
+    loadingPaymentMethods,
+  };
 };

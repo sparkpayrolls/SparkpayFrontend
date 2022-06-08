@@ -7,36 +7,27 @@ import { Radio } from 'antd';
 import { Formik, FormikProps } from 'formik';
 import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
-import {
-  IWalletBillingForm,
-  IWalletBillingModal,
-  WalletBilling,
-} from '../types';
+import { IWalletBillingForm, WalletBilling } from '../types';
 import { fundWalletValidationSchema } from 'src/helpers/validation';
 import { Util } from 'src/helpers/util';
 import { useWalletBillingFormLogic } from 'src/helpers/hooks/use-wallet-billing-form-logic.hook';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
-export const WalletBillingModal = NiceModal.create(
-  (props: IWalletBillingModal) => {
-    return (
-      <ModalLayout title="Fund Payroll">
-        {(modal) => {
-          return (
-            <WalletBillingForm
-              modal={modal}
-              administrator={props.administrator}
-              paymentMethods={props.paymentMethods}
-            />
-          );
-        }}
-      </ModalLayout>
-    );
-  },
-);
+export const WalletBillingModal = NiceModal.create(() => {
+  return (
+    <ModalLayout title="Fund Payroll">
+      {(modal) => {
+        return <WalletBillingForm modal={modal} />;
+      }}
+    </ModalLayout>
+  );
+});
 
 const WalletBillingForm = (props: IWalletBillingForm) => {
   const {
     paymentMethods,
+    loadingPaymentMethods,
     handleWalletBillingFormSubmit,
     currency,
   } = useWalletBillingFormLogic(props);
@@ -78,21 +69,33 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
               autoComplete="off"
             >
               <div className="add-employee-modal__upload-type-input">
-                <label>Select Payment Method</label>
-                <Radio.Group
-                  name="channel"
-                  onChange={handleChange}
-                  value={values.channel}
-                  className="add-employee-modal__upload-type-input__radio-group"
-                >
-                  {paymentMethods.map((paymentMethod) => {
-                    return (
-                      <Radio key={paymentMethod.id} value={paymentMethod.name}>
-                        {paymentMethod.name}
-                      </Radio>
-                    );
-                  })}
-                </Radio.Group>
+                {loadingPaymentMethods ? (
+                  <>
+                    <Skeleton width={100} borderRadius={4} count={1} />
+                    <Skeleton width={200} borderRadius={4} count={1} />
+                  </>
+                ) : (
+                  <>
+                    <label>Select Payment Method</label>
+                    <Radio.Group
+                      name="channel"
+                      onChange={handleChange}
+                      value={values.channel}
+                      className="add-employee-modal__upload-type-input__radio-group"
+                    >
+                      {paymentMethods.map((paymentMethod) => {
+                        return (
+                          <Radio
+                            key={paymentMethod.id}
+                            value={paymentMethod.name}
+                          >
+                            {paymentMethod.name}
+                          </Radio>
+                        );
+                      })}
+                    </Radio.Group>
+                  </>
+                )}
               </div>
 
               <div className="single-employee-upload-form__section">
@@ -116,7 +119,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                   className="form__submit-button form__submit-button--full-width"
                   primary
                   showSpinner={isSubmitting}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || loadingPaymentMethods}
                 />
               </div>
             </form>

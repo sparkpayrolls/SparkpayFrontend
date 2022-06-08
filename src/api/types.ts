@@ -82,6 +82,8 @@ export type PaginateParams = {
   page?: number;
 
   all?: boolean;
+
+  search?: string;
 };
 
 export enum PayoutMethodNameEnum {

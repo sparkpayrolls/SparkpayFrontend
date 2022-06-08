@@ -15,6 +15,8 @@ import { commitUser } from 'src/redux/slices/user/user.slice';
 import auth_frame from '../../public/svgs/auth-frame.svg';
 import logo_white from '../../public/svgs/logo-white.svg';
 import logo from '../../public/svgs/logo.svg';
+import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 interface ISignInForm {
   email: string;
@@ -43,7 +45,12 @@ const Login: NextPage = () => {
       const { email: username, password } = values;
       const { user, token } = await $api.auth.login(username, password);
       Cookies.set('auth_token', token);
+      $api.registerInterceptors(token, dispatch);
       dispatch(commitUser(user));
+      await Promise.all([
+        refreshCompanies(dispatch),
+        getCurrentAdministrator(dispatch),
+      ]);
     } catch (error: any) {
       toast.error(error.message, { delay: 1000 });
     } finally {

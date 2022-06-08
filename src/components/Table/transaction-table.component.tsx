@@ -1,18 +1,23 @@
-import { useEffect } from 'react';
+import { useTransactions } from 'src/helpers/hooks/use-transactions.hook';
 import { Util } from 'src/helpers/util';
+import { useAppSelector } from 'src/redux/hooks';
 import { DateTimeChip } from '../DateTimeChip/date-time-chip';
 import { StatusChip } from '../StatusChip/status-chip.component';
 import { TransactionMethod } from '../TransactionMethod/transaction-method.component';
-import { ITransactionTable } from '../types';
 import { Table } from './Table.component';
- 
-export const TransactionTable = (props: ITransactionTable) => {
-  const { loading, administrator, getTransactions, transactions, meta } = props;
-  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
 
-  useEffect(() => {
-    getTransactions();
-  }, [getTransactions, administrator]);
+export const TransactionTable = () => {
+  const { loading, transactions, setParams } = useTransactions();
+  const administrator = useAppSelector((state) => state.administrator);
+  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
+  const refresh = (
+    page?: number,
+    limit?: number,
+    search?: string,
+    all?: boolean,
+  ) => {
+    setParams({ page, limit, search, all });
+  };
 
   return (
     <div className="transaction-table">
@@ -28,16 +33,16 @@ export const TransactionTable = (props: ITransactionTable) => {
         isNotSelectable
         isNotSearchable
         title="Transactions"
-        refresh={getTransactions}
-        isLoading={!!loading}
-        isEmpty={!transactions.length}
+        refresh={refresh}
+        isLoading={loading}
+        isEmpty={!transactions?.data?.length}
         emptyStateText={'No transactions yet'}
-        paginationMeta={meta}
+        paginationMeta={transactions?.meta}
       >
         {() => {
           return (
             <tbody>
-              {transactions.map((transaction) => {
+              {transactions?.data?.map((transaction) => {
                 return (
                   <tr key={transaction.id}>
                     <td>{transaction.id.toUpperCase()}</td>
