@@ -22,15 +22,17 @@ import { logOut } from 'src/redux/slices/user/user.slice';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 
+let authToken: string;
 export class $api {
   static $axios = axios.create({
     baseURL: config().apiUrl,
   });
 
   static registerInterceptors(
-    authToken: string,
+    _authToken: string,
     dispatch: ReturnType<typeof useAppDispatch>,
   ) {
+    authToken = _authToken;
     $api.$axios.interceptors.request.use((config) => {
       return {
         ...config,

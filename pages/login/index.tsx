@@ -46,11 +46,11 @@ const Login: NextPage = () => {
       const { user, token } = await $api.auth.login(username, password);
       Cookies.set('auth_token', token);
       $api.registerInterceptors(token, dispatch);
-      dispatch(commitUser(user));
       await Promise.all([
         refreshCompanies(dispatch),
         getCurrentAdministrator(dispatch),
       ]);
+      dispatch(commitUser(user));
     } catch (error: any) {
       toast.error(error.message, { delay: 1000 });
     } finally {
