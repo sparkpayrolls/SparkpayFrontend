@@ -618,3 +618,8 @@ export type NigerianTaxGroupMeta = {
 };
 
 export type ICreatePayrollPayload = { payDate: string } & ProcessPayrollPayload;
+
+export type PayrollUpdateResponse = {
+  message: string;
+  actions: string[];
+};

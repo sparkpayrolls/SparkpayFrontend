@@ -5,9 +5,11 @@ import { TransactionTable } from '@/components/Table/transaction-table.component
 import { WalletCard } from '@/components/Wallet/wallet-card.component';
 import { PayrollUpdateCard } from '@/components/Wallet/payroll-update-card.component';
 import { useWalletBalance } from 'src/helpers/hooks/use-wallet-balance.hook';
+import { usePayrollUpdateMessage } from 'src/helpers/hooks/use-payroll-update-message.hoook';
 
 const WalletBilling: NextPage = () => {
   const { walletBalance, loading: loadingWalletBalance } = useWalletBalance();
+  const { update: payrollUpdate, loading } = usePayrollUpdateMessage();
 
   return (
     <DashboardLayout pageTitle="Transactions">
@@ -24,7 +26,11 @@ const WalletBilling: NextPage = () => {
             amount={walletBalance}
             loading={loadingWalletBalance}
           />
-          <PayrollUpdateCard payrollDate="Next payroll date is on the 27th, May" />
+          <PayrollUpdateCard
+            payrollDate={payrollUpdate.message}
+            actions={payrollUpdate.actions}
+            loading={loading}
+          />
         </div>
         <TransactionTable />
       </div>

@@ -31,11 +31,12 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     row-gap: 2rem;
     margin-top: 1.5rem;
     margin-bottom: 42px;
 
-    @media screen and (min-width: 1300px) {
+    @media screen and (min-width: 768px) {
       flex-direction: row;
       column-gap: 2rem;
     }
@@ -48,16 +49,19 @@
     row-gap: 1rem;
     flex-direction: column;
     justify-content: space-between;
-    max-width: 459px;
     width: 100%;
     background: #130f26;
     border-radius: 8px;
     overflow: hidden;
 
-    @media screen and (min-width: 425px) {
+    @media screen and (min-width: 1440px) {
       flex-direction: row;
       align-items: center;
       // column-gap: 1rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      max-width: calc(50% - 2rem);
     }
   }
 
@@ -74,6 +78,7 @@
 
   &__payroll-update-text {
     color: #d7dce0;
+    width: 100%;
   }
 
   &__payroll-update {
@@ -82,25 +87,26 @@
     flex-direction: column;
     align-items: flex-start;
     row-gap: 1rem;
-    max-width: 637px;
+    width: 100%;
     background: #f7f9fb;
     border-radius: 8px;
 
-    @media screen and (min-width: 425px) {
+    @media screen and (min-width: 1440px) {
       flex-direction: row;
       column-gap: 1rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      max-width: calc(50% - 2rem);
     }
   }
 
   &__payroll-date-text {
-    font-size: 1.3rem;
-    line-height: 24px;
+    font-size: 1rem;
+    line-height: 1.25rem;
     color: #0b2253;
     margin-top: 0.5rem;
-
-    @media screen and (min-width: 425px) {
-      font-size: 1.5rem;
-    }
+    max-width: 100%;
   }
 
   &__wallet-purple-image {
@@ -131,5 +137,23 @@
   &__wallet-image {
     position: relative;
     right: 8px;
+  }
+
+  &__payroll-update-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  &__payroll-update-action-button {
+    padding: 0;
+    font-size: 1rem;
+    box-shadow: unset;
+    color: #1d4ed8;
+
+    &:hover {
+      background: unset !important;
+      color: #0e347e;
+    }
   }
 }
