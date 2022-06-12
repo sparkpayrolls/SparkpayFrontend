@@ -1,9 +1,15 @@
 .table-component {
   &__tool-bar {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    gap: 1rem;
     margin-bottom: 1.25rem;
+    flex-direction: column;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   &__table-title {
@@ -291,6 +297,16 @@
           padding: 4px 8px;
         }
       }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
     }
   }
 }

@@ -9,10 +9,17 @@ export class CompanyWalletModule extends HttpRepository {
   }
 
   async getCompanyWalletTransactions(params: PaginateParams) {
-    const query = this.parseQueryObject(params);
+    return this.get<WalletTransaction[]>('/company-wallets/transactions', {
+      params,
+    });
+  }
 
-    return this.get<WalletTransaction[]>(
-      `/company-wallets/transactions${query}`,
+  async exportTransactions(params: PaginateParams) {
+    const { data } = await this.get<{ file: string; name: string }>(
+      '/company-wallets/transactions/export',
+      { params },
     );
+
+    return data;
   }
 }

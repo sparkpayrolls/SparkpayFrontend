@@ -68,6 +68,8 @@ export interface ITable {
     label: string;
     action?(): any;
     primary?: boolean;
+    loading?: boolean;
+    disabled?: boolean;
   }[];
 }
 
@@ -471,7 +473,7 @@ export interface ButtonProps {
   /**
    * Optional click handler
    */
-  onClick?: () => void;
+  onClick?: MouseEventHandler;
   /**
    * Custom css className
    */

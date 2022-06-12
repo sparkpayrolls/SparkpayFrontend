@@ -223,6 +223,8 @@ export const Table = (props: ITable) => {
                     href={button.href}
                     onClick={button.action ? button.action : undefined}
                     primary={button.primary}
+                    disabled={button.disabled}
+                    showSpinner={button.loading}
                   />
                 );
               })}

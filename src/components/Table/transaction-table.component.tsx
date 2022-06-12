@@ -1,13 +1,22 @@
+import NiceModal from '@ebay/nice-modal-react';
 import { useTransactions } from 'src/helpers/hooks/use-transactions.hook';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
 import { DateTimeChip } from '../DateTimeChip/date-time-chip';
+import { FilterTransactionModal } from '../Modals/FilterTransactionModal.component';
 import { StatusChip } from '../StatusChip/status-chip.component';
 import { TransactionMethod } from '../TransactionMethod/transaction-method.component';
 import { Table } from './Table.component';
 
 export const TransactionTable = () => {
-  const { loading, transactions, setParams } = useTransactions();
+  const {
+    loading,
+    loadingExport,
+    params,
+    transactions,
+    exportTransactions,
+    setParams,
+  } = useTransactions();
   const administrator = useAppSelector((state) => state.administrator);
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const refresh = (
@@ -38,6 +47,24 @@ export const TransactionTable = () => {
         isEmpty={!transactions?.data?.length}
         emptyStateText={'No transactions yet'}
         paginationMeta={transactions?.meta}
+        buttons={[
+          {
+            label: 'Filters',
+            action() {
+              NiceModal.show(FilterTransactionModal, {
+                filter: setParams,
+                initialParams: params,
+              });
+            },
+          },
+          {
+            label: 'Export (xlsx)',
+            action: exportTransactions,
+            primary: true,
+            disabled: loadingExport,
+            loading: loadingExport,
+          },
+        ]}
       >
         {() => {
           return (
