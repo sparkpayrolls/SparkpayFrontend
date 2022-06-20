@@ -54,7 +54,7 @@
       left: 0;
       background-repeat: no-repeat;
       background-size: cover;
-      background-image: url("../../../public/svgs/gradient.svg");
+      background-image: url('../../../public/svgs/gradient.svg');
       z-index: -2;
     }
 
@@ -66,7 +66,7 @@
       left: 0;
       background-repeat: no-repeat;
       background-size: contain;
-      background-image: url("../../../public/svgs/auth-ellipse.svg");
+      background-image: url('../../../public/svgs/auth-ellipse.svg');
       z-index: -1;
     }
   }
@@ -81,7 +81,8 @@
       width: calc(100% - 523px);
       margin: 0 0 0 523px;
       padding-bottom: unset;
-      height: 100vh;
+      overflow-y: auto;
+      padding-block: 10rem;
     }
   }
 

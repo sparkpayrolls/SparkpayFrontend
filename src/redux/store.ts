@@ -15,16 +15,12 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import LoginReducer from '../../pages/login/loginSlice';
-import createAccountReducer from '../../pages/create-account/createAccountSlice';
 import CountriesReducer from './slices/countries/countries.slice';
 import UserReducer from './slices/user/user.slice';
 import AdministratorReducer from './slices/administrator/administrator.slice';
 import CompaniesReducer from './slices/companies/companies.slice';
 
 const reducers = combineReducers({
-  login: LoginReducer,
-  createAccount: createAccountReducer,
   countries: CountriesReducer,
   user: UserReducer,
   administrator: AdministratorReducer,

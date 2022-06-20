@@ -1,385 +1,220 @@
-/* eslint-disable no-unused-vars */
-import { NextPage } from 'next';
-import Head from 'next/head';
-import React from 'react';
-import Image from 'next/image';
-import { Formik, FormikHelpers, FormikProps, FormikErrors } from 'formik';
-import { Button } from '../../src/components/Button/Button.component';
-import { InputV2 } from '../../src/components/Input/Input.component';
-import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
-import { $api } from 'src/api';
-import Cookies from 'js-cookie';
-import { HttpError } from 'src/api/repo/http.error';
-import { Util } from 'src/helpers/util';
-import Link from 'next/link';
-import { getCountries } from 'src/redux/slices/countries/countries.slice';
-import { useRouter } from 'next/router';
-import { signupValidationSchema } from 'src/helpers/validation';
-import { toast } from 'react-toastify';
-import { commitUser } from 'src/redux/slices/user/user.slice';
+import { Button } from '@/components/Button/Button.component';
+import { InputV2 } from '@/components/Input/Input.component';
 import { Select } from '@/components/Input/select.component';
-import auth_frame from '../../public/svgs/auth-frame.svg';
-import logo_white from '../../public/svgs/logo-white.svg';
-import logo from '../../public/svgs/logo.svg';
+import { Formik } from 'formik';
+import { NextPage } from 'next';
+import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
-
-interface ISignUpForm {
-  firstname: string;
-  lastname: string;
-  country: string;
-  email: string;
-  password: string;
-  inviteCode: string;
-  subcribeToMailList: boolean;
-}
+import { useCreateAccountPageContext } from 'src/helpers/hooks/use-create-account-page-context.hook';
+import { signupValidationSchema } from 'src/helpers/validation';
+import { AuthLayout } from 'src/layouts/auth-layout/auth-layout';
 
 const CreateAccount: NextPage = () => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const { user, countries } = useAppSelector((state) => state);
-  const { loading } = useAppSelector((state) => state.createAccount);
-  const [inviteCodeValid, setInviteCodeValid] = React.useState({
-    loading: false,
-    valid: false,
-    details: { name: '', email: '' },
-  });
-
-  React.useEffect(() => {
-    getCountries(dispatch);
-  }, [dispatch]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const validateInviteCode = React.useCallback(
-    Util.debounce(async (code) => {
-      try {
-        setInviteCodeValid((i) => ({ ...i, loading: true }));
-        const details = await $api.auth.validateInviteCode(code);
-        setInviteCodeValid((i) => ({ ...i, valid: true, details }));
-      } catch (error) {
-        setInviteCodeValid((i) => ({
-          ...i,
-          valid: false,
-          details: { email: '', name: '' },
-        }));
-      } finally {
-        setInviteCodeValid((i) => ({ ...i, loading: false }));
-      }
-    }, 500),
-    [],
-  );
-
-  React.useEffect(() => {
-    if (router.isReady) {
-      validateInviteCode(router.query.inviteCode as string);
-    }
-  }, [router, validateInviteCode]);
-
-  if (user) {
-    router.replace('/overview');
+  const context = useCreateAccountPageContext();
+  if (!context) {
     return null;
   }
 
-  const validateEmail = Util.debounce(async (
-    email: string,
-    // eslint-disable-next-line no-unused-vars
-    setErrors: (errors: FormikErrors<ISignUpForm>) => void,
-    setSubmitting: (isSubmitting: boolean) => void,
-  ) => {
-    setSubmitting(true);
-    try {
-      if (email) {
-        const isTaken = await $api.auth.emailTaken(email);
-        if (isTaken) {
-          setErrors({ email: 'email already taken' });
-        }
-      }
-    } catch (error: any) {
-      // error validating email
-    } finally {
-      setSubmitting(false);
-    }
-  }, 500);
-
-  const onSubmit = async (
-    values: ISignUpForm,
-    actions: FormikHelpers<ISignUpForm>,
-  ) => {
-    try {
-      actions.setSubmitting(true);
-      const { user, token } = await $api.auth.signup(values);
-      Cookies.set('auth_token', token);
-      $api.registerInterceptors(token, dispatch);
-      dispatch(commitUser(user));
-    } catch (error) {
-      const err = error as HttpError;
-      if (err.status === 422) {
-        actions.setErrors(err.errors);
-        return;
-      }
-      if (err.status === 409) {
-        actions.setErrors({ email: err.message });
-        return;
-      }
-      toast.error(`${err.message}`);
-    } finally {
-      actions.setSubmitting(false);
-    }
-  };
-  if (!router.isReady) {
-    return null;
-  }
-
-  const [firstname, ...lastname] = inviteCodeValid.details.name.split(' ');
+  const {
+    countries,
+    firstname,
+    initialValues,
+    inviteCodeValid,
+    lastname,
+    router,
+    onSubmit,
+    validateEmail,
+  } = context;
 
   return (
-    <div className="create-account">
-      <Head>
-        <title>Create Account</title>
-        <meta name="description" content="Generated by create next app" />
-      </Head>
-      <div className="create-account__side-info">
-        <Link href="/">
-          <a className="create-account__side-info--logo">
-            <Image src={logo_white} alt="logo" />
-          </a>
-        </Link>
+    <AuthLayout title="Create Account" description="Create a SparkPay account">
+      <h1 className="create-account__title">Create Account</h1>
+      <p className="create-account__subtext">
+        Enter your details to create a free account
+      </p>
 
-        <div className="create-account__side-info--graphics">
-          <Image src={auth_frame} alt="graphics svg" />
-        </div>
+      <Formik
+        key={`${firstname}-${lastname.join('-')}-${
+          inviteCodeValid.details.email
+        }`}
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validationSchema={signupValidationSchema}
+      >
+        {(props) => {
+          const {
+            values,
+            touched,
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            setErrors,
+            setSubmitting,
+            setTouched,
+            setValues,
+          } = props;
 
-        <div className="create-account__side-info--txt-area">
-          <h3 className="create-account__side-info--text">
-            Simple and Effective Payroll Management
-          </h3>
-          <p className="create-account__side-info--subtext">
-            Ease from payroll stress and manual computation through a
-            synchronised and automated payroll system.
-          </p>
-        </div>
-        <div className="create-account__side-info--gradient"></div>
-        <div className="create-account__side-info--ellipse"></div>
-      </div>
-
-      <div className="create-account__container">
-        <div className="create-account__content">
-          <Link href="/">
-            <a className="create-account__content--logo">
-              <Image src={logo} alt="logo" />
-            </a>
-          </Link>
-
-          <h1 className="create-account__title">Create Account</h1>
-          <p className="create-account__subtext">
-            Enter your details to create a free account
-          </p>
-
-          <Formik
-            key={`${firstname}-${lastname.join('-')}-${
-              inviteCodeValid.details.email
-            }`}
-            initialValues={{
-              firstname: firstname,
-              lastname: lastname.join(' '),
-              country: '',
-              email: inviteCodeValid.details.email,
-              password: '',
-              inviteCode: (router.query.inviteCode as string) || '',
-              subcribeToMailList: true,
-            }}
-            onSubmit={onSubmit}
-            validationSchema={signupValidationSchema}
-          >
-            {(props: FormikProps<ISignUpForm>) => {
-              const {
-                values,
-                touched,
-                errors,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-                isSubmitting,
-                setErrors,
-                setSubmitting,
-                setTouched,
-                setValues,
-              } = props;
-              return (
-                <form onSubmit={handleSubmit}>
-                  <div className="create-account__form-input-area">
-                    <div className="create-account__form-grid">
-                      <InputV2
-                        type="text"
-                        label="First Name"
-                        name="firstname"
-                        value={values.firstname}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={touched.firstname && errors.firstname}
-                      />
-
-                      <InputV2
-                        type="text"
-                        label="Last Name"
-                        name="lastname"
-                        value={values.lastname}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={touched.lastname && errors.lastname}
-                      />
-                    </div>
-
-                    <InputV2
-                      type="email"
-                      label="Email Address"
-                      name="email"
-                      value={values.email}
-                      loading={isSubmitting}
-                      onChange={(event: any) => {
-                        validateEmail(
-                          event.target.value,
-                          setErrors,
-                          setSubmitting,
-                        );
-                        handleChange(event);
-                      }}
-                      onBlur={(event: any) => {
-                        validateEmail(
-                          event.target.value,
-                          setErrors,
-                          setSubmitting,
-                        );
-                        handleBlur(event);
-                      }}
-                      error={touched.email && errors.email}
-                    />
-
-                    <Select
-                      onBlur={() =>
-                        setTouched({ ...touched, country: true }, true)
-                      }
-                      onChange={(val: string) =>
-                        setValues({ ...values, country: val }, true)
-                      }
-                      optionFilterProp="children"
-                      showSearch
-                      loading={!countries.length}
-                      disabled={!countries.length}
-                      label="Select Country"
-                      error={(touched.country && errors.country) || ''}
-                    >
-                      {countries.map((country) => {
-                        const { Option } = Select;
-
-                        return (
-                          <Option value={country.id} key={country.id}>
-                            {country.name}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-
-                    <InputV2
-                      type="password"
-                      label="Password"
-                      name="password"
-                      value={values.password}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      showVisibilityToggle
-                      hideValue
-                      error={touched.password && errors.password}
-                    />
-
-                    <InputV2
-                      type="text"
-                      label="Invite Code"
-                      name="inviteCode"
-                      value={values.inviteCode}
-                      onChange={(event) => {
-                        handleChange(event);
-
-                        const { pathname, query } = router;
-                        const url = stringifyUrl({
-                          url: pathname,
-                          query: { ...query, inviteCode: event.target.value },
-                        });
-
-                        router.push(url);
-                      }}
-                      onBlur={handleBlur}
-                      error={
-                        (!!values.inviteCode &&
-                          !inviteCodeValid.loading &&
-                          !inviteCodeValid.valid &&
-                          'invalid invite code') ||
-                        (touched.inviteCode && errors.inviteCode)
-                      }
-                      loading={inviteCodeValid.loading}
-                    />
-
-                    <InputV2
-                      type="checkbox"
-                      checkbox
-                      id="subscribe"
-                      labelFor="subscribe"
-                      label="Subscribe to hearing about exciting new features and offers"
-                      name="subcribeToMailList"
-                      checked={values.subcribeToMailList}
-                      onChange={() => {
-                        setValues({
-                          ...values,
-                          subcribeToMailList: !values.subcribeToMailList,
-                        });
-                      }}
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    label="Create Account"
-                    className="create-account__submit-btn"
-                    primary
-                    disabled={
-                      isSubmitting ||
-                      !countries.length ||
-                      inviteCodeValid.loading ||
-                      !inviteCodeValid.valid
-                    }
-                    showSpinner={
-                      loading ||
-                      isSubmitting ||
-                      !countries.length ||
-                      inviteCodeValid.loading
-                    }
+          return (
+            <form onSubmit={handleSubmit}>
+              <div className="create-account__form-input-area">
+                <div className="create-account__form-grid">
+                  <InputV2
+                    type="text"
+                    label="First Name"
+                    name="firstname"
+                    value={values.firstname}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.firstname && errors.firstname}
                   />
-                </form>
-              );
-            }}
-          </Formik>
 
-          <p className="create-account__have-an-account-text">
-            Already have an account?{' '}
-            <Link href="/login">
-              <a className="create-account__span-text"> Log In</a>
-            </Link>
-          </p>
+                  <InputV2
+                    type="text"
+                    label="Last Name"
+                    name="lastname"
+                    value={values.lastname}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.lastname && errors.lastname}
+                  />
+                </div>
 
-          <p className="create-account__terms-and-conditions">
-            By creating an account, you have agreed to our <br />{' '}
-            <Link href="#">
-              <a className="create-account__span-text underline-text">terms</a>
-            </Link>{' '}
-            and{' '}
-            <Link href="#">
-              <a className="create-account__span-text underline-text">
-                conditions
-              </a>
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
+                <InputV2
+                  type="email"
+                  label="Email Address"
+                  name="email"
+                  value={values.email}
+                  loading={isSubmitting}
+                  onChange={(event: any) => {
+                    validateEmail(event.target.value, setErrors, setSubmitting);
+                    handleChange(event);
+                  }}
+                  onBlur={(event: any) => {
+                    validateEmail(event.target.value, setErrors, setSubmitting);
+                    handleBlur(event);
+                  }}
+                  error={touched.email && errors.email}
+                />
+
+                <Select
+                  onBlur={() => setTouched({ ...touched, country: true }, true)}
+                  onChange={(val: string) =>
+                    setValues({ ...values, country: val }, true)
+                  }
+                  optionFilterProp="children"
+                  showSearch
+                  loading={!countries.length}
+                  disabled={!countries.length}
+                  label="Select Country"
+                  error={(touched.country && errors.country) || ''}
+                >
+                  {countries.map((country) => {
+                    const { Option } = Select;
+
+                    return (
+                      <Option value={country.id} key={country.id}>
+                        {country.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+
+                <InputV2
+                  type="password"
+                  label="Password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  showVisibilityToggle
+                  hideValue
+                  error={touched.password && errors.password}
+                />
+
+                <InputV2
+                  type="text"
+                  label="Invite Code"
+                  name="inviteCode"
+                  value={values.inviteCode}
+                  onChange={(event) => {
+                    handleChange(event);
+
+                    const { pathname, query } = router;
+                    const url = stringifyUrl({
+                      url: pathname,
+                      query: { ...query, inviteCode: event.target.value },
+                    });
+
+                    router.push(url);
+                  }}
+                  onBlur={handleBlur}
+                  error={
+                    (!!values.inviteCode &&
+                      !inviteCodeValid.loading &&
+                      !inviteCodeValid.valid &&
+                      'invalid invite code') ||
+                    (touched.inviteCode && errors.inviteCode)
+                  }
+                  loading={inviteCodeValid.loading}
+                />
+
+                <InputV2
+                  type="checkbox"
+                  checkbox
+                  id="subscribe"
+                  labelFor="subscribe"
+                  label="Subscribe to hearing about exciting new features and offers"
+                  name="subcribeToMailList"
+                  checked={values.subcribeToMailList}
+                  onChange={() => {
+                    setValues({
+                      ...values,
+                      subcribeToMailList: !values.subcribeToMailList,
+                    });
+                  }}
+                />
+              </div>
+
+              <Button
+                type="submit"
+                label="Create Account"
+                className="create-account__submit-btn"
+                primary
+                disabled={
+                  isSubmitting ||
+                  !countries.length ||
+                  inviteCodeValid.loading ||
+                  !inviteCodeValid.valid
+                }
+                showSpinner={
+                  isSubmitting || !countries.length || inviteCodeValid.loading
+                }
+              />
+            </form>
+          );
+        }}
+      </Formik>
+
+      <p className="create-account__have-an-account-text">
+        Already have an account?{' '}
+        <Link href="/login">
+          <a className="create-account__span-text"> Log In</a>
+        </Link>
+      </p>
+
+      <p className="create-account__terms-and-conditions">
+        By creating an account, you have agreed to our <br />{' '}
+        <Link href="#">
+          <a className="create-account__span-text underline-text">terms</a>
+        </Link>{' '}
+        and{' '}
+        <Link href="#">
+          <a className="create-account__span-text underline-text">conditions</a>
+        </Link>
+      </p>
+    </AuthLayout>
   );
 };
 export default CreateAccount;

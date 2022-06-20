@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 //@ts-ignore
 import TawkTo from 'tawkto-react';
-import NiceModal from '@ebay/nice-modal-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '../../../public/svgs/logo.svg';
@@ -9,7 +8,6 @@ import menu from '../../../public/svgs/menu.svg';
 import close from '../../../public/svgs/Close.svg';
 import { useState } from 'react';
 import classNames from 'classnames';
-import { RequestAccessModal } from '@/components/Modals/RequestAccessModal.component';
 import {
   FacebookSVG,
   InstagramSVG,
@@ -111,12 +109,14 @@ const DefaultLayout: React.FC = ({ children }) => {
                 </Link>
               </li>
               <li className="navigation__list-item">
-                <button
-                  onClick={() => NiceModal.show(RequestAccessModal)}
-                  className="navigation__link navigation__button navigation__button--primary"
-                >
-                  Request access
-                </button>
+                <Link href="/request-access">
+                  <a
+                    // onClick={() => NiceModal.show(RequestAccessModal)}
+                    className="navigation__link navigation__button navigation__button--primary"
+                  >
+                    Request access
+                  </a>
+                </Link>
               </li>
             </div>
           </ul>
