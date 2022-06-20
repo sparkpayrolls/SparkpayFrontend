@@ -372,6 +372,43 @@
   }
 }
 
+.default-description-popover {
+  &__content {
+    max-height: 200px;
+    overflow-y: auto;
+
+    @media screen and (min-width: 768px) {
+      max-width: 300px;
+    }
+  }
+}
+
+.employee-update-description-popover {
+  max-height: 200px;
+  overflow-y: auto;
+
+  @media screen and (min-width: 768px) {
+    max-width: calc(100vw - 60vw);
+  }
+
+  table {
+    width: 100%;
+
+    td,
+    th {
+      padding: 0.5rem;
+      white-space: nowrap;
+      font-size: 14px;
+      line-height: 1rem;
+    }
+
+    th {
+      background: #f7f9fb;
+      font-weight: 500;
+    }
+  }
+}
+
 .employee-table {
   margin-top: 1.5rem;
 }

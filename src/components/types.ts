@@ -420,13 +420,6 @@ export type IWalletCard = {
   loading?: boolean;
 };
 
-export type IAuditTable = {
-  logs: Audit[];
-  getLogs(params: Record<string, any>): any;
-  meta: PaginationMeta;
-  loading: boolean;
-};
-
 export type IDatePicker = {
   error?: string;
   onChange?(value: Moment | null, dateString: string): void;

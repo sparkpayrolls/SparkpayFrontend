@@ -332,7 +332,7 @@ export type Audit = Document & {
   action: AuditAction;
   description: string;
   role: string;
-  meta?: unknown;
+  meta?: Record<string, unknown>;
 };
 
 export enum PayrollEmployeePayoutStatusEnum {

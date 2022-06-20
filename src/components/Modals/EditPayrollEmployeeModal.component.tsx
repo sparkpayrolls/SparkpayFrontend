@@ -305,7 +305,7 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                   }}
                 </Formik>
               </div>
-              {enabledRemittances.length && (
+              {!!enabledRemittances.length && (
                 <div className="edit-payroll-employee__section">
                   <h3 className="edit-payroll-employee__section-title">
                     Toggle Remittances

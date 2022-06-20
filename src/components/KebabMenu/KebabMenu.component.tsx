@@ -35,7 +35,7 @@ export const KebabMenu = (props: IKebabMenu) => {
   );
 
   return (
-    <Dropdown overlay={menu}>
+    <Dropdown trigger={['click']} overlay={menu}>
       <button
         className="kebabmenu__trigger"
         onClick={(e) => e.preventDefault()}
