@@ -32,7 +32,7 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
   );
   useEffect(() => {
     const container = containerRef.current;
-    if (container) {
+    if (container && props.fixedHeader) {
       const clonedContainer = container.cloneNode(true) as any;
       clonedContainer.classList.add('table-layout--fixed-header__dup-table');
       container.appendChild(clonedContainer);
@@ -56,7 +56,7 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
         tableContainer?.removeEventListener('scroll', syncScroll);
       };
     }
-  }, [containerRef, props.children]);
+  }, [containerRef, props.children, props.fixedHeader]);
 
   return (
     <div className={className}>
