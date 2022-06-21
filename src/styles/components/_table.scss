@@ -481,8 +481,33 @@
   }
 
   &__container {
+    position: relative;
+  }
+  &__table-container {
     width: 100%;
-    overflow-y: auto;
+    // max-height: 69vh;
+    overflow: auto;
+  }
+
+  &--fixed-header {
+    .table-layout__table-container {
+      max-height: calc(100vh - var(--space-around, 31vh));
+    }
+  }
+}
+
+.table-layout--fixed-header {
+  &__dup-table {
+    position: unset;
+    overflow: hidden;
+
+    > .table-layout__table-container {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+    }
   }
 }
 
@@ -692,6 +717,16 @@
 }
 
 .audit-table {
+  --space-around: 21.5rem;
+
+  @media screen and (min-width: 768px) {
+    --space-around: 19.5rem;
+  }
+
+  @media screen and (min-width: 1024px) {
+    --space-around: 16.5rem;
+  }
+
   &__table {
     td {
       vertical-align: middle;

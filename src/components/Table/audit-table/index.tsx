@@ -25,6 +25,7 @@ export const AuditTable = () => {
         title={title}
         onSearch={onSearch}
         searchPlaceholder="Search by name"
+        fixedHeader
       >
         <TableV2 className="audit-table__table" loading={loading}>
           <thead>

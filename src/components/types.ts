@@ -379,6 +379,7 @@ export type ITableLayout = {
   menuItems?: IKebabItem[];
   searchPlaceholder?: string;
   searchDelay?: number;
+  fixedHeader?: boolean;
 };
 
 export type ICheckboxTableColumn = {
