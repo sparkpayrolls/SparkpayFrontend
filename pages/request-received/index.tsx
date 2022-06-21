@@ -19,7 +19,8 @@ const RequestReceived: NextPage = () => {
             </div>
 
             <p className="success-message__message">
-              Your request for access was successful
+              Your request for access was successful. We will get back to you by
+              email.
             </p>
 
             <Button
