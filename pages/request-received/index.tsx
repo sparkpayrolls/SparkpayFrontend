@@ -26,9 +26,9 @@ const RequestReceived: NextPage = () => {
             <Button
               type="button"
               className="success-message__button"
-              label={'Continue to Login'}
+              label={'Continue'}
               element="a"
-              href="/login"
+              href="/"
               primary
             />
           </div>
