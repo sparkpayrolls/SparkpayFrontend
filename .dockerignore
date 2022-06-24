@@ -20,11 +20,7 @@ __pages__
 
 .env.production.local
 
-.eslintrc.json
-
 .gitignore
-
-.prettierrc
 
 jest.config.js
 

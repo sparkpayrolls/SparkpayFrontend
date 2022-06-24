@@ -44,7 +44,6 @@ jobs:
           IMAGE_TAG: ${{ github.run_number }}
         run: |
           # Build a docker container and push it to ECR
-          rm .env.development
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest-prod .
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest-prod
@@ -104,7 +103,7 @@ jobs:
           IMAGE_TAG: ${{ github.run_number }}
         run: |
           # Build a docker container and push it to ECR
-          rm .env.production
+          cp .env.development .env.production
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest-dev .
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest-dev
