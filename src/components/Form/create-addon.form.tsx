@@ -122,16 +122,6 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
               },
             ],
           });
-          console.log({
-            ...values,
-            dates: [
-              {
-                month: period.format('MMMM'),
-                year: +period.format('YYYY'),
-                days: [start.format('DD'), end.format('DD')],
-              },
-            ],
-          });
         };
 
         return (
