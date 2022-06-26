@@ -173,7 +173,10 @@ const EmployeeTaxGroupPage = () => {
             </div>
 
             {group?.meta?.salaryBreakdown && (
-              <div className="tax-group-details__section">
+              <div
+                className="tax-group-details__section"
+                style={{ justifyContent: 'flex-start' }}
+              >
                 <h5 className="tax-group-details__section-title">
                   Salary Breakdown
                 </h5>
@@ -192,7 +195,10 @@ const EmployeeTaxGroupPage = () => {
             )}
 
             {group?.meta?.customTaxRelief && (
-              <div className="tax-group-details__section">
+              <div
+                className="tax-group-details__section"
+                style={{ justifyContent: 'flex-start' }}
+              >
                 <h5 className="tax-group-details__section-title">
                   Custom Tax Relief Items
                 </h5>
