@@ -18,15 +18,16 @@ import herosectionimg from '../../../public/svgs/hero-img.svg';
 import working_woman from '../../../public/images/working-woman.png';
 import photo from '../../../public/images/photo.png';
 import coin from '../../../public/images/coin.png';
+import coin_mobile from '../../../public/images/coin-mobile.png';
 import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
 // import { JoinWaitListModal } from '../Modals/JoinWaitListModal.component';
 import {
-  ServicePointSVG,
+  // ServicePointSVG,
   ServicePointSVG2,
   ServicePointSVG3,
   ServicePointSVG4,
   ServicePointSVG5,
-  ServicePointSVG6,
+  // ServicePointSVG6,
   VideoSVG,
   // CheckMarkSVG,
   QuoteSVG,
@@ -134,46 +135,44 @@ export const Landing = () => {
 
           <div className="services__features">
             <div className="services__card">
-              <ServicePointSVG />
+              <ServicePointSVG3 />
 
               <h3 className="services__feature-title">Disbursement</h3>
               <p className="services__feature-subtext">
-                Lorem ipsum dolor sit amert plerusa consectetur vred adipiscing
-                tortor donec deauteir accumsan nibh turpis treu massa, donec
-                deaut consectetu adipiscing tortor benelit.
+                Set up automated payments and basic salary deductions to ensure
+                that your employees are paid on time.
               </p>
             </div>
             <div className="services__card">
               <ServicePointSVG2 />
 
-              <h3 className="services__feature-title">Disbursement</h3>
+              <h3 className="services__feature-title">Taxes</h3>
               <p className="services__feature-subtext">
-                Lorem ipsum dolor sit amert plerusa consectetur vred adipiscing
-                tortor donec deauteir accumsan nibh turpis treu massa, donec
-                deaut consectetu adipiscing tortor benelit.
+                Stay in compliance with local laws by using the tax, benefits,
+                and compliance solutions we provide for your employees.
               </p>
             </div>
             <div className="services__card">
-              <ServicePointSVG3 />
+              <ServicePointSVG5 />
 
-              <h3 className="services__feature-title">Disbursement</h3>
+              <h3 className="services__feature-title">Pension</h3>
               <p className="services__feature-subtext">
-                Lorem ipsum dolor sit amert plerusa consectetur vred adipiscing
-                tortor donec deauteir accumsan nibh turpis treu massa, donec
-                deaut consectetu adipiscing tortor benelit.
+                Deduct your pension from your employee&apos;s income and remit
+                it to the right channels if required.
               </p>
             </div>
             <div className="services__card">
               <ServicePointSVG4 />
 
-              <h3 className="services__feature-title">Disbursement</h3>
+              <h3 className="services__feature-title">
+                24/7 Assistance customer service
+              </h3>
               <p className="services__feature-subtext">
-                Lorem ipsum dolor sit amert plerusa consectetur vred adipiscing
-                tortor donec deauteir accumsan nibh turpis treu massa, donec
-                deaut consectetu adipiscing tortor benelit.
+                Contact our technical support assistants, accessible 24 hours a
+                day, 7 days a week to help and support you.
               </p>
             </div>
-            <div className="services__card">
+            {/* <div className="services__card">
               <ServicePointSVG5 />
 
               <h3 className="services__feature-title">Disbursement</h3>
@@ -192,7 +191,7 @@ export const Landing = () => {
                 tortor donec deauteir accumsan nibh turpis treu massa, donec
                 deaut consectetu adipiscing tortor benelit.
               </p>
-            </div>
+            </div> */}
           </div>
         </section>
 
@@ -263,6 +262,10 @@ export const Landing = () => {
             <h3 className="focus-content__text-title sub-header">
               Focus on your business while we handle your Payroll.
             </h3>
+
+            <div className="focus-content__image-mobile">
+              <Image src={coin_mobile} alt="coin" />
+            </div>
 
             <p className="focus-content__text-paragraph">
               Payroll management is an integral part of every business. SparkPay

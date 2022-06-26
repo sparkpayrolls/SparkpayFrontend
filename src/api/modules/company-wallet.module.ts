@@ -1,5 +1,5 @@
 import { HttpRepository } from '../repo/http.repo';
-import { CompanyWallet, WalletTransaction } from '../types';
+import { CompanyWallet, PaginateParams, WalletTransaction } from '../types';
 
 export class CompanyWalletModule extends HttpRepository {
   async getCompanyWallet() {
@@ -8,11 +8,18 @@ export class CompanyWalletModule extends HttpRepository {
     return data;
   }
 
-  async getCompanyWalletTransactions(params: Record<string, any>) {
-    const query = this.parseQueryObject(params);
+  async getCompanyWalletTransactions(params: PaginateParams) {
+    return this.get<WalletTransaction[]>('/company-wallets/transactions', {
+      params,
+    });
+  }
 
-    return this.get<WalletTransaction[]>(
-      `/company-wallets/transactions${query}`,
+  async exportTransactions(params: PaginateParams) {
+    const { data } = await this.get<{ file: string; name: string }>(
+      '/company-wallets/transactions/export',
+      { params },
     );
+
+    return data;
   }
 }

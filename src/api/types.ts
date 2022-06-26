@@ -82,6 +82,8 @@ export type PaginateParams = {
   page?: number;
 
   all?: boolean;
+
+  search?: string;
 };
 
 export enum PayoutMethodNameEnum {
@@ -330,7 +332,7 @@ export type Audit = Document & {
   action: AuditAction;
   description: string;
   role: string;
-  meta?: unknown;
+  meta?: Record<string, unknown>;
 };
 
 export enum PayrollEmployeePayoutStatusEnum {
@@ -616,3 +618,8 @@ export type NigerianTaxGroupMeta = {
 };
 
 export type ICreatePayrollPayload = { payDate: string } & ProcessPayrollPayload;
+
+export type PayrollUpdateResponse = {
+  message: string;
+  actions: string[];
+};

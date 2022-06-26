@@ -361,4 +361,86 @@ export class Util {
       return null;
     }
   }
+
+  static COMPARABLE_TYPES = [
+    'number',
+    'string',
+    'boolean',
+    'bigint',
+    'undefined',
+    'function',
+    'symbol',
+  ];
+
+  static isComparable<T>(val: T) {
+    return Util.COMPARABLE_TYPES.includes(typeof val) || val === null;
+  }
+
+  static getChanges(
+    paramOne: Record<string, unknown>,
+    paramTwo: Record<string, unknown>,
+  ) {
+    const changes: Record<string, { from?: unknown; to?: unknown }> = {};
+    const _getChanges = (
+      _paramOne: typeof paramOne,
+      _paramTwo: typeof paramTwo,
+      path: string,
+      _changes: typeof changes,
+    ) => {
+      const keys = new Set(
+        Object.keys(_paramOne ?? {}).concat(Object.keys(_paramTwo ?? {})),
+      );
+      const uniqueKeys = keys.values();
+      let uniqueKey = uniqueKeys.next();
+      while (!uniqueKey.done) {
+        const key = uniqueKey.value;
+        const valueOne = (_paramOne || {})[key];
+        const valueTwo = (_paramTwo || {})[key];
+        if (valueOne !== valueTwo) {
+          if (Util.isComparable(valueOne) && Util.isComparable(valueTwo)) {
+            _changes[`${path}${key}`] = { from: valueOne, to: valueTwo };
+          } else {
+            _getChanges(
+              valueOne as typeof _paramOne,
+              valueTwo as typeof _paramTwo,
+              `${path}${key}.`,
+              _changes,
+            );
+          }
+        }
+
+        uniqueKey = uniqueKeys.next();
+      }
+    };
+    _getChanges(paramOne, paramTwo, '', changes);
+
+    return changes;
+  }
+
+  static camelCaseToTitleCase(text: string) {
+    const result = text.replace(/([A-Z])/g, ' $1');
+    return result.charAt(0).toUpperCase() + result.slice(1);
+  }
+
+  static objectToDotNotation = (obj: unknown) => {
+    const newObj = {} as Record<string, unknown>;
+    const _objectToDotNotation = (
+      _obj: unknown,
+      _newObj: typeof newObj,
+      path: string,
+    ) => {
+      if (typeof _obj !== 'object' || _obj === null) {
+        newObj[path] = _obj;
+        return;
+      }
+
+      Object.keys(_obj).forEach((key) => {
+        const newPath = path ? `${path}.${key}` : key;
+        _objectToDotNotation((_obj as typeof newObj)[key], _newObj, newPath);
+      });
+    };
+    _objectToDotNotation(obj, newObj, '');
+
+    return newObj;
+  };
 }

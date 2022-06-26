@@ -16,6 +16,7 @@ import { Button } from '../Button/Button.component';
 import { DatePicker } from '../Input/date-picker.component';
 import { InputV2 } from '../Input/Input.component';
 import { Select } from '../Input/select.component';
+import { EditableSVG } from '../svg';
 import { ModalLayout } from './ModalLayout.component';
 
 type IEditPayrollEmployeeModal = {
@@ -122,61 +123,63 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                   Add Salary Addon
                 </h3>
 
-                <table>
-                  {/* <thead>
-                    <tr>
-                      <th>Type</th>
-                      <th>Amount</th>
-                      <th>Name</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead> */}
-                  <tbody>
-                    {addons.map((addon, i) => {
-                      const [date] = addon.dates;
-                      const { month } = date;
-                      const [start, end] = date.days || [];
-                      const prorateRange = `${start}/${month} -> ${end}/${month}`;
-                      const isProrateAddon = addon.type === 'prorate';
-                      const amount = `${currency} ${Util.formatMoneyNumber(
-                        +addon.amount,
-                      )}`;
+                {!!addons.length && (
+                  <table className="edit-payroll-employee__table-section">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {addons.map((addon, i) => {
+                        const [date] = addon.dates;
+                        const { month } = date;
+                        const [start, end] = date.days || [];
+                        const prorateRange = `${start}/${month} -> ${end}/${month}`;
+                        const isProrateAddon = addon.type === 'prorate';
+                        const amount = `${currency} ${Util.formatMoneyNumber(
+                          +addon.amount,
+                        )}`;
 
-                      return (
-                        <tr key={`${employee}-addon-${i}`}>
-                          <td>{addon.type}</td>
-                          <td title={isProrateAddon ? amount : ''}>
-                            {isProrateAddon ? prorateRange : amount}
-                          </td>
-                          <td>{addon.name}</td>
-                          <td>
-                            <button
-                              disabled={loadingPayroll}
-                              onClick={onEditAddon(addon)}
-                            >
-                              <i className="fa fa-pencil" aria-hidden="true">
-                                &#x270E;
-                              </i>
-                            </button>
-                            <button
-                              disabled={loadingPayroll}
-                              onClick={onDeleteAddon({
-                                addon,
-                                addons,
-                                hook,
-                                onCustomAddon,
-                                month,
-                                year,
-                              })}
-                            >
-                              <i className="fa fa-trash"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                        return (
+                          <tr key={`${employee}-addon-${i}`}>
+                            <td>{addon.type}</td>
+                            <td title={isProrateAddon ? amount : ''}>
+                              {isProrateAddon ? prorateRange : amount}
+                            </td>
+                            <td>{addon.name}</td>
+                            <td className="edit-payroll-employee__table-section--actions">
+                              <button
+                                disabled={loadingPayroll}
+                                onClick={onEditAddon(addon)}
+                                title="Edit"
+                              >
+                                <EditableSVG />
+                              </button>
+                              <button
+                                disabled={loadingPayroll}
+                                onClick={onDeleteAddon({
+                                  addon,
+                                  addons,
+                                  hook,
+                                  onCustomAddon,
+                                  month,
+                                  year,
+                                })}
+                                title="Delete"
+                              >
+                                <i className="fa fa-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
 
                 <Formik
                   key={JSON.stringify(addon)}
@@ -302,7 +305,7 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                   }}
                 </Formik>
               </div>
-              {enabledRemittances.length && (
+              {!!enabledRemittances.length && (
                 <div className="edit-payroll-employee__section">
                   <h3 className="edit-payroll-employee__section-title">
                     Toggle Remittances
@@ -315,12 +318,13 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                         groups,
                         hasGroupsFeature,
                       } = enabledRemittance;
+
                       const remittance = remittances.find(
                         (remittance) => remittance.name === name,
                       );
 
                       return (
-                        <li key={name}>
+                        <li key={name} style={{ marginBottom: '2rem' }}>
                           <h4 className="edit-payroll-employee__section-sub-title">
                             {name}
                           </h4>

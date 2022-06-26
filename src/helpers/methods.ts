@@ -21,15 +21,7 @@ export const getEmployeeAddSubmitHandler = (
         ...values,
         salary: +values.salary,
       });
-      toast.success('Employee added successfully', {
-        position: 'bottom-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.success('Employee added successfully');
       if (onDone) {
         onDone(employee);
       }

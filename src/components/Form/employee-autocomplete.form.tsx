@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { $api } from 'src/api';
 import { Employee } from 'src/api/types';
+import { Util } from 'src/helpers/util';
 import { Button } from '../Button/Button.component';
 import { AutoComplete } from '../Input/autocomplete.component';
 
@@ -19,21 +20,25 @@ export const EmployeeAutocompleteForm = (props: IEmployeeAutoCompleteForm) => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [autoCompleteValue, setAutoCompleteValue] = useState('');
 
-  const handleSearch = (search: string) => {
-    if (!search) {
-      setEmployees([]);
-      return;
-    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleSearch = useCallback(
+    Util.debounce((search: string) => {
+      if (!search) {
+        setEmployees([]);
+        return;
+      }
 
-    $api.employee
-      .getEmployees({ search, limit: 5 })
-      .then(({ data: employees }) => {
-        setEmployees(employees);
-      })
-      .catch(() => {
-        /** */
-      });
-  };
+      $api.employee
+        .getEmployees({ search, limit: 5 })
+        .then(({ data: employees }) => {
+          setEmployees(employees);
+        })
+        .catch(() => {
+          /** */
+        });
+    }, 500),
+    [],
+  );
 
   return (
     <form

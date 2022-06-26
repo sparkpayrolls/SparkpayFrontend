@@ -68,6 +68,8 @@ export interface ITable {
     label: string;
     action?(): any;
     primary?: boolean;
+    loading?: boolean;
+    disabled?: boolean;
   }[];
 }
 
@@ -157,6 +159,7 @@ export type IOrganizationMenu = {
   companies: Administrator[];
   onSelect: (company: Administrator, closeMenu: () => void) => any;
   loading?: string;
+  administrator: Administrator | null;
 };
 
 export type IProfileMenu = {
@@ -207,19 +210,6 @@ export type IEmployeeTable = {
   onStatusToggle(
     action: 'Activate' | 'Delete' | 'Deactivate',
   ): (id: string | string[]) => any;
-};
-
-export type ITransactionTable = {
-  transactions: WalletTransaction[];
-  meta: PaginationMeta;
-  getTransactions(
-    page?: number,
-    perPage?: number,
-    search?: string,
-    all?: boolean,
-  ): any;
-  loading?: boolean;
-  administrator: Administrator | null;
 };
 
 export type IPayrollTable = {
@@ -389,6 +379,7 @@ export type ITableLayout = {
   menuItems?: IKebabItem[];
   searchPlaceholder?: string;
   searchDelay?: number;
+  fixedHeader?: boolean;
 };
 
 export type ICheckboxTableColumn = {
@@ -422,28 +413,12 @@ export type IPagination = {
 
 export type IWalletBillingForm = {
   modal: NiceModalHandler;
-  administrator: Administrator;
-  paymentMethods: PaymentMethod[];
-};
-
-export type IWalletBillingModal = {
-  administrator: Administrator;
-  paymentMethods: PaymentMethod[];
 };
 
 export type IWalletCard = {
   title: string;
-  amount: string;
-  administrator: Administrator;
-  refreshBalance(): any;
-  paymentMethods: PaymentMethod[];
-};
-
-export type IAuditTable = {
-  logs: Audit[];
-  getLogs(params: Record<string, any>): any;
-  meta: PaginationMeta;
-  loading: boolean;
+  amount: number;
+  loading?: boolean;
 };
 
 export type IDatePicker = {
@@ -492,7 +467,7 @@ export interface ButtonProps {
   /**
    * Optional click handler
    */
-  onClick?: () => void;
+  onClick?: MouseEventHandler;
   /**
    * Custom css className
    */

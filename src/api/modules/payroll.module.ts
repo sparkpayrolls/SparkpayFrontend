@@ -7,6 +7,7 @@ import {
   Payroll,
   PayrollEmployee,
   PayrollSummary,
+  PayrollUpdateResponse,
   ProcessPayrollPayload,
   ProcessPayrollResponse,
 } from '../types';
@@ -151,6 +152,14 @@ export class PayrollModule extends HttpRepository {
     const { data } = await this.put(
       `/payrolls/add-to-remittance-group`,
       payload,
+    );
+
+    return data;
+  }
+
+  async getPayrollUpdate() {
+    const { data } = await this.get<PayrollUpdateResponse>(
+      `/payrolls/payroll-update`,
     );
 
     return data;

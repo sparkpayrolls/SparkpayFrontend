@@ -9,4 +9,13 @@ export class PaymentModule extends HttpRepository {
 
     return data;
   }
+  async hydratePaymentDetails(_: unknown) {
+    return {
+      payoutMethod: { id: 'some-id', name: 'Bank Transfer' },
+      payoutMethodMeta: {
+        bankId: { id: 'some-id', name: 'United Bank For Africa' },
+        accountNumber: 2189428060,
+      },
+    };
+  }
 }

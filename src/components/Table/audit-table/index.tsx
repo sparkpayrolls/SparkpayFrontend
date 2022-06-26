@@ -1,27 +1,31 @@
+import { DateTimeChip } from '@/components/DateTimeChip/date-time-chip';
+import { TableEmptyState } from '@/components/EmptyState/table-emptystate.component';
+import { Identity } from '@/components/Identity/identity.component';
+import { Pagination } from '@/components/Pagination/pagination.component';
+import { StatusChip } from '@/components/StatusChip/status-chip.component';
+import { Popover } from 'antd';
 import { User } from 'src/api/types';
-import { DateTimeChip } from '../DateTimeChip/date-time-chip';
-import { TableEmptyState } from '../EmptyState/table-emptystate.component';
-import { Identity } from '../Identity/identity.component';
-import { Pagination } from '../Pagination/pagination.component';
-import { StatusChip } from '../StatusChip/status-chip.component';
-import { IAuditTable } from '../types';
-import { TableLayout } from './table-layout.component';
-import { TableV2 } from './Table.component';
+import { TableLayout } from '../table-layout.component';
+import { TableV2 } from '../Table.component';
+import { getDescriptionComponent, useLogic } from './helpers';
 
-export const AuditTable = (props: IAuditTable) => {
-  const { logs, meta, getLogs, loading } = props;
-  const isEmpty = logs.length <= 0;
-
-  const onSearch = (search: string) => {
-    getLogs({ search, page: 1, perPage: meta.perPage });
-  };
+export const AuditTable = () => {
+  const {
+    auditLogs,
+    isEmpty,
+    loading,
+    title,
+    onSearch,
+    setParams,
+  } = useLogic();
 
   return (
     <div className="audit-table">
       <TableLayout
-        title={`${meta.total} Logs`}
+        title={title}
         onSearch={onSearch}
         searchPlaceholder="Search by name"
+        fixedHeader
       >
         <TableV2 className="audit-table__table" loading={loading}>
           <thead>
@@ -34,8 +38,10 @@ export const AuditTable = (props: IAuditTable) => {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log) => {
+            {auditLogs?.data?.map((log) => {
               const user = log.actionBy as User;
+              const Content = getDescriptionComponent(log.description);
+
               return (
                 <tr key={log.id}>
                   <th>
@@ -48,7 +54,21 @@ export const AuditTable = (props: IAuditTable) => {
                     />
                   </th>
                   <td className="audit-table__table__description-col">
-                    <div>{log.description}</div>
+                    <div>
+                      <Popover
+                        placement="top"
+                        // title={text}
+                        content={
+                          <Content
+                            description={log.description}
+                            meta={log.meta}
+                          />
+                        }
+                        trigger="click"
+                      >
+                        {log.description}
+                      </Popover>
+                    </div>
                   </td>
                   <td>{log.role}</td>
                   <td>
@@ -70,7 +90,7 @@ export const AuditTable = (props: IAuditTable) => {
           }
         />
       )}
-      <Pagination refresh={getLogs} meta={meta} />
+      <Pagination refresh={setParams} meta={auditLogs?.meta} />
     </div>
   );
 };

@@ -1,9 +1,15 @@
 .table-component {
   &__tool-bar {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    gap: 1rem;
     margin-bottom: 1.25rem;
+    flex-direction: column;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   &__table-title {
@@ -293,6 +299,16 @@
       }
     }
   }
+
+  &__buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+    }
+  }
 }
 
 .organization-table {
@@ -353,6 +369,43 @@
 .audittrail {
   &__emp-img {
     margin-top: -0.5rem;
+  }
+}
+
+.default-description-popover {
+  &__content {
+    max-height: 200px;
+    overflow-y: auto;
+
+    @media screen and (min-width: 768px) {
+      max-width: 300px;
+    }
+  }
+}
+
+.employee-update-description-popover {
+  max-height: 200px;
+  overflow-y: auto;
+
+  @media screen and (min-width: 768px) {
+    max-width: calc(100vw - 60vw);
+  }
+
+  table {
+    width: 100%;
+
+    td,
+    th {
+      padding: 0.5rem;
+      white-space: nowrap;
+      font-size: 14px;
+      line-height: 1rem;
+    }
+
+    th {
+      background: #f7f9fb;
+      font-weight: 500;
+    }
   }
 }
 
@@ -428,8 +481,33 @@
   }
 
   &__container {
+    position: relative;
+  }
+  &__table-container {
     width: 100%;
-    overflow-y: auto;
+    // max-height: 69vh;
+    overflow: auto;
+  }
+
+  &--fixed-header {
+    .table-layout__table-container {
+      max-height: calc(100vh - var(--space-around, 31vh));
+    }
+  }
+}
+
+.table-layout--fixed-header {
+  &__dup-table {
+    position: unset;
+    overflow: hidden;
+
+    > .table-layout__table-container {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+    }
   }
 }
 
@@ -639,6 +717,16 @@
 }
 
 .audit-table {
+  --space-around: 21.5rem;
+
+  @media screen and (min-width: 768px) {
+    --space-around: 19.5rem;
+  }
+
+  @media screen and (min-width: 1024px) {
+    --space-around: 16.5rem;
+  }
+
   &__table {
     td {
       vertical-align: middle;

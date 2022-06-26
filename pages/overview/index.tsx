@@ -11,6 +11,7 @@ import { OrganisationDashboardData, UserDashboardData } from 'src/api/types';
 import { $api } from 'src/api';
 import { CreateOrgnizationModal } from '@/components/Modals/CreateOrganizationModal.component';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 const Dashboard: NextPage = () => {
   const { administrator, companies } = useAppSelector((state) => state);
@@ -64,6 +65,7 @@ const Dashboard: NextPage = () => {
     if (!companies.length) {
       NiceModal.show(CreateOrgnizationModal).then(() => {
         refreshCompanies(dispatch);
+        getCurrentAdministrator(dispatch);
         getUserDashboardData();
       });
     }

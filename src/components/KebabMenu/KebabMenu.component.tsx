@@ -35,7 +35,7 @@ export const KebabMenu = (props: IKebabMenu) => {
   );
 
   return (
-    <Dropdown overlay={menu}>
+    <Dropdown trigger={['click']} overlay={menu}>
       <button
         className="kebabmenu__trigger"
         onClick={(e) => e.preventDefault()}
@@ -50,6 +50,7 @@ export const OrganizationsMenu = ({
   companies,
   onSelect,
   loading,
+  administrator,
 }: IOrganizationMenu) => {
   const [isActive, setIsActive] = useState(false);
   const [id] = useState(
@@ -87,7 +88,9 @@ export const OrganizationsMenu = ({
     return null;
   }
 
-  const [selected] = companies.filter((company) => company.selected);
+  const [selected] = companies.filter(
+    (company) => company.id === administrator?.id,
+  );
   const selectedCompany = selected?.company as Company;
 
   return (
@@ -116,6 +119,7 @@ export const OrganizationsMenu = ({
         </li>
         {companies.map((a) => {
           const company = a.company as Company;
+          const selected = a.id === administrator?.id;
           return (
             <li key={company?.id} className="organization-menu__dropdown__item">
               <Identity
@@ -125,8 +129,8 @@ export const OrganizationsMenu = ({
               />
 
               <Switch
-                loading={loading === company?.id || (!!loading && a.selected)}
-                checked={a.selected}
+                loading={loading === company?.id || (!!loading && selected)}
+                checked={selected}
                 onClick={() => onSelect(a, () => setIsActive(false))}
                 className="organization-menu__dropdown__item__switch"
               />

@@ -17,7 +17,7 @@ import { $api } from 'src/api';
 import Skeleton from 'react-loading-skeleton';
 
 import 'react-loading-skeleton/dist/skeleton.css';
-import { TableEmptyState } from '../EmptyState/table-emptystate.component';
+import { IF } from '../Misc/if.component';
 
 const ViewMoreButton = withPermission(() => (
   <Link href="/transactions">
@@ -99,56 +99,47 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
       </section>
 
       <section className="dashboard__chart-section">
-        <div className="disbursement">
-          {!chartDataEmpty && (
-            <>
-              <div style={{ marginBottom: '2.5rem' }}>
-                <div className="disbursement__header">
-                  <div className="disbursement__info">
-                    <p className="disbursement__title">Payroll trend</p>
-                  </div>
-
-                  <div className="disbursement__select">
-                    <Select
-                      value={filter.filterBy}
-                      onChange={(filterBy) => {
-                        const filter = {
-                          filterBy,
-                          filterFormat: filterBy === 'years' ? 'YYYY' : 'MMM',
-                        };
-                        setFilter(filter);
-                      }}
-                    >
-                      <Select.Option value="months">Monthly</Select.Option>
-                      <Select.Option value="years">Yearly</Select.Option>
-                    </Select>
-                  </div>
+        <IF condition={!chartDataEmpty}>
+          <div className="disbursement">
+            <div style={{ marginBottom: '2.5rem' }}>
+              <div className="disbursement__header">
+                <div className="disbursement__info">
+                  <p className="disbursement__title">Payroll trend</p>
                 </div>
-                <p className="disbursement__date">
-                  {moment().format('MMMM DD, YYYY, hh:mm A')}
-                </p>
-              </div>
 
-              {!loadingData && chartData && (
-                <OrganizationDashboardBarChart
-                  datasets={chartData.barChart.datasets as any}
-                  labels={chartData.barChart.labels}
-                  currency={currency}
-                />
-              )}
-              {loadingData && (
-                <Skeleton
-                  width="100%"
-                  borderRadius={4}
-                  count={1}
-                  height={318}
-                />
-              )}
-            </>
-          )}
-          {/* TODO: Get something better */}
-          {chartDataEmpty && <TableEmptyState text="No data to display" />}
-        </div>
+                <div className="disbursement__select">
+                  <Select
+                    value={filter.filterBy}
+                    onChange={(filterBy) => {
+                      const filter = {
+                        filterBy,
+                        filterFormat: filterBy === 'years' ? 'YYYY' : 'MMM',
+                      };
+                      setFilter(filter);
+                    }}
+                  >
+                    <Select.Option value="months">Monthly</Select.Option>
+                    <Select.Option value="years">Yearly</Select.Option>
+                  </Select>
+                </div>
+              </div>
+              <p className="disbursement__date">
+                {moment().format('MMMM DD, YYYY, hh:mm A')}
+              </p>
+            </div>
+
+            {!loadingData && chartData && (
+              <OrganizationDashboardBarChart
+                datasets={chartData.barChart.datasets as any}
+                labels={chartData.barChart.labels}
+                currency={currency}
+              />
+            )}
+            {loadingData && (
+              <Skeleton width="100%" borderRadius={4} count={1} height={318} />
+            )}
+          </div>
+        </IF>
 
         {!chartDataEmpty && (
           <div className="payroll">
