@@ -17,7 +17,6 @@ import { $api } from 'src/api';
 import Skeleton from 'react-loading-skeleton';
 
 import 'react-loading-skeleton/dist/skeleton.css';
-import { TableEmptyState } from '../EmptyState/table-emptystate.component';
 
 const ViewMoreButton = withPermission(() => (
   <Link href="/transactions">
@@ -147,7 +146,7 @@ export const OrganisationDashboard = (props: IOrganisationDashboard) => {
             </>
           )}
           {/* TODO: Get something better */}
-          {chartDataEmpty && <TableEmptyState text="No data to display" />}
+          {/* {chartDataEmpty && <TableEmptyState text="No data to display" />} */}
         </div>
 
         {!chartDataEmpty && (
