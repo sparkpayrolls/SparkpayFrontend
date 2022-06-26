@@ -98,6 +98,42 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
           setTouched,
         } = props;
 
+        const handleDatesChange = (
+          value: [moment.Moment, moment.Moment] | null,
+        ) => {
+          if (!value) {
+            setValues({ ...values, dates: [] });
+            return;
+          }
+
+          let [start, end] = value;
+          if (+start.format('DD') > +end.format('DD')) {
+            [start, end] = [end, start];
+          }
+          const period = start;
+
+          setValues({
+            ...values,
+            dates: [
+              {
+                month: period.format('MMMM'),
+                year: +period.format('YYYY'),
+                days: [start.format('DD'), end.format('DD')],
+              },
+            ],
+          });
+          console.log({
+            ...values,
+            dates: [
+              {
+                month: period.format('MMMM'),
+                year: +period.format('YYYY'),
+                days: [start.format('DD'), end.format('DD')],
+              },
+            ],
+          });
+        };
+
         return (
           <form action="#" onSubmit={handleSubmit} className="addon-form">
             <InputV2
@@ -267,31 +303,7 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
                     ];
                   })[0]
                 }
-                onChange={(value) => {
-                  if (!value) {
-                    setValues({ ...values, dates: [] });
-                    return;
-                  }
-                  const [start, end] = (value as unknown) as moment.Moment[];
-                  setValues({
-                    ...values,
-                    dates: [
-                      {
-                        month: start.format('MMMM'),
-                        year: start.year(),
-                        days: [
-                          start.format('DD'),
-                          end.format('MMMM') !== start.format('MMMM')
-                            ? ''
-                            : end.format('DD'),
-                        ],
-                      },
-                    ],
-                  });
-                }}
-                panelRender={(p) => {
-                  return <div className="hide-second-panel">{p}</div>;
-                }}
+                onChange={handleDatesChange as any}
                 error={touched.dates && errors.dates && 'Dates are required'}
               />
             )}
