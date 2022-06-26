@@ -32,15 +32,7 @@ export const EmployeeTab = (props: IEmployeeTab) => {
           const ids = Array.isArray(id) ? id : [id];
           setIsLoading(true);
           await $api.employee.removeMultipleEmployees(ids);
-          toast.success(`employee(s) deleted successfully`, {
-            position: 'bottom-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.success(`employee(s) deleted successfully`);
           refreshEmployees();
         } catch (error) {
           const err = error as HttpError;
