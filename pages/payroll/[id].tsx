@@ -20,20 +20,24 @@ import {
   PayrollEmployee,
   PayrollEmployeePayoutStatus,
   PayrollStatus,
+  Response,
 } from 'src/api/types';
 import { HttpError } from 'src/api/repo/http.error';
 import { TableV2 } from '@/components/Table/Table.component';
 import { TableEmptyState } from '@/components/EmptyState/table-emptystate.component';
 import { IF } from '@/components/Misc/if.component';
+import { useSocket } from 'src/helpers/hooks/use-socket.hook';
+import { useWalletBalance } from 'src/helpers/hooks/use-wallet-balance.hook';
 
 const PayDetails: NextPage = () => {
   const router = useRouter();
   const administrator = useAppSelector((state) => state.administrator);
-  const [walletBalance, setWalletBalance] = useState(0);
+  const socket = useSocket();
+  const { walletBalance, loading: loadingWalletBalance } = useWalletBalance();
   const [apiCalls, setApiCalls] = useState(0);
   const [payrollNotFound, setPayrollNotFound] = useState(false);
   const [payroll, setPayroll] = useState<Payroll | null>(null);
-  const [employees, setEmployees] = useState<PayrollEmployee[]>([]);
+  const [employees, setEmployees] = useState<Response<PayrollEmployee[]>>();
 
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const totals: Record<string, number> = {
@@ -43,10 +47,10 @@ const PayDetails: NextPage = () => {
   const headerRow: string[] = [];
   const remittanceRows: string[] = [];
   const loading = apiCalls > 0;
-  const hasEmployees = !!employees.length;
+  const hasEmployees = !!employees?.data?.length;
   const payrollId = router.query.id as string;
 
-  employees.forEach((employee) => {
+  employees?.data?.forEach((employee) => {
     totals['Total Salary Amount'] += employee.salary;
     totals['Total Net Salary'] += employee.netSalary;
     if (employee.deductions && employee.deductions.length) {
@@ -79,19 +83,6 @@ const PayDetails: NextPage = () => {
     }
   });
 
-  const getCompanyWallet = useCallback(async () => {
-    try {
-      setApiCalls((c) => c + 1);
-      const wallet = await $api.payroll.getCompanyWallet();
-
-      setWalletBalance(wallet.balance);
-    } catch (error) {
-      // ...
-    } finally {
-      setApiCalls((c) => c - 1);
-    }
-  }, [setWalletBalance]);
-
   const getPayroll = useCallback(async () => {
     try {
       setApiCalls((c) => c + 1);
@@ -113,10 +104,10 @@ const PayDetails: NextPage = () => {
     try {
       setApiCalls((c) => c + 1);
       if (payrollId) {
-        const { data } = await $api.payroll.getPayrollEmployees(payrollId, {
+        const employees = await $api.payroll.getPayrollEmployees(payrollId, {
           all: true,
         });
-        setEmployees(data);
+        setEmployees(employees);
       }
     } catch (error) {
       // ...
@@ -126,10 +117,30 @@ const PayDetails: NextPage = () => {
   }, [payrollId, setEmployees]);
 
   useEffect(() => {
-    getCompanyWallet();
     getPayroll();
     getPayrollEmployees();
-  }, [getCompanyWallet, getPayroll, getPayrollEmployees, administrator]);
+  }, [getPayroll, getPayrollEmployees, administrator]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('Payroll', (data: Payroll) => {
+        if (data.id === payroll?.id) {
+          setPayroll(data);
+        }
+      });
+      socket.on('PayrollEmployee', (payrollEmployee: PayrollEmployee) => {
+        if (payrollEmployee.payroll === payroll?.id) {
+          socket.emit(
+            'GetPayrollEmployees',
+            { all: true, payroll: payroll?.id },
+            (data: Response<PayrollEmployee[]>) => {
+              setEmployees(data);
+            },
+          );
+        }
+      });
+    }
+  }, [payroll, socket]);
 
   return (
     <DashboardLayoutV2 title="Payroll details" href="/payroll">
@@ -143,7 +154,7 @@ const PayDetails: NextPage = () => {
                   title="Payroll Details"
                   balance={walletBalance}
                   currency={currency}
-                  loading={loading && walletBalance <= 0}
+                  loading={loadingWalletBalance}
                 />
 
                 <TotalPayrollChip
@@ -234,7 +245,7 @@ const PayDetails: NextPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {employees.map((e) => {
+                  {employees?.data?.map((e) => {
                     const employee = e.employee as Employee;
 
                     return (
