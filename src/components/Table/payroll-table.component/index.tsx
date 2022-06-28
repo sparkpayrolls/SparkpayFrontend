@@ -1,49 +1,35 @@
-import { useEffect } from 'react';
 import { Util } from 'src/helpers/util';
-import { DateTimeChip } from '../DateTimeChip/date-time-chip';
-import { KebabMenu } from '../KebabMenu/KebabMenu.component';
-import { StatusChip } from '../StatusChip/status-chip.component';
-import { IPayrollTable } from '../types';
-import { Table } from './Table.component';
+import { DateTimeChip } from '../../DateTimeChip/date-time-chip';
+import { KebabMenu } from '../../KebabMenu/KebabMenu.component';
+import { StatusChip } from '../../StatusChip/status-chip.component';
+import { Table } from '../Table.component';
+import { usePayrollTableContext } from './hooks';
 
-export const PayrollTable = (props: IPayrollTable) => {
+export const PayrollTable = () => {
   const {
-    administrator,
-    meta,
-    payrolls,
+    headerRow,
     loading,
-    getPayrolls,
-    kebabMenuItems,
-  } = props;
-  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const headerRow = [
-    'Prorate\xa0Month',
-    `Amount\xa0(${currency})`,
-    'Payroll\xa0size',
-    'Status',
-    'Payout\xa0Date',
-  ];
-
-  useEffect(() => {
-    getPayrolls();
-  }, [getPayrolls, administrator]);
+    payroll,
+    getMenuItems,
+    refresh,
+  } = usePayrollTableContext();
 
   return (
     <section className="payroll-table">
       <Table
         isNotSearchable
         isNotSelectable
-        title={`${meta.total} Payroll`}
+        title={`${payroll?.meta?.total || 0} Payroll`}
         headerRow={headerRow}
         isLoading={loading}
-        isEmpty={!payrolls.length}
-        paginationMeta={meta}
-        refresh={getPayrolls}
+        isEmpty={!payroll?.data?.length}
+        paginationMeta={payroll?.meta}
+        refresh={refresh}
       >
         {() => {
           return (
             <tbody>
-              {payrolls.map((payroll) => {
+              {payroll?.data?.map((payroll) => {
                 return (
                   <tr key={payroll.id}>
                     <td>{payroll.proRateMonth}</td>
@@ -55,7 +41,7 @@ export const PayrollTable = (props: IPayrollTable) => {
                     <td>
                       <span className="payroll-table__date-menu">
                         <DateTimeChip date={payroll.payDate} />
-                        <KebabMenu items={kebabMenuItems(payroll)} />
+                        <KebabMenu items={getMenuItems(payroll)} />
                       </span>
                     </td>
                   </tr>

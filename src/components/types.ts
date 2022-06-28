@@ -212,20 +212,6 @@ export type IEmployeeTable = {
   ): (id: string | string[]) => any;
 };
 
-export type IPayrollTable = {
-  administrator: Administrator | null;
-  meta: PaginationMeta;
-  payrolls: Payroll[];
-  loading: boolean;
-  getPayrolls(
-    page?: number,
-    perPage?: number,
-    search?: string,
-    all?: boolean,
-  ): any;
-  kebabMenuItems(payroll: Payroll): IKebabItem[];
-};
-
 /**User Profile */
 /*user profile change password modal*/
 export type ChangePasswordUserProfile = {
