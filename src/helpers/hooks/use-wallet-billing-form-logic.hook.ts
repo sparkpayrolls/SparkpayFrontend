@@ -1,41 +1,65 @@
 import { IWalletBillingForm, WalletBilling } from '@/components/types';
 import { FormikHelpers } from 'formik';
+import { $api } from 'src/api';
 import { Company, Country } from 'src/api/types';
 import { useAppSelector } from 'src/redux/hooks';
 import { config } from '../config';
 import { Util } from '../util';
-import { usePaymentMethods } from './use-payment-methods.hooks';
+// import { usePaymentMethods } from './use-payment-methods.hooks';
 
 export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
   const { modal } = params;
-  const administrator = useAppSelector((state) => state.administrator);
-  const {
-    paymentMethods,
-    loading: loadingPaymentMethods,
-  } = usePaymentMethods();
+  const { administrator, user } = useAppSelector(({ administrator, user }) => ({
+    user,
+    administrator,
+  }));
+  // const {
+  //   paymentMethods,
+  //   loading: loadingPaymentMethods,
+  // } = usePaymentMethods();
   const company = administrator?.company as Company;
   const country = company.country as Country;
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
 
-  const triggerPaystackNGCheckout = (amount: number, channels: string[]) => {
+  // const _triggerPaystackNGCheckout = (
+  //   amount: number,
+  //   ref: string,
+  //   channels: string[],
+  // ) => {
+  //   return new Promise((resolve, reject) => {
+  //     // @ts-ignore
+  //     const handler = window.PaystackPop.setup({
+  //       key: config().paystackKey,
+  //       email: company.email,
+  //       amount: amount * 100,
+  //       currency: 'NGN',
+  //       channels,
+  //       ref,
+  //       callback: resolve,
+  //       onClose: () => reject(new Error()),
+  //     });
+
+  //     handler.openIframe();
+  //   });
+  // };
+
+  const triggerCollectCheckout = (amount: number, reference: string) => {
     return new Promise((resolve, reject) => {
       // @ts-ignore
-      const handler = window.PaystackPop.setup({
-        key: config().paystackKey,
+      const checkout = new window.CollectCheckout({
+        publicKey: config().collectKey,
         email: company.email,
         amount: amount * 100,
         currency: 'NGN',
-        channels,
-        metadata: {
-          companyId: company.id,
-          userId: administrator?.user,
-          chargeType: 'wallet-topup',
-        },
-        callback: resolve,
+        reference,
+        firstName: user?.firstname,
+        lastName: user?.lastname,
+        onSuccess: resolve,
         onClose: () => reject(new Error()),
       });
 
-      handler.openIframe();
+      checkout.setup();
+      checkout.open();
     });
   };
 
@@ -51,21 +75,33 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
       helpers.setSubmitting(false);
       return;
     }
-    let channel: string;
-    switch (values.channel) {
-      case 'Bank Transfer': {
-        channel = 'bank';
-        break;
-      }
-      default:
-        channel = 'card';
-    }
+    // let channel: string;
+    // switch (values.channel) {
+    //   case 'Bank Transfer': {
+    //     channel = 'bank';
+    //     break;
+    //   }
+    //   default:
+    //     channel = 'card';
+    // }
 
-    triggerPaystackNGCheckout(amount, [channel])
+    $api.payment
+      .getPaymentReference({
+        amount,
+        metadata: {
+          companyId: company.id,
+          userId: administrator?.user,
+          chargeType: 'wallet-topup',
+        },
+      })
+      .then((reference) => {
+        return triggerCollectCheckout(amount, reference);
+      })
       .then(() => {
         modal.resolve(true);
         setTimeout(modal.hide, 100);
       })
+
       .catch(() => helpers.setSubmitting(false));
   };
 
@@ -86,9 +122,9 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
   };
 
   return {
-    paymentMethods,
+    // paymentMethods,
     handleWalletBillingFormSubmit,
     currency,
-    loadingPaymentMethods,
+    // loadingPaymentMethods,
   };
 };

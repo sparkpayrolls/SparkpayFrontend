@@ -14,8 +14,12 @@ export const OrganizationDashboardBarChart = (
 ) => {
   const { labels, datasets, currency } = props;
 
-  const data = datasets[0].data.map((data, idx) => {
-    return { timePeriod: labels[idx], value: Util.shortenNumber(data) };
+  const data = [] as Record<string, unknown>[];
+
+  datasets.forEach((dataset) => {
+    dataset.data.forEach((value, index) => {
+      data.push({ timePeriod: labels[index], value });
+    });
   });
 
   const config: AreaConfig = {
@@ -34,6 +38,11 @@ export const OrganizationDashboardBarChart = (
           },
         },
       },
+      label: {
+        formatter(text) {
+          return Util.shortenNumber(+text);
+        },
+      },
     },
     line: {
       color: '#2563EB',
@@ -43,7 +52,7 @@ export const OrganizationDashboardBarChart = (
       formatter: (data) => {
         return {
           name: 'value',
-          value: `${currency} ${data.value}`,
+          value: `${currency} ${Util.formatMoneyNumber(data.value, 2)}`,
         };
       },
     },

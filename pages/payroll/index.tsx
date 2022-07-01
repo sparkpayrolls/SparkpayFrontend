@@ -4,133 +4,10 @@ import Head from 'next/head';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import { Button } from '../../src/components/Button/Button.component';
 import Plus from '../../public/svgs/add-fill.svg';
-import { useAppSelector } from 'src/redux/hooks';
-import { Util } from 'src/helpers/util';
-import { useCallback, useState } from 'react';
-import { Payroll } from 'src/api/types';
-import { $api } from 'src/api';
-import { IKebabItem } from '@/components/KebabMenu/KebabMenu.component';
 import withAuth from 'src/helpers/HOC/withAuth';
-import { toast } from 'react-toastify';
-import { HttpError } from 'src/api/repo/http.error';
 import { PayrollTable } from '@/components/Table/payroll-table.component';
-import { confirmation } from '../../src/components/Modals/ConfirmationModal.component';
 
 const PayrollDetails: NextPage = () => {
-  const defaultMeta = Util.getDefaultPaginationMeta({});
-  const [payrolls, setPayrolls] = useState<Payroll[]>([]);
-  const [meta, setMeta] = useState(defaultMeta);
-  const [loading, setLoading] = useState(false);
-  const administrator = useAppSelector((state) => state.administrator);
-
-  const pausePayroll = async (id: string) => {
-    try {
-      setLoading(true);
-      await $api.payroll.pausePendingPayroll(id);
-      toast.success('payroll paused successfully');
-      getPayrolls();
-    } catch (error) {
-      const err = error as HttpError;
-      toast.error(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const resumePayroll = async (id: string) => {
-    try {
-      setLoading(true);
-      await $api.payroll.resumePausedPayroll(id);
-      toast.success('payroll resumed successfully');
-      getPayrolls();
-    } catch (error) {
-      const err = error as HttpError;
-      toast.error(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deletePayroll = async (id: string) => {
-    if (!loading) {
-      const shouldDelete = await confirmation({
-        title: 'Delete Payroll',
-        text: 'Are you sure you want to permanently delete this payroll?',
-      });
-      if (shouldDelete) {
-        try {
-          setLoading(true);
-          await $api.payroll.deletePayroll(id);
-          toast.success('payroll deleted successfully');
-          getPayrolls();
-        } catch (error) {
-          const err = error as HttpError;
-          toast.error(err.message);
-        } finally {
-          setLoading(false);
-        }
-      }
-    }
-  };
-
-  const getPayrollActions = (payroll: Payroll) => {
-    const canActivate = Util.canActivate([['Payroll', 'write']], administrator);
-    const items: IKebabItem[] = [
-      { href: `/payroll/${payroll.id}`, value: 'View' },
-    ];
-    if (canActivate) {
-      if (payroll.status === 'pending') {
-        items.push({
-          action() {
-            pausePayroll(payroll.id);
-          },
-          value: 'Pause',
-        });
-      }
-
-      if (payroll.status === 'paused') {
-        items.push({
-          action() {
-            resumePayroll(payroll.id);
-          },
-          value: 'Resume',
-        });
-      }
-
-      if (['paused', 'pending'].includes(payroll.status as any)) {
-        items.push({
-          action() {
-            deletePayroll(payroll.id);
-          },
-          value: 'Delete',
-        });
-      }
-    }
-
-    return items;
-  };
-
-  const getPayrolls = useCallback(
-    async (page = 1, perPage = 10, search = '', all = false) => {
-      try {
-        setLoading(true);
-        const { data, meta } = await $api.payroll.getPayrolls({
-          page,
-          perPage,
-          search,
-          all,
-        });
-        setPayrolls(data);
-        setMeta(meta as any);
-      } catch (error) {
-        //...
-      } finally {
-        setLoading(false);
-      }
-    },
-    [],
-  );
-
   return (
     <DashboardLayout pageTitle="Payroll">
       <div className="payroll-section">
@@ -157,14 +34,7 @@ const PayrollDetails: NextPage = () => {
               />
             </div>
           </div>
-          <PayrollTable
-            loading={loading}
-            kebabMenuItems={getPayrollActions}
-            administrator={administrator}
-            getPayrolls={getPayrolls}
-            meta={meta}
-            payrolls={payrolls}
-          />
+          <PayrollTable />
         </div>
       </div>
     </DashboardLayout>
