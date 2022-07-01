@@ -77,7 +77,7 @@ export const userChangePasswordValidationSchema = Yup.object().shape({
 
 export const fundWalletValidationSchema = Yup.object().shape({
   amount: Yup.string().required('amount is required'),
-  channel: Yup.string().required('select payment method'),
+  // channel: Yup.string().required('select payment method'),
 });
 
 export const savePayrollValidationSchema = Yup.object().shape({

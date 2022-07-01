@@ -9,13 +9,13 @@ export class PaymentModule extends HttpRepository {
 
     return data;
   }
-  async hydratePaymentDetails(_: unknown) {
-    return {
-      payoutMethod: { id: 'some-id', name: 'Bank Transfer' },
-      payoutMethodMeta: {
-        bankId: { id: 'some-id', name: 'United Bank For Africa' },
-        accountNumber: 2189428060,
-      },
-    };
+
+  async getPaymentReference(payload?: unknown) {
+    const { data } = await this.post<string>(
+      `/payments/get-reference`,
+      payload,
+    );
+
+    return data;
   }
 }

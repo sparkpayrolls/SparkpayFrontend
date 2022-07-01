@@ -3,7 +3,7 @@ import React from 'react';
 import Head from 'next/head';
 import NiceModal from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
-import { Radio } from 'antd';
+// import { Radio } from 'antd';
 import { Formik, FormikProps } from 'formik';
 import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
@@ -11,7 +11,7 @@ import { IWalletBillingForm, WalletBilling } from '../types';
 import { fundWalletValidationSchema } from 'src/helpers/validation';
 import { Util } from 'src/helpers/util';
 import { useWalletBillingFormLogic } from 'src/helpers/hooks/use-wallet-billing-form-logic.hook';
-import Skeleton from 'react-loading-skeleton';
+// import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 export const WalletBillingModal = NiceModal.create(() => {
@@ -26,8 +26,8 @@ export const WalletBillingModal = NiceModal.create(() => {
 
 const WalletBillingForm = (props: IWalletBillingForm) => {
   const {
-    paymentMethods,
-    loadingPaymentMethods,
+    // paymentMethods,
+    // loadingPaymentMethods,
     handleWalletBillingFormSubmit,
     currency,
   } = useWalletBillingFormLogic(props);
@@ -35,14 +35,18 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
   return (
     <div className="add-employee-modal">
       <Head>
-        <script src="https://js.paystack.co/v1/inline.js" defer></script>
+        {/* <script src="https://js.paystack.co/v1/inline.js" defer></script> */}
+        <script
+          src="https://cdn.collect.africa/collect-widget.js"
+          defer
+        ></script>
       </Head>
 
       <Formik
         initialValues={{
           amount: '',
           // @ts-ignore
-          channel: '',
+          // channel: '',
         }}
         onSubmit={handleWalletBillingFormSubmit}
         validationSchema={fundWalletValidationSchema}
@@ -57,10 +61,10 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
             handleBlur,
             values,
           } = props;
-          const error =
-            ((errors.amount && touched.amount) ||
-              (errors.channel && touched.channel)) &&
-            [errors.amount, errors.channel].filter((e) => !!e).join(' and ');
+          // const error =
+          //   ((errors.amount && touched.amount) ||
+          //     (errors.channel && touched.channel)) &&
+          //   [errors.amount, errors.channel].filter((e) => !!e).join(' and ');
 
           return (
             <form
@@ -68,7 +72,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
               className="single-employee-upload-form"
               autoComplete="off"
             >
-              <div className="add-employee-modal__upload-type-input">
+              {/* <div className="add-employee-modal__upload-type-input">
                 {loadingPaymentMethods ? (
                   <>
                     <Skeleton width={100} borderRadius={4} count={1} />
@@ -96,7 +100,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                     </Radio.Group>
                   </>
                 )}
-              </div>
+              </div> */}
 
               <div className="single-employee-upload-form__section">
                 <InputV2
@@ -108,7 +112,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                   transformValue={Util.formatMoneyString(currency)}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  error={error}
+                  error={touched.amount && errors.amount}
                 />
               </div>
 
@@ -119,7 +123,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                   className="form__submit-button form__submit-button--full-width"
                   primary
                   showSpinner={isSubmitting}
-                  disabled={isSubmitting || loadingPaymentMethods}
+                  disabled={isSubmitting}
                 />
               </div>
             </form>
