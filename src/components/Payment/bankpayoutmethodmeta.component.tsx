@@ -1,76 +1,26 @@
 import { Formik } from 'formik';
-import { useCallback, useEffect, useState } from 'react';
-import { $api } from 'src/api';
-import { Bank } from 'src/api/types';
-import { Util } from 'src/helpers/util';
+import { useBanks } from 'src/helpers/hooks/use-banks.hook';
+import { usePayoutDetailsValidation } from 'src/helpers/hooks/use-payout-details-validation.hook';
 import { bankPayoutMethodMetaValidationSchema } from 'src/helpers/validation';
 import { InputV2 } from '../Input/Input.component';
 import { Select } from '../Input/select.component';
 import { IBankPayoutMethodMeta } from '../types';
 
-let callId = 0;
-
 export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
   const { method, error, setMeta } = props;
-  const [banks, setBanks] = useState<Bank[]>([]);
-  const [err, setErr] = useState('');
-  const [accountName, setAccountName] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const getBanks = useCallback(async () => {
-    try {
-      setBanks([]);
-      const {
-        data,
-      } = await $api.payout.getSupportedBanks(
-        typeof method.country === 'string' ? method.country : method.country.id,
-        { all: true },
-      );
-      setBanks(data);
-    } catch (error) {
-      //...
-    }
-  }, [method.country]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const validate = useCallback(
-    Util.debounce(async (methodId: string, meta: Record<string, any>) => {
-      if (meta.accountNumber && meta.accountNumber.length >= 6 && meta.bankId) {
-        callId += 1;
-        const id = callId;
-        try {
-          setAccountName('');
-          setMeta(null);
-          setErr('');
-          setLoading(true);
-
-          const res = await $api.payout.validatePayoutMethod(methodId, meta);
-          if (id === callId) {
-            setAccountName((res as { accountName: string })?.accountName);
-            setMeta(meta);
-          }
-        } catch (error) {
-          if (id === callId) {
-            setErr('invalid bank details provided');
-          }
-        } finally {
-          setLoading(false);
-        }
-      }
-    }, 500),
-    [],
-  );
-
-  useEffect(() => {
-    getBanks();
-  }, [getBanks]);
-
-  useEffect(() => {
-    if (props.initialValues) {
-      validate(method.id, props.initialValues);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const country =
+    typeof method.country === 'string' ? method.country : method.country.id;
+  const { banks, loading: loadingBanks } = useBanks({ country, all: true });
+  const {
+    result = {},
+    loading: loadingPayoutValidation,
+    error: payoutValidationError,
+  } = usePayoutDetailsValidation({
+    method: method.id,
+    meta: props.initialValues,
+  });
+  const { accountName } = result as { accountName: string };
+  const err = payoutValidationError ? 'invalid bank details' : '';
 
   return (
     <Formik
@@ -87,12 +37,19 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
         const {
           values,
           handleBlur,
-          handleChange,
           touched,
           errors,
           setTouched,
           setValues: setVals,
         } = props;
+
+        const setValue = (val: string, name: keyof typeof values) => {
+          const newVals = { ...values, [name]: val };
+          setVals(newVals, true);
+          if (newVals.bankId && newVals.accountNumber?.length >= 6) {
+            setMeta(newVals);
+          }
+        };
 
         return (
           <>
@@ -103,16 +60,12 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
               }
               placeholder="Select Bank Name"
               onBlur={() => setTouched({ ...touched, bankId: true }, true)}
-              onChange={(val: string) => {
-                const newVals = { ...values, bankId: val };
-                setVals(newVals, true);
-                validate(method.id, newVals);
-              }}
+              onChange={(val) => setValue(val, 'bankId')}
               value={values.bankId}
               optionFilterProp="children"
               showSearch
               disabled={!banks.length}
-              loading={loading}
+              loading={loadingPayoutValidation || loadingBanks}
               error={(touched.bankId && errors.bankId) || ''}
             >
               {banks.map((bank) => {
@@ -133,13 +86,9 @@ export const BankPayoutMethodMeta = (props: IBankPayoutMethodMeta) => {
               placeholder="Account Number"
               value={values.accountNumber}
               name="accountNumber"
-              onChange={(event) => {
-                handleChange(event);
-                validate(method.id, {
-                  ...values,
-                  accountNumber: event.target.value,
-                });
-              }}
+              onChange={(event) =>
+                setValue(event.target.value, 'accountNumber')
+              }
               onBlur={handleBlur}
               error={
                 (!!err ||

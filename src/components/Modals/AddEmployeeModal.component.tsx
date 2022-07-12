@@ -4,12 +4,10 @@ import { ModalLayout } from './ModalLayout.component';
 import { Radio } from 'antd';
 import { Administrator } from 'src/api/types';
 import { Util } from 'src/helpers/util';
-import {
-  EmployeeAddForm,
-  EmployeeBulkAddForm,
-} from '../Form/employee-add.form';
+import { EmployeeAddForm } from '../Form/employee-add.form/employee-add.form';
 import { IF } from '../Misc/if.component';
 import { getEmployeeAddSubmitHandler } from 'src/helpers/methods';
+import { EmployeeBulkAddForm } from '../Form/employee-add.form/employee-bulk-add-form.component/employee-bulk-add-form.component';
 
 export const AddEmployeeModal = NiceModal.create(
   (props: { administrator: Administrator }) => {

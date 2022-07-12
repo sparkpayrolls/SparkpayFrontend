@@ -520,7 +520,7 @@ export type IEmployeeOnboardingForm = {
 export type ISelect<T> = SelectProps<T> & {
   ref?: React.Ref<RefSelectProps>;
   label?: string;
-  error?: string;
+  error?: string | boolean;
   containerClassName?: string;
 };
 

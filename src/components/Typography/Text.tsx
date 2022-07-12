@@ -1,10 +1,11 @@
 import classNames from 'classnames';
+import { ReactNode } from 'react';
 import { ElementWrapper } from '../Table/check-box-table-col.component';
 
 export interface IText {
   element?: string;
   className?: string;
-  text?: string;
+  text?: string | ReactNode;
 }
 
 export const Text = (props: IText & Record<string, any>) => {

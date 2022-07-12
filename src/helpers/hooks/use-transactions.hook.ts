@@ -21,13 +21,7 @@ export const useTransactions = () => {
     setLoadingExport(true);
     $api.companyWallet
       .exportTransactions(params)
-      .then(({ file, name }) => {
-        const link = document.createElement('a');
-
-        link.href = file;
-        link.download = name;
-        link.click();
-      })
+      .then(Util.downloadFile)
       .catch((error) => {
         Util.onNonAuthError(error, () => {
           toast.error('error exporting transactions');

@@ -1,32 +1,25 @@
-import { FormikTouched } from 'formik';
-import { SetStateAction } from 'react';
 import { Employee } from 'src/api/types';
 
-/* eslint-disable no-unused-vars */
-export type DebouncedFunc<T extends (...args: any) => any> = {
-  (...args: Parameters<T>): ReturnType<T> | undefined;
+export type DebouncedFunc<T extends (..._args: any) => any> = {
+  (..._args: Parameters<T>): ReturnType<T> | undefined;
 };
 
 export type IgetEmployeeMethod = {
   employeeId: string;
   apiCallStarted(): void;
-  setEmployee(value?: Employee): void;
-  setNotFound(value: boolean): void;
+  setEmployee(_value?: Employee): void;
+  setNotFound(_value: boolean): void;
   apiCallDone(): void;
 };
 
-export type IgetBulkEmployeeFileUploadHandler = {
-  setTouched(
-    touched: FormikTouched<{
-      file: string;
-    }>,
-    shouldValidate?: boolean | undefined,
-  ): void;
-  setFile(value: SetStateAction<File | null>): void;
-  setValues(
-    values: SetStateAction<{
-      file: string;
-    }>,
-    shouldValidate?: boolean | undefined,
-  ): void;
+export type IgetCustomBlurHandler<T extends Record<string, unknown>> = {
+  name: string;
+  setTouched(_touched: T): unknown;
+  touched: T;
+};
+
+export type IgetCustomChangeHandler<T extends Record<string, unknown>> = {
+  values: T;
+  name: string;
+  setValues(_values: T): unknown;
 };

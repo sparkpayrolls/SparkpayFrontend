@@ -3,7 +3,7 @@ import NiceModal from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
 import { IEditEmployeeDetailsModal } from '../types';
 import { Util } from 'src/helpers/util';
-import { EmployeeAddForm } from '../Form/employee-add.form';
+import { EmployeeAddForm } from '../Form/employee-add.form/employee-add.form';
 import { Country } from 'src/api/types';
 
 export const EditEmployeeDetailsModal = NiceModal.create(

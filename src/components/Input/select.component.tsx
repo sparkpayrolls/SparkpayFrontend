@@ -11,20 +11,32 @@ export function Select<T extends SelectValue>(
 ) {
   const [autocompleteDisabled, setAutocompleteDisabled] = useState(false);
   const [focused, setFocused] = useState(false);
-  const { label, error, className, containerClassName, onFocus, ...selectProps } = props;
+  const {
+    label,
+    error,
+    className,
+    containerClassName,
+    onFocus,
+    style,
+    ...selectProps
+  } = props;
   let id: string | undefined;
   const selectClass = classNames('app-select', className, {
     [`has-error`]: !!error,
   });
-  const containerClass = classNames('app-select-container app-select', containerClassName, {
-    'app-select-container--focused': focused,
-  });
+  const containerClass = classNames(
+    'app-select-container app-select',
+    containerClassName,
+    {
+      'app-select-container--focused': focused,
+    },
+  );
   if (label) {
     id = label.toLowerCase().replace(/\s/gi, '_');
   }
 
   return (
-    <Container className={containerClass}>
+    <Container className={containerClass} style={style}>
       {label && (
         <Text
           text={label}

@@ -43,7 +43,8 @@ export const singleEmployeeUploadValidationSchema = Yup.object().shape({
 });
 
 export const bulkEmployeeFileUploadValidationSchema = Yup.object().shape({
-  file: Yup.string().required('please upload an xlsx file to proceed'),
+  file: Yup.string().required('upload an xlsx file'),
+  payoutMethod: Yup.string().required('select a payout method to proceed'),
 });
 
 export const createOrganizationValidationSchema = Yup.object().shape({
@@ -117,10 +118,10 @@ export const BulkEmployeeAddValidation = Yup.object()
       .of(
         Yup.object()
           .shape({
-            firstname: format.firstname,
-            lastname: format.lastname,
-            email: format.email,
-            phoneNumber: format.phonenumber,
+            firstname: Yup.string().required('First Name is required'),
+            lastname: Yup.string().required('Last Name is required'),
+            email: Yup.string().email().optional(),
+            phoneNumber: Yup.string().optional(),
             salary: Yup.string().required('Salary is required'),
           })
           .required(),
