@@ -69,7 +69,7 @@ export const useEmployeeListContext = () => {
   };
 
   const employees =
-    parsed?.data?.map((row) => {
+    parsed?.data?.map((row: string[]) => {
       const [
         firstname,
         lastname,
