@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
+import { useTawkto } from 'src/helpers/hooks/use-tawkto';
 import { Util } from 'src/helpers/util';
 import { resetPasswordValidationSchema } from 'src/helpers/validation';
 import { useAppSelector } from 'src/redux/hooks';
@@ -19,6 +20,9 @@ type IResetPassword = {
 const ResetPassword: NextPage = () => {
   const { user } = useAppSelector((state) => state);
   const router = useRouter();
+
+  useTawkto();
+
   if (user) {
     router.replace('/');
     return null;

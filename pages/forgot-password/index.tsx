@@ -7,6 +7,7 @@ import { stringifyUrl } from 'query-string';
 import React from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
+import { useTawkto } from 'src/helpers/hooks/use-tawkto';
 import { forgotPasswordValidationSchema } from 'src/helpers/validation';
 import { useAppSelector } from 'src/redux/hooks';
 import { Button } from '../../src/components/Button/Button.component';
@@ -19,6 +20,9 @@ type IForgotPassword = {
 const ForgetPassword: NextPage = () => {
   const { user } = useAppSelector((state) => state);
   const router = useRouter();
+
+  useTawkto();
+
   if (user) {
     router.replace('/');
     return null;

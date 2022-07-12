@@ -1,6 +1,4 @@
 import { useEffect } from 'react';
-//@ts-ignore
-import TawkTo from 'tawkto-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Logo from '../../../public/svgs/logo.svg';
@@ -15,6 +13,7 @@ import {
   SparkpaySVG,
   TwitterSVG,
 } from '@/components/svg';
+import { useTawkto } from 'src/helpers/hooks/use-tawkto';
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -49,9 +48,7 @@ const DefaultLayout: React.FC = ({ children }) => {
   });
   const { width } = useWindowDimensions();
 
-  useEffect(() => {
-    new TawkTo('627a74667b967b11798ea98e', '1g2n5dcgr');
-  }, []);
+  useTawkto();
 
   const navigationClassName = classNames('navigation', navigation);
 
