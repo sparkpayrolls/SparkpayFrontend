@@ -1,10 +1,13 @@
 import { Button } from '@/components/Button/Button.component';
 import { NextPage } from 'next';
 import Image from 'next/image';
+import { useTawkto } from 'src/helpers/hooks/use-tawkto';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 import checkMarkCircle from '../../public/svgs/check_mark_circle.svg';
 
 const RequestReceived: NextPage = () => {
+  useTawkto();
+
   return (
     <DashboardLayoutV2 title="Request Received">
       <div className="request-received">

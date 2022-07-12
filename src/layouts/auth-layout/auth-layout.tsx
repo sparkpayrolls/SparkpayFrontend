@@ -2,12 +2,15 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
+import { useTawkto } from 'src/helpers/hooks/use-tawkto';
 import auth_frame from '../../../public/svgs/auth-frame.svg';
 import logo_white from '../../../public/svgs/logo-white.svg';
 import logo from '../../../public/svgs/logo.svg';
 import { IAuthLayout } from './auth-layout-types';
 
 export const AuthLayout = (props: PropsWithChildren<IAuthLayout>) => {
+  useTawkto();
+
   return (
     <div className="login">
       <Head>
