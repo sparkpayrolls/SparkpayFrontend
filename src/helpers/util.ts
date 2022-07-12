@@ -14,7 +14,11 @@ import {
   SalaryAddOn,
 } from 'src/api/types';
 import { config } from './config';
-import { DebouncedFunc } from './types';
+import {
+  DebouncedFunc,
+  IgetCustomBlurHandler,
+  IgetCustomChangeHandler,
+} from './types';
 
 export class Util {
   static debounce<T extends (...args: any) => any>(
@@ -443,4 +447,54 @@ export class Util {
 
     return newObj;
   };
+
+  static getCustomBlurHandler = <T extends Record<string, unknown>>(
+    params: IgetCustomBlurHandler<T>,
+  ) => {
+    const { name, setTouched, touched } = params;
+
+    return () => {
+      setTouched({ ...touched, [name]: true });
+    };
+  };
+
+  static getCustomChangeHandler = <T extends Record<string, unknown>, K>(
+    params: IgetCustomChangeHandler<T>,
+  ) => {
+    const { name, setValues, values } = params;
+
+    return (val: K) => {
+      setValues({ ...values, [name]: val });
+    };
+  };
+
+  static downloadFile({ file, name }: { file: string; name: string }) {
+    const link = document.createElement('a');
+
+    link.href = file;
+    link.download = name;
+    link.click();
+  }
+
+  static queuedThrottle<T extends (..._args: any) => any>(
+    func: T,
+    limit: number,
+  ) {
+    let lastCall = Date.now();
+
+    const queuThrottled = (
+      ...args: Parameters<T>
+    ): ReturnType<T> | undefined => {
+      const timeElasped = Date.now() - lastCall;
+      if (timeElasped < limit) {
+        setTimeout(queuThrottled, limit - timeElasped, ...args);
+        return;
+      }
+
+      lastCall = Date.now();
+      return func(...args);
+    };
+
+    return queuThrottled;
+  }
 }

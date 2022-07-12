@@ -19,4 +19,14 @@ export class FileModule extends HttpRepository {
 
     return data;
   }
+
+  async parseSavedEmployeeUploadXlsx(id: string) {
+    const { data } = await this.get<{
+      headerRow: string[];
+      data: string[][];
+      payoutMethod: string;
+    }>(`/files/${id}/parse/employee-upload-xlsx`);
+
+    return data;
+  }
 }

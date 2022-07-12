@@ -95,6 +95,14 @@ export class EmployeeModule extends HttpRepository {
     return data;
   }
 
+  async findEmployeesByEmail(emails: string[]) {
+    const { data } = await this.get<Employee[]>(`/employees/find-by-email`, {
+      params: { emails },
+    });
+
+    return data;
+  }
+
   async getEmployeeGroups(params: Record<string, any>) {
     return this.get<Group[]>('/employees/groups', { params });
   }
@@ -202,5 +210,14 @@ export class EmployeeModule extends HttpRepository {
 
   async getSalaryAddons(entity: string, params: Record<string, any>) {
     return this.get<SalaryAddOn[]>(`/employees/${entity}/addons`, { params });
+  }
+
+  async getEmployeeUploadSheetFormat(payoutMethod: string) {
+    const { data } = await this.get<{ file: string; name: string }>(
+      '/employees/employee-upload-sheet-format',
+      { params: { payoutMethod } },
+    );
+
+    return data;
   }
 }

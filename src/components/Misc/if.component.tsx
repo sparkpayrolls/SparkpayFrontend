@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-export const IF = (props: PropsWithChildren<{ condition: boolean }>) => {
+export const IF = (props: PropsWithChildren<{ condition?: unknown }>) => {
   if (props.condition) {
     return <>{props.children}</>;
   }

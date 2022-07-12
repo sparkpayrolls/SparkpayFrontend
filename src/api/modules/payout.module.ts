@@ -16,8 +16,11 @@ export class PayoutModule extends HttpRepository {
     return this.get<Bank[]>(`/payouts/${country}/banks${query}`);
   }
 
-  async validatePayoutMethod(methodId: string, meta?: unknown) {
-    const { data } = await this.post('/payouts/validate', { methodId, meta });
+  async validatePayoutMethod<K>(methodId: string, meta?: unknown) {
+    const { data } = await this.post<K>('/payouts/validate', {
+      methodId,
+      meta,
+    });
 
     return data;
   }

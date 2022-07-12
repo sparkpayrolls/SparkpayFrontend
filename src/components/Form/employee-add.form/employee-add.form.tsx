@@ -1,23 +1,12 @@
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Formik, FormikProps } from 'formik';
-import { stringifyUrl } from 'query-string';
 import { Util } from 'src/helpers/util';
-import {
-  bulkEmployeeFileUploadValidationSchema,
-  singleEmployeeUploadValidationSchema,
-} from 'src/helpers/validation';
-import { Button } from '../Button/Button.component';
-import { InputV2 } from '../Input/Input.component';
-import { AddEmployee, IEmployeeAddForm } from '../types';
-import { AddFileSVG } from '@/components/svg';
-import classNames from 'classnames';
-import { InputError } from '../Shared/input-error.component';
-import { config } from 'src/helpers/config';
-import { getBulkEmployeeFileUploadHandler } from 'src/helpers/methods';
+import { singleEmployeeUploadValidationSchema } from 'src/helpers/validation';
+import { Button } from '../../Button/Button.component';
+import { InputV2 } from '../../Input/Input.component';
+import { AddEmployee, IEmployeeAddForm } from '../../types';
 import { $api } from 'src/api';
-import { toast } from 'react-toastify';
-import { PayoutDetails } from '../Employee/payout-details.component';
+import { PayoutDetails } from '../../Employee/payout-details.component';
 
 const emailExists = Util.debounce(
   // eslint-disable-next-line no-unused-vars
@@ -191,118 +180,6 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
                 disabled={
                   isSubmitting || Util.deepEquals(values, initialValues)
                 }
-                showSpinner={isSubmitting}
-              />
-            </div>
-          </form>
-        );
-      }}
-    </Formik>
-  );
-};
-
-export const EmployeeBulkAddForm = (props: { onSubmit?: () => void }) => {
-  const router = useRouter();
-  const [file, setFile] = useState<File | null>(null);
-  const [uploadTextActive, setUploadTextActive] = useState(false);
-  const fileUploadClass = classNames('form__file-upload', {
-    ['active']: !!file || uploadTextActive,
-  });
-
-  return (
-    <Formik
-      initialValues={{ file: '' }}
-      validationSchema={bulkEmployeeFileUploadValidationSchema}
-      onSubmit={({ file }, helpers) => {
-        helpers.setSubmitting(true);
-        $api.file
-          .uploadTemporaryFile(JSON.parse(file))
-          .then((file) => {
-            const url = stringifyUrl({
-              url: '/employees/employee-list',
-              query: { file: file.id },
-            });
-
-            props.onSubmit && props.onSubmit();
-            router.replace(url);
-          })
-          .catch((error) => {
-            toast.error(error.message);
-          })
-          .finally(() => {
-            helpers.setSubmitting(false);
-          });
-      }}
-    >
-      {(props: FormikProps<{ file: string }>) => {
-        const {
-          handleSubmit,
-          isSubmitting,
-          setValues,
-          setTouched,
-          touched,
-          errors,
-        } = props;
-
-        return (
-          <form
-            onSubmit={handleSubmit}
-            className="edit-details-form"
-            autoComplete="off"
-          >
-            <label>
-              <div
-                className={fileUploadClass}
-                draggable
-                onDragOver={() => setUploadTextActive(true)}
-                onDragLeave={() => setUploadTextActive(false)}
-              >
-                <AddFileSVG />
-                <p className="form__file-upload--text">
-                  {file ? (
-                    file.name
-                  ) : (
-                    <>
-                      <span className="form__file-upload-text--highlight">
-                        Upload a file
-                      </span>{' '}
-                      or drag and drop
-                    </>
-                  )}
-                </p>
-
-                <span className="form__file-upload-subtext">
-                  {file ? <>Change File</> : <>Spreadsheet (xlsx) up to 10MB</>}
-                </span>
-                <input
-                  type="file"
-                  name="xlslFile"
-                  accept=".xlsx"
-                  onChange={getBulkEmployeeFileUploadHandler({
-                    setTouched,
-                    setValues,
-                    setFile,
-                  })}
-                />
-              </div>
-              <InputError>{touched.file && errors.file}</InputError>
-            </label>
-
-            <a
-              className="form__sample-btn"
-              download="employee_upload_format.xlsx"
-              href={config().employeeUploadSample}
-            >
-              Download Format
-            </a>
-
-            <div className="form__submit-button">
-              <Button
-                type="submit"
-                label="Proceed"
-                className="form__submit-button form__submit-button--full-width"
-                primary
-                disabled={isSubmitting}
                 showSpinner={isSubmitting}
               />
             </div>

@@ -1,13 +1,16 @@
 import classNames from 'classnames';
 import { DetailedHTMLProps, InputHTMLAttributes, useState } from 'react';
+import { IF } from '../Misc/if.component';
 import { InputError } from '../Shared/input-error.component';
 import { Spinner } from '../Spinner/Spinner.component';
 import { EditableSVG } from '../svg';
+import { Text } from '../Typography/Text';
 
 interface IEditableField {
   // eslint-disable-next-line no-unused-vars
   transformValue?(val: string | number | readonly string[] | undefined): any;
   error?: boolean | string;
+  helper?: string;
   loading?: boolean;
 }
 
@@ -19,7 +22,7 @@ export const EditableField = (
     IEditableField,
 ) => {
   const [focused, setFocused] = useState<boolean>(false);
-  const { loading, error, transformValue, type, ...inputProps } = props;
+  const { loading, error, helper, transformValue, type, ...inputProps } = props;
   const inputClassname = classNames('employee-list__input-container__input', {
     'employee-list__input-container__input--has-error': !!error,
   });
@@ -58,9 +61,20 @@ export const EditableField = (
           <Spinner size={20} color="--green" />
         </span>
       )}
-      <div className="employee-list__input-container__error">
-        <InputError>{error}</InputError>
-      </div>
+      <IF condition={error}>
+        <div className="employee-list__input-container__error">
+          <InputError>{error}</InputError>
+        </div>
+      </IF>
+      <IF condition={!error && helper}>
+        <div className="employee-list__input-container__error">
+          <Text
+            className="input-v2__helper text__text-sm text__gray400"
+            text={helper}
+            element="span"
+          />
+        </div>
+      </IF>
     </div>
   );
 };
