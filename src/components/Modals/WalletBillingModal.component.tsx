@@ -35,11 +35,11 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
   return (
     <div className="add-employee-modal">
       <Head>
-        {/* <script src="https://js.paystack.co/v1/inline.js" defer></script> */}
-        <script
+        <script src="https://js.paystack.co/v1/inline.js" defer></script>
+        {/* <script
           src="https://cdn.collect.africa/collect-widget.js"
           defer
-        ></script>
+        ></script> */}
       </Head>
 
       <Formik
