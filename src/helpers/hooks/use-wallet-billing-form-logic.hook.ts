@@ -9,10 +9,12 @@ import { Util } from '../util';
 
 export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
   const { modal } = params;
-  const { administrator, user } = useAppSelector(({ administrator, user }) => ({
-    user,
-    administrator,
-  }));
+  const { administrator /* user */ } = useAppSelector(
+    ({ administrator, user }) => ({
+      user,
+      administrator,
+    }),
+  );
   // const {
   //   paymentMethods,
   //   loading: loadingPaymentMethods,
@@ -21,47 +23,47 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
   const country = company.country as Country;
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
 
-  // const _triggerPaystackNGCheckout = (
-  //   amount: number,
-  //   ref: string,
-  //   channels: string[],
-  // ) => {
-  //   return new Promise((resolve, reject) => {
-  //     // @ts-ignore
-  //     const handler = window.PaystackPop.setup({
-  //       key: config().paystackKey,
-  //       email: company.email,
-  //       amount: amount * 100,
-  //       currency: 'NGN',
-  //       channels,
-  //       ref,
-  //       callback: resolve,
-  //       onClose: () => reject(new Error()),
-  //     });
-
-  //     handler.openIframe();
-  //   });
-  // };
-
-  const triggerCollectCheckout = (amount: number, reference: string) => {
+  const triggerPaystackNGCheckout = (
+    amount: number,
+    ref: string,
+    // channels: string[],
+  ) => {
     return new Promise((resolve, reject) => {
       // @ts-ignore
-      const checkout = new window.CollectCheckout({
-        publicKey: config().collectKey,
+      const handler = window.PaystackPop.setup({
+        key: config().paystackKey,
         email: company.email,
         amount: amount * 100,
         currency: 'NGN',
-        reference,
-        firstName: user?.firstname,
-        lastName: user?.lastname,
-        onSuccess: resolve,
+        // channels,
+        ref,
+        callback: resolve,
         onClose: () => reject(new Error()),
       });
 
-      checkout.setup();
-      checkout.open();
+      handler.openIframe();
     });
   };
+
+  // const triggerCollectCheckout = (amount: number, reference: string) => {
+  //   return new Promise((resolve, reject) => {
+  //     // @ts-ignore
+  //     const checkout = new window.CollectCheckout({
+  //       publicKey: config().collectKey,
+  //       email: company.email,
+  //       amount: amount * 100,
+  //       currency: 'NGN',
+  //       reference,
+  //       firstName: user?.firstname,
+  //       lastName: user?.lastname,
+  //       onSuccess: resolve,
+  //       onClose: () => reject(new Error()),
+  //     });
+
+  //     checkout.setup();
+  //     checkout.open();
+  //   });
+  // };
 
   const handleNigeriaSubmit = (
     values: WalletBilling,
@@ -95,7 +97,7 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
         },
       })
       .then((reference) => {
-        return triggerCollectCheckout(amount, reference);
+        return triggerPaystackNGCheckout(amount, reference);
       })
       .then(() => {
         modal.resolve(true);
