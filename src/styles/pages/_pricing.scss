@@ -1,0 +1,125 @@
+.pricing {
+  &__main {
+    padding: 6rem 0;
+  }
+
+  &__page-title {
+    max-width: 394px;
+    margin-left: auto;
+    margin-right: auto;
+    letter-spacing: -0.08em;
+    color: #1d4ed8;
+  }
+
+  &__tier-title {
+    letter-spacing: -0.08em;
+  }
+
+  &__page-title,
+  &__calculator-title,
+  &__tier-title {
+    font-weight: 800;
+  }
+
+  &__tiers {
+    margin-top: 5rem;
+    max-width: 1208px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 0 1.25rem;
+  }
+
+  &__tier {
+    max-width: 368px;
+    border-radius: 20px;
+    border: 1px solid #d9d9d9;
+    padding: 3rem;
+  }
+
+  &__tier-header {
+    padding: 1rem 0;
+    border-bottom: 1px solid #d9d9d9;
+    margin-bottom: 1.5rem;
+  }
+
+  &__calculator {
+    margin-top: 5rem;
+    padding: 8rem 1.25rem;
+    background: #1d4ed8;
+    color: #fff;
+  }
+
+  &__calculator-container {
+    max-width: 1063px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+
+    @media screen and (min-width: 900px) {
+      justify-content: space-between;
+      flex-direction: row-reverse;
+    }
+  }
+
+  &__calculator-box {
+    width: 100%;
+    max-width: 502px;
+    min-height: 507px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 3rem;
+    color: #0b2253;
+  }
+
+  &__input-label {
+    text-transform: uppercase;
+    display: block;
+    font-weight: 800;
+  }
+
+  &__input-container {
+    margin-top: 0.5rem;
+    position: relative;
+  }
+
+  &__input-input,
+  &__input-prefix {
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 42px;
+  }
+
+  &__input-input {
+    width: 100%;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 1.25rem;
+    background: #f7f9fb;
+    transition: 0.2s ease-in;
+    &:hover,
+    &:focus {
+      border-color: #1d4ed8;
+    }
+  }
+
+  &__input--prefixed {
+    .pricing__input-input {
+      padding-left: 95px;
+    }
+  }
+
+  &__input-prefix {
+    position: absolute;
+    display: block;
+    top: 1.4rem;
+    left: 1.25rem;
+  }
+}

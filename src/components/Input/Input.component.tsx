@@ -251,12 +251,9 @@ export const InputV2 = (
   return (
     <Container className={containerClass}>
       {!!label && (
-        <Text
-          className={labelClassname}
-          htmlFor={labelFor}
-          text={label}
-          element="label"
-        />
+        <Text className={labelClassname} htmlFor={labelFor} element="label">
+          {label}
+        </Text>
       )}
 
       <Container className="input-v2__input-container">
@@ -274,7 +271,7 @@ export const InputV2 = (
           type={contentVisible ? contentVisibleInputType : 'password'}
           value={value}
         />
-        
+
         <Container className="input-v2__add-on">
           {loading && <Spinner color="--green" />}
           {showVisibilityToggle && !loading && (
@@ -283,7 +280,7 @@ export const InputV2 = (
               className="input-v2__add-on__button"
               onClick={() => setContentVisible(!contentVisible)}
             >
-              <Text text="toggle visibility" className="sr-only" />
+              <Text className="sr-only">toggle visibility</Text>
               {
                 // eslint-disable-next-line @next/next/no-img-element
                 contentVisible ? <ShowPasswordSVG /> : <HidePasswordSVG />
@@ -294,17 +291,15 @@ export const InputV2 = (
       </Container>
 
       {!!error && typeof error === 'string' && (
-        <Text
-          className="input-v2--error__error text__text-sm text__danger"
-          text={error}
-        />
+        <Text className="input-v2--error__error text__text-sm text__danger">
+          {error}
+        </Text>
       )}
 
       {!!helper && !error && (
-        <Text
-          className="input-v2__helper text__text-sm text__gray400"
-          text={helper}
-        />
+        <Text className="input-v2__helper text__text-sm text__gray400">
+          {helper}
+        </Text>
       )}
     </Container>
   );
@@ -345,12 +340,9 @@ export const TextArea = (
   return (
     <div className={containerClass}>
       {label && (
-        <Text
-          className={labelClassname}
-          htmlFor={labelFor}
-          text={label}
-          element="label"
-        />
+        <Text className={labelClassname} htmlFor={labelFor} element="label">
+          {label}
+        </Text>
       )}
       <textarea
         {...textAreaProps}
@@ -365,16 +357,14 @@ export const TextArea = (
         }}
       />
       {!!error && typeof error === 'string' && (
-        <Text
-          className="textarea--error__error text__text-sm text__danger"
-          text={error}
-        />
+        <Text className="textarea--error__error text__text-sm text__danger">
+          {error}
+        </Text>
       )}
       {!!helper && !error && (
-        <Text
-          className="textarea__helper text__text-sm text__gray400"
-          text={helper}
-        />
+        <Text className="textarea__helper text__text-sm text__gray400">
+          {helper}
+        </Text>
       )}
     </div>
   );

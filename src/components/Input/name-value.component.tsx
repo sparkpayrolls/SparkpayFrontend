@@ -85,9 +85,10 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
       {!!label && (
         <Text
           className="name-value-input-group__label text__label"
-          text={label}
           element="label"
-        />
+        >
+          {label}
+        </Text>
       )}
 
       <div className="name-value-input-group__inputs">
@@ -131,10 +132,7 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
               />
               {canDelete && (
                 <span role="button" onClick={() => removeItem(i)}>
-                  <Text
-                    className="sr-only"
-                    text="remove salary breakdown item"
-                  />{' '}
+                  <Text className="sr-only">remove salary breakdown item</Text>
                   <i className="fas fa-trash fa"></i>{' '}
                 </span>
               )}
@@ -144,16 +142,14 @@ export const NameValueInputGroup = (props: INameValueInputGroup) => {
       </div>
 
       {!!error && typeof error === 'string' && (
-        <Text
-          className="input-v2--error__error text__text-sm text__danger"
-          text={error}
-        />
+        <Text className="input-v2--error__error text__text-sm text__danger">
+          {error}
+        </Text>
       )}
       {!!helper && !error && (
-        <Text
-          className="input-v2__helper text__text-sm text__gray400"
-          text={helper}
-        />
+        <Text className="input-v2__helper text__text-sm text__gray400">
+          {helper}
+        </Text>
       )}
     </div>
   );

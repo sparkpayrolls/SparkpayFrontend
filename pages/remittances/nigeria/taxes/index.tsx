@@ -42,8 +42,9 @@ const Tax: NextPage = () => {
           <Text
             className="nigerian-tax__page-title text__page-title"
             element="h1"
-            text="Tax"
-          />
+          >
+            Tax
+          </Text>
 
           <Button
             type="button"

@@ -193,16 +193,13 @@ export const CreateRoleForm = (props: ICreateRoleForm) => {
                   </tbody>
                 </TableV2>
               </TableLayout>
-              <Text
-                className="input-v2--error__error text__text-sm text__danger"
-                text={
-                  (touched.permissions &&
-                    (Array.isArray(errors.permissions)
-                      ? errors.permissions.join(',')
-                      : errors.permissions)) ||
-                  ''
-                }
-              />
+              <Text className="input-v2--error__error text__text-sm text__danger">
+                {(touched.permissions &&
+                  (Array.isArray(errors.permissions)
+                    ? errors.permissions.join(',')
+                    : errors.permissions)) ||
+                  ''}
+              </Text>
             </div>
 
             <Button

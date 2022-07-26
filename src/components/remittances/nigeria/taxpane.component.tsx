@@ -254,7 +254,9 @@ export const TaxSettings = () => {
     <Container className="tax-pane">
       <Container loading={!settings} className="tax-pane__settings">
         <Container>
-          <Text text="Status" className="text__label" element="label" />
+          <Text className="text__label" element="label">
+            Status
+          </Text>
           <Radio.Group
             value={settings?.status || 'Disabled'}
             onChange={getRadioHandler('status')}
@@ -269,7 +271,9 @@ export const TaxSettings = () => {
         </Container>
 
         <Container>
-          <Text text="Type" className="text__label" element="label" />
+          <Text className="text__label" element="label">
+            Type
+          </Text>
           <Radio.Group
             value={settings?.type || 'PAYE'}
             onChange={getRadioHandler('type')}
@@ -436,11 +440,9 @@ export const TaxSettings = () => {
 
       <Container className="tax-pane__employee-list">
         <Container>
-          <Text
-            text="Add employee to Tax list"
-            className="text__section-title"
-            element="h6"
-          />
+          <Text className="text__section-title" element="h6">
+            Add employee to Tax list
+          </Text>
 
           <EmployeeAutocompleteForm
             onSubmit={(e) => addEmployeeToTax({ employee: e.id })}
@@ -448,11 +450,9 @@ export const TaxSettings = () => {
         </Container>
 
         <Container>
-          <Text
-            text="Employees on Tax list"
-            className="text__section-title"
-            element="h6"
-          />
+          <Text className="text__section-title" element="h6">
+            Employees on Tax list
+          </Text>
           <Container className="tax-pane__table-container">
             <TableLayout>
               <TableV2 loading={employeesLoading}>

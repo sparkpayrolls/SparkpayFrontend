@@ -38,12 +38,9 @@ export function Select<T extends SelectValue>(
   return (
     <Container className={containerClass} style={style}>
       {label && (
-        <Text
-          text={label}
-          className="label text__label"
-          element="label"
-          htmlFor={id}
-        />
+        <Text className="label text__label" element="label" htmlFor={id}>
+          {label}
+        </Text>
       )}
       <S
         id={id}
@@ -70,10 +67,9 @@ export function Select<T extends SelectValue>(
         }}
       />
       {error && (
-        <Text
-          className="input-v2--error__error text__text-sm text__danger"
-          text={error}
-        />
+        <Text className="input-v2--error__error text__text-sm text__danger">
+          {error}
+        </Text>
       )}
     </Container>
   );
