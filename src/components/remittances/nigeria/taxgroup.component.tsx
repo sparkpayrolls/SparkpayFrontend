@@ -106,13 +106,9 @@ export const TaxGroup = (props: ITaxGroup) => {
 
   return (
     <Container className="tax-group" loading={loading} showContent>
-      <Text
-        className="tax-group__page-title "
-        element="h2"
-        text={`${groupsMeta?.total || 0} Group${
-          groupsMeta?.total === 1 ? '' : 's'
-        }`}
-      />
+      <Text className="tax-group__page-title " element="h2">{`${
+        groupsMeta?.total || 0
+      } Group${groupsMeta?.total === 1 ? '' : 's'}`}</Text>
 
       <Container className="employee-group-tab__cards    tax-group__body-content">
         {groups.length < 1 && (

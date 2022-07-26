@@ -33,10 +33,9 @@ export function AutoComplete(props: IAutoComplete) {
         </div>
       </div>
       {error && (
-        <Text
-          className="input-v2--error__error text__text-sm text__danger"
-          text={error}
-        />
+        <Text className="input-v2--error__error text__text-sm text__danger">
+          {error}
+        </Text>
       )}
     </Container>
   );

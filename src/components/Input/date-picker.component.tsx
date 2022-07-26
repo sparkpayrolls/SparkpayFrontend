@@ -59,10 +59,9 @@ export const DatePicker = (props: IDatePicker & DatePickerProps) => {
 
       {!!error && <p className="date-picker__error">{error}</p>}
       {!!helper && !error && (
-        <Text
-          className="textarea__helper text__text-sm text__gray400"
-          text={helper}
-        />
+        <Text className="textarea__helper text__text-sm text__gray400">
+          {helper}
+        </Text>
       )}
     </div>
   );
@@ -119,10 +118,9 @@ const Multiple = (props: IMultiple & CalendarProps & DatePickerPropsMulti) => {
 
       {!!error && <p className="date-picker__error">{error}</p>}
       {!!helper && !error && (
-        <Text
-          className="textarea__helper text__text-sm text__gray400"
-          text={helper}
-        />
+        <Text className="textarea__helper text__text-sm text__gray400">
+          {helper}
+        </Text>
       )}
     </div>
   );
@@ -177,10 +175,9 @@ const RangePicker = (props: IDatePicker & RangePickerProps) => {
 
       {!!error && <p className="date-picker__error">{error}</p>}
       {!!helper && !error && (
-        <Text
-          className="textarea__helper text__text-sm text__gray400"
-          text={helper}
-        />
+        <Text className="textarea__helper text__text-sm text__gray400">
+          {helper}
+        </Text>
       )}
     </div>
   );

@@ -70,9 +70,10 @@ export const EditableField = (
         <div className="employee-list__input-container__error">
           <Text
             className="input-v2__helper text__text-sm text__gray400"
-            text={helper}
             element="span"
-          />
+          >
+            {helper}
+          </Text>
         </div>
       </IF>
     </div>

@@ -2,7 +2,6 @@
 // import { useState, FormEvent } from 'react';
 // import { toast } from 'react-toastify';
 // import NiceModal from '@ebay/nice-modal-react';
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import Carousel from 'react-multi-carousel';
@@ -67,11 +66,6 @@ export const Landing = () => {
 
   return (
     <DefaultLayout>
-      <Head>
-        <title>SparkPay</title>
-        <meta name="description" content="Sparkpay homepage" />
-      </Head>
-
       <main className="home">
         <section className="hero-section">
           <div className="hero-section__text-column">
@@ -127,9 +121,7 @@ export const Landing = () => {
           <div className="services__text-group">
             <h2 className="sub-header">Our services</h2>
             <p className="services__subtext ">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget
-              tortor, pellentesque donec ut accumsan nibh turpis massa facilisis
-              pellentesque amet.
+              Services engineered to make your payroll experience seamless.
             </p>
           </div>
 
@@ -158,7 +150,7 @@ export const Landing = () => {
               <h3 className="services__feature-title">Pension</h3>
               <p className="services__feature-subtext">
                 Deduct your pension from your employee&apos;s income and remit
-                it to the right channels if required.
+                it to the right channels if required. (coming soon)
               </p>
             </div>
             <div className="services__card">

@@ -1,24 +1,28 @@
 import classNames from 'classnames';
-import { ReactNode } from 'react';
 import { ElementWrapper } from '../Table/check-box-table-col.component';
 
 export interface IText {
+  component?: string;
   element?: string;
   className?: string;
-  text?: string | ReactNode;
+  variant?: 'heading-1' | 'heading-2' | 'heading-3' | 'body-text-1';
 }
 
 export const Text = (props: IText & Record<string, any>) => {
-  const { className: c, element, text, ...otherProps } = props;
-  const className = classNames('text', c);
+  const {
+    className: c,
+    element,
+    component,
+    variant = 'body-text-1',
+    ...otherProps
+  } = props;
+  const className = classNames('text', c, variant);
 
   return (
     <ElementWrapper
-      element={element || 'span'}
+      element={element || component || 'span'}
       className={className}
       {...otherProps}
-    >
-      {text}
-    </ElementWrapper>
+    />
   );
 };
