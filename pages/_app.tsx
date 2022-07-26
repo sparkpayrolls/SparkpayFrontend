@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux/store';
 import NiceModal from '@ebay/nice-modal-react';
-import { PersistGate } from 'redux-persist/integration/react';
+import { PersistGate, PersistGateProps } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { PropsWithChildren } from 'react';
 import { Detector } from 'react-detect-offline';
@@ -16,6 +16,10 @@ import { useAppLogic } from 'src/helpers/hooks/use-app-logic.hook';
 let persistor = persistStore(store);
 const AuthManager = (props: PropsWithChildren<unknown>) => {
   const { loading, renderDetectOnline } = useAppLogic();
+
+  if (typeof window === 'undefined') {
+    return <>{props.children}</>;
+  }
 
   return (
     <>
@@ -34,6 +38,14 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
   );
 };
 
+const PersistGateWrapper = (props: PersistGateProps) => {
+  if (typeof window === 'undefined') {
+    return <>{props.children}</>;
+  }
+
+  return <PersistGate {...props} />;
+};
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -43,14 +55,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGateWrapper loading={null} persistor={persistor}>
           <NiceModal.Provider>
             <AuthManager>
               <Component {...pageProps} />
             </AuthManager>
             <ToastContainer hideProgressBar={true} autoClose={3000} />
           </NiceModal.Provider>
-        </PersistGate>
+        </PersistGateWrapper>
       </Provider>
     </>
   );
