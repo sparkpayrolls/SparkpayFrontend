@@ -18,7 +18,7 @@ import working_woman from '../../../public/images/working-woman.png';
 import photo from '../../../public/images/photo.png';
 import coin from '../../../public/images/coin.png';
 import coin_mobile from '../../../public/images/coin-mobile.png';
-import DefaultLayout from 'src/layouts/default-layout/DefaultLayout';
+import DefaultLayout, { Title } from 'src/layouts/default-layout/DefaultLayout';
 // import { JoinWaitListModal } from '../Modals/JoinWaitListModal.component';
 import {
   // ServicePointSVG,
@@ -66,6 +66,7 @@ export const Landing = () => {
 
   return (
     <DefaultLayout>
+      <Title title="SparkPay | Payroll with ease" />
       <main className="home">
         <section className="hero-section">
           <div className="hero-section__text-column">
