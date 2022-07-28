@@ -1,23 +1,44 @@
 import { FieldArrayRenderProps, getIn } from 'formik';
-import keyBy from 'lodash.keyby';
+import cloneDeep from 'lodash.clonedeep';
 import {
   useState,
   useCallback,
-  useEffect,
   ChangeEvent,
   MouseEventHandler,
+  FormEvent,
+  useRef,
+  useEffect,
 } from 'react';
 import { $api } from 'src/api';
 import { Util } from 'src/helpers/util';
-import { BulkEmployeeUploadList } from '../types';
 import { EmployeesFormProps } from './types';
 
+const EMPLOYEE_LENGTH = 100;
 export const useEmployeeFormContext = (props: EmployeesFormProps) => {
-  const { values } = props.formikProps;
-  const { currency } = props;
-  const [existingEmails, setExistingEmails] = useState<Record<string, unknown>>(
-    {},
+  const {
+    values,
+    handleSubmit,
+    setValues,
+    setSubmitting,
+    touched,
+    errors,
+  } = props.formikProps;
+  const employeeAddition = Math.min(
+    200,
+    Math.max(EMPLOYEE_LENGTH, Math.floor(values.employees.length * 0.1)),
   );
+  const _errors = values.employees.reduce((acc, cur) => {
+    if (cur.error) {
+      acc[cur.email] = cur.error;
+    }
+
+    return acc;
+  }, {} as Record<string, unknown>);
+  const [changes, setChanges] = useState(
+    {} as Record<string, typeof values.employees[0]>,
+  );
+  const [employeeLength, setEmployeeLength] = useState(employeeAddition);
+  const [existingEmails, setExistingEmails] = useState(_errors);
   const [busy, setBusy] = useState(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,47 +65,54 @@ export const useEmployeeFormContext = (props: EmployeesFormProps) => {
     [],
   );
 
-  useEffect(() => {
-    if (values.employees.length) {
-      setBusy(true);
-      $api.employee
-        .findEmployeesByEmail(
-          values.employees.map((employee) => employee.email),
-        )
-        .then((employees) => {
-          const existingEmails = keyBy(employees, 'email');
-          setExistingEmails(existingEmails);
-        })
-        .catch(() => {})
-        .finally(() => setBusy(false));
+  const handleChange = (event: ChangeEvent<any>) => {
+    setTimeout(() => {
+      const { name, value } = event.target;
+      const [, index, prop] = name.split('.');
+      const item = changes[index] || values.employees[index];
+      item[prop as 'firstname'] = value;
+      if (prop === 'email') {
+        validateEmail(value);
+      }
+      setChanges({ ...changes, [index]: item });
+    }, 0);
+  };
+
+  const _handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitting(true);
+    const vals = cloneDeep(values);
+    Object.keys(changes).forEach((key) => {
+      vals.employees[+key] = changes[+key];
+    });
+    setValues(vals);
+    setTimeout(handleSubmit, 0, event);
+  };
+
+  const increaseEmployeeLength = () => {
+    if (employeeLength >= values.employees.length) {
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  const transformSalary = (val: string) => {
-    const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
-    if (!valTransformed) return '';
-
-    return `${currency} ${valTransformed.toLocaleString()}`;
+    setEmployeeLength(employeeLength + employeeAddition);
   };
 
   const getEmptyEmployee = (
     payoutMethod: string,
-    length: number,
-  ): BulkEmployeeUploadList => ({
+  ): typeof values.employees[0] => ({
     firstname: '',
     lastname: '',
     email: '',
     phoneNumber: '',
-    salary: '',
+    salary: '' as any,
     payoutMethod,
-    payoutDetails: Array(length).fill(''),
+    payoutMethodMeta: {},
+    error: '',
   });
 
   const getAddRowClickHandler = (
     isSubmitting: boolean,
     helpers: FieldArrayRenderProps,
-    length: number,
   ): MouseEventHandler<HTMLButtonElement> => {
     return (event) => {
       event.preventDefault();
@@ -92,18 +120,16 @@ export const useEmployeeFormContext = (props: EmployeesFormProps) => {
         return;
       }
 
-      helpers.push(getEmptyEmployee(props.payoutMethod.id, length));
+      helpers.push(
+        getEmptyEmployee(values.employees[0]?.payoutMethod as string),
+      );
     };
   };
 
-  const getFieldError = <T, K>(params: {
-    name: string;
-    index: number;
-    touched: T;
-    errors: K;
-  }) => {
-    const { errors, touched, index, name } = params;
-    if (name === 'email' && existingEmails[values.employees[index]?.email]) {
+  const getFieldError = (params: { name: string; index: number }) => {
+    const { index, name } = params;
+    const email = values.employees[index]?.email;
+    if (name === 'email' && !!email && !!existingEmails[email]) {
       return 'email exists in company';
     }
 
@@ -116,27 +142,35 @@ export const useEmployeeFormContext = (props: EmployeesFormProps) => {
     return '';
   };
 
-  const getEmailChangeHandler = <T extends (..._args: any) => any>(params: {
-    handleChange: T;
-  }) => {
-    const { handleChange } = params;
-
-    return (event: ChangeEvent<HTMLInputElement>) => {
-      handleChange(event);
-      validateEmail(event.target.value);
-    };
-  };
-
   const hasExistingEmail = values.employees.some(
-    (employee) => !!existingEmails[employee.email],
+    (employee) => !!employee.email && !!existingEmails[employee.email],
   );
 
   return {
-    busy,
     getAddRowClickHandler,
-    getEmailChangeHandler,
     getFieldError,
+    busy,
     hasExistingEmail,
-    transformSalary,
+    changes,
+    handleChange,
+    handleSubmit: _handleSubmit,
+    increaseEmployeeLength,
+    employeeLength,
   };
+};
+
+export const useElementPosition = <T extends HTMLElement>(
+  dependencies: unknown,
+) => {
+  const elementRef = useRef<T>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0, width: 0 });
+
+  useEffect(() => {
+    if (elementRef.current) {
+      const rect = elementRef.current.getBoundingClientRect();
+      setPosition(rect);
+    }
+  }, [dependencies]);
+
+  return { elementRef, position };
 };

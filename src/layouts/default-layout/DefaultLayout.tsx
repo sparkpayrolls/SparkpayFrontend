@@ -44,6 +44,18 @@ function useWindowDimensions() {
   return windowDimensions;
 }
 
+export const useUrl = () => {
+  const [url, setUrl] = useState('https://sparkpayhq.com/');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setUrl(window.location.origin + window.location.pathname);
+    }
+  }, []);
+
+  return { url };
+};
+
 export const Title = (props: { title: string }) => {
   const { title } = props;
 
@@ -65,7 +77,7 @@ const DefaultLayout: React.FC = ({ children }) => {
     'navigation--attach': false,
     'navigation--show': false,
   });
-  const [url, setUrl] = useState('https://sparkpayhq.com/');
+  const { url } = useUrl();
   const { width } = useWindowDimensions();
 
   useTawkto();
@@ -87,10 +99,6 @@ const DefaultLayout: React.FC = ({ children }) => {
       'navigation--attach': false,
     }));
   };
-
-  useEffect(() => {
-    setUrl(window.location.origin + window.location.pathname);
-  }, []);
 
   return (
     <>

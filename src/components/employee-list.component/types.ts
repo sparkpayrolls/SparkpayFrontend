@@ -1,16 +1,9 @@
 import { $api } from 'src/api';
+import { ParseSavedEmployeeUploadXlsxResponseEmployee } from 'src/api/types';
 
-export interface BulkEmployeeUploadList {
-  firstname: string;
-  lastname: string;
-  email: string;
-  phoneNumber: string;
-  salary: string;
-  payoutDetails: string[];
-  payoutMethod: string;
-}
-
-export type Values = { employees: BulkEmployeeUploadList[] };
+export type Values = {
+  employees: ParseSavedEmployeeUploadXlsxResponseEmployee[];
+};
 
 // eslint-disable-next-line no-undef
 export type Parsed = Awaited<

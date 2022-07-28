@@ -120,7 +120,7 @@ export type Employee = Document & {
   salary: number;
   email: string;
   country: string | Country;
-  payoutMethod?: PayoutMethod;
+  payoutMethod?: string | PayoutMethod;
   payoutMethodMeta: unknown;
   salaryAddOns: unknown[];
   groups: EmployeeGroup[];
@@ -622,4 +622,21 @@ export type ICreatePayrollPayload = { payDate: string } & ProcessPayrollPayload;
 export type PayrollUpdateResponse = {
   message: string;
   actions: string[];
+};
+
+export type ParseSavedEmployeeUploadXlsxResponseEmployee = Pick<
+  Employee,
+  | 'firstname'
+  | 'lastname'
+  | 'email'
+  | 'salary'
+  | 'phoneNumber'
+  | 'payoutMethod'
+  | 'payoutMethodMeta'
+> & { error: string };
+
+export type ParseSavedEmployeeUploadXlsxResponse = {
+  headerRow: string[];
+  data: ParseSavedEmployeeUploadXlsxResponseEmployee[];
+  payoutMethod: string;
 };

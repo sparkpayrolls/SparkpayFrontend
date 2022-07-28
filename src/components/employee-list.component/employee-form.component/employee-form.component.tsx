@@ -1,33 +1,33 @@
 import { Button } from '@/components/Button/Button.component';
-import { EditableField } from '@/components/Input/editable-field.component';
 import { PlusSvg } from '@/components/svg';
-import { FieldArray, Form } from 'formik';
+import { FieldArray } from 'formik';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { Util } from 'src/helpers/util';
+import { ConcealedInput } from './components';
 import { useEmployeeFormContext } from './hooks';
 import { PayoutDetailFields } from './payout-details-fields.component/payout-detail-fileds.component';
 import { EmployeesFormProps } from './types';
 
 export const EmployeesForm = (props: EmployeesFormProps) => {
+  const { isSubmitting, values, handleBlur } = props.formikProps;
+  const { headerRow, payoutMethodContext, payoutMethod } = props;
   const {
-    errors,
-    handleBlur,
+    changes,
     handleChange,
     handleSubmit,
-    isSubmitting,
-    touched,
-    values,
-  } = props.formikProps;
-  const { headerRow } = props;
-  const {
+    employeeLength,
+    increaseEmployeeLength,
     busy,
-    getAddRowClickHandler,
-    getEmailChangeHandler,
-    getFieldError,
     hasExistingEmail,
-    transformSalary,
+    getAddRowClickHandler,
+    getFieldError,
   } = useEmployeeFormContext(props);
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <form
+      style={{ width: '100%', height: '100%', overflowX: 'auto' }}
+      onSubmit={handleSubmit}
+    >
       <FieldArray name="employees">
         {(helpers) => {
           return (
@@ -39,11 +39,7 @@ export const EmployeesForm = (props: EmployeesFormProps) => {
                   <button
                     type="button"
                     disabled={isSubmitting}
-                    onClick={getAddRowClickHandler(
-                      isSubmitting,
-                      helpers,
-                      (headerRow?.length || 5) - 5,
-                    )}
+                    onClick={getAddRowClickHandler(isSubmitting, helpers)}
                     className="employee-list__actions--add-btn"
                   >
                     <PlusSvg /> Add Row
@@ -59,141 +55,166 @@ export const EmployeesForm = (props: EmployeesFormProps) => {
                 </div>
               </div>
 
-              <div className="employee-list__table-container">
-                <table className="employee-list__table">
-                  <thead>
-                    <tr>
-                      {headerRow?.map((name) => {
-                        return <th key={name}>{name}</th>;
-                      })}
-                      <th></th>
-                    </tr>
-                  </thead>
+              <div className="employee-list__table-container flex-table">
+                <div className="flex-table__tr">
+                  {headerRow?.map((name) => {
+                    return (
+                      <div key={name} className="flex-table__th">
+                        {name}
+                      </div>
+                    );
+                  })}
+                  <div className="flex-table__th"></div>
+                </div>
+                <div
+                  id="scrollableDiv"
+                  style={{
+                    overflowX: 'auto',
+                    height: 'calc(100% - 48px)',
+                  }}
+                >
+                  <InfiniteScroll
+                    hasMore
+                    next={increaseEmployeeLength}
+                    loader={null}
+                    dataLength={employeeLength}
+                    scrollableTarget="scrollableDiv"
+                  >
+                    {values.employees
+                      .slice(0, employeeLength)
+                      .map((_employee, index) => {
+                        const employee = changes[index] || _employee;
 
-                  <tbody>
-                    {values.employees.map((employee, index) => {
-                      return (
-                        <tr key={`${employee.firstname}_${index}`}>
-                          <td>
-                            <EditableField
-                              type="text"
-                              placeholder="First Name"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              name={`employees.${index}.firstname`}
-                              value={employee.firstname}
+                        return (
+                          <div
+                            key={`bulk_upload_employee_${index}`}
+                            className="flex-table__tr"
+                          >
+                            <ConcealedInput
+                              className="flex-table__td"
                               error={getFieldError({
                                 name: 'firstname',
                                 index,
-                                touched,
-                                errors,
                               })}
-                            />
-                          </td>
+                              inputProps={{
+                                className: 'employee-list__input',
+                                defaultValue: employee.firstname,
+                                name: `employees.${index}.firstname`,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
+                              }}
+                            >
+                              {employee.firstname}
+                            </ConcealedInput>
 
-                          <td>
-                            <EditableField
-                              type="text"
-                              placeholder="Last Name"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              name={`employees.${index}.lastname`}
-                              value={employee.lastname}
+                            <ConcealedInput
+                              className="flex-table__td"
                               error={getFieldError({
                                 name: 'lastname',
                                 index,
-                                touched,
-                                errors,
                               })}
-                            />
-                          </td>
+                              inputProps={{
+                                className: 'employee-list__input',
+                                defaultValue: employee.lastname,
+                                name: `employees.${index}.lastname`,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
+                              }}
+                            >
+                              {employee.lastname}
+                            </ConcealedInput>
 
-                          <td>
-                            <EditableField
-                              type="number"
-                              placeholder="Salary"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              name={`employees.${index}.salary`}
-                              value={employee.salary}
-                              transformValue={transformSalary}
+                            <ConcealedInput
+                              className="flex-table__td"
                               error={getFieldError({
                                 name: 'salary',
                                 index,
-                                touched,
-                                errors,
                               })}
-                            />
-                          </td>
+                              inputProps={{
+                                className: 'employee-list__input',
+                                defaultValue: employee.salary,
+                                type: 'number',
+                                name: `employees.${index}.salary`,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
+                              }}
+                            >
+                              {props.currency}{' '}
+                              {Util.formatMoneyNumber(+employee.salary, 2)}
+                            </ConcealedInput>
 
-                          <td>
-                            <EditableField
-                              type="text"
-                              placeholder="Email"
-                              onChange={getEmailChangeHandler({
-                                handleChange,
-                              })}
-                              onBlur={handleBlur}
-                              name={`employees.${index}.email`}
-                              value={employee.email}
+                            <ConcealedInput
+                              className="flex-table__td"
                               error={getFieldError({
                                 name: 'email',
                                 index,
-                                touched,
-                                errors,
                               })}
-                            />
-                          </td>
+                              inputProps={{
+                                type: 'email',
+                                className: 'employee-list__input',
+                                defaultValue: employee.email,
+                                name: `employees.${index}.email`,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
+                              }}
+                            >
+                              {employee.email}
+                            </ConcealedInput>
 
-                          <td>
-                            <EditableField
-                              type="text"
-                              placeholder="Phone Number"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              name={`employees.${index}.phoneNumber`}
-                              value={employee.phoneNumber}
+                            <ConcealedInput
+                              className="flex-table__td"
                               error={getFieldError({
                                 name: 'phoneNumber',
                                 index,
-                                touched,
-                                errors,
                               })}
-                            />
-                          </td>
-
-                          <PayoutDetailFields
-                            payoutDetails={
-                              values.employees[index].payoutDetails
-                            }
-                            name={`employees.${index}.payoutMethodMeta`}
-                            payoutMethod={props.payoutMethod}
-                            onChange={handleChange}
-                          />
-
-                          <td>
-                            <button
-                              title="delete row"
-                              onClick={() => helpers.remove(index)}
-                              type="button"
-                              style={{
-                                background: 'transparent',
-                                border: 'none',
+                              inputProps={{
+                                className: 'employee-list__input',
+                                defaultValue: employee.phoneNumber,
+                                name: `employees.${index}.phoneNumber`,
+                                onChange: handleChange,
+                                onBlur: handleBlur,
                               }}
                             >
-                              <i className="fas fa-trash" />
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                              {employee.phoneNumber}
+                            </ConcealedInput>
+
+                            <PayoutDetailFields
+                              name={`employees.${index}.payoutMethodMeta`}
+                              payoutMehodContext={payoutMethodContext}
+                              payoutMethod={employee.payoutMethod as string}
+                              payoutMethodMeta={
+                                employee.payoutMethodMeta as Record<
+                                  string,
+                                  unknown
+                                >
+                              }
+                              payoutMethodName={payoutMethod}
+                              onChange={handleChange}
+                            />
+
+                            <div className="flex-table__td">
+                              <button
+                                title="delete row"
+                                onClick={() => helpers.remove(index)}
+                                type="button"
+                                style={{
+                                  background: 'transparent',
+                                  border: 'none',
+                                }}
+                              >
+                                <i className="fas fa-trash" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </InfiniteScroll>
+                </div>
               </div>
             </>
           );
         }}
       </FieldArray>
-    </Form>
+    </form>
   );
 };

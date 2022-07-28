@@ -9,7 +9,7 @@ const RequestReceived: NextPage = () => {
   useTawkto();
 
   return (
-    <DashboardLayoutV2 title="Request Received">
+    <DashboardLayoutV2 title="SparkPay | Request Received">
       <div className="request-received">
         <div>
           <div className="success-message">

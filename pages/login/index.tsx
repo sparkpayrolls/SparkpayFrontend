@@ -16,7 +16,7 @@ const Login: NextPage = () => {
   const { initialValues, onSubmit } = context;
 
   return (
-    <AuthLayout title="Log In" description="Log into your SparkPay account">
+    <AuthLayout title="SparkPay | Log In">
       <h1 className="login__title">Log In</h1>
       <p className="login__subtext">Enter your email &amp; password to login</p>
 

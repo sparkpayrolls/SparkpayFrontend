@@ -6,9 +6,9 @@ import { Container } from '../Shared/container.component';
 import { ISelect } from '../types';
 import { Text } from '../Typography/Text';
 
-export function Select<T extends SelectValue>(
-  props: PropsWithChildren<ISelect<T>>,
-) {
+export type ISelectProps<T> = PropsWithChildren<ISelect<T>>;
+
+export function Select<T extends SelectValue>(props: ISelectProps<T>) {
   const [autocompleteDisabled, setAutocompleteDisabled] = useState(false);
   const [focused, setFocused] = useState(false);
   const {

@@ -1,19 +1,16 @@
 export type PayoutDetailFieldsComponentProps = {
-  value: string[];
+  payoutMethodMeta: Record<string, unknown>;
   payoutMethod: string;
   name: string;
   onChange?(__: {
     target: {
       name: string;
-      value: { bankId: string; accountNumber: string };
+      value: Record<string, unknown>;
     };
   }): unknown;
+  payoutMehodContext: Record<string, unknown>;
 };
 
-export type PayoutDetailFieldsProps = Omit<
-  PayoutDetailFieldsComponentProps,
-  'payoutMethod' | 'value'
-> & {
-  payoutDetails: string[];
-  payoutMethod: { id: string; name: string };
+export type PayoutDetailFieldsProps = PayoutDetailFieldsComponentProps & {
+  payoutMethodName: string;
 };

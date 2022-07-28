@@ -9,6 +9,7 @@ type usePayoutDetailsValidationParams<T extends Record<string, unknown>> = {
   meta?: T;
 };
 
+let lastCallId = '';
 export const usePayoutDetailsValidation = <
   T extends Record<string, unknown>,
   K
@@ -25,13 +26,21 @@ export const usePayoutDetailsValidation = <
     debounce(async (method, meta) => {
       if (method && meta) {
         setLoading(true);
+        const callId = Math.random().toString(32).substring(2);
+        lastCallId = callId;
         $api.payout
           .validatePayoutMethod<K>(method, meta)
           .then((result) => {
-            setResult(result);
-            setError(undefined);
+            if (callId === lastCallId) {
+              setResult(result);
+              setError(undefined);
+            }
           })
-          .catch((error) => Util.onNonAuthError(error, setError))
+          .catch((error) => {
+            if (callId === lastCallId) {
+              Util.onNonAuthError(error, setError);
+            }
+          })
           .finally(() => setLoading(false));
       }
     }, 500),

@@ -1,50 +1,51 @@
-import { EditableField } from '@/components/Input/editable-field.component';
-import { Select } from '@/components/Input/select.component';
+import { ConcealedInput, ConcealedSelect } from '../../components';
 import { PayoutDetailFieldsComponentProps } from '../types';
 import { useBankTransferFieldsContext } from './hooks';
 
 export const BankTransferFields = (props: PayoutDetailFieldsComponentProps) => {
   const {
     accountName,
-    bankName,
-    banks,
     error,
     handleChange,
     loading,
-    loadingBanks,
     values,
+    banks,
+    bank,
   } = useBankTransferFieldsContext(props);
 
   return (
     <>
-      <td>
-        <Select
-          style={{ minWidth: '250px' }}
-          loading={loadingBanks || loading}
-          value={values.bankId}
-          optionFilterProp="label"
-          showSearch
-          options={banks.map((bank) => ({ value: bank.id, label: bank.name }))}
-          error={
-            !values.bankId &&
-            !!bankName &&
-            `unknown/unsupported bank '${bankName}'`
-          }
-          onChange={handleChange}
-        />
-      </td>
+      <ConcealedSelect
+        className="flex-table__td"
+        loading={loading}
+        selectProps={{
+          placeholder: 'Account Number',
+          defaultValue: values.bankId,
+          options: banks.map((bank) => ({ value: bank.id, label: bank.name })),
+          onChange: handleChange,
+          showSearch: true,
+          loading,
+          optionFilterProp: 'label',
+        }}
+      >
+        {bank?.name}
+      </ConcealedSelect>
 
-      <td>
-        <EditableField
-          type="text"
-          placeholder="Account Number"
-          value={values.accountNumber}
-          onChange={handleChange}
-          error={error}
-          name={'accountNumber'}
-          helper={accountName}
-        />
-      </td>
+      <ConcealedInput
+        className="flex-table__td"
+        helper={accountName as string}
+        error={error}
+        inputProps={{
+          type: 'text',
+          placeholder: 'Account Number',
+          className: 'employee-list__input',
+          defaultValue: values.accountNumber,
+          name: `accountNumber`,
+          onChange: handleChange,
+        }}
+      >
+        {values.accountNumber}
+      </ConcealedInput>
     </>
   );
 };
