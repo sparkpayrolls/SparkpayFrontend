@@ -102,7 +102,6 @@ const DefaultLayout: React.FC = ({ children }) => {
 
   return (
     <>
-      <Title title="SparkPay | Payroll with ease" />
       <Head>
         <meta
           name="description"

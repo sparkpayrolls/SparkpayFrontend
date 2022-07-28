@@ -7,6 +7,10 @@ export default function PricingPage() {
   const [variables, setVariables] = useState({ amount: 1000000, size: 20 });
   const [results, setResults] = useState({ payroll: 0, transfer: 0, total: 0 });
   const [focused, setFocused] = useState({ amount: false, size: false });
+  const [priceComponent, setPriceComponent] = useState({
+    payroll: '',
+    transfer: '',
+  });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     let { name, value } = event.target;
@@ -45,6 +49,14 @@ export default function PricingPage() {
       payroll: fee,
       transfer: totalTransferFee,
       total: amount + totalTransferFee + fee,
+    });
+
+    setPriceComponent({
+      payroll:
+        fee === capp
+          ? `NGN ${Util.formatMoneyNumber(capp, 2)} capp`
+          : `2.5% + NGN ${Util.formatMoneyNumber(addition, 2)}`,
+      transfer: `NGN ${transferFee}/transfer`,
     });
   }, [variables]);
 
@@ -143,18 +155,16 @@ export default function PricingPage() {
                 className="pricing__calculator-title"
                 component="p"
               >
-                Do the math
+                Make an accurate calculation of our fees.
               </Text>
               <Text component="p" variant="body-text-1">
-                Check out the cost of using SparkPay.
-                <br />
-                To see our charges, enter a value into the calculator.
+                You can view our costs by entering values into the calculator.
               </Text>
             </section>
             <section className="pricing__calculator-box">
               <div className="pricing__input pricing__input--prefixed">
-                <Text className="pricing__input-label" variant="body-text-1">
-                  if your payroll amount is
+                <Text className="pricing__sub-label" variant="body-text-1">
+                  If the sum of your payroll is
                 </Text>
 
                 <div className="pricing__input-container">
@@ -178,7 +188,7 @@ export default function PricingPage() {
               </div>
 
               <div className="pricing__input mt-2">
-                <Text className="pricing__input-label" variant="body-text-1">
+                <Text className="pricing__sub-label" variant="body-text-1">
                   and your payroll size is
                 </Text>
 
@@ -201,35 +211,41 @@ export default function PricingPage() {
                 </div>
               </div>
 
-              <div className="mt-2">
-                <Text className="pricing__input-label" variant="body-text-1">
-                  Payroll Fee Will Be
-                </Text>
-                <Text className="pricing__input-label" variant="heading-3">
-                  NGN {Util.formatMoneyNumber(results.payroll, 2)}
-                </Text>
+              <div className="mt-3 d-flex flex-column r-gap">
+                <div>
+                  <Text className="pricing__sub-label" variant="body-text-1">
+                    Payroll fee ({priceComponent.payroll})
+                  </Text>
+                  <Text className="pricing__input-label" variant="heading-3">
+                    NGN {Util.formatMoneyNumber(results.payroll, 2)}
+                  </Text>
+                </div>
 
-                <Text
-                  className="pricing__input-label mt-1"
-                  component="p"
-                  variant="body-text-1"
-                >
-                  Transfer Fee Will Be
-                </Text>
-                <Text className="pricing__input-label" variant="heading-3">
-                  NGN {Util.formatMoneyNumber(results.transfer, 2)}
-                </Text>
+                <div>
+                  <Text
+                    className="pricing__sub-label mt-1"
+                    component="p"
+                    variant="body-text-1"
+                  >
+                    Transfer fee ({priceComponent.transfer})
+                  </Text>
+                  <Text className="pricing__input-label" variant="heading-3">
+                    NGN {Util.formatMoneyNumber(results.transfer, 2)}
+                  </Text>
+                </div>
 
-                <Text
-                  className="pricing__input-label mt-1"
-                  component="p"
-                  variant="body-text-1"
-                >
-                  Making the total charge
-                </Text>
-                <Text className="pricing__input-label" variant="heading-3">
-                  NGN {Util.formatMoneyNumber(results.total, 2)}
-                </Text>
+                <div>
+                  <Text
+                    className="pricing__sub-label mt-1"
+                    component="p"
+                    variant="body-text-1"
+                  >
+                    Total charge
+                  </Text>
+                  <Text className="pricing__input-label" variant="heading-3">
+                    NGN {Util.formatMoneyNumber(results.total, 2)}
+                  </Text>
+                </div>
               </div>
             </section>
           </div>
