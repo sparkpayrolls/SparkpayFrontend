@@ -1,9 +1,9 @@
 import { FormikHelpers } from 'formik';
+import pick from 'lodash.pick';
 import { useRouter } from 'next/router';
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
-import { usePayoutMethods } from 'src/helpers/hooks/use-payout-methods.hook';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
 import { Parsed, Values } from './types';
@@ -14,14 +14,15 @@ export const useEmployeeListContext = () => {
   const country = Util.getCountryFromAdministrator(administrator);
   const currency = country?.currencySymbol as string;
   const [parsed, setParsed] = useState<Parsed>();
-  const [payoutMethods] = usePayoutMethods(country?.id);
-  const [payoutMethod, setPayoutMethod] = useState<{
-    name: string;
-    id: string;
-  }>();
+  const [loading, setLoading] = useState(false);
+  const {
+    loading: loadingPayoutMethodContext,
+    context: payoutMehtodContext,
+  } = usePayoutMethodContext(parsed?.payoutMethod as string);
 
   const getParsed = useCallback(async () => {
     try {
+      setLoading(true);
       const file = router.query.file;
       if (file && typeof file === 'string') {
         const parsed = await $api.file.parseSavedEmployeeUploadXlsx(file);
@@ -32,6 +33,8 @@ export const useEmployeeListContext = () => {
       toast.error('xlsx invalid or deleted, upload again');
       router.push('/employees');
       return;
+    } finally {
+      setLoading(false);
     }
   }, [router]);
 
@@ -39,63 +42,66 @@ export const useEmployeeListContext = () => {
     getParsed();
   }, [getParsed]);
 
-  useEffect(() => {
-    const payoutMethodRegex = new RegExp(parsed?.payoutMethod || '', 'gi');
-    const payoutMethod = payoutMethods.find((p) =>
-      payoutMethodRegex.test(p.name),
-    );
-    setPayoutMethod(payoutMethod || payoutMethods[0]);
-  }, [parsed?.payoutMethod, payoutMethods]);
-
   const handleSubmit = async (
     values: Values,
     helpers: FormikHelpers<Values>,
   ) => {
     try {
-      helpers.setSubmitting(true);
-      const transValues = {
-        employees: values.employees.map(({ payoutDetails: __, ...details }) => {
-          return details;
+      const valuesTransformed = {
+        employees: values.employees.map((employee) => {
+          return pick(employee, [
+            'firstname',
+            'lastname',
+            'email',
+            'salary',
+            'phoneNumber',
+            'payoutMethod',
+            'payoutMethodMeta',
+          ]);
         }),
       };
-      await $api.employee.addEmployees(transValues as any);
+      helpers.setSubmitting(true);
+      await $api.employee.addEmployees(valuesTransformed);
       toast.success('Employees added successfully.');
       router.push('/employees');
     } catch (error) {
       Util.onNonAuthError(error, (httpError) => {
+        if (httpError.status === 422) {
+          helpers.setErrors(httpError.errors);
+          return;
+        }
         toast.error(httpError.message);
       });
     }
   };
 
-  const employees =
-    parsed?.data?.map((row: string[]) => {
-      const [
-        firstname,
-        lastname,
-        salary,
-        email,
-        phoneNumber,
-        ...payoutDetails
-      ] = row;
-
-      return {
-        firstname,
-        lastname,
-        email,
-        phoneNumber,
-        salary,
-        payoutMethod: payoutMethod?.id as string,
-        payoutDetails,
-      };
-    }) || [];
-
   return {
     currency,
-    employees,
+    employees: parsed?.data || [],
     handleSubmit,
     parsed,
-    payoutMethod,
-    payoutMethods,
+    loading: loading || loadingPayoutMethodContext,
+    payoutMehtodContext,
   };
+};
+
+const usePayoutMethodContext = (method?: string) => {
+  const [context, setContext] = useState<Record<string, unknown>>({});
+  const [loading, setLoading] = useState(false);
+  const administrator = useAppSelector((state) => state.administrator);
+
+  useEffect(() => {
+    if (method === 'Bank Transfer') {
+      setLoading(true);
+      const country = Util.getCountryFromAdministrator(administrator);
+      $api.payout
+        .getSupportedBanks(country.id, { all: true })
+        .then(({ data: banks }) => {
+          setContext({ banks });
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [administrator, method]);
+
+  return { context, loading };
 };

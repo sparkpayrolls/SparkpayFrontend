@@ -27,7 +27,7 @@ const CreateAccount: NextPage = () => {
   } = context;
 
   return (
-    <AuthLayout title="Create Account" description="Create a SparkPay account">
+    <AuthLayout title="SparkPay | Create Account">
       <h1 className="create-account__title">Create Account</h1>
       <p className="create-account__subtext">
         Enter your details to create a free account

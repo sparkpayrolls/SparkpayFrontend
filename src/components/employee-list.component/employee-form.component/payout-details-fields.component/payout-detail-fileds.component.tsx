@@ -5,25 +5,13 @@ import {
 } from './types';
 
 export const PayoutDetailFields = (props: PayoutDetailFieldsProps) => {
-  const { payoutDetails, payoutMethod, ...fieldsComponentProps } = props;
-  const FieldsComponent = payoutDetailFieldsComponent[payoutMethod.name];
+  const { payoutMethodName, ...fieldsComponentProps } = props;
+  const FieldsComponent = payoutDetailFieldsComponent[payoutMethodName];
   if (FieldsComponent) {
-    return (
-      <FieldsComponent
-        {...fieldsComponentProps}
-        payoutMethod={payoutMethod.id}
-        value={payoutDetails}
-      />
-    );
+    return <FieldsComponent {...fieldsComponentProps} />;
   }
 
-  return (
-    <>
-      {payoutDetails.map((name, i) => {
-        return <td key={`${name}_${i}`}></td>;
-      })}
-    </>
-  );
+  return null;
 };
 
 const payoutDetailFieldsComponent: Record<

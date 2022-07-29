@@ -1,76 +1,88 @@
-import { useState, useRef, useEffect, ChangeEvent } from 'react';
-import { useBanks } from 'src/helpers/hooks/use-banks.hook';
+import { useState, ChangeEvent, useEffect } from 'react';
+import { Bank } from 'src/api/types';
 import { usePayoutDetailsValidation } from 'src/helpers/hooks/use-payout-details-validation.hook';
-import { Util } from 'src/helpers/util';
-import { useAppSelector } from 'src/redux/hooks';
 import { PayoutDetailFieldsComponentProps } from '../types';
 
 export const useBankTransferFieldsContext = (
   props: PayoutDetailFieldsComponentProps,
 ) => {
-  const [bankName, accountNumber] = props.value;
-  const { name, onChange, payoutMethod } = props;
+  const { payoutMethod, onChange, name, payoutMethodMeta } = props;
+  const banks = props.payoutMehodContext.banks as Bank[];
+  const {
+    validateResponse,
+    error: _error = '',
+    bankId = '',
+    accountNumber = '',
+  } = payoutMethodMeta;
   const [values, setValues] = useState({
-    bankId: '',
-    accountNumber: `${accountNumber}`,
+    bankId: bankId as string,
+    accountNumber: accountNumber as string,
   });
-  const [toValidate, setToValidate] = useState<typeof values>();
+  const [error, setError] = useState(_error as string);
+  const [accountName, setAccountName] = useState(
+    ((validateResponse as Record<string, unknown>)?.accountName as string) ||
+      '',
+  );
+  const [validatePayload, setValidatePayload] = useState<typeof values>();
   const {
     result,
     error: validationError,
     loading,
   } = usePayoutDetailsValidation({
-    meta: toValidate,
+    meta: validatePayload,
     method: payoutMethod,
   });
-  const administrator = useAppSelector((state) => state.administrator);
-  const country = Util.getCountryFromAdministrator(administrator);
-  const { banks, loading: loadingBanks } = useBanks({
-    country: country.id,
-    all: true,
-  });
-  const nameRegex = useRef(new RegExp(bankName, 'gi'));
-  const { accountName } = (result as { accountName: string }) || {};
-  const error = validationError ? 'invalid bank details' : '';
 
   useEffect(() => {
-    const bankIdFromName = banks.find((bank) =>
-      nameRegex.current.test(bank.name),
-    );
-
-    if (bankIdFromName) {
-      setValues((values) => ({ ...values, bankId: bankIdFromName.id }));
+    const { accountName = '' } = (result as { accountName: string }) || {};
+    const error = validationError ? 'invalid bank details' : '';
+    if (error || accountName) {
+      setAccountName(accountName);
+      setError(error);
     }
-  }, [banks]);
+  }, [result, validationError]);
 
   useEffect(() => {
-    if (values.bankId && values.accountNumber.length >= 6) {
-      setToValidate(values);
-      if (onChange) {
-        onChange({ target: { name, value: values } });
-      }
+    const { bankId, accountNumber } = payoutMethodMeta;
+    if (
+      (values.bankId &&
+        values.accountNumber.length >= 6 &&
+        values.bankId !== bankId,
+      accountNumber !== values.accountNumber)
+    ) {
+      setValidatePayload(values);
     }
-  }, [name, onChange, values]);
+  }, [values, payoutMethodMeta]);
 
   const handleChange = (param: string | ChangeEvent<HTMLInputElement>) => {
-    let { value, name = 'bankId' } =
+    let { value, name: _name = 'bankId' } =
       (param as ChangeEvent<HTMLInputElement>).target || {};
-
     if (typeof param === 'string') {
       value = param;
     }
+    const update = { ...values, [_name]: value };
+    if (onChange) {
+      setTimeout(onChange, 0, {
+        target: {
+          name,
+          value: {
+            ...payoutMethodMeta,
+            ...update,
+          },
+        },
+      });
+    }
 
-    setValues({ ...values, [name]: value });
+    setValues(update);
   };
 
   return {
     accountName,
-    bankName,
-    banks,
     error,
     handleChange,
     loading,
-    loadingBanks,
     values,
+    banks,
+    bank: banks.find((bank) => bank.id === values.bankId),
   };
 };

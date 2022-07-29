@@ -1,5 +1,9 @@
 import { HttpRepository } from '../repo/http.repo';
-import { File, FileUploadPayload } from '../types';
+import {
+  File,
+  FileUploadPayload,
+  ParseSavedEmployeeUploadXlsxResponse,
+} from '../types';
 
 export class FileModule extends HttpRepository {
   async parseXlsxFile<T>(dataUri: string) {
@@ -21,11 +25,9 @@ export class FileModule extends HttpRepository {
   }
 
   async parseSavedEmployeeUploadXlsx(id: string) {
-    const { data } = await this.get<{
-      headerRow: string[];
-      data: string[][];
-      payoutMethod: string;
-    }>(`/files/${id}/parse/employee-upload-xlsx`);
+    const { data } = await this.get<ParseSavedEmployeeUploadXlsxResponse>(
+      `/files/${id}/parse/employee-upload-xlsx`,
+    );
 
     return data;
   }

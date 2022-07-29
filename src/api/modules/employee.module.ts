@@ -24,7 +24,7 @@ export class EmployeeModule extends HttpRepository {
     return data;
   }
 
-  async addEmployees(payload: { employees: Record<string, string>[] }) {
+  async addEmployees(payload: { employees: Record<string, unknown>[] }) {
     const { data } = await this.post<Employee[]>('employees/bulk', payload);
 
     return data;

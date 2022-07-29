@@ -1,6 +1,7 @@
 .dashboard-layout-v2 {
-  width: 100vw;
-  height: 100vh;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: unset !important;
   background: #f4f7fc;
 
   &__body {

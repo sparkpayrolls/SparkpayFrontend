@@ -11,10 +11,7 @@ const RequestAccess: NextPage = () => {
   const { initialValues, onSubmit } = useRequestAccessPageLogic();
 
   return (
-    <AuthLayout
-      title="Request Access"
-      description="Request for access to SparkPay"
-    >
+    <AuthLayout title="SparkPay | Request Access">
       <h1 className="login__title">Request Access</h1>
       <p className="login__subtext">
         Enter your name &amp; email to request access

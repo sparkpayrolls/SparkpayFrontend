@@ -1,40 +1,45 @@
 import { Formik } from 'formik';
 import { BulkEmployeeAddValidation } from 'src/helpers/validation';
+import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 import { IF } from '../Misc/if.component';
 import { EmployeesForm } from './employee-form.component/employee-form.component';
 import { useEmployeeListContext } from './hooks';
 
 export const EmployeeList = () => {
   const {
-    currency,
+    loading,
+    parsed,
     employees,
     handleSubmit,
-    parsed,
-    payoutMethod,
-    payoutMethods,
+    payoutMehtodContext,
+    currency,
   } = useEmployeeListContext();
 
   return (
-    <div className="employee-list">
-      <Formik
-        key={JSON.stringify(employees)}
-        initialValues={{ employees }}
-        validationSchema={BulkEmployeeAddValidation}
-        onSubmit={handleSubmit}
-      >
-        {(props) => {
-          return (
-            <IF condition={parsed && payoutMethod}>
+    <DashboardLayoutV2
+      loading={loading}
+      title="Employee list"
+      href="/employees"
+    >
+      <IF condition={parsed}>
+        <Formik
+          initialValues={{ employees }}
+          validationSchema={BulkEmployeeAddValidation}
+          onSubmit={handleSubmit}
+        >
+          {(props) => {
+            return (
               <EmployeesForm
                 formikProps={props}
+                payoutMethodContext={payoutMehtodContext}
                 currency={currency}
                 headerRow={parsed?.headerRow}
-                payoutMethod={payoutMethod as typeof payoutMethods[0]}
+                payoutMethod={parsed?.payoutMethod as string}
               />
-            </IF>
-          );
-        }}
-      </Formik>
-    </div>
+            );
+          }}
+        </Formik>
+      </IF>
+    </DashboardLayoutV2>
   );
 };
