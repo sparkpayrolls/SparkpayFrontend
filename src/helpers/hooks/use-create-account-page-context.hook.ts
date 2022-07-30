@@ -60,7 +60,7 @@ export const useCreateAccountPageContext = () => {
     }
   }, [router, validateInviteCode]);
 
-  if (user) {
+  if (user && typeof window !== 'undefined') {
     router.replace('/overview');
     return null;
   }
@@ -111,7 +111,7 @@ export const useCreateAccountPageContext = () => {
       actions.setSubmitting(false);
     }
   };
-  if (!router.isReady) {
+  if (!router.isReady && typeof window !== 'undefined') {
     return null;
   }
 

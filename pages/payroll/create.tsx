@@ -40,7 +40,11 @@ const CreatePayroll: NextPage = () => {
   } = useCreatePayrollPageLogic();
 
   return (
-    <DashboardLayoutV2 title="Create payroll" href="/payroll">
+    <DashboardLayoutV2
+      loading={loadingPayroll}
+      title="Create payroll"
+      href="/payroll"
+    >
       <div className="create-payroll-page">
         <TableLayout
           title={
