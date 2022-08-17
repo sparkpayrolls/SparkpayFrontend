@@ -27,7 +27,7 @@ import { Dropdown, Menu } from 'antd';
 const EmployeePage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
   const [loading, setLoading] = useState(false);
-  const [groupTabControl, setGroupTabControl] = useState('');
+  const [groupTabControl, setGroupTabControl] = useState(false);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [paginationMeta, setPaginationMeta] = useState(
     Util.getDefaultPaginationMeta({}),
@@ -87,8 +87,8 @@ const EmployeePage: NextPage = () => {
   };
 
   const onCreateGroup = () => {
-    NiceModal.show(CreateEmployeeGroupModal).then((group: any) => {
-      setGroupTabControl(group?.id);
+    NiceModal.show(CreateEmployeeGroupModal).then(() => {
+      setGroupTabControl(!groupTabControl);
     });
   };
 

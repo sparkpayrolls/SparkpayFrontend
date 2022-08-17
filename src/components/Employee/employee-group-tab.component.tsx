@@ -67,7 +67,14 @@ export const EmployeeGroup = (props: IEmployeeGroup) => {
       try {
         setLoading(true);
         await $api.employee.updateEmployeeGroup(id, { status });
-        getGroups();
+        setGroups(
+          groups.map((group) => {
+            if (group.id === id) {
+              return { ...group, status };
+            }
+            return group;
+          }),
+        );
         toast.success('group status successfully updated');
       } catch (error) {
         const httpError = error as HttpError;
@@ -88,7 +95,7 @@ export const EmployeeGroup = (props: IEmployeeGroup) => {
         try {
           setLoading(true);
           await $api.employee.deleteEmployeeGroup(id);
-          getGroups();
+          setGroups(groups.filter((group) => group.id !== id));
           toast.success('group deleted successfully.');
         } catch (error) {
           const httpError = error as HttpError;
