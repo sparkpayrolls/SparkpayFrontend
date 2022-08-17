@@ -41,7 +41,7 @@ const CreatePayroll: NextPage = () => {
 
   return (
     <DashboardLayoutV2
-      loading={loadingPayroll}
+      loading={loadingPayroll && !hasEmployees}
       title="Create payroll"
       href="/payroll"
     >
