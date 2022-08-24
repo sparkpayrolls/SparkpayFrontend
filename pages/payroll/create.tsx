@@ -127,9 +127,12 @@ const CreatePayroll: NextPage = () => {
                     </CheckboxTableColumn>
                     <th>Salary ({currency})</th>
                     <th>Net Salary ({currency}) </th>
-                    {headerRow.map((row) => {
-                      return <th key={row}>{row}</th>;
-                    })}
+                    <IF condition={headerRow.has('bonuses')}>
+                      <th>Bonuses ({currency})</th>
+                    </IF>
+                    <IF condition={headerRow.has('deductions')}>
+                      <th>Deductions ({currency})</th>
+                    </IF>
                     {remittanceRows.map((row) => {
                       return <th key={row}>{row}</th>;
                     })}
@@ -167,11 +170,7 @@ const CreatePayroll: NextPage = () => {
                           <td>
                             {currency} {Util.formatMoneyNumber(e.netSalary)}
                           </td>
-                          <IF
-                            condition={headerRow.includes(
-                              `Bonuses (${currency})`,
-                            )}
-                          >
+                          <IF condition={headerRow.has('bonuses')}>
                             <td>
                               {currency}{' '}
                               {Util.formatMoneyNumber(
@@ -179,11 +178,7 @@ const CreatePayroll: NextPage = () => {
                               )}
                             </td>
                           </IF>
-                          <IF
-                            condition={headerRow.includes(
-                              `Deductions (${currency})`,
-                            )}
-                          >
+                          <IF condition={headerRow.has('deductions')}>
                             <td>
                               {currency}{' '}
                               {Util.formatMoneyNumber(

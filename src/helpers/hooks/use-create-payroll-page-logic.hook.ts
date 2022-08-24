@@ -35,7 +35,7 @@ export const useCreatePayrollPageLogic = () => {
     'Total Salary Amount': 0,
     'Total Net Salary': 0,
   };
-  const headerRow: string[] = [];
+  const headerRow: Set<string> = new Set();
   const remittanceRows: string[] = [];
 
   employees.forEach((employee) => {
@@ -52,8 +52,8 @@ export const useCreatePayrollPageLogic = () => {
           employee.deductions.map((d) => d.amount),
         );
       }
-      if (!headerRow.includes(`Deductions (${currency})`)) {
-        headerRow.push(`Deductions (${currency})`);
+      if (!headerRow.has('deductions')) {
+        headerRow.add('deductions');
       }
     }
     if (employee.bonuses && employee.bonuses.length) {
@@ -63,8 +63,8 @@ export const useCreatePayrollPageLogic = () => {
           employee.bonuses.map((d) => d.amount),
         );
       }
-      if (!headerRow.includes(`Bonuses (${currency})`)) {
-        headerRow.push(`Bonuses (${currency})`);
+      if (!headerRow.has('bonuses')) {
+        headerRow.add('bonuses');
       }
     }
     if (employee.remittances && employee.remittances.length) {
@@ -131,7 +131,7 @@ export const useCreatePayrollPageLogic = () => {
     if (modalParamUpdateRef.current?.id === employee.id) {
       modalParamUpdateRef.current.setParams(modalParams);
     }
-    
+
     return () => {
       NiceModal.show(EditPayrollEmployeeModal, {
         getParams: () => modalParams,
