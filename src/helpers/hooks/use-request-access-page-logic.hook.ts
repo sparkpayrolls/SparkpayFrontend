@@ -29,5 +29,5 @@ export const useRequestAccessPageLogic = () => {
     }
   };
 
-  return { initialValues, onSubmit };
+  return { initialValues, router, onSubmit };
 };

@@ -22,7 +22,6 @@ export const signupValidationSchema = Yup.object().shape({
   country: format.country,
   email: format.email,
   password: format.password,
-  inviteCode: Yup.string().required('invite code is required'),
 });
 
 export const forgotPasswordValidationSchema = Yup.object().shape({

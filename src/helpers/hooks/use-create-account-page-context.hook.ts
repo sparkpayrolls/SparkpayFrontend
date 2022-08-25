@@ -16,7 +16,6 @@ interface ISignUpForm {
   country: string;
   email: string;
   password: string;
-  inviteCode: string;
   subcribeToMailList: boolean;
 }
 
@@ -24,41 +23,10 @@ export const useCreateAccountPageContext = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user, countries } = useAppSelector((state) => state);
-  const [inviteCodeValid, setInviteCodeValid] = React.useState({
-    loading: false,
-    valid: false,
-    details: { name: '', email: '' },
-  });
 
   React.useEffect(() => {
     getCountries(dispatch);
   }, [dispatch]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const validateInviteCode = React.useCallback(
-    Util.debounce(async (code) => {
-      try {
-        setInviteCodeValid((i) => ({ ...i, loading: true }));
-        const details = await $api.auth.validateInviteCode(code);
-        setInviteCodeValid((i) => ({ ...i, valid: true, details }));
-      } catch (error) {
-        setInviteCodeValid((i) => ({
-          ...i,
-          valid: false,
-          details: { email: '', name: '' },
-        }));
-      } finally {
-        setInviteCodeValid((i) => ({ ...i, loading: false }));
-      }
-    }, 500),
-    [],
-  );
-
-  React.useEffect(() => {
-    if (router.isReady) {
-      validateInviteCode(router.query.inviteCode as string);
-    }
-  }, [router, validateInviteCode]);
 
   if (user && typeof window !== 'undefined') {
     router.replace('/overview');
@@ -115,24 +83,18 @@ export const useCreateAccountPageContext = () => {
     return null;
   }
 
-  const [firstname, ...lastname] = inviteCodeValid.details.name.split(' ');
   const initialValues: ISignUpForm = {
-    firstname: firstname,
-    lastname: lastname.join(' '),
+    firstname: '',
+    lastname: '',
     country: '',
-    email: inviteCodeValid.details.email,
+    email: '',
     password: '',
-    inviteCode: (router.query.inviteCode as string) || '',
     subcribeToMailList: true,
   };
 
   return {
     countries,
     initialValues,
-    firstname,
-    inviteCodeValid,
-    lastname,
-    router,
     onSubmit,
     validateEmail,
   };
