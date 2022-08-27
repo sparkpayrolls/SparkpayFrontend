@@ -118,7 +118,7 @@ export const Landing = () => {
           </div>
         </section> */}
 
-        <section className="services">
+        <section className="services" id="services">
           <div className="services__text-group">
             <h2 className="sub-header">Our services</h2>
             <p className="services__subtext ">

@@ -152,6 +152,16 @@ const DefaultLayout: React.FC = ({ children }) => {
               <Image src={close} alt="close icon" />
             </button>
             <div className="navigation__list-section">
+              <li className="navigation__list-item">
+                <Link href="/#services">
+                  <a className="navigation__link">Services</a>
+                </Link>
+              </li>
+              <li className="navigation__list-item">
+                <Link href="/pricing">
+                  <a className="navigation__link">Pricing</a>
+                </Link>
+              </li>
               <li className="navigation__list-item navigation__hide">
                 <Link href="#">
                   <a className="navigation__link">FAQ</a>
