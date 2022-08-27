@@ -4,7 +4,7 @@
 // import NiceModal from '@ebay/nice-modal-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Carousel from 'react-multi-carousel';
+// import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 // import { $api } from 'src/api';
 import herosectionimg from '../../../public/svgs/hero-img.svg';
@@ -15,7 +15,7 @@ import herosectionimg from '../../../public/svgs/hero-img.svg';
 // import netflix from '../../../public/svgs/clients/netflix.svg';
 // import uber from '../../../public/svgs/clients/uber.svg';
 import working_woman from '../../../public/images/working-woman.png';
-import photo from '../../../public/images/photo.png';
+// import photo from '../../../public/images/photo.png';
 import coin from '../../../public/images/coin.png';
 import coin_mobile from '../../../public/images/coin-mobile.png';
 import DefaultLayout, { Title } from 'src/layouts/default-layout/DefaultLayout';
@@ -29,8 +29,8 @@ import {
   // ServicePointSVG6,
   VideoSVG,
   // CheckMarkSVG,
-  QuoteSVG,
-  FiveStarSVG,
+  // QuoteSVG,
+  // FiveStarSVG,
 } from '../svg';
 
 export const Landing = () => {
@@ -56,13 +56,13 @@ export const Landing = () => {
   //   }
   // };
 
-  const responsive = {
-    mobile: {
-      breakpoint: { max: 3000, min: 0 },
-      items: 1,
-      slidesToSlide: 1, // optional, default to 1.
-    },
-  };
+  // const responsive = {
+  //   mobile: {
+  //     breakpoint: { max: 3000, min: 0 },
+  //     items: 1,
+  //     slidesToSlide: 1, // optional, default to 1.
+  //   },
+  // };
 
   return (
     <DefaultLayout>
@@ -301,7 +301,7 @@ export const Landing = () => {
           </div>
         </section>
 
-        <section className="testimonial">
+        {/* <section className="testimonial">
           <div className="testimonial__column1">
             <h3 className="testimonial__title">
               Powering the growth of multiple business &amp; retailers.
@@ -400,7 +400,7 @@ export const Landing = () => {
               </div>
             </Carousel>
           </div>
-        </section>
+        </section> */}
 
         <section className="newsletter">
           <div className="newsletter__text-content">
