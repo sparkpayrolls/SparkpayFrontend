@@ -7,6 +7,7 @@ import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IEmployeeTable } from '../types';
 import { Table, TR } from './Table.component';
 import { Group } from 'src/api/types';
+import Link from 'next/link';
 
 export const EmployeeTable = (props: IEmployeeTable) => {
   const {
@@ -150,7 +151,11 @@ export const EmployeeTable = (props: IEmployeeTable) => {
                     onChange={onEmployeeSelect(employee.id)}
                   >
                     <td>
-                      {employee.firstname} {employee.lastname}
+                      <Link href={`/employees/${employee.id}`}>
+                        <a>
+                          {employee.firstname} {employee.lastname}
+                        </a>
+                      </Link>
                     </td>
                     <td>
                       <span className="email" title={employee.email}>

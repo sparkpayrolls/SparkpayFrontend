@@ -8,7 +8,12 @@ import { RequestAccessValidation } from 'src/helpers/validation';
 import { AuthLayout } from 'src/layouts/auth-layout/auth-layout';
 
 const RequestAccess: NextPage = () => {
-  const { initialValues, onSubmit } = useRequestAccessPageLogic();
+  const { initialValues, router, onSubmit } = useRequestAccessPageLogic();
+
+  if (typeof window !== 'undefined') {
+    router.replace('/create-account');
+    return null;
+  }
 
   return (
     <AuthLayout title="SparkPay | Request Access">

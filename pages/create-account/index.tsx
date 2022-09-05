@@ -4,7 +4,6 @@ import { Select } from '@/components/Input/select.component';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { stringifyUrl } from 'query-string';
 import { useCreateAccountPageContext } from 'src/helpers/hooks/use-create-account-page-context.hook';
 import { signupValidationSchema } from 'src/helpers/validation';
 import { AuthLayout } from 'src/layouts/auth-layout/auth-layout';
@@ -15,16 +14,7 @@ const CreateAccount: NextPage = () => {
     return null;
   }
 
-  const {
-    countries,
-    firstname,
-    initialValues,
-    inviteCodeValid,
-    lastname,
-    router,
-    onSubmit,
-    validateEmail,
-  } = context;
+  const { countries, initialValues, onSubmit, validateEmail } = context;
 
   return (
     <AuthLayout title="SparkPay | Create Account">
@@ -34,9 +24,6 @@ const CreateAccount: NextPage = () => {
       </p>
 
       <Formik
-        key={`${firstname}-${lastname.join('-')}-${
-          inviteCodeValid.details.email
-        }`}
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={signupValidationSchema}
@@ -134,33 +121,6 @@ const CreateAccount: NextPage = () => {
                 />
 
                 <InputV2
-                  type="text"
-                  label="Invite Code"
-                  name="inviteCode"
-                  value={values.inviteCode}
-                  onChange={(event) => {
-                    handleChange(event);
-
-                    const { pathname, query } = router;
-                    const url = stringifyUrl({
-                      url: pathname,
-                      query: { ...query, inviteCode: event.target.value },
-                    });
-
-                    router.push(url);
-                  }}
-                  onBlur={handleBlur}
-                  error={
-                    (!!values.inviteCode &&
-                      !inviteCodeValid.loading &&
-                      !inviteCodeValid.valid &&
-                      'invalid invite code') ||
-                    (touched.inviteCode && errors.inviteCode)
-                  }
-                  loading={inviteCodeValid.loading}
-                />
-
-                <InputV2
                   type="checkbox"
                   checkbox
                   id="subscribe"
@@ -182,15 +142,8 @@ const CreateAccount: NextPage = () => {
                 label="Create Account"
                 className="create-account__submit-btn"
                 primary
-                disabled={
-                  isSubmitting ||
-                  !countries.length ||
-                  inviteCodeValid.loading ||
-                  !inviteCodeValid.valid
-                }
-                showSpinner={
-                  isSubmitting || !countries.length || inviteCodeValid.loading
-                }
+                disabled={isSubmitting || !countries.length}
+                showSpinner={isSubmitting || !countries.length}
               />
             </form>
           );

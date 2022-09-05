@@ -30,16 +30,16 @@ export default function PricingPage() {
   useEffect(() => {
     const amount = Math.max(+variables.amount || 0, 0);
     const size = Math.max(+variables.size || 0, 0);
-    let addition = 1500;
-    let capp = 4500;
+    let addition = 1000;
+    let capp = 3000;
     let transferFee = 75;
     if (size < 50) {
-      addition = 500;
-      capp = 2500;
+      addition = 200;
+      capp = 2200;
       transferFee = 55;
     } else if (size < 500) {
-      addition = 1000;
-      capp = 3500;
+      addition = 500;
+      capp = 2500;
       transferFee = 65;
     }
 
@@ -88,12 +88,12 @@ export default function PricingPage() {
                 className="pricing__tier-title"
                 variant="heading-2"
               >
-                2.5% + NGN 500
+                1.5% + NGN 200
               </Text>
             </header>
 
             <Text component="p" variant="body-text-1">
-              capped at ₦ 2,500
+              capped at ₦ 2,200
             </Text>
             <Text component="p" variant="body-text-1">
               and a transfer fee of ₦ 55
@@ -111,12 +111,12 @@ export default function PricingPage() {
                 className="pricing__tier-title"
                 variant="heading-2"
               >
-                2.5% + NGN 1,500
+                1.5% + NGN 1,000
               </Text>
             </header>
 
             <Text component="p" variant="body-text-1">
-              capped at ₦ 4,500
+              capped at ₦ 3,000
             </Text>
             <Text component="p" variant="body-text-1">
               and a transfer fee of ₦ 75
@@ -134,12 +134,12 @@ export default function PricingPage() {
                 className="pricing__tier-title"
                 variant="heading-2"
               >
-                2.5% + NGN 1,000
+                1.5% + NGN 500
               </Text>
             </header>
 
             <Text component="p" variant="body-text-1">
-              capped at ₦ 3,500
+              capped at ₦ 2,500
             </Text>
             <Text component="p" variant="body-text-1">
               and a transfer fee of ₦ 65
