@@ -55,54 +55,54 @@ jobs:
           service: sparkpay-fe
           cluster: sparkpay-fe
           wait-for-service-stability: true
-  build-dev:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
-    strategy:
-      matrix:
-        node-version: [14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    steps:
-      - name: Git checkout
-        uses: actions/checkout@v2
+  # build-dev:
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/dev'
+  #   strategy:
+  #     matrix:
+  #       node-version: [14.x]
+  #       # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  #   steps:
+  #     - name: Git checkout
+  #       uses: actions/checkout@v2
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-          aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
-          aws-region: us-east-1
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
+  #         aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
+  #         aws-region: us-east-1
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+  #     - name: Login to Amazon ECR
+  #       id: login-ecr
+  #       uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push the image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: sparkpay-fe
-          IMAGE_TAG: ${{ github.run_number }}
-        run: |
-          # Build a docker container and push it to ECR
-          cp .env.development .env.production
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest-dev .
-          echo "Pushing image to ECR..."
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest-dev
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:latest-dev"
+  #     - name: Build, tag, and push the image to Amazon ECR
+  #       id: build-image
+  #       env:
+  #         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #         ECR_REPOSITORY: sparkpay-fe
+  #         IMAGE_TAG: ${{ github.run_number }}
+  #       run: |
+  #         # Build a docker container and push it to ECR
+  #         cp .env.development .env.production
+  #         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest-dev .
+  #         echo "Pushing image to ECR..."
+  #         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest-dev
+  #         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:latest-dev"
 
-      - name: Render Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definitions/staging.json
-          container-name: sparkpay-staging-fe
-          image: '${{ steps.build-image.outputs.image }}'
+  #     - name: Render Amazon ECS task definition
+  #       id: task-def
+  #       uses: aws-actions/amazon-ecs-render-task-definition@v1
+  #       with:
+  #         task-definition: task-definitions/staging.json
+  #         container-name: sparkpay-staging-fe
+  #         image: '${{ steps.build-image.outputs.image }}'
 
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: sparkpay-staging-fe-service
-          cluster: sparkpay-staging-fe
-          wait-for-service-stability: true
+  #     - name: Deploy Amazon ECS task definition
+  #       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+  #       with:
+  #         task-definition: ${{ steps.task-def.outputs.task-definition }}
+  #         service: sparkpay-staging-fe-service
+  #         cluster: sparkpay-staging-fe
+  #         wait-for-service-stability: true
