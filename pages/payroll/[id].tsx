@@ -28,6 +28,9 @@ import { TableEmptyState } from '@/components/EmptyState/table-emptystate.compon
 import { IF } from '@/components/Misc/if.component';
 import { useSocket } from 'src/helpers/hooks/use-socket.hook';
 import { useWalletBalance } from 'src/helpers/hooks/use-wallet-balance.hook';
+import { SearchForm } from '@/components/Form/search.form';
+import { KebabMenu } from '@/components/KebabMenu/KebabMenu.component';
+import { toast } from 'react-toastify';
 
 const PayDetails: NextPage = () => {
   const router = useRouter();
@@ -38,13 +41,15 @@ const PayDetails: NextPage = () => {
   const [payrollNotFound, setPayrollNotFound] = useState(false);
   const [payroll, setPayroll] = useState<Payroll | null>(null);
   const [employees, setEmployees] = useState<Response<PayrollEmployee[]>>();
+  const [selected, setSelected] = useState<string[]>([]);
+  const [search, setSearch] = useState('');
 
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const totals: Record<string, number> = {
     'Total Salary Amount': 0,
     'Total Net Salary': 0,
   };
-  const headerRow: string[] = [];
+  const headerRow: Set<string> = new Set();
   const remittanceRows: string[] = [];
   const loading = apiCalls > 0;
   const hasEmployees = !!employees?.data?.length;
@@ -58,18 +63,14 @@ const PayDetails: NextPage = () => {
       totals['Total Deductions'] += Util.sum(
         employee.deductions.map((d) => d.amount),
       );
-      if (!headerRow.includes(`Deductions (${currency})`)) {
-        headerRow.push(`Deductions (${currency})`);
-      }
+      headerRow.add('deductions');
     }
     if (employee.bonuses && employee.bonuses.length) {
       totals['Total Bonuses'] = totals['Total Bonuses'] || 0;
       totals['Total Bonuses'] += Util.sum(
         employee.bonuses.map((d) => d.amount),
       );
-      if (!headerRow.includes(`Bonuses (${currency})`)) {
-        headerRow.push(`Bonuses (${currency})`);
-      }
+      headerRow.add('bonuses');
     }
     if (employee.remittances && employee.remittances.length) {
       employee.remittances.forEach((remittance) => {
@@ -115,6 +116,52 @@ const PayDetails: NextPage = () => {
       setApiCalls((c) => c - 1);
     }
   }, [payrollId, setEmployees]);
+
+  const getSelectHandler = (id: string) => {
+    return () => {
+      if (selected.includes(id)) {
+        setSelected(selected.filter((s) => s !== id));
+      } else {
+        setSelected([...selected, id]);
+      }
+    };
+  };
+
+  const handleSelectAll = () => {
+    if (selected.length > 0) {
+      setSelected([]);
+    } else {
+      setSelected((employees?.data || []).map((e) => e.id));
+    }
+  };
+
+  const downloadPayslips = async (params: {
+    shouldDownloadOnly: boolean;
+    payrollEmployeeIds: string[];
+  }) => {
+    try {
+      if (loading) {
+        return;
+      }
+      setApiCalls(Math.max(apiCalls + 1, 1));
+      const payslips = await $api.payroll.downloadPayslips(payrollId, params);
+      if (params.shouldDownloadOnly) {
+        payslips.forEach((payslip) => {
+          Util.downloadFile({
+            file: `data:application/pdf;base64,${payslip}`,
+            name: 'payslip.pdf',
+          });
+        });
+      }
+      toast.success('payslip fetched successfully');
+    } catch (error) {
+      Util.onNonAuthError(error, (httpError) => {
+        toast.error(`error fetching payslip - ${httpError.message}`);
+      });
+    } finally {
+      setApiCalls(Math.max(apiCalls - 1, 0));
+    }
+  };
 
   useEffect(() => {
     getPayroll();
@@ -167,7 +214,7 @@ const PayDetails: NextPage = () => {
                 <div className="employee-details__employee-settings-flex">
                   <SinglePayrollDetail
                     title="Payroll Size"
-                    details={payroll?.size}
+                    details={Util.formatMoneyNumber(payroll?.size || 0)}
                     loading={loading && !payroll}
                   />
                   <SinglePayrollDetail
@@ -176,7 +223,8 @@ const PayDetails: NextPage = () => {
                     details={
                       payroll && (
                         <>
-                          {currency} {payroll?.fee}
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(payroll?.fee || 0, 2)}
                         </>
                       )
                     }
@@ -222,22 +270,80 @@ const PayDetails: NextPage = () => {
                 </div>
               </div>
             </div>
-            <p className="payroll-details-section__payroll-breakdown-text">
-              Payroll breakdown
-            </p>
+
+            <div className="d-flex md-align-items-center mt-4 md-justify-content-space-between gap-2 flex-direction-column md-flex-direction-row">
+              <p className="payroll-details-section__payroll-breakdown-text">
+                Payroll employees
+              </p>
+
+              <div className="d-flex gap-1 align-items-center">
+                <SearchForm
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="Search employees"
+                />
+                <div
+                  style={{
+                    padding: '0.2rem',
+                    border: '1px solid #d7dce0',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <KebabMenu
+                    items={[
+                      {
+                        action() {
+                          if (selected.length) {
+                            downloadPayslips({
+                              shouldDownloadOnly: false,
+                              payrollEmployeeIds: selected,
+                            });
+                          }
+                        },
+                        value: 'Send payslips',
+                      },
+                      {
+                        action() {
+                          if (selected.length) {
+                            downloadPayslips({
+                              shouldDownloadOnly: true,
+                              payrollEmployeeIds: selected,
+                            });
+                          }
+                        },
+                        value: 'Download payslips',
+                      },
+                    ]}
+                  />
+                </div>
+              </div>
+            </div>
             <TableLayout>
               <TableV2
                 className="payroll-create-table"
-                loading={loading && !hasEmployees}
+                loading={loading || !hasEmployees}
               >
                 <thead>
                   <tr>
-                    <th>Name</th>
+                    <th style={{ paddingRight: 0 }}>
+                      <input
+                        checked={
+                          selected.length > 0 &&
+                          selected.length >= (employees?.data?.length || 0)
+                        }
+                        onChange={handleSelectAll}
+                        type="checkbox"
+                      />
+                    </th>
+                    <th style={{ paddingLeft: 0 }}>Name</th>
                     <th>Salary ({currency})</th>
                     <th>Net Salary ({currency}) </th>
-                    {headerRow.map((row) => {
-                      return <th key={row}>{row}</th>;
-                    })}
+                    <IF condition={headerRow.has('bonuses')}>
+                      <th>Bonuses ({currency})</th>
+                    </IF>
+                    <IF condition={headerRow.has('deductions')}>
+                      <th>Deductions ({currency})</th>
+                    </IF>
                     {remittanceRows.map((row) => {
                       return <th key={row}>{row}</th>;
                     })}
@@ -245,69 +351,102 @@ const PayDetails: NextPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {employees?.data?.map((e) => {
-                    const employee = e.employee as Employee;
+                  {employees?.data
+                    ?.filter((e) => {
+                      const employee = e.employee as Employee;
+                      const name = `${employee.firstname} ${employee.lastname}`;
 
-                    return (
-                      <tr key={employee.id}>
-                        <td>
-                          {employee.firstname} {employee.lastname}
-                        </td>
-                        <td>
-                          {currency} {Util.formatMoneyNumber(e.salary)}
-                        </td>
-                        <td>
-                          {currency} {Util.formatMoneyNumber(e.netSalary)}
-                        </td>
-                        <IF
-                          condition={headerRow.includes(
-                            `Deductions (${currency})`,
-                          )}
-                        >
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              Util.sum(
-                                e.deductions?.map((d) => d.amount) || [],
-                              ),
-                            )}
-                          </td>
-                        </IF>
-                        <IF
-                          condition={headerRow.includes(
-                            `Bonuses (${currency})`,
-                          )}
-                        >
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              Util.sum(e.bonuses?.map((d) => d.amount) || []),
-                            )}
-                          </td>
-                        </IF>
-                        {remittanceRows.map((row) => {
-                          const remittances = e.remittances || [];
-                          const remittance = remittances.find(
-                            (r) => r.name === row.replace(` (${currency})`, ''),
-                          );
+                      return name.toLowerCase().includes(search.toLowerCase());
+                    })
+                    ?.map((e) => {
+                      const employee = e.employee as Employee;
 
-                          return (
-                            <td key={`${employee.id}-${row}`}>
+                      return (
+                        <tr key={employee.id}>
+                          <td style={{ paddingRight: 0 }}>
+                            <input
+                              checked={selected.includes(e.id)}
+                              onChange={getSelectHandler(e.id)}
+                              type="checkbox"
+                            />
+                          </td>
+                          <td style={{ paddingLeft: 0 }}>
+                            {employee.firstname} {employee.lastname}
+                          </td>
+                          <td>
+                            {currency} {Util.formatMoneyNumber(e.salary)}
+                          </td>
+                          <td>
+                            {currency} {Util.formatMoneyNumber(e.netSalary)}
+                          </td>
+                          <IF condition={headerRow.has('bonuses')}>
+                            <td>
                               {currency}{' '}
-                              {Util.formatMoneyNumber(remittance?.amount || 0)}
+                              {Util.formatMoneyNumber(
+                                Util.sum(e.bonuses?.map((d) => d.amount) || []),
+                              )}
                             </td>
-                          );
-                        })}
-                        <td>
-                          <StatusChip
-                            status={
-                              e.payoutStatus as PayrollEmployeePayoutStatus
-                            }
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
+                          </IF>
+                          <IF condition={headerRow.has('deductions')}>
+                            <td>
+                              {currency}{' '}
+                              {Util.formatMoneyNumber(
+                                Util.sum(
+                                  e.deductions?.map((d) => d.amount) || [],
+                                ),
+                              )}
+                            </td>
+                          </IF>
+                          {remittanceRows.map((row) => {
+                            const remittances = e.remittances || [];
+                            const remittance = remittances.find(
+                              (r) =>
+                                r.name === row.replace(` (${currency})`, ''),
+                            );
+
+                            return (
+                              <td key={`${employee.id}-${row}`}>
+                                {currency}{' '}
+                                {Util.formatMoneyNumber(
+                                  remittance?.amount || 0,
+                                )}
+                              </td>
+                            );
+                          })}
+                          <td>
+                            <div className="d-flex align-items-center justify-content-space-between">
+                              <StatusChip
+                                status={
+                                  e.payoutStatus as PayrollEmployeePayoutStatus
+                                }
+                              />
+                              <KebabMenu
+                                items={[
+                                  {
+                                    action() {
+                                      downloadPayslips({
+                                        shouldDownloadOnly: false,
+                                        payrollEmployeeIds: [e.id],
+                                      });
+                                    },
+                                    value: 'Send payslip',
+                                  },
+                                  {
+                                    action() {
+                                      downloadPayslips({
+                                        shouldDownloadOnly: true,
+                                        payrollEmployeeIds: [e.id],
+                                      });
+                                    },
+                                    value: 'Download payslip',
+                                  },
+                                ]}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </TableV2>
             </TableLayout>
