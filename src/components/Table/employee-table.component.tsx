@@ -1,3 +1,4 @@
+import NiceModal from '@ebay/nice-modal-react';
 import { useEffect, useState } from 'react';
 import { Util } from 'src/helpers/util';
 import withPermission from 'src/helpers/HOC/withPermission';
@@ -6,8 +7,10 @@ import { StatusChip } from '../StatusChip/status-chip.component';
 import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IEmployeeTable } from '../types';
 import { Table, TR } from './Table.component';
-import { Group } from 'src/api/types';
+import { Employee, Group } from 'src/api/types';
 import Link from 'next/link';
+import { EditEmployeeDetailsModal } from '../Modals/EditDetailsModal.component';
+import { getEmployeeEditSubmitHandler } from 'src/helpers/methods';
 
 export const EmployeeTable = (props: IEmployeeTable) => {
   const {
@@ -80,15 +83,27 @@ export const EmployeeTable = (props: IEmployeeTable) => {
       ]
     : undefined;
 
-  const employeeKebabMenu = (id: string, status: string) => {
+  const employeeKebabMenu = (employee: Employee) => {
+    const { id, status } = employee;
+
     const menu: IKebabItem[] = [
       {
-        href: `/employees/${id}`,
+        href: `/employees/${employee.id}`,
         value: 'View',
       },
     ];
     if (hasWriteAccess) {
       menu.push(
+        {
+          action: () => {
+            NiceModal.show(EditEmployeeDetailsModal, {
+              administrator,
+              employee,
+              onSubmit: getEmployeeEditSubmitHandler(employee.id, getEmployees),
+            });
+          },
+          value: 'Edit',
+        },
         {
           action: () => kebabHandler('Delete')(id),
           value: 'Delete',
@@ -183,10 +198,7 @@ export const EmployeeTable = (props: IEmployeeTable) => {
                           dateFormat={'MMM\xa0DD,\xa0YYYY'}
                         />
                         <KebabWithPermissions
-                          items={employeeKebabMenu(
-                            employee.id,
-                            employee.status,
-                          )}
+                          items={employeeKebabMenu(employee)}
                         />
                       </span>
                     </td>

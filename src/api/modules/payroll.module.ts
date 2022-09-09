@@ -164,4 +164,16 @@ export class PayrollModule extends HttpRepository {
 
     return data;
   }
+
+  async downloadPayslips(
+    payrollId: string,
+    params: { payrollEmployeeIds: string[]; shouldDownloadOnly?: boolean },
+  ) {
+    const { data } = await this.get<string[]>(
+      `/payrolls/${payrollId}/payslips`,
+      { params },
+    );
+
+    return data;
+  }
 }

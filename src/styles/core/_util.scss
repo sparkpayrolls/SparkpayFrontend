@@ -42,12 +42,24 @@
   flex-direction: column;
 }
 
+.flex-direction-column {
+  flex-direction: column;
+}
+
 .flex-column-reverse {
   flex-direction: column-reverse;
 }
 
 .gap {
   gap: var(--gap, 1rem);
+}
+
+.gap-1 {
+  gap: 0.5rem;
+}
+
+.gap-2 {
+  gap: 1rem;
 }
 
 .r-gap {
@@ -109,4 +121,20 @@
 
 .mt-3 {
   margin-top: 1.5rem;
+}
+
+.mt-4 {
+  margin-top: 2rem;
+}
+
+@media screen and (min-width: 768px) {
+  .md-align-items-center {
+    align-items: center;
+  }
+  .md-justify-content-space-between {
+    justify-content: space-between;
+  }
+  .md-flex-direction-row {
+    flex-direction: row;
+  }
 }
