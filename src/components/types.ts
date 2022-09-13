@@ -45,7 +45,7 @@ import { IKebabItem } from './KebabMenu/KebabMenu.component';
 export interface ITable {
   children: () => ReactElement;
   onCheckAllClick?: ChangeEventHandler<HTMLInputElement>;
-  headerRow: string[];
+  headerRow: ReactNode[];
   allChecked?: boolean;
   paginationMeta?: PaginationMeta;
   refresh?: (
@@ -71,6 +71,11 @@ export interface ITable {
     loading?: boolean;
     disabled?: boolean;
   }[];
+  selectAllNoun?: string;
+  onSelectAll?: MouseEventHandler<HTMLButtonElement>;
+  onClearSelection?: MouseEventHandler<HTMLButtonElement>;
+  shouldClearSelection?: boolean;
+  refreshV2?(params: Record<string, unknown>): unknown;
 }
 
 export interface ITR {
@@ -80,6 +85,7 @@ export interface ITR {
 
 export type ITablePagination = PaginationMeta & {
   refresh?: (page?: number, perPage?: number, all?: boolean) => void;
+  refreshV2?(params: Record<string, unknown>): unknown;
 };
 
 export type ITablev2 = DetailedHTMLProps<

@@ -137,19 +137,19 @@ export class EmployeeModule extends HttpRepository {
     return data;
   }
 
-  async addEmployeesToGroup(groupId: string, ids: string[]) {
+  async addEmployeesToGroup(groupId: string, ids: string[], all = false) {
     const { data } = await this.post<Employee | EmployeeGroup[]>(
       `/employees/groups/${groupId}/employees`,
-      { ids },
+      { ids, all },
     );
 
     return data;
   }
 
-  async removeEmployeesFromGroup(groupId: string, ids: string[]) {
+  async removeEmployeesFromGroup(groupId: string, ids: string[], all = false) {
     const { data } = await this.delete<Employee | EmployeeGroup[]>(
       `/employees/groups/${groupId}/employees`,
-      { ids },
+      { ids, all },
     );
 
     return data;

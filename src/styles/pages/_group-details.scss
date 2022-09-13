@@ -23,7 +23,6 @@
   }
 
   &__edit-details-btn {
-    width: 100%;
     height: 40px;
     background: #edf1fd;
     border-radius: 8px;
@@ -39,6 +38,16 @@
     @media screen and (min-width: 768px) {
       max-width: 134px;
     }
+  }
+
+  &__edit-details-btn-link {
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    color: #1d4ed8;
+    display: inline-block;
+    padding: 12px;
+    border: 1px solid #edf1fd;
   }
 
   &__group-detail-title {
