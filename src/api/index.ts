@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { config } from '../helpers/config';
 import { AuthModule } from './modules/auth.module';
@@ -21,8 +21,14 @@ import type { useAppDispatch } from 'src/redux/hooks';
 import { logOut } from 'src/redux/slices/user/user.slice';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
+import { AuthDetails } from './types';
+import Cookies from 'js-cookie';
+import moment from 'moment';
 
 let authToken: string;
+let authDetails: AuthDetails;
+let tokenInterceptor: number;
+let authInterceptor: number;
 export class $api {
   static $axios = axios.create({
     baseURL: config().apiUrl,
@@ -33,18 +39,43 @@ export class $api {
     dispatch: ReturnType<typeof useAppDispatch>,
   ) {
     authToken = _authToken;
-    $api.$axios.interceptors.request.use((config) => {
+    authDetails = JSON.parse(Cookies.get('auth_details') || '""');
+
+    $api.$axios.interceptors.request.eject(tokenInterceptor);
+    $api.$axios.interceptors.response.eject(authInterceptor);
+
+    tokenInterceptor = $api.$axios.interceptors.request.use(async (_config) => {
+      if (
+        moment(authDetails.accessTokenExpires).isBefore(moment()) &&
+        moment(authDetails.refreshTokenExpires).isAfter(moment())
+      ) {
+        const res = await axios({
+          baseURL: config().apiUrl,
+          url: '/auth/tokens',
+          params: { refreshToken: authDetails.refreshToken },
+        }).catch(() => {
+          /** invalid token */
+        });
+        if (res && res.data && res.data.data) {
+          authDetails = res.data.data;
+          authToken = authDetails.accessToken;
+          Cookies.set('auth_token', authToken);
+          Cookies.set('auth_details', JSON.stringify(authDetails));
+        }
+      }
+
       return {
-        ...config,
+        ..._config,
         headers: {
-          ...(config?.headers || {}),
+          ...(_config?.headers || {}),
           Authorization: `Bearer ${authToken}`,
         },
       };
     });
-    $api.$axios.interceptors.response.use(
+
+    authInterceptor = $api.$axios.interceptors.response.use(
       (res) => res,
-      (error) => {
+      (error: AxiosError) => {
         switch (error.response?.status) {
           case 401: {
             logOut(dispatch);

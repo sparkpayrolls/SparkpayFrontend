@@ -37,11 +37,13 @@ const ChangePasswordForm = ({ modal }: { modal: NiceModalHandler }) => {
       onSubmit={async (values, helpers) => {
         try {
           helpers.setSubmitting(true);
-          const { user, token } = await $api.auth.changePassword(
+          const { user, ...authDetails } = await $api.auth.changePassword(
             values.oldPassword,
             values.newPassword,
           );
-          Cookies.set('auth_token', token);
+          Cookies.set('auth_token', authDetails.accessToken);
+          Cookies.set('auth_details', JSON.stringify(authDetails));
+          $api.registerInterceptors(authDetails.accessToken, dispatch);
           dispatch(commitUser(user));
           modal.hide();
           toast.success('Password changed successfully.');

@@ -73,8 +73,10 @@ export const useAppLogic = () => {
       startLoading();
       $api.auth
         .verifyEmail(code as string)
-        .then(({ user, token }) => {
-          Cookies.set('auth_token', token);
+        .then(({ user, ...authDetails }) => {
+          Cookies.set('auth_token', authDetails.accessToken);
+          Cookies.set('auth_details', JSON.stringify(authDetails));
+          $api.registerInterceptors(authDetails.accessToken, dispatch);
           dispatch(commitUser(user));
           toast.success('Email verified');
           router.replace('/overview');

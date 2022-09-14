@@ -1,5 +1,5 @@
 import { HttpRepository } from '../repo/http.repo';
-import { LoggedInUser, SignupDTO } from '../types';
+import { AuthDetails, LoggedInUser, SignupDTO } from '../types';
 
 export class AuthModule extends HttpRepository {
   async login(username: string, password: string): Promise<LoggedInUser> {
@@ -64,5 +64,13 @@ export class AuthModule extends HttpRepository {
     });
 
     return data as { email: string; name: string };
+  }
+
+  async getTokens(refreshToken: string) {
+    const { data } = await this.get<AuthDetails>('/auth/tokens', {
+      params: { refreshToken },
+    });
+
+    return data;
   }
 }
