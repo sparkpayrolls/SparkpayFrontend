@@ -651,3 +651,13 @@ export type ParseSavedEmployeeUploadXlsxResponse = {
   data: ParseSavedEmployeeUploadXlsxResponseEmployee[];
   payoutMethod: string;
 };
+
+export type EmployeePayrollHistory = {
+  id: string;
+  netSalary: number;
+  payoutStatus:
+    | PayrollEmployeePayoutStatusEnum
+    | keyof typeof PayrollEmployeePayoutStatusEnum;
+  payroll: Pick<Payroll, 'id' | 'payDate' | 'proRateMonth'>;
+  salary: number;
+};

@@ -8,6 +8,8 @@ import withAuth from 'src/helpers/HOC/withAuth';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import BackIcon from '../../public/svgs/backicon.svg';
 import { Addon } from '@/components/Employee/addon.component';
+import { IF } from '@/components/Misc/if.component';
+import { EmployeePayrollHistory } from '@/components/Employee/payroll-history.component/payroll-history.component';
 
 const EmployeeDetailPage: NextPage = () => {
   const [showEditGroupModal, setShowEditGroupModal] = useState(false);
@@ -32,16 +34,22 @@ const EmployeeDetailPage: NextPage = () => {
               Employees Details
             </h5>
           </div>
-          <button
-            className="employee-details__employee-button"
-            onClick={() =>
-              activeTab === 'details'
-                ? setShowEditGroupModal(true)
-                : setShowCreateAddonModal(true)
-            }
-          >
-            {activeTab === 'details' ? 'Edit Details' : 'Create Addon'}
-          </button>
+          <IF condition={activeTab === 'details'}>
+            <button
+              className="employee-details__employee-button"
+              onClick={() => setShowEditGroupModal(true)}
+            >
+              Edit Details
+            </button>
+          </IF>
+          <IF condition={activeTab === 'addons'}>
+            <button
+              className="employee-details__employee-button"
+              onClick={() => setShowCreateAddonModal(true)}
+            >
+              Create Addon
+            </button>
+          </IF>
         </div>
         <Tab
           onChange={(activeKey) => setActiveTab(activeKey)}
@@ -55,6 +63,7 @@ const EmployeeDetailPage: NextPage = () => {
               }}
             />
           </Tab.TabPane>
+
           <Tab.TabPane tab="Addons" key="addons">
             <Addon
               editHandler={{
@@ -62,6 +71,10 @@ const EmployeeDetailPage: NextPage = () => {
                 setEdit: setShowCreateAddonModal,
               }}
             />
+          </Tab.TabPane>
+
+          <Tab.TabPane tab="Payroll History" key="payroll">
+            <EmployeePayrollHistory />
           </Tab.TabPane>
         </Tab>
       </div>

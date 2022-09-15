@@ -6,7 +6,7 @@ import { Util } from 'src/helpers/util';
 import search_icon from '../../../public/svgs/search-icon.svg';
 import { Button } from '../Button/Button.component';
 import { SelectInput } from '../Input/seletct-input';
-import { KebabMenu } from '../KebabMenu/KebabMenu.component';
+import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { ITable, ITablePagination, ITablev2, ITR } from '../types';
 import { Dropdown } from 'antd';
 import { SearchForm } from '../Form/search.form';
@@ -156,10 +156,14 @@ export const Table = (props: ITable) => {
         props.isLoading ? ' table-component--loading' : ''
       }`}
     >
-      {(!!props.title ||
-        !props.isNotSearchable ||
-        !!props.onFilterClick ||
-        !!props.kebabMenuItems?.length) && (
+      <IF
+        condition={
+          !!props.title ||
+          !props.isNotSearchable ||
+          !!props.onFilterClick ||
+          !!props.kebabMenuItems?.length
+        }
+      >
         <div className="table-component__tool-bar">
           {props.title && (
             <p className="table-component__table-title">{props.title}</p>
@@ -173,47 +177,42 @@ export const Table = (props: ITable) => {
               alignItems: 'center',
             }}
           >
-            {!props.isNotSearchable && (
-              <>
-                <div className="table-component__search">
-                  <SearchForm
-                    placeholder="Search by name"
-                    onChange={(event) => {
-                      setSearch(event.target.value);
-                      searchFunc(
-                        props.refresh || (() => {}),
-                        event.target.value,
-                      );
-                      searchFunc(() => {
-                        props.refreshV2 &&
-                          props.refreshV2({ search: event.target.value });
-                      }, event.target.value);
-                    }}
-                  />
-                </div>
+            <IF condition={!props.isNotSearchable}>
+              <div className="table-component__search">
+                <SearchForm
+                  placeholder="Search by name"
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                    searchFunc(props.refresh || (() => {}), event.target.value);
+                    searchFunc(() => {
+                      props.refreshV2 &&
+                        props.refreshV2({ search: event.target.value });
+                    }, event.target.value);
+                  }}
+                />
+              </div>
 
-                <Dropdown
-                  overlay={menu}
-                  trigger={['click']}
-                  overlayClassName="employee-dropdown"
-                >
-                  <button className="table-component__search-btn">
-                    <Image src={search_icon} alt="search icon" />
-                  </button>
-                </Dropdown>
-              </>
-            )}
+              <Dropdown
+                overlay={menu}
+                trigger={['click']}
+                overlayClassName="employee-dropdown"
+              >
+                <button className="table-component__search-btn">
+                  <Image src={search_icon} alt="search icon" />
+                </button>
+              </Dropdown>
+            </IF>
 
-            {props.onFilterClick && (
+            <IF condition={props.onFilterClick}>
               <button
                 className="table-component__filter-btn"
                 onClick={props.onFilterClick}
               >
                 <span>Filter</span> <FilterSVG />
               </button>
-            )}
+            </IF>
 
-            {!!props.kebabMenuItems?.length && (
+            <IF condition={props.kebabMenuItems?.length}>
               <div
                 style={{
                   padding: '0.2rem',
@@ -221,11 +220,11 @@ export const Table = (props: ITable) => {
                   borderRadius: '4px',
                 }}
               >
-                <KebabMenu items={props.kebabMenuItems} />
+                <KebabMenu items={props.kebabMenuItems as IKebabItem[]} />
               </div>
-            )}
+            </IF>
 
-            {props.buttons && (
+            <IF condition={props.buttons}>
               <div className="table-component__buttons">
                 {props.buttons?.map((button, i) => {
                   return (
@@ -243,10 +242,14 @@ export const Table = (props: ITable) => {
                   );
                 })}
               </div>
-            )}
+            </IF>
+
+            <IF condition={props.appendToolBar}>
+              <div>{props.appendToolBar}</div>
+            </IF>
           </div>
         </div>
-      )}
+      </IF>
 
       <IF
         condition={

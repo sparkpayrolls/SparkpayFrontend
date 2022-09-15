@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { Employee, PaginationMeta } from 'src/api/types';
 import { Util } from '../util';
+import { useSelectItems } from './use-select-items.hook';
 
 export const useGroupEmployeesPageContext = () => {
   const router = useRouter();
@@ -24,11 +25,17 @@ export const useGroupEmployeesPageContext = () => {
     limit: 10,
     search: '',
   });
-  const [selected, setSelected] = useState<string[]>([]);
-  const [selectAll, setSelectAll] = useState(false);
   const [loading, setLoading] = useState(false);
+  const {
+    allChecked,
+    selected,
+    selectAll,
+    clearSelection,
+    getCheckClickHandler,
+    handleCheckAllClick,
+    handleSelectAllClick,
+  } = useSelectItems(employees.map((employee) => employee.id));
 
-  const allChecked = !!employees.length && selected.length >= employees.length;
   const groupId = router.query.id as string;
 
   const getEmployees = useCallback(() => {
@@ -80,30 +87,6 @@ export const useGroupEmployeesPageContext = () => {
     };
   };
 
-  const clearSelection = () => {
-    setSelectAll(false);
-    setSelected([]);
-  };
-  const handleCheckAllClick = () => {
-    if (selected.length || selectAll) {
-      clearSelection();
-    } else {
-      setSelected(employees.map((employee) => employee.id));
-    }
-  };
-  const handleSelectAllClick = () => {
-    setSelectAll(true);
-  };
-  const getCheckClickHandler = (id: string) => {
-    return () => {
-      if (selected.includes(id)) {
-        setSelectAll(false);
-        setSelected(selected.filter((s) => s !== id));
-      } else {
-        setSelected([...selected, id]);
-      }
-    };
-  };
   const updateParams = (obj: Record<string, unknown>) => {
     setParams({ ...params, ...obj });
   };

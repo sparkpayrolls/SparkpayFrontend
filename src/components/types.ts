@@ -76,6 +76,7 @@ export interface ITable {
   onClearSelection?: MouseEventHandler<HTMLButtonElement>;
   shouldClearSelection?: boolean;
   refreshV2?(params: Record<string, unknown>): unknown;
+  appendToolBar?: ReactNode;
 }
 
 export interface ITR {

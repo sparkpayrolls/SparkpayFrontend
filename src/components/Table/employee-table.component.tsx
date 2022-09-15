@@ -17,7 +17,7 @@ export const EmployeeTable = (props: IEmployeeTable) => {
     employees,
     paginationMeta,
     getEmployees,
-    onFilter,
+    // onFilter,
     loading,
     onStatusToggle,
     onDelete,
@@ -149,7 +149,7 @@ export const EmployeeTable = (props: IEmployeeTable) => {
         title={`${paginationMeta.total}\xa0Employee${
           paginationMeta.total > 1 ? 's' : ''
         }`}
-        onFilterClick={onFilter}
+        // onFilterClick={onFilter}
         isEmpty={!employees.length}
         emptyStateText="No employee yet"
         isLoading={loading}

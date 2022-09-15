@@ -2,14 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { EmployeeGroup, PaginationMeta } from 'src/api/types';
+import { useSelectItems } from 'src/helpers/hooks/use-select-items.hook';
 import { Util } from 'src/helpers/util';
 import { IGroupEmployees } from './group-employees.component';
 
 export const useGroupEmployeeContext = (props: IGroupEmployees) => {
   const { groupId } = props;
   const [loading, setLoading] = useState(false);
-  const [selected, setSelected] = useState<string[]>([]);
-  const [selectAll, setSelectAll] = useState(false);
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
     total: 0,
     hasNextPage: false,
@@ -27,6 +26,15 @@ export const useGroupEmployeeContext = (props: IGroupEmployees) => {
     limit: 10,
   });
   const [employees, setEmployees] = useState<EmployeeGroup[]>([]);
+  const {
+    allChecked,
+    selected,
+    selectAll,
+    clearSelection,
+    getCheckClickHandler,
+    handleCheckAllClick,
+    handleSelectAllClick,
+  } = useSelectItems(employees.map((employee) => employee.id));
 
   const getGroupEmployees = useCallback(() => {
     setLoading(true);
@@ -50,32 +58,6 @@ export const useGroupEmployeeContext = (props: IGroupEmployees) => {
     getGroupEmployees();
   }, [getGroupEmployees]);
 
-  const allChecked = !!employees.length && selected.length >= employees.length;
-
-  const getCheckClickHandler = (id: string) => {
-    return () => {
-      if (selected.includes(id)) {
-        setSelectAll(false);
-        setSelected(selected.filter((s) => s !== id));
-      } else {
-        setSelected([...selected, id]);
-      }
-    };
-  };
-  const clearSelection = () => {
-    setSelectAll(false);
-    setSelected([]);
-  };
-  const handleCheckAllClick = () => {
-    if (selected.length > 0 || selectAll) {
-      clearSelection();
-    } else {
-      setSelected(employees.map((employee) => employee.id));
-    }
-  };
-  const handleSelectAllClick = () => {
-    setSelectAll(true);
-  };
   const updateParams = (obj: Record<string, unknown>) => {
     setParams({ ...params, ...obj });
   };
