@@ -59,8 +59,19 @@ export type User = Document & {
 export type LoggedInUser = {
   user: User;
 
-  token: string;
+  accessToken: string;
+
+  refreshToken: string;
+
+  accessTokenExpires: string;
+
+  refreshTokenExpires: string;
 };
+
+export type AuthDetails = Pick<
+  LoggedInUser,
+  'accessToken' | 'refreshToken' | 'accessTokenExpires' | 'refreshTokenExpires'
+>;
 
 export type SignupDTO = {
   firstname: string;
@@ -639,4 +650,14 @@ export type ParseSavedEmployeeUploadXlsxResponse = {
   headerRow: string[];
   data: ParseSavedEmployeeUploadXlsxResponseEmployee[];
   payoutMethod: string;
+};
+
+export type EmployeePayrollHistory = {
+  id: string;
+  netSalary: number;
+  payoutStatus:
+    | PayrollEmployeePayoutStatusEnum
+    | keyof typeof PayrollEmployeePayoutStatusEnum;
+  payroll: Pick<Payroll, 'id' | 'payDate' | 'proRateMonth'>;
+  salary: number;
 };

@@ -1,4 +1,20 @@
 .table-component {
+  &__select-all-alert {
+    color: #6d7a98;
+    gap: 0.1rem;
+    background: #f7f9fb;
+
+    button {
+      color: #1890ff;
+      background: transparent;
+      border-radius: 4px;
+
+      &:hover {
+        background: #edf1fd;
+      }
+    }
+  }
+
   &__tool-bar {
     display: flex;
     gap: 1rem;
@@ -95,7 +111,7 @@
     letter-spacing: 0.4px;
     color: #3a434b;
 
-    padding: 12px 1rem;
+    padding: 1rem;
     > span {
       display: none;
     }
@@ -170,7 +186,6 @@
   table {
     border-collapse: collapse;
     min-width: 100%;
-    margin-top: 10px;
   }
 
   th {

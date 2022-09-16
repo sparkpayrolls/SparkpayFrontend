@@ -6,10 +6,11 @@ import { Util } from 'src/helpers/util';
 import search_icon from '../../../public/svgs/search-icon.svg';
 import { Button } from '../Button/Button.component';
 import { SelectInput } from '../Input/seletct-input';
-import { KebabMenu } from '../KebabMenu/KebabMenu.component';
+import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { ITable, ITablePagination, ITablev2, ITR } from '../types';
 import { Dropdown } from 'antd';
 import { SearchForm } from '../Form/search.form';
+import { IF } from '../Misc/if.component';
 
 export const TR = (props: PropsWithChildren<ITR>) => {
   return (
@@ -33,6 +34,7 @@ const TablePagination = (props: ITablePagination) => {
 
   const refresh = (page: number, perPage: number, all?: boolean) => {
     props.refresh && props.refresh(page, perPage, all);
+    props.refreshV2 && props.refreshV2({ page, limit: perPage, all });
   };
 
   const handlePerPageSelect = (event: ChangeEvent<HTMLInputElement>) => {
@@ -55,12 +57,7 @@ const TablePagination = (props: ITablePagination) => {
       <div className="table-component__pagination--per-page d-flex align-items-center">
         <span>Items per page: </span>
         <SelectInput
-          options={[
-            { value: '10' },
-            { value: '100' },
-            { value: '1000' },
-            { value: 'all' },
-          ]}
+          options={[{ value: '10' }, { value: '100' }, { value: '1000' }]}
           displayValue="value"
           actualValue="value"
           onChange={handlePerPageSelect}
@@ -146,6 +143,9 @@ export const Table = (props: ITable) => {
       onChange={(event) => {
         setSearch(event.target.value);
         searchFunc(props.refresh || (() => {}), event.target.value);
+        searchFunc(() => {
+          props.refreshV2 && props.refreshV2({ search: event.target.value });
+        }, event.target.value);
       }}
     />
   );
@@ -156,30 +156,38 @@ export const Table = (props: ITable) => {
         props.isLoading ? ' table-component--loading' : ''
       }`}
     >
-      {(!!props.title ||
-        !props.isNotSearchable ||
-        !!props.onFilterClick ||
-        !!props.kebabMenuItems?.length) && (
+      <IF
+        condition={
+          !!props.title ||
+          !props.isNotSearchable ||
+          !!props.onFilterClick ||
+          !!props.kebabMenuItems?.length
+        }
+      >
         <div className="table-component__tool-bar">
           {props.title && (
             <p className="table-component__table-title">{props.title}</p>
           )}
 
-          {!props.isNotSearchable && (
-            <div
-              style={{
-                // minWidth: '45%',
-                display: 'flex',
-                gridColumnGap: 16,
-                alignItems: 'center',
-              }}
-            >
+          <div
+            style={{
+              // minWidth: '45%',
+              display: 'flex',
+              gridColumnGap: 16,
+              alignItems: 'center',
+            }}
+          >
+            <IF condition={!props.isNotSearchable}>
               <div className="table-component__search">
                 <SearchForm
                   placeholder="Search by name"
                   onChange={(event) => {
                     setSearch(event.target.value);
                     searchFunc(props.refresh || (() => {}), event.target.value);
+                    searchFunc(() => {
+                      props.refreshV2 &&
+                        props.refreshV2({ search: event.target.value });
+                    }, event.target.value);
                   }}
                 />
               </div>
@@ -193,60 +201,110 @@ export const Table = (props: ITable) => {
                   <Image src={search_icon} alt="search icon" />
                 </button>
               </Dropdown>
+            </IF>
 
-              {props.onFilterClick && (
-                <button
-                  className="table-component__filter-btn"
-                  onClick={props.onFilterClick}
-                >
-                  <span>Filter</span> <FilterSVG />
-                </button>
-              )}
+            <IF condition={props.onFilterClick}>
+              <button
+                className="table-component__filter-btn"
+                onClick={props.onFilterClick}
+              >
+                <span>Filter</span> <FilterSVG />
+              </button>
+            </IF>
 
-              {!!props.kebabMenuItems?.length && (
-                <div className="table-component__option-btn">
-                  {/* <KebabMenuSVG /> */}
-                  <KebabMenu items={props.kebabMenuItems} />
-                </div>
-              )}
-            </div>
-          )}
-          {props.buttons && (
-            <div className="table-component__buttons">
-              {props.buttons?.map((button, i) => {
-                return (
-                  <Button
-                    key={`${button.label}-${i}`}
-                    label={button.label}
-                    type="button"
-                    element={button.href ? 'a' : undefined}
-                    href={button.href}
-                    onClick={button.action ? button.action : undefined}
-                    primary={button.primary}
-                    disabled={button.disabled}
-                    showSpinner={button.loading}
-                  />
-                );
-              })}
-            </div>
-          )}
+            <IF condition={props.kebabMenuItems?.length}>
+              <div
+                style={{
+                  padding: '0.2rem',
+                  border: '1px solid #d7dce0',
+                  borderRadius: '4px',
+                }}
+              >
+                <KebabMenu items={props.kebabMenuItems as IKebabItem[]} />
+              </div>
+            </IF>
+
+            <IF condition={props.buttons}>
+              <div className="table-component__buttons">
+                {props.buttons?.map((button, i) => {
+                  return (
+                    <Button
+                      key={`${button.label}-${i}`}
+                      label={button.label}
+                      type="button"
+                      element={button.href ? 'a' : undefined}
+                      href={button.href}
+                      onClick={button.action ? button.action : undefined}
+                      primary={button.primary}
+                      disabled={button.disabled}
+                      showSpinner={button.loading}
+                    />
+                  );
+                })}
+              </div>
+            </IF>
+
+            <IF condition={props.appendToolBar}>
+              <div>{props.appendToolBar}</div>
+            </IF>
+          </div>
         </div>
-      )}
+      </IF>
+
+      <IF
+        condition={
+          props.selectAllNoun &&
+          props.allChecked &&
+          (props.paginationMeta?.total || 0) >
+            (props.paginationMeta?.perPage || 0)
+        }
+      >
+        <p className="table-component__select-all-alert d-flex justify-content-center align-items-center px-1">
+          <span className="message">
+            All{' '}
+            {Util.formatMoneyNumber(
+              (props.shouldClearSelection
+                ? props.paginationMeta?.total
+                : props.paginationMeta?.perPage) || 0,
+              0,
+            )}{' '}
+            {props.selectAllNoun}{' '}
+            <IF condition={!props.shouldClearSelection}>on this page</IF> are
+            selected.
+          </span>
+
+          <button
+            onClick={
+              props.shouldClearSelection
+                ? props.onClearSelection
+                : props.onSelectAll
+            }
+            className="button p-1"
+          >
+            <IF condition={props.shouldClearSelection}>Clear Selection</IF>
+            <IF condition={!props.shouldClearSelection}>
+              Select all{' '}
+              {Util.formatMoneyNumber(props.paginationMeta?.total || 0, 0)}{' '}
+              {props.selectAllNoun}
+            </IF>
+          </button>
+        </p>
+      </IF>
 
       <div className="table-component__table-container">
         <table>
           <thead className="table-component__thead">
             {!props.isNotSelectable && (
               <TR checked={props.allChecked} onChange={props.onCheckAllClick}>
-                {props.headerRow.map((item) => {
-                  return <th key={item}>{item}</th>;
+                {props.headerRow.map((item, key) => {
+                  return <th key={`th_${key}`}>{item}</th>;
                 })}
               </TR>
             )}
             {props.isNotSelectable && (
               <tr>
-                {props.headerRow.map((item) => {
-                  return <th key={item}>{item}</th>;
+                {props.headerRow.map((item, key) => {
+                  return <th key={`th_${key}`}>{item}</th>;
                 })}
               </tr>
             )}
@@ -267,7 +325,11 @@ export const Table = (props: ITable) => {
       </div>
 
       {props.paginationMeta && !props.isEmpty && (
-        <TablePagination {...props.paginationMeta} refresh={refresh} />
+        <TablePagination
+          {...props.paginationMeta}
+          refresh={refresh}
+          refreshV2={props.refreshV2}
+        />
       )}
     </div>
   );

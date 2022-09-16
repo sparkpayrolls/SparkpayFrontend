@@ -29,9 +29,13 @@ export const useLoginPageLogic = () => {
       actions.setSubmitting(true);
 
       const { email: username, password } = values;
-      const { user, token } = await $api.auth.login(username, password);
-      Cookies.set('auth_token', token);
-      $api.registerInterceptors(token, dispatch);
+      const { user, ...authDetails } = await $api.auth.login(
+        username,
+        password,
+      );
+      Cookies.set('auth_token', authDetails.accessToken);
+      Cookies.set('auth_details', JSON.stringify(authDetails));
+      $api.registerInterceptors(authDetails.accessToken, dispatch);
       await Promise.all([
         refreshCompanies(dispatch),
         getCurrentAdministrator(dispatch),

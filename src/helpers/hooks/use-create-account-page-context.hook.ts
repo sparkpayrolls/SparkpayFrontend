@@ -60,9 +60,10 @@ export const useCreateAccountPageContext = () => {
   ) => {
     try {
       actions.setSubmitting(true);
-      const { user, token } = await $api.auth.signup(values);
-      Cookies.set('auth_token', token);
-      $api.registerInterceptors(token, dispatch);
+      const { user, ...authDetails } = await $api.auth.signup(values);
+      Cookies.set('auth_token', authDetails.accessToken);
+      Cookies.set('auth_details', JSON.stringify(authDetails));
+      $api.registerInterceptors(authDetails.accessToken, dispatch);
       dispatch(commitUser(user));
     } catch (error) {
       const err = error as HttpError;

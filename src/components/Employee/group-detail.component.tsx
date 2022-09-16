@@ -13,6 +13,7 @@ import { HttpError } from 'src/api/repo/http.error';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { GroupEmployees } from '../Group/group-employees.component';
+import { IF } from '../Misc/if.component';
 
 interface IGroupDetails {
   editHandler?: {
@@ -116,21 +117,23 @@ export const GroupDetails = (props: IGroupDetails) => {
                 />
               </div>
             </div>
-            <hr />
-            <div className="group-details__group-details-flex-body">
-              <div className="full-width">
-                <SingleDetail
-                  title="Description"
-                  details={(group as Group)?.description}
-                  loading={loading}
-                />
+            <IF condition={(group as Group)?.description}>
+              <hr />
+              <div className="group-details__group-details-flex-body">
+                <div className="full-width">
+                  <SingleDetail
+                    title="Description"
+                    details={(group as Group)?.description}
+                    loading={loading}
+                  />
+                </div>
               </div>
-            </div>
+            </IF>
           </div>
 
           {/* add employee section */}
 
-          <div className="group-details__group-details-property-section">
+          <div className="mt-1">
             <div className="group-details__add-employee-section">
               <GroupEmployees groupId={groupId} />
             </div>

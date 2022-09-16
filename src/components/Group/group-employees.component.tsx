@@ -1,12 +1,8 @@
-import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { $api } from 'src/api';
-import { Employee, EmployeeGroup } from 'src/api/types';
+import { Employee } from 'src/api/types';
 import { Util } from 'src/helpers/util';
-import removeicon from '../../../public/svgs/remove-icon.svg';
-import { EmployeeAutocompleteForm } from '../Form/employee-autocomplete.form';
-import { Container } from '../Shared/container.component';
+import { KebabMenu } from '../KebabMenu/KebabMenu.component';
+import { Table } from '../Table/Table.component';
+import { useGroupEmployeeContext } from './hooks';
 
 export type IGroupEmployees = {
   groupId?: string;
@@ -15,112 +11,94 @@ export type IGroupEmployees = {
 };
 
 export const GroupEmployees = (props: IGroupEmployees) => {
-  const { groupId, addEmployee, removeEmployee } = props;
-  const [loading, setLoading] = useState(false);
-  const [employees, setEmployees] = useState<EmployeeGroup[]>([]);
-
-  const getEmployees = useCallback(async () => {
-    if (!groupId) return;
-    try {
-      setLoading(true);
-      const { data: employees } = await $api.group.getGroupEmployees(groupId, {
-        all: true,
-      });
-      setEmployees(employees);
-    } catch (error) {
-      Util.onNonAuthError(error, (httpError) => {
-        toast.error(`error getting employees - ${httpError.message}`);
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [groupId]);
-
-  useEffect(() => {
-    getEmployees();
-  }, [getEmployees]);
-
-  const onAddEmployee = async (id: string) => {
-    if (!groupId) return;
-    try {
-      setLoading(true);
-      if (addEmployee) {
-        await addEmployee(id);
-      } else {
-        await $api.employee.addEmployeesToGroup(groupId, [id]);
-      }
-      await getEmployees();
-      toast.success('employee added successfully.');
-    } catch (error) {
-      Util.onNonAuthError(error, (httpError) => {
-        toast.error(httpError.message);
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-  const onRemoveEmployee = async (id: string) => {
-    if (!groupId) return;
-    try {
-      setLoading(true);
-      if (removeEmployee) {
-        await removeEmployee(id);
-      } else {
-        await $api.employee.removeEmployeesFromGroup(groupId, [id]);
-      }
-      await getEmployees();
-      toast.success('employee removed successfully.');
-    } catch (error) {
-      Util.onNonAuthError(error, (httpError) => {
-        toast.error(httpError.message);
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    selected,
+    allChecked,
+    handleCheckAllClick,
+    paginationMeta,
+    handleSelectAllClick,
+    clearSelection,
+    employees,
+    selectAll,
+    getCheckClickHandler,
+    loading,
+    updateParams,
+    params,
+    removeEmployees,
+  } = useGroupEmployeeContext(props);
 
   return (
-    <div>
-      <div className="group-details__employee-header">
-        <p className="group-details__employee-number">
-          {employees.length} Employee{employees.length !== 1 && 's'}
-        </p>
-      </div>
-      <Container
-        loading={loading}
-        showContent
-        className="group-details__parent-container"
+    <div className="group-employee-table">
+      <Table
+        headerRow={[
+          <div key="name_th_content" className="d-flex gap-2">
+            <input
+              checked={allChecked}
+              onChange={handleCheckAllClick}
+              type="checkbox"
+            />
+            <span>Name</span>
+          </div>,
+        ]}
+        emptyStateText={
+          params.search
+            ? 'No employees match your search'
+            : 'No employees in group'
+        }
+        selectAllNoun="employees"
+        title={`${Util.formatMoneyNumber(paginationMeta.total)} Employees`}
+        kebabMenuItems={[
+          { action: removeEmployees(selected), value: 'Delete' },
+        ]}
+        paginationMeta={paginationMeta}
+        onSelectAll={handleSelectAllClick}
+        onClearSelection={clearSelection}
+        refreshV2={updateParams}
+        allChecked={allChecked}
+        isNotSelectable
+        isEmpty={employees.length < 1}
+        shouldClearSelection={selectAll}
+        isLoading={loading}
       >
-        <EmployeeAutocompleteForm
-          onSelect={(employee) => onAddEmployee(employee.id)}
-          clearOnSelect
-        />
+        {() => {
+          return (
+            <tbody>
+              {employees.map((groupEmployee) => {
+                const employee = groupEmployee.employee as Employee;
 
-        <div className="items">
-          {employees.map((groupEmloyee) => {
-            const employee = groupEmloyee.employee as Employee;
-            if (!employee) return null;
+                return (
+                  <tr key={groupEmployee.id}>
+                    <td>
+                      <div className="d-flex gap-2 align-items-center">
+                        <input
+                          checked={selected.includes(groupEmployee.id)}
+                          onChange={getCheckClickHandler(groupEmployee.id)}
+                          type="checkbox"
+                        />
 
-            return (
-              <div className="group-details__user" key={groupEmloyee.id}>
-                <p className="group-details__name">
-                  {employee.firstname} {employee.lastname}
-                </p>
-                <div
-                  onClick={() => onRemoveEmployee(employee.id)}
-                  className="group-details__image-container"
-                >
-                  <Image
-                    src={removeicon}
-                    className="group-details__remove-icon"
-                    alt="group-details-image"
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </Container>
+                        <span>
+                          {employee.firstname} {employee.lastname}
+                        </span>
+
+                        <div className="ml-auto">
+                          <KebabMenu
+                            items={[
+                              {
+                                action: removeEmployees([employee.id]),
+                                value: 'Delete',
+                              },
+                            ]}
+                          />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          );
+        }}
+      </Table>
     </div>
   );
 };

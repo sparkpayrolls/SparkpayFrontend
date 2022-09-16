@@ -3,6 +3,7 @@ import {
   Employee,
   EmployeeGroup,
   EmployeeGroupPayload,
+  EmployeePayrollHistory,
   EmployeeStatus,
   Group,
   SalaryAddOn,
@@ -137,19 +138,19 @@ export class EmployeeModule extends HttpRepository {
     return data;
   }
 
-  async addEmployeesToGroup(groupId: string, ids: string[]) {
+  async addEmployeesToGroup(groupId: string, ids: string[], all = false) {
     const { data } = await this.post<Employee | EmployeeGroup[]>(
       `/employees/groups/${groupId}/employees`,
-      { ids },
+      { ids, all },
     );
 
     return data;
   }
 
-  async removeEmployeesFromGroup(groupId: string, ids: string[]) {
+  async removeEmployeesFromGroup(groupId: string, ids: string[], all = false) {
     const { data } = await this.delete<Employee | EmployeeGroup[]>(
       `/employees/groups/${groupId}/employees`,
-      { ids },
+      { ids, all },
     );
 
     return data;
@@ -216,6 +217,28 @@ export class EmployeeModule extends HttpRepository {
     const { data } = await this.get<{ file: string; name: string }>(
       '/employees/employee-upload-sheet-format',
       { params: { payoutMethod } },
+    );
+
+    return data;
+  }
+
+  async getEmployeePayrollHistory(
+    employee: string,
+    params: Record<string, unknown>,
+  ) {
+    return this.get<EmployeePayrollHistory[]>(
+      `/employees/${employee}/payrolls`,
+      { params },
+    );
+  }
+
+  async getEmployeePayslips(
+    employee: string,
+    params: { all?: boolean; shouldDownloadOnly?: boolean; payrolls: string[] },
+  ) {
+    const { data } = await this.get<string[]>(
+      `/employees/${employee}/payslips`,
+      { params },
     );
 
     return data;
