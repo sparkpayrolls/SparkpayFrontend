@@ -8,7 +8,7 @@ import close from '../../../public/svgs/Close.svg';
 import { useState } from 'react';
 import classNames from 'classnames';
 import {
-  FacebookSVG,
+  // FacebookSVG,
   InstagramSVG,
   LinkedinSVG,
   SparkpaySVG,
@@ -263,7 +263,7 @@ const DefaultLayout: React.FC = ({ children }) => {
 
               <ul>
                 <li>
-                  <Link href="#">
+                  <Link href="mailto:support@sparkpayhq.com">
                     <a className="footer__link">support@sparkpayhq.com</a>
                   </Link>
                 </li>
@@ -274,32 +274,32 @@ const DefaultLayout: React.FC = ({ children }) => {
                 </li> */}
                 <li>
                   <ul className="footer__social-link">
-                    <li>
+                    {/* <li>
                       <Link href="#">
                         <a>
                           <FacebookSVG />
                         </a>
                       </Link>
-                    </li>
+                    </li> */}
 
                     <li>
-                      <Link href="#">
-                        <a>
+                      <Link href="https://twitter.com/Sparkpayhq">
+                        <a target="_blank">
                           <TwitterSVG />
                         </a>
                       </Link>
                     </li>
                     <li>
-                      <Link href="#">
-                        <a>
+                      <Link href="https://www.linkedin.com/company/sparkpay-payroll/">
+                        <a target="_blank">
                           <LinkedinSVG />
                         </a>
                       </Link>
                     </li>
 
                     <li>
-                      <Link href="#">
-                        <a>
+                      <Link href="https://www.instagram.com/sparkpayhq/">
+                        <a target="_blank">
                           <InstagramSVG />
                         </a>
                       </Link>
