@@ -31,6 +31,10 @@ export const usePayrollSummaryPageLogic = () => {
         helpers.setSubmitting(true);
         const payroll = await $api.payroll.createPayroll(values);
         toast.success('payroll created');
+        if (walletBalance < (summary?.totalAmount || 0)) {
+          router.push('/transactions');
+          return;
+        }
         router.push(`/payroll/${payroll.id}`);
       } catch (error) {
         Util.onNonAuthError(error, (err) => {

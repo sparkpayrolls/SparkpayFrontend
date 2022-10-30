@@ -2,7 +2,12 @@ import classNames from 'classnames';
 import { FormikHelpers } from 'formik';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { ChangeEvent, MouseEvent as ReactMouseEvent, useState } from 'react';
+import {
+  ChangeEvent,
+  MouseEvent as ReactMouseEvent,
+  useEffect,
+  useState,
+} from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { usePayoutMethods } from 'src/helpers/hooks/use-payout-methods.hook';
@@ -17,7 +22,7 @@ import {
 export const useEmployeeBulAddFormContext = (
   payload: useEmployeeBulAddFormContextPayload,
 ) => {
-  const { onSubmit } = payload;
+  const { onSubmit, gotoPayrollCreation } = payload;
   const router = useRouter();
   const administrator = useAppSelector((state) => state.administrator);
   const [file, setFile] = useState<File | null>(null);
@@ -28,7 +33,11 @@ export const useEmployeeBulAddFormContext = (
   const fileUploadClass = classNames('form__file-upload', {
     ['active']: !!file || uploadTextActive,
   });
-  const initialValues = { file: '', fileName: '', payoutMethod: '' };
+  const [initialValues, setInitialValues] = useState({
+    file: '',
+    fileName: '',
+    payoutMethod: '',
+  });
   const handleFormikSubmit = (
     { file, fileName }: Values,
     helpers: FormikHelpers<Values>,
@@ -39,7 +48,7 @@ export const useEmployeeBulAddFormContext = (
       .then((file) => {
         const url = stringifyUrl({
           url: '/employees/employee-list',
-          query: { file: file.id },
+          query: { file: file.id, gotoPayrollCreation },
         });
 
         onSubmit();
@@ -95,7 +104,15 @@ export const useEmployeeBulAddFormContext = (
     };
   };
 
+  useEffect(() => {
+    const [payoutMethod] = payoutMethods;
+    if (payoutMethod && !initialValues.payoutMethod) {
+      setInitialValues({ ...initialValues, payoutMethod: payoutMethod.id });
+    }
+  }, [payoutMethods, initialValues]);
+
   return {
+    file,
     fileUploadClass,
     getDownloadClickHandler,
     getFileUploadHandler,

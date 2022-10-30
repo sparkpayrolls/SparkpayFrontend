@@ -12,8 +12,10 @@ import { $api } from 'src/api';
 import { CreateOrgnizationModal } from '@/components/Modals/CreateOrganizationModal.component';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { getCurrentAdministrator } from 'src/redux/slices/administrator/administrator.slice';
+import { useRouter } from 'next/router';
 
 const Dashboard: NextPage = () => {
+  const router = useRouter();
   const { administrator, companies } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -66,14 +68,14 @@ const Dashboard: NextPage = () => {
       NiceModal.show(CreateOrgnizationModal).then(() => {
         refreshCompanies(dispatch);
         getCurrentAdministrator(dispatch);
-        getUserDashboardData();
+        router.replace('/employees');
       });
     }
 
     return () => {
       NiceModal.hide(CreateOrgnizationModal);
     };
-  }, [companies, dispatch, getUserDashboardData]);
+  }, [companies, dispatch, getUserDashboardData, router]);
 
   return (
     <DashboardLayout loading={loading} pageTitle="Overview">

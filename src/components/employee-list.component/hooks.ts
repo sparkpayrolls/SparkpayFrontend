@@ -19,6 +19,7 @@ export const useEmployeeListContext = () => {
     loading: loadingPayoutMethodContext,
     context: payoutMehtodContext,
   } = usePayoutMethodContext(parsed?.payoutMethod as string);
+  const { gotoPayrollCreation } = router.query;
 
   const getParsed = useCallback(async () => {
     try {
@@ -63,7 +64,11 @@ export const useEmployeeListContext = () => {
       helpers.setSubmitting(true);
       await $api.employee.addEmployees(valuesTransformed);
       toast.success('Employees added successfully.');
-      router.push('/employees');
+      if (gotoPayrollCreation) {
+        router.replace('/payroll/create');
+        return;
+      }
+      router.replace('/employees');
     } catch (error) {
       Util.onNonAuthError(error, (httpError) => {
         if (httpError.status === 422) {

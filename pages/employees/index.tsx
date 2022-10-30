@@ -1,5 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../src/components/Button/Button.component';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
@@ -26,7 +26,7 @@ import { Dropdown, Menu } from 'antd';
 
 const EmployeePage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [groupTabControl, setGroupTabControl] = useState(false);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [paginationMeta, setPaginationMeta] = useState(
@@ -69,6 +69,22 @@ const EmployeePage: NextPage = () => {
     [setEmployees],
   );
 
+  const onAddEmployee = useCallback(() => {
+    NiceModal.show(AddEmployeeModal, {
+      administrator,
+      gotoPayrollCreation: !employees.length,
+    }).then(() => {
+      const { page, perPage, search, all, filter } = employeeQuery;
+      getEmployees(page, perPage, search, all, filter);
+    });
+  }, [administrator, employeeQuery, employees, getEmployees]);
+
+  useEffect(() => {
+    if (!loading && !employees.length) {
+      onAddEmployee();
+    }
+  }, [loading, employees, onAddEmployee]);
+
   const onTabChange = (tab: string) => {
     const { pathname, query } = router;
     const url = stringifyUrl({
@@ -77,13 +93,6 @@ const EmployeePage: NextPage = () => {
     });
 
     router.push(url);
-  };
-
-  const onAddEmployee = () => {
-    NiceModal.show(AddEmployeeModal, { administrator }).then(() => {
-      const { page, perPage, search, all, filter } = employeeQuery;
-      getEmployees(page, perPage, search, all, filter);
-    });
   };
 
   const onCreateGroup = () => {

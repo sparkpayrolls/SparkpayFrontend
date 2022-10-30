@@ -7,13 +7,12 @@ export type Values = {
   payoutMethod: string;
 };
 
-export type useEmployeeBulAddFormContextPayload = {
-  onSubmit(): unknown;
-};
-
 export type EmployeeBulkAddFormProps = {
   onSubmit(): unknown;
+  gotoPayrollCreation?: boolean;
 };
+
+export type useEmployeeBulAddFormContextPayload = EmployeeBulkAddFormProps;
 
 type setTouched = (_touched: FormikTouched<Values>) => unknown;
 type setValues = (_values: SetStateAction<Values>) => unknown;

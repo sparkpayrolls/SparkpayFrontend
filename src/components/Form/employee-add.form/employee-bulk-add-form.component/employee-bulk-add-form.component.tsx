@@ -11,6 +11,7 @@ import { EmployeeBulkAddFormProps } from './types';
 
 export const EmployeeBulkAddForm = (props: EmployeeBulkAddFormProps) => {
   const {
+    file,
     fileUploadClass,
     getDownloadClickHandler,
     getFileUploadHandler,
@@ -23,6 +24,7 @@ export const EmployeeBulkAddForm = (props: EmployeeBulkAddFormProps) => {
 
   return (
     <Formik
+      key={initialValues.payoutMethod}
       initialValues={initialValues}
       validationSchema={bulkEmployeeFileUploadValidationSchema}
       onSubmit={handleFormikSubmit}
@@ -116,12 +118,18 @@ export const EmployeeBulkAddForm = (props: EmployeeBulkAddFormProps) => {
             <div className="form__submit-button">
               <Button
                 type="submit"
+                title={!file ? 'upload xlsx file to proceed' : ''}
                 label="Proceed"
                 className="form__submit-button form__submit-button--full-width"
                 primary
-                disabled={isSubmitting}
+                disabled={isSubmitting || !file}
                 showSpinner={isSubmitting}
               />
+              <IF condition={!file}>
+                <p className="text__danger text__text-sm">
+                  upload employee details file in xlsx format to proceed
+                </p>
+              </IF>
             </div>
           </form>
         );

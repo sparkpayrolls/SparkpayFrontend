@@ -8,18 +8,14 @@ import { EmployeeAddForm } from '../Form/employee-add.form/employee-add.form';
 import { IF } from '../Misc/if.component';
 import { getEmployeeAddSubmitHandler } from 'src/helpers/methods';
 import { EmployeeBulkAddForm } from '../Form/employee-add.form/employee-bulk-add-form.component/employee-bulk-add-form.component';
+import { useRouter } from 'next/router';
 
 export const AddEmployeeModal = NiceModal.create(
   (props: { administrator: Administrator }) => {
     return (
       <ModalLayout title="Add Employee">
         {(modal) => {
-          return (
-            <AddEmployeeForm
-              modal={modal}
-              administrator={props.administrator}
-            />
-          );
+          return <AddEmployeeForm modal={modal} {...props} />;
         }}
       </ModalLayout>
     );
@@ -29,12 +25,15 @@ export const AddEmployeeModal = NiceModal.create(
 const AddEmployeeForm = ({
   modal,
   administrator,
+  gotoPayrollCreation,
 }: {
   modal: NiceModalHandler;
   administrator: Administrator;
+  gotoPayrollCreation?: boolean;
 }) => {
+  const router = useRouter();
   const [uploadType, setUploadType] = useState<'singleUpload' | 'bulkUpload'>(
-    'singleUpload',
+    'bulkUpload',
   );
 
   return (
@@ -47,8 +46,8 @@ const AddEmployeeForm = ({
           className="add-employee-modal__upload-type-input__radio-group"
           value={uploadType}
         >
-          <Radio value="singleUpload">Single Upload</Radio>
           <Radio value="bulkUpload">Bulk Upload</Radio>
+          <Radio value="singleUpload">Single Upload</Radio>
         </Radio.Group>
       </div>
 
@@ -62,8 +61,13 @@ const AddEmployeeForm = ({
             phoneNumber: '',
           }}
           onSubmit={getEmployeeAddSubmitHandler((employee) => {
-            modal.resolve(employee);
             setTimeout(modal.hide, 20);
+            if (gotoPayrollCreation) {
+              router.replace('/payroll/create');
+              return;
+            }
+
+            modal.resolve(employee);
           })}
           currency={Util.getCurrencySymbolFromAdministrator(administrator)}
           country={Util.getCountryFromAdministrator(administrator)?.id}
@@ -71,7 +75,10 @@ const AddEmployeeForm = ({
       </IF>
 
       <IF condition={uploadType === 'bulkUpload'}>
-        <EmployeeBulkAddForm onSubmit={modal.hide} />
+        <EmployeeBulkAddForm
+          gotoPayrollCreation={gotoPayrollCreation}
+          onSubmit={modal.hide}
+        />
       </IF>
     </div>
   );
