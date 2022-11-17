@@ -1,45 +1,48 @@
-import { Formik } from 'formik';
-import { BulkEmployeeAddValidation } from 'src/helpers/validation';
+import { PlusSvg } from '@/components/svg';
+import 'jspreadsheet-ce/dist/jspreadsheet.css';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
-import { IF } from '../Misc/if.component';
-import { EmployeesForm } from './employee-form.component/employee-form.component';
+import { Button } from '../Button/Button.component';
 import { useEmployeeListContext } from './hooks';
 
 export const EmployeeList = () => {
   const {
+    handleAddRowClick,
+    handleSubmitClick,
+    isSubmitting,
     loading,
-    parsed,
-    employees,
-    handleSubmit,
-    payoutMehtodContext,
-    currency,
+    sheetRef,
   } = useEmployeeListContext();
 
   return (
     <DashboardLayoutV2
       loading={loading}
-      title="Employee list"
+      title="Add employees"
       href="/employees"
     >
-      <IF condition={parsed}>
-        <Formik
-          initialValues={{ employees }}
-          validationSchema={BulkEmployeeAddValidation}
-          onSubmit={handleSubmit}
-        >
-          {(props) => {
-            return (
-              <EmployeesForm
-                formikProps={props}
-                payoutMethodContext={payoutMehtodContext}
-                currency={currency}
-                headerRow={parsed?.headerRow}
-                payoutMethod={parsed?.payoutMethod as string}
-              />
-            );
-          }}
-        </Formik>
-      </IF>
+      <div className="employee-list__header">
+        {/* <h3 className="employee-list__title">Add employees</h3> */}
+
+        <div className="employee-list__actions">
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={handleAddRowClick}
+            className="employee-list__actions--add-btn"
+          >
+            <PlusSvg /> Add Rows
+          </button>
+          <Button
+            type="button"
+            disabled={isSubmitting}
+            showSpinner={isSubmitting}
+            onClick={handleSubmitClick}
+            label="Add Employees"
+            primary
+          />
+        </div>
+      </div>
+
+      <div style={{ maxWidth: '100%', height: '100%' }} ref={sheetRef}></div>
     </DashboardLayoutV2>
   );
 };

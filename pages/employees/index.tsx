@@ -23,6 +23,7 @@ import {
   Plus2Svg,
 } from '@/components/svg';
 import { Dropdown, Menu } from 'antd';
+import Link from 'next/link';
 
 const EmployeePage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
@@ -81,9 +82,9 @@ const EmployeePage: NextPage = () => {
 
   useEffect(() => {
     if (!loading && !employees.length) {
-      onAddEmployee();
+      router.push('/employees/employee-list');
     }
-  }, [loading, employees, onAddEmployee]);
+  }, [loading, employees, onAddEmployee, router]);
 
   const onTabChange = (tab: string) => {
     const { pathname, query } = router;
@@ -104,9 +105,11 @@ const EmployeePage: NextPage = () => {
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <button className="employee-menu-list" onClick={onAddEmployee}>
-          <Plus2Svg /> Add employee
-        </button>
+        <Link href="/employees/employee-list" /* onClick={onAddEmployee} */>
+          <a className="employee-menu-list">
+            <Plus2Svg /> Add employee
+          </a>
+        </Link>
       </Menu.Item>
 
       <Menu.Item key="1">
@@ -131,13 +134,15 @@ const EmployeePage: NextPage = () => {
                 type="submit"
               />
               <Button
+                element="a"
+                href="/employees/employee-list"
                 label={
                   <>
                     <PlusSvg />
                     &nbsp;{'Add\xa0Employee'}
                   </>
                 }
-                onClick={onAddEmployee}
+                // onClick={onAddEmployee}
                 className="employee-section__submit-btn"
                 primary
                 type="submit"

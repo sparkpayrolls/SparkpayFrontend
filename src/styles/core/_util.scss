@@ -156,3 +156,32 @@
     flex-direction: row;
   }
 }
+
+.error-cell {
+  background-color: #fce9e9;
+  color: #ca1b1b;
+}
+
+.jexcel_dropdown .jdropdown-container,
+.jexcel_dropdown .jdropdown-content {
+  background-color: #ffffff;
+}
+
+.jexcel_dropdown .jdropdown-close {
+  display: none;
+}
+
+.jexcel_dropdown .jdropdown-content {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.jexcel_dropdown .jdropdown-item:hover,
+.jexcel_dropdown .jdropdown-selected,
+.jexcel_dropdown .jdropdown-cursor {
+  background-color: #dcdcdc;
+}
+
+.jdropdown-item {
+  padding: 0.5rem;
+}

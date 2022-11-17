@@ -111,24 +111,17 @@ export const TaxInformationValidationSchema = Yup.object().shape({
   taxOfficeNumber: Yup.string(),
 });
 
-export const BulkEmployeeAddValidation = Yup.object()
-  .shape({
-    employees: Yup.array()
-      .of(
-        Yup.object()
-          .shape({
-            firstname: Yup.string().required('First Name is required'),
-            lastname: Yup.string().required('Last Name is required'),
-            email: Yup.string().email().optional(),
-            phoneNumber: Yup.string().optional(),
-            salary: Yup.string().required('Salary is required'),
-          })
-          .required(),
-      )
-      .min(1, 'at least one employee')
-      .required(),
-  })
-  .required();
+export const BulkEmployeeAddValidation = Yup.array().of(
+  Yup.object()
+    .shape({
+      firstname: Yup.string().required('First Name is required'),
+      lastname: Yup.string().required('Last Name is required'),
+      email: Yup.string().email('enter a valid email').optional(),
+      phoneNumber: Yup.string().optional(),
+      salary: Yup.string().required('Salary is required'),
+    })
+    .required(),
+);
 
 export const EmployeeGroupValidation = Yup.object()
   .shape({
