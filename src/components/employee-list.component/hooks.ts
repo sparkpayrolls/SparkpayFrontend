@@ -212,10 +212,10 @@ export const useEmployeeListContext = () => {
             mask: 'N #,##.00',
             decimal: '.',
           },
-          { type: 'text', title: 'Email', width: 200 },
+          { type: 'text', title: 'Email (optioinal)', width: 165 },
           {
             type: 'text',
-            title: 'Phone Number',
+            title: 'Phone (optional)',
             width: 135,
           },
           {
