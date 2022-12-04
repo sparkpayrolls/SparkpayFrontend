@@ -11,6 +11,7 @@ import { $api } from 'src/api';
 import { getCountries } from 'src/redux/slices/countries/countries.slice';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { Select } from '../Input/select.component';
+import { IF } from '../Misc/if.component';
 
 export const CreateOrgnizationModal = NiceModal.create(() => {
   return (
@@ -24,7 +25,25 @@ export const CreateOrgnizationModal = NiceModal.create(() => {
 
 const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
   const dispatch = useAppDispatch();
-  const countries = useAppSelector((state) => state.countries);
+  const { countries, companies, user } = useAppSelector((state) => state);
+
+  const initialValues = {
+    name: '',
+    country: '',
+    email: '',
+    phonenumber: '',
+  };
+
+  if (countries.length === 1) {
+    const [country] = countries;
+
+    initialValues.country = country.id;
+  }
+
+  if (!companies.length) {
+    initialValues.email = user?.email ?? '';
+    initialValues.phonenumber = user?.phonenumber ?? '';
+  }
 
   useEffect(() => {
     getCountries(dispatch);
@@ -55,12 +74,7 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
 
   return (
     <Formik
-      initialValues={{
-        name: '',
-        country: '',
-        email: '',
-        phonenumber: '',
-      }}
+      initialValues={initialValues}
       validationSchema={createOrganizationValidationSchema}
       onSubmit={handleSubmit}
     >
@@ -121,31 +135,33 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
               />
             </div>
 
-            <div className="create-organization-form__section">
-              <Select
-                label="Country"
-                onBlur={() => setTouched({ ...touched, country: true }, true)}
-                onChange={(val: string) =>
-                  setValues({ ...values, country: val }, true)
-                }
-                optionFilterProp="children"
-                placeholder="Select Country"
-                showSearch
-                disabled={!countries.length}
-                loading={!countries.length}
-                error={(touched.country && errors.country) || ''}
-              >
-                {countries.map((country) => {
-                  const { Option } = Select;
+            <IF condition={countries.length > 1}>
+              <div className="create-organization-form__section">
+                <Select
+                  label="Country"
+                  onBlur={() => setTouched({ ...touched, country: true }, true)}
+                  onChange={(val: string) =>
+                    setValues({ ...values, country: val }, true)
+                  }
+                  optionFilterProp="children"
+                  placeholder="Select Country"
+                  showSearch
+                  disabled={!countries.length}
+                  loading={!countries.length}
+                  error={(touched.country && errors.country) || ''}
+                >
+                  {countries.map((country) => {
+                    const { Option } = Select;
 
-                  return (
-                    <Option value={country.id} key={country.id}>
-                      {country.name}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </div>
+                    return (
+                      <Option value={country.id} key={country.id}>
+                        {country.name}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+            </IF>
 
             <div className="form__submit-button">
               <Button
