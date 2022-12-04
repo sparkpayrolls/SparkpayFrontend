@@ -1,6 +1,7 @@
 import { Button } from '@/components/Button/Button.component';
 import { InputV2 } from '@/components/Input/Input.component';
 import { Select } from '@/components/Input/select.component';
+import { IF } from '@/components/Misc/if.component';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -15,6 +16,12 @@ const CreateAccount: NextPage = () => {
   }
 
   const { countries, initialValues, onSubmit, validateEmail } = context;
+
+  if (countries.length === 1) {
+    const [country] = countries;
+
+    initialValues.country = country.id;
+  }
 
   return (
     <AuthLayout title="SparkPay | Create Account">
@@ -85,28 +92,32 @@ const CreateAccount: NextPage = () => {
                   error={touched.email && errors.email}
                 />
 
-                <Select
-                  onBlur={() => setTouched({ ...touched, country: true }, true)}
-                  onChange={(val: string) =>
-                    setValues({ ...values, country: val }, true)
-                  }
-                  optionFilterProp="children"
-                  showSearch
-                  loading={!countries.length}
-                  disabled={!countries.length}
-                  label="Select Country"
-                  error={(touched.country && errors.country) || ''}
-                >
-                  {countries.map((country) => {
-                    const { Option } = Select;
+                <IF condition={countries.length > 1}>
+                  <Select
+                    onBlur={() =>
+                      setTouched({ ...touched, country: true }, true)
+                    }
+                    onChange={(val: string) =>
+                      setValues({ ...values, country: val }, true)
+                    }
+                    optionFilterProp="children"
+                    showSearch
+                    loading={!countries.length}
+                    disabled={!countries.length}
+                    label="Select Country"
+                    error={(touched.country && errors.country) || ''}
+                  >
+                    {countries.map((country) => {
+                      const { Option } = Select;
 
-                    return (
-                      <Option value={country.id} key={country.id}>
-                        {country.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                      return (
+                        <Option value={country.id} key={country.id}>
+                          {country.name}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </IF>
 
                 <InputV2
                   type="password"
