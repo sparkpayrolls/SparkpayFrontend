@@ -34,7 +34,7 @@ export const resetPasswordValidationSchema = Yup.object().shape({
 });
 
 export const singleEmployeeUploadValidationSchema = Yup.object().shape({
-  email: Yup.string().email(),
+  email: Yup.string().email().optional(),
   firstname: format.firstname,
   lastname: format.lastname,
   salary: Yup.string().required('Salary is Required'),
