@@ -77,7 +77,69 @@ export default function PricingPage() {
         </Text>
 
         <section className="pricing__tiers">
-          <section className="pricing__tier">
+          <section style={{ width: '100%' }}>
+            <header className="pricing__tier-header">
+              <Text
+                className="pricing__input-label"
+                component="h3"
+                variant="heading-3"
+              >
+                Transfers
+              </Text>
+            </header>
+
+            <div className="grid gap-2">
+              <div>
+                <div className="d-flex justify-content-space-between">
+                  <div>
+                    <Text component="p" variant="body-text-1">
+                      Transfers of NGN 5,000 and below
+                    </Text>
+                  </div>
+
+                  <div>
+                    <Text component="p" variant="body-text-1">
+                      NGN 10 per Transfer
+                    </Text>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div className="d-flex justify-content-space-between">
+                  <div>
+                    <Text component="p" variant="body-text-1">
+                      Transfers between NGN 5,001 and NGN 50,000
+                    </Text>
+                  </div>
+
+                  <div>
+                    <Text component="p" variant="body-text-1">
+                      NGN 25 per Transfer
+                    </Text>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div className="d-flex justify-content-space-between">
+                  <div>
+                    <Text component="p" variant="body-text-1">
+                      Transfers above NGN 50,000
+                    </Text>
+                  </div>
+
+                  <div>
+                    <Text component="p" variant="body-text-1">
+                      NGN 50 per Transfer
+                    </Text>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* <section className="pricing__tier">
             <header className="pricing__tier-header">
               <Text component="p" variant="body-text-1">
                 if payroll size is less than 50
@@ -144,10 +206,10 @@ export default function PricingPage() {
             <Text component="p" variant="body-text-1">
               and a transfer fee of ₦ 65
             </Text>
-          </section>
+          </section> */}
         </section>
 
-        <section className="pricing__calculator">
+        {/* <section className="pricing__calculator">
           <div className="pricing__calculator-container">
             <section className="pricing__calculator-titles">
               <Text
@@ -249,7 +311,7 @@ export default function PricingPage() {
               </div>
             </section>
           </div>
-        </section>
+        </section> */}
       </main>
     </DefaultLayout>
   );
