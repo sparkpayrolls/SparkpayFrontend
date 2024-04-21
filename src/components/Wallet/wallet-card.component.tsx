@@ -128,7 +128,7 @@ export const WalletCard = (props: IWalletCard) => {
           </div>
         </div>
 
-        {!wallet?.account && (
+        {!loading && !wallet?.account && (
           <Button
             label={<>{'Fund Payroll'}</>}
             onClick={() => {
