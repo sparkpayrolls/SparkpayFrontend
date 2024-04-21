@@ -63,12 +63,13 @@ const Option = (props: PropsWithChildren<ISelectOption>) => {
 export const SelectInput = (props: ISelectInput) => {
   const selectRef = useRef<HTMLSpanElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const optionsRef = useRef<HTMLSpanElement>(null);
   const [showOptions, setShowOptions] = useState(false);
-  const [selected, setSelected] = useState<ISelectInputOptionItem>(
-    props.selected || {},
+  const [selected, setSelected] = useState<string | ISelectInputOptionItem>(
+    props.selected || props.value || {},
   );
-  const [hasShownOptions, setHasShownOptions] = useState(false);
+  const [search, setSearch] = useState('');
   const [inputId] = useState(
     `select-input-${Math.random().toString().substr(2, 5)}`,
   );
@@ -80,21 +81,34 @@ export const SelectInput = (props: ISelectInput) => {
     'select-input--has-error': !!props.error,
     'select-input--drop-top': props.dropTop,
   });
+  const placeholderClassName = classNames({
+    'select-input__placeholder':
+      typeof selected == 'string' || !!Object.keys(selected).length,
+    'select-input__placeholder--placeholding':
+      !selected || !Object.keys(selected).length,
+  });
   const selectedValue = props.options.find(
-    (o) => o[props.actualValue] === selected[props.actualValue],
+    (o) =>
+      (typeof o === 'string' ? o : o[props.actualValue || 'id']) ===
+      (typeof selected === 'string'
+        ? selected
+        : selected[props.actualValue || 'id']),
   );
 
-  const handleOptionClick = (option: ISelectInputOptionItem) => {
+  const handleOptionClick = (option: string | ISelectInputOptionItem) => {
     setSelected(option);
     setShowOptions(false);
-    triggerChangeEvent(option);
+    triggerInputEvent('change', option);
   };
 
   const triggerInputEvent = useCallback(
-    (eventName: string, selectedI?: ISelectInputOptionItem) => {
+    (eventName: string, selectedI?: string | ISelectInputOptionItem) => {
       const sel = selectedI || selected;
       if (inputRef.current) {
-        inputRef.current.value = (sel[actualValue] as string) || '';
+        inputRef.current.value =
+          typeof sel === 'string'
+            ? sel
+            : (sel[actualValue || 'id'] as string) || '';
         const event = new Event(eventName);
         inputRef.current.dispatchEvent(event);
       }
@@ -102,40 +116,15 @@ export const SelectInput = (props: ISelectInput) => {
     [inputRef, selected, actualValue],
   );
 
-  const triggerChangeEvent = (selected: ISelectInputOptionItem) => {
-    if (inputRef.current) {
-      inputRef.current.addEventListener('change', (event) => {
-        if (onChange) {
-          onChange(event as any);
-        }
-      });
-      triggerInputEvent('change', selected);
-    }
-  };
-
-  const triggerBlurEvent = useCallback(() => {
-    if (inputRef) {
-      inputRef.current?.addEventListener('blur', (event) => {
-        if (onBlur) {
-          onBlur(event as any);
-        }
-      });
+  useEffect(() => {
+    if (!showOptions) {
       triggerInputEvent('blur');
     }
-  }, [inputRef, triggerInputEvent, onBlur]);
-
-  useEffect(() => {
-    if (!showOptions && hasShownOptions) {
-      triggerBlurEvent();
-    }
-
-    if (!hasShownOptions && showOptions) {
-      setHasShownOptions(true);
-    }
-  }, [inputRef, showOptions, hasShownOptions, triggerBlurEvent]);
+  }, [showOptions, triggerInputEvent]);
 
   useEffect(() => {
     const element = selectRef.current;
+    const inputElement = inputRef.current;
 
     const handleClickOutside = (event: MouseEvent) => {
       // @ts-ignore
@@ -143,19 +132,41 @@ export const SelectInput = (props: ISelectInput) => {
         setShowOptions(false);
       }
     };
+    const handleBlur = (event: any) => {
+      if (onBlur) {
+        onBlur(event);
+      }
+    };
+    const handleChange = (event: any) => {
+      if (onChange) {
+        onChange(event);
+      }
+    };
+
     window.addEventListener('click', handleClickOutside);
+    inputElement?.addEventListener('blur', handleBlur);
+    inputElement?.addEventListener('change', handleChange);
 
     return () => {
       window.removeEventListener('click', handleClickOutside);
+      inputElement?.removeEventListener('blur', handleBlur);
+      inputElement?.removeEventListener('change', handleChange);
     };
-  }, [selectRef]);
+  }, [selectRef, inputRef, onBlur, onChange]);
 
   return (
     <span ref={selectRef} className={className} id={inputId}>
       {props.label && <label>{props.label}</label>}
       <span
         className="select-input__selector"
-        onClick={() => !loading && setShowOptions(!showOptions)}
+        onClick={() => {
+          if (!loading) {
+            setShowOptions(!showOptions);
+            setTimeout(() => {
+              searchInputRef.current?.focus();
+            }, 100);
+          }
+        }}
       >
         <span className="select-input__search">
           <input
@@ -170,15 +181,17 @@ export const SelectInput = (props: ISelectInput) => {
             unselectable="on"
             name={props.name}
             value={props.value}
-            onChange={props.onChange}
-            onBlur={props.onBlur}
             aria-expanded={showOptions}
             readOnly
             ref={inputRef}
           />
         </span>
-        <span className="select-input__placeholder">
-          {(selectedValue && (selectedValue[props.displayValue] as string)) ||
+        <span className={placeholderClassName}>
+          {(selectedValue &&
+            (typeof selectedValue === 'string'
+              ? selectedValue
+              : (selectedValue[props.displayValue || 'name'] as string))) ||
+            props.placeholder ||
             'Select'}
         </span>
         {!loading && (
@@ -201,19 +214,51 @@ export const SelectInput = (props: ISelectInput) => {
         className="select-input__options"
         ref={optionsRef}
       >
-        {props.options.map((value, index) => {
-          return (
-            <Option
-              key={`${inputId}-${index}`}
-              isSelected={
-                selected[props.actualValue] === value[props.actualValue]
+        {props.showSearch && (
+          <div className="select-input__search-input">
+            <input
+              type="search"
+              className="input-v2__input input-v2--focused__input"
+              placeholder={
+                typeof props.showSearch === 'string'
+                  ? props.showSearch
+                  : props.placeholder
               }
-              onClick={() => handleOptionClick(value)}
-            >
-              {value[props.displayValue] as string}
-            </Option>
-          );
-        })}
+              onChange={(event) => setSearch(event.target.value)}
+              ref={searchInputRef}
+            />
+          </div>
+        )}
+
+        <div>
+          {props.options.map((_value, index) => {
+            const name =
+              typeof _value === 'string'
+                ? _value
+                : (_value[props.displayValue || 'name'] as string);
+
+            if (search.length && !name.toLowerCase().includes(search)) {
+              return null;
+            }
+
+            return (
+              <Option
+                key={`${inputId}-${index}`}
+                isSelected={
+                  (typeof selected === 'string'
+                    ? selected
+                    : selected[props.actualValue || 'id']) ===
+                  (typeof _value === 'string'
+                    ? _value
+                    : (_value[props.actualValue || 'id'] as string))
+                }
+                onClick={() => handleOptionClick(_value)}
+              >
+                {name}
+              </Option>
+            );
+          })}
+        </div>
       </span>
     </span>
   );

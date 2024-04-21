@@ -2,13 +2,18 @@ import { IWalletBillingForm, WalletBilling } from '@/components/types';
 import { FormikHelpers } from 'formik';
 import { $api } from 'src/api';
 import { Company, Country } from 'src/api/types';
-import { useAppSelector } from 'src/redux/hooks';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { config } from '../config';
 import { Util } from '../util';
+import { useBanks } from './use-banks.hook';
+import { useEffect, useMemo, useState } from 'react';
+import debounce from 'lodash.debounce';
+import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
+import { toast } from 'react-toastify';
 // import { usePaymentMethods } from './use-payment-methods.hooks';
 
 export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
-  const { modal } = params;
+  const { modal, switchForm } = params;
   const { administrator, user } = useAppSelector(({ administrator, user }) => ({
     user,
     administrator,
@@ -80,6 +85,11 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
       helpers.setSubmitting(false);
       return;
     }
+    if (amount > 5e5) {
+      switchForm('NGMoreInfo');
+      helpers.setSubmitting(false);
+      return;
+    }
     // let channel: string;
     // switch (values.channel) {
     //   case 'Bank Transfer': {
@@ -136,5 +146,88 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
     handleWalletBillingFormSubmit,
     currency,
     // loadingPaymentMethods,
+  };
+};
+
+export const useNGMoreInfoFormContext = (params: IWalletBillingForm) => {
+  const { administrator } = useAppSelector(({ administrator }) => ({
+    administrator,
+  }));
+  const dispatch = useAppDispatch();
+  const company = administrator?.company as Company;
+  const { banks, loading: loadingBanks } = useBanks({
+    country: (company.country as Country).id,
+    all: true,
+  });
+  const [resolutionResult, setResolutionResult] = useState<
+    Record<string, string>
+  >({});
+
+  const resolveAccount = useMemo(() => {
+    return debounce(async (bankId?: string, accountNumber?: string) => {
+      if (bankId && accountNumber) {
+        setResolutionResult({});
+        $api.payout
+          .resolveAccount<typeof resolutionResult>({
+            provider: 'paystack',
+            bankId,
+            accountNumber,
+          })
+          .then(setResolutionResult)
+          .catch(() =>
+            setResolutionResult({ error: 'Could not resolve account' }),
+          );
+      }
+    }, 500);
+  }, []);
+
+  useEffect(() => {
+    resolveAccount(company.bank, company.accountNumber);
+  }, [company, resolveAccount]);
+
+  const initialValues = {
+    accountNumber: company.accountNumber,
+    bank: company.bank,
+    bvn: company.bvn,
+    bvnName: company.bvnName,
+  };
+
+  const handleSubmit = (
+    values: typeof initialValues,
+    helpers: FormikHelpers<typeof initialValues>,
+  ) => {
+    $api.company
+      .updateCompanyById(company.id, values)
+      .then(() => {
+        return $api.companyWallet.createTransactionAccount({
+          provider: 'paystack',
+        });
+      })
+      .then(() => {
+        dispatch(
+          commitAministrator({
+            ...(administrator as any),
+            company: { ...company, ...values },
+          }),
+        );
+
+        params.modal.resolve(true);
+        setTimeout(params.modal.hide, 100);
+      })
+
+      .catch((error) => {
+        toast.error(error.message);
+        helpers.setSubmitting(false);
+      });
+  };
+
+  return {
+    company,
+    initialValues,
+    banks,
+    loadingBanks,
+    resolveAccount,
+    resolutionResult,
+    handleSubmit,
   };
 };

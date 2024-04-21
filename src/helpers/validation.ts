@@ -80,6 +80,13 @@ export const fundWalletValidationSchema = Yup.object().shape({
   // channel: Yup.string().required('select payment method'),
 });
 
+export const ngMoreInfoValidation = Yup.object().shape({
+  accountNumber: Yup.string().required('account number is required').min(10),
+  bank: Yup.string().required('bank is required'),
+  bvn: Yup.string().required('bvn is required').min(11),
+  bvnName: Yup.string().required('bvn name is required'),
+});
+
 export const savePayrollValidationSchema = Yup.object().shape({
   payDate: Yup.string().required('pay date is required'),
   proRateMonth: Yup.string().required('select a prorate month'),

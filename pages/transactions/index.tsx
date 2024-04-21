@@ -4,11 +4,11 @@ import withAuth from 'src/helpers/HOC/withAuth';
 import { TransactionTable } from '@/components/Table/transaction-table.component';
 import { WalletCard } from '@/components/Wallet/wallet-card.component';
 import { PayrollUpdateCard } from '@/components/Wallet/payroll-update-card.component';
-import { useWalletBalance } from 'src/helpers/hooks/use-wallet-balance.hook';
+import { useWallet } from 'src/helpers/hooks/use-wallet-balance.hook';
 import { usePayrollUpdateMessage } from 'src/helpers/hooks/use-payroll-update-message.hoook';
 
 const WalletBilling: NextPage = () => {
-  const { walletBalance, loading: loadingWalletBalance } = useWalletBalance();
+  const { wallet, loading: loadingWalletBalance } = useWallet();
   const { update: payrollUpdate, loading } = usePayrollUpdateMessage();
 
   return (
@@ -23,8 +23,9 @@ const WalletBilling: NextPage = () => {
         >
           <WalletCard
             title="Balance"
-            amount={walletBalance}
+            amount={wallet?.balance || 0}
             loading={loadingWalletBalance}
+            wallet={wallet}
           />
           <PayrollUpdateCard
             payrollDate={payrollUpdate.message}

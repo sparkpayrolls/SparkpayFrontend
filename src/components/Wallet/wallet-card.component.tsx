@@ -13,7 +13,7 @@ import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
 
 export const WalletCard = (props: IWalletCard) => {
-  const { title, amount, loading } = props;
+  const { title, amount, loading, wallet } = props;
   const administrator = useAppSelector((state) => state.administrator);
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const [_amount, setAmount] = useState({ amount, lastAmount: amount });
@@ -38,45 +38,107 @@ export const WalletCard = (props: IWalletCard) => {
         </div>
 
         <div className="wallet-billing-page__wallet-text">
-          <p>{title}</p>
-          {loading ? (
-            <Skeleton
-              className="wallet-billing-page__wallet-amount-skeleton"
-              width={200}
-              borderRadius={4}
-              count={1}
-            />
-          ) : (
-            <CountUp
-              className="wallet-billing-page__wallet-amount-text"
-              start={_amount.lastAmount}
-              end={_amount.amount}
-              duration={countUpDuration}
-              separator=","
-              decimals={2}
-              decimal="."
-              delay={0}
-              prefix={`${currency} `}
-            >
-              {({ countUpRef }) => (
-                <p
-                  className="wallet-billing-page__wallet-amount-text"
-                  ref={countUpRef as any}
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+          >
+            <div>
+              <p>{title}</p>
+              {loading ? (
+                <Skeleton
+                  className="wallet-billing-page__wallet-amount-skeleton"
+                  width={200}
+                  borderRadius={4}
+                  count={1}
                 />
+              ) : (
+                <CountUp
+                  className="wallet-billing-page__wallet-amount-text"
+                  start={_amount.lastAmount}
+                  end={_amount.amount}
+                  duration={countUpDuration}
+                  separator=","
+                  decimals={2}
+                  decimal="."
+                  delay={0}
+                  prefix={`${currency}\xa0`}
+                >
+                  {({ countUpRef }) => (
+                    <p
+                      className="wallet-billing-page__wallet-amount-text"
+                      ref={countUpRef as any}
+                    />
+                  )}
+                </CountUp>
               )}
-            </CountUp>
-          )}
+            </div>
+
+            {!loading && wallet?.account && (
+              <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '16px',
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '4px',
+                    }}
+                  >
+                    Account Name
+                    <br />
+                    <i style={{ fontWeight: 'bold' }}>
+                      {wallet?.account?.accountName}
+                    </i>
+                  </span>
+                  <div style={{ display: 'flex', gap: '16px' }}>
+                    <span
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px',
+                      }}
+                    >
+                      Account Number
+                      <br />
+                      <i style={{ fontWeight: 'bold' }}>
+                        {wallet?.account?.accountNumber}
+                      </i>
+                    </span>
+                    <span
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px',
+                      }}
+                    >
+                      Bank
+                      <br />
+                      <i style={{ fontWeight: 'bold' }}>
+                        {wallet?.account?.bankName}
+                      </i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        <Button
-          label={<>{'Fund Payroll'}</>}
-          onClick={() => {
-            NiceModal.show(WalletBillingModal);
-          }}
-          className="wallet-billing-page__submit-btn"
-          primary
-          type="submit"
-        />
+        {!wallet?.account && (
+          <Button
+            label={<>{'Fund Payroll'}</>}
+            onClick={() => {
+              NiceModal.show(WalletBillingModal);
+            }}
+            className="wallet-billing-page__submit-btn"
+            primary
+            type="submit"
+          />
+        )}
 
         <div className="wallet-billing-page__wallet-yellow-image">
           <Image src={YellowImage} alt="yellowImage" />

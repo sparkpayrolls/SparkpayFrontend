@@ -177,6 +177,10 @@ export type Company = Document & {
   country: string | Country;
   logo?: string;
   salaryBreakdown?: SalaryBreakdown[];
+  accountNumber?: string;
+  bank?: string;
+  bvn?: string;
+  bvnName?: string;
 };
 
 export enum PermissionGroupEnum {
@@ -275,6 +279,11 @@ export type OrganisationDashboardData = {
 export type CompanyWallet = Document & {
   company: string | Company;
   balance: number;
+  account?: {
+    accountName: string;
+    accountNumber: string;
+    bankName: string;
+  };
 };
 
 export type WalletTransactionStatus = 'successful' | 'failed';

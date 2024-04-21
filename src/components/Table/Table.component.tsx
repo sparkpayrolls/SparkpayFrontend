@@ -142,10 +142,11 @@ export const Table = (props: ITable) => {
       placeholder="Search by name"
       onChange={(event) => {
         setSearch(event.target.value);
-        searchFunc(props.refresh || (() => {}), event.target.value);
-        searchFunc(() => {
-          props.refreshV2 && props.refreshV2({ search: event.target.value });
-        }, event.target.value);
+        if (props.refreshV2)
+          searchFunc(() => {
+            props.refreshV2 && props.refreshV2({ search: event.target.value });
+          }, event.target.value);
+        else searchFunc(props.refresh || (() => {}), event.target.value);
       }}
     />
   );
@@ -183,11 +184,16 @@ export const Table = (props: ITable) => {
                   placeholder="Search by name"
                   onChange={(event) => {
                     setSearch(event.target.value);
-                    searchFunc(props.refresh || (() => {}), event.target.value);
-                    searchFunc(() => {
-                      props.refreshV2 &&
-                        props.refreshV2({ search: event.target.value });
-                    }, event.target.value);
+                    if (props.refreshV2)
+                      searchFunc(() => {
+                        props.refreshV2 &&
+                          props.refreshV2({ search: event.target.value });
+                      }, event.target.value);
+                    else
+                      searchFunc(
+                        props.refresh || (() => {}),
+                        event.target.value,
+                      );
                   }}
                 />
               </div>

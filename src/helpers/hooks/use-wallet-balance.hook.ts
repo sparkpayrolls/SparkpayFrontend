@@ -4,9 +4,9 @@ import { CompanyWallet } from 'src/api/types';
 import { useAppSelector } from 'src/redux/hooks';
 import { useSocket } from './use-socket.hook';
 
-export const useWalletBalance = () => {
+export const useWallet = () => {
   const administrator = useAppSelector((state) => state.administrator);
-  const [walletBalance, setWalletBalance] = useState(0);
+  const [wallet, setWallet] = useState<CompanyWallet>();
   const [loading, setLoading] = useState(true);
   const socket = useSocket();
 
@@ -15,7 +15,7 @@ export const useWalletBalance = () => {
       setLoading(true);
       const wallet = await $api.payroll.getCompanyWallet();
 
-      setWalletBalance(wallet.balance);
+      setWallet(wallet);
     } catch (error) {
       // ...
     } finally {
@@ -30,10 +30,16 @@ export const useWalletBalance = () => {
   useEffect(() => {
     if (socket) {
       socket.on('CompanyWallet', (data: CompanyWallet) => {
-        setWalletBalance(data.balance);
+        setWallet(data);
       });
     }
   }, [socket]);
 
-  return { loading, walletBalance };
+  return { loading, wallet };
+};
+
+export const useWalletBalance = () => {
+  const { loading, wallet } = useWallet();
+
+  return { loading, walletBalance: wallet?.balance || 0 };
 };

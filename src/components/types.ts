@@ -22,6 +22,7 @@ import {
   Audit,
   AuditAction,
   Company,
+  CompanyWallet,
   Employee,
   EmployeeStatus,
   GroupStatus,
@@ -141,15 +142,17 @@ export type ISelectInput = {
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   label?: string;
-  options: ISelectInputOptionItem[];
-  error?: string;
-  displayValue: string;
-  actualValue: string;
+  options: ISelectInputOptionItem[] | string[];
+  error?: string | false;
+  displayValue?: string;
+  actualValue?: string;
   name?: string;
   value?: string;
   selected?: ISelectInputOptionItem;
   dropTop?: boolean;
   loading?: boolean;
+  placeholder?: string;
+  showSearch?: boolean | string;
 };
 
 /** AddEmployee */
@@ -406,12 +409,14 @@ export type IPagination = {
 
 export type IWalletBillingForm = {
   modal: NiceModalHandler;
+  switchForm(value: 'NGMoreInfo'): void;
 };
 
 export type IWalletCard = {
   title: string;
   amount: number;
   loading?: boolean;
+  wallet?: CompanyWallet;
 };
 
 export type IDatePicker = {

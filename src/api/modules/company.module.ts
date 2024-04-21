@@ -54,7 +54,17 @@ export class CompanyModule extends HttpRepository {
   async updateCompanyById(
     id: string,
     update: Partial<
-      Pick<Company, 'name' | 'email' | 'salaryBreakdown' | 'phonenumber'> & {
+      Pick<
+        Company,
+        | 'name'
+        | 'email'
+        | 'salaryBreakdown'
+        | 'phonenumber'
+        | 'bank'
+        | 'bvnName'
+        | 'bvn'
+        | 'accountNumber'
+      > & {
         logoFile: FileUploadPayload;
       }
     >,

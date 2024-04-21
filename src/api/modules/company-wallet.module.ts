@@ -22,4 +22,13 @@ export class CompanyWalletModule extends HttpRepository {
 
     return data;
   }
+
+  async createTransactionAccount<K>(params: unknown) {
+    const { data } = await this.post<K>(
+      '/company-wallets/transactions/accounts',
+      params,
+    );
+
+    return data;
+  }
 }

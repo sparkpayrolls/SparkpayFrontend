@@ -24,4 +24,10 @@ export class PayoutModule extends HttpRepository {
 
     return data;
   }
+
+  async resolveAccount<K>(payload: unknown) {
+    const { data } = await this.post<K>('/payments/resolve-account', payload);
+
+    return data;
+  }
 }
