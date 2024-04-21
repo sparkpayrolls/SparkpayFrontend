@@ -87,7 +87,7 @@ export const SelectInput = (props: ISelectInput) => {
     'select-input__placeholder--placeholding':
       !selected || !Object.keys(selected).length,
   });
-  const selectedValue = props.options.find(
+  const selectedValue = (props.options as any[]).find(
     (o) =>
       (typeof o === 'string' ? o : o[props.actualValue || 'id']) ===
       (typeof selected === 'string'
