@@ -211,7 +211,7 @@ const NGMoreInfoForm = (props: IWalletBillingForm) => {
 
             <div className="single-employee-upload-form__section">
               <InputV2
-                type="tel"
+                type="text"
                 label="BVN Name"
                 placeholder="Enter BVN Name"
                 value={values.bvnName}
