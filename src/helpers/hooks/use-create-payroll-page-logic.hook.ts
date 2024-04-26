@@ -121,7 +121,13 @@ export const useCreatePayrollPageLogic = () => {
       month: params.proRateMonth,
       payrollCycle: params.cycle,
       onCustomAddon(addons: Addon[]) {
-        setParams({ addons });
+        setParams({
+          addons: ([] as typeof addons)
+            .concat(addons)
+            .concat(
+              params.addons?.filter((a) => a.entity !== employee.id) || [],
+            ),
+        });
       },
       loadingPayroll,
       remittances: payrollEmployee.remittances || [],

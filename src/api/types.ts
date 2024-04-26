@@ -428,6 +428,7 @@ export type Addon = {
     year: number;
   }[];
   customAddonIndex?: number;
+  entity?: string;
 };
 
 export type Remittance = {
