@@ -24,6 +24,17 @@ export const signupValidationSchema = Yup.object().shape({
   password: format.password,
 });
 
+export const bookDemoValidationSchema = Yup.object().shape({
+  firstname: format.firstname,
+  lastname: format.lastname,
+  email: format.email,
+  phonenumber: format.phonenumber,
+  company: Yup.string().required('Company name is required'),
+  employeeSize: Yup.string()
+    .oneOf(['0 - 10', '11 - 50', '51 and above'])
+    .required('Employee size is required'),
+});
+
 export const forgotPasswordValidationSchema = Yup.object().shape({
   email: format.email,
 });

@@ -23,6 +23,7 @@ export const useCreateAccountPageContext = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user, countries } = useAppSelector((state) => state);
+  const inviteCode = router.query.inviteCode as string;
 
   React.useEffect(() => {
     getCountries(dispatch);
@@ -60,7 +61,10 @@ export const useCreateAccountPageContext = () => {
   ) => {
     try {
       actions.setSubmitting(true);
-      const { user, ...authDetails } = await $api.auth.signup(values);
+      const { user, ...authDetails } = await $api.auth.signup({
+        ...values,
+        inviteCode,
+      });
       Cookies.set('auth_token', authDetails.accessToken);
       Cookies.set('auth_details', JSON.stringify(authDetails));
       $api.registerInterceptors(authDetails.accessToken, dispatch);

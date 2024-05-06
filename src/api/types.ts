@@ -85,6 +85,8 @@ export type SignupDTO = {
   country: string;
 
   subcribeToMailList?: boolean;
+
+  inviteCode?: string;
 };
 
 export type PaginateParams = {

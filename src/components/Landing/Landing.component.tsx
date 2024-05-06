@@ -82,9 +82,9 @@ export const Landing = () => {
             </p>
 
             <div className="hero-section__cta">
-              <Link href="/create-account">
+              <Link href="/book-a-demo">
                 <a className="hero-section__link hero-section__link--onboard">
-                  Get Started
+                  Book a demo
                 </a>
               </Link>
 

@@ -181,12 +181,12 @@ const DefaultLayout: React.FC = ({ children }) => {
                 </Link>
               </li>
               <li className="navigation__list-item">
-                <Link href="/create-account">
+                <Link href="/book-a-demo">
                   <a
                     // onClick={() => NiceModal.show(RequestAccessModal)}
                     className="navigation__link navigation__button navigation__button--primary"
                   >
-                    Create Account
+                    Book a demo
                   </a>
                 </Link>
               </li>

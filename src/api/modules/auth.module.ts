@@ -26,6 +26,12 @@ export class AuthModule extends HttpRepository {
     return data;
   }
 
+  async bookDemo(payload: unknown): Promise<LoggedInUser> {
+    const { data } = await this.post<LoggedInUser>('/auth/book-demo', payload);
+
+    return data;
+  }
+
   async resendEmailVerification(): Promise<void> {
     await this.post('/auth/resend-email-verification');
   }

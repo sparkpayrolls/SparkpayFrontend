@@ -13,6 +13,10 @@ export const useLoginPageLogic = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state);
 
+  if (!router.isReady && typeof window !== 'undefined') {
+    return null;
+  }
+
   const initialValues = { email: '', password: '' };
   const goto = router.query.goto as string;
   const isLoggedIn = !!user;
