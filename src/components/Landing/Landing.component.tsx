@@ -1,7 +1,7 @@
 // import { Button } from '@/components/Button/Button.component';
 // import { useState, FormEvent } from 'react';
 // import { toast } from 'react-toastify';
-// import NiceModal from '@ebay/nice-modal-react';
+import NiceModal from '@ebay/nice-modal-react';
 import Image from 'next/image';
 import Link from 'next/link';
 // import Carousel from 'react-multi-carousel';
@@ -20,6 +20,7 @@ import coin from '../../../public/images/coin.png';
 import coin_mobile from '../../../public/images/coin-mobile.png';
 import DefaultLayout, { Title } from 'src/layouts/default-layout/DefaultLayout';
 // import { JoinWaitListModal } from '../Modals/JoinWaitListModal.component';
+import { WalkThroughModal } from '../Modals/WalkThroughModal.component';
 import {
   // ServicePointSVG,
   ServicePointSVG2,
@@ -88,7 +89,10 @@ export const Landing = () => {
               </Link>
 
               <Link href="#">
-                <a className="hero-section__link hero-section__link--demo">
+                <a
+                  onClick={() => NiceModal.show(WalkThroughModal)}
+                  className="hero-section__link hero-section__link--demo"
+                >
                   <VideoSVG /> See how SparkPay works (4mins)
                 </a>
               </Link>
@@ -294,7 +298,10 @@ export const Landing = () => {
             </p>
 
             <Link href="#">
-              <a className="hero-section__link hero-section__link--demo">
+              <a
+                onClick={() => NiceModal.show(WalkThroughModal)}
+                className="hero-section__link hero-section__link--demo"
+              >
                 <VideoSVG /> See how SparkPay works (4mins)
               </a>
             </Link>
