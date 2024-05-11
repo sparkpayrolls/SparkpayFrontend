@@ -14,7 +14,7 @@ export const WalkThroughModal = NiceModal.create(() => {
       className="WalkThrougModal"
     >
       <iframe
-        src="https://www.youtube.com/embed/83m-77tsCRQ&si=_7movIGrciGJXbqQ"
+        src="https://www.youtube.com/embed/83m-77tsCRQ?si=G-4FrEDuNClKv-eN"
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerPolicy="strict-origin-when-cross-origin"
