@@ -237,7 +237,10 @@ export const SelectInput = (props: ISelectInput) => {
                 ? _value
                 : (_value[props.displayValue || 'name'] as string);
 
-            if (search.length && !name.toLowerCase().includes(search)) {
+            if (
+              search.length &&
+              !name.toLowerCase().includes(search.toLowerCase())
+            ) {
               return null;
             }
 
