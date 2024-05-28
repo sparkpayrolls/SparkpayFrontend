@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { getCountries } from 'src/redux/slices/countries/countries.slice';
 import { commitUser } from 'src/redux/slices/user/user.slice';
 import { Util } from '../util';
+import { stringifyUrl } from 'query-string';
 
 interface ISignUpForm {
   firstname: string;
@@ -24,13 +25,14 @@ export const useCreateAccountPageContext = () => {
   const dispatch = useAppDispatch();
   const { user, countries } = useAppSelector((state) => state);
   const inviteCode = router.query.inviteCode as string;
+  const goto = router.query.goto as string;
 
   React.useEffect(() => {
     getCountries(dispatch);
   }, [dispatch]);
 
   if (user && typeof window !== 'undefined') {
-    router.replace('/overview');
+    router.replace(goto ? goto : '/overview');
     return null;
   }
 
@@ -102,5 +104,9 @@ export const useCreateAccountPageContext = () => {
     initialValues,
     onSubmit,
     validateEmail,
+    loginUrl: stringifyUrl({
+      url: 'login',
+      query: router.query,
+    }),
   };
 };

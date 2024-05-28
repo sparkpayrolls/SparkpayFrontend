@@ -155,9 +155,14 @@ export class Util {
     const stringifyUrl = await import('query-string').then(
       (mod) => mod.stringifyUrl,
     );
+    const query: any = { goto: router.asPath };
+    if (router.query.inviteToken) {
+      query.inviteToken = router.query.inviteToken;
+    }
+
     const url = stringifyUrl({
       url: '/login',
-      query: { goto: router.asPath },
+      query,
     });
     router.replace(url);
   }

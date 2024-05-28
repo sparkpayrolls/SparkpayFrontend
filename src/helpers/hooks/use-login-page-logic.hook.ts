@@ -1,6 +1,7 @@
 import { FormikHelpers } from 'formik';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
@@ -52,5 +53,12 @@ export const useLoginPageLogic = () => {
     }
   };
 
-  return { initialValues, onSubmit };
+  return {
+    initialValues,
+    onSubmit,
+    createAccountUrl: stringifyUrl({
+      url: 'create-account',
+      query: router.query,
+    }),
+  };
 };

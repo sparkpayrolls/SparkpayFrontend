@@ -86,7 +86,7 @@ const Login: NextPage = () => {
       <div className="login__sign-up">
         <p className="login__sign-up-text">
           Don’t have an account?
-          <Link href="/create-account">
+          <Link href={context.createAccountUrl}>
             <a className="login__span-text"> Create Account</a>
           </Link>
         </p>

@@ -163,7 +163,7 @@ const CreateAccount: NextPage = () => {
 
       <p className="create-account__have-an-account-text">
         Already have an account?{' '}
-        <Link href="/login">
+        <Link href={context.loginUrl}>
           <a className="create-account__span-text"> Log In</a>
         </Link>
       </p>
