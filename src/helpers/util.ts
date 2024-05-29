@@ -157,7 +157,7 @@ export class Util {
     );
     const query: any = { goto: router.asPath };
     if (router.query.inviteToken) {
-      query.inviteToken = router.query.inviteToken;
+      query.inviteCode = router.query.inviteToken;
     }
 
     const url = stringifyUrl({
