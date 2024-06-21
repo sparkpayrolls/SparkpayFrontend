@@ -10,14 +10,20 @@ import { useEffect, useMemo, useState } from 'react';
 import debounce from 'lodash.debounce';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 // import { usePaymentMethods } from './use-payment-methods.hooks';
 
 export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
-  const { modal, switchForm } = params;
+  const { modal /* switchForm */ } = params;
   const { administrator, user } = useAppSelector(({ administrator, user }) => ({
     user,
     administrator,
   }));
+  const [dva, setDVA] = useState<any>(null);
+  const [expiry, setExpiry] = useState({
+    minute: 0,
+    seconds: 0,
+  });
   // const {
   //   paymentMethods,
   //   loading: loadingPaymentMethods,
@@ -26,11 +32,23 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
   const country = company.country as Country;
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
 
-  const triggerPaystackNGCheckout = (
-    amount: number,
-    ref: string,
-    // channels: string[],
-  ) => {
+  useEffect(() => {
+    if (dva) {
+      const interval = setInterval(() => {
+        setExpiry({
+          minute: Math.max(moment(dva?.expiresAt).diff(moment(), 'minutes'), 0),
+          seconds:
+            Math.max(moment(dva?.expiresAt).diff(moment(), 'seconds'), 0) % 60,
+        });
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [dva]);
+
+  const triggerPaystackNGCheckout = (amount: number, ref: string) => {
     return new Promise((resolve, reject) => {
       // @ts-ignore
       const handler = window.PaystackPop.setup({
@@ -38,7 +56,7 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
         email: company.email,
         amount: amount * 100,
         currency: 'NGN',
-        // channels,
+        channels: ['card'],
         ref,
         callback: resolve,
         onClose: () => reject(new Error()),
@@ -46,31 +64,6 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
 
       handler.openIframe();
     });
-  };
-
-  const triggerCollectCheckout = (amount: number, reference: string) => {
-    return new Promise((resolve, reject) => {
-      // @ts-ignore
-      const checkout = new window.CollectCheckout({
-        publicKey: config().collectKey,
-        email: company.email,
-        amount: amount * 100,
-        currency: 'NGN',
-        reference,
-        firstName: user?.firstname,
-        lastName: user?.lastname,
-        onSuccess: resolve,
-        onClose: () => reject(new Error()),
-      });
-
-      checkout.setup();
-      checkout.open();
-    });
-  };
-
-  const providers = {
-    Paystack: triggerPaystackNGCheckout,
-    Collect: triggerCollectCheckout,
   };
 
   const handleNigeriaSubmit = (
@@ -85,44 +78,44 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
       helpers.setSubmitting(false);
       return;
     }
-    if (amount > 5e5) {
-      switchForm('NGMoreInfo');
+    // if (amount > 5e5) {
+    //   switchForm('NGMoreInfo');
+    //   helpers.setSubmitting(false);
+    //   return;
+    // }
+    if (amount > 5e5 && values.channel === 'Card') {
+      helpers.setErrors({
+        amount:
+          "Use the 'Bank Transfer' option for amounts greater than 500,000",
+      });
       helpers.setSubmitting(false);
       return;
     }
-    // let channel: string;
-    // switch (values.channel) {
-    //   case 'Bank Transfer': {
-    //     channel = 'bank';
-    //     break;
-    //   }
-    //   default:
-    //     channel = 'card';
-    // }
 
-    $api.payment
-      .getPaymentReference({
-        amount,
-        country: country.name,
-        metadata: {
-          companyId: company.id,
-          userId: administrator?.user,
-          chargeType: 'wallet-topup',
-        },
-      })
-      .then((result) => {
-        const [reference, provider] = result.split('::');
-        const providerFunc = providers[provider as 'Paystack'];
-        if (providerFunc) {
-          return providerFunc(amount, reference);
-        }
-      })
-      .then(() => {
-        modal.resolve(true);
-        setTimeout(modal.hide, 100);
-      })
+    if (values.channel === 'Card') {
+      triggerPaystackNGCheckout(
+        +values.amount,
+        `funding-${company?.id}-${user?.id}-${Math.random().toString(36)}`,
+      )
+        .then(() => modal.hide())
+        .then(() => modal.remove())
+        .catch(() => {
+          helpers.setSubmitting(false);
+        });
+    }
 
-      .catch(() => helpers.setSubmitting(false));
+    if (values.channel === 'Bank Transfer') {
+      $api.payment
+        .generateDynamicVirtualAccount({
+          amount,
+          country: country.name,
+        })
+        .then((result) => {
+          setDVA(result);
+          helpers.setSubmitting(false);
+        })
+        .catch(() => helpers.setSubmitting(false));
+    }
   };
 
   const handleWalletBillingFormSubmit = (
@@ -130,6 +123,13 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
     helpers: FormikHelpers<WalletBilling>,
   ) => {
     helpers.setSubmitting(true);
+    if (dva) {
+      toast.info(
+        'Transaction balance will be updated immediately funding is confirmed.',
+      );
+      modal.hide();
+      return;
+    }
 
     switch (country.name) {
       case 'Nigeria': {
@@ -146,6 +146,14 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
     handleWalletBillingFormSubmit,
     currency,
     // loadingPaymentMethods,
+    dva,
+    copyDVA() {
+      navigator.clipboard.writeText(dva?.accountNumber);
+    },
+    back() {
+      setDVA(null);
+    },
+    expiry,
   };
 };
 

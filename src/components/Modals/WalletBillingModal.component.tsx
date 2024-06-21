@@ -20,6 +20,8 @@ import {
 // import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { SelectInput } from '../Input/seletct-input';
+import { Radio } from 'antd';
+import { BackSVG, CopySVG } from '../svg';
 
 export const WalletBillingModal = NiceModal.create(() => {
   const [form, switchForm] = useState<'NGMoreInfo'>();
@@ -41,10 +43,12 @@ export const WalletBillingModal = NiceModal.create(() => {
 
 const WalletBillingForm = (props: IWalletBillingForm) => {
   const {
-    // paymentMethods,
-    // loadingPaymentMethods,
     handleWalletBillingFormSubmit,
     currency,
+    dva,
+    copyDVA,
+    expiry,
+    back,
   } = useWalletBillingFormLogic(props);
 
   return (
@@ -60,8 +64,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
       <Formik
         initialValues={{
           amount: '',
-          // @ts-ignore
-          // channel: '',
+          channel: 'Card',
         }}
         onSubmit={handleWalletBillingFormSubmit}
         validationSchema={fundWalletValidationSchema}
@@ -76,10 +79,6 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
             handleBlur,
             values,
           } = props;
-          // const error =
-          //   ((errors.amount && touched.amount) ||
-          //     (errors.channel && touched.channel)) &&
-          //   [errors.amount, errors.channel].filter((e) => !!e).join(' and ');
 
           return (
             <form
@@ -87,54 +86,154 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
               className="single-employee-upload-form"
               autoComplete="off"
             >
-              {/* <div className="add-employee-modal__upload-type-input">
-                {loadingPaymentMethods ? (
-                  <>
-                    <Skeleton width={100} borderRadius={4} count={1} />
-                    <Skeleton width={200} borderRadius={4} count={1} />
-                  </>
-                ) : (
-                  <>
-                    <label>Select Payment Method</label>
-                    <Radio.Group
-                      name="channel"
-                      onChange={handleChange}
-                      value={values.channel}
-                      className="add-employee-modal__upload-type-input__radio-group"
+              {!dva && (
+                <div className="add-employee-modal__upload-type-input">
+                  <label>Select Payment Method</label>
+                  <Radio.Group
+                    name="channel"
+                    onChange={handleChange}
+                    value={values.channel}
+                    className="add-employee-modal__upload-type-input__radio-group"
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '56px',
+                      }}
                     >
-                      {paymentMethods.map((paymentMethod) => {
-                        return (
-                          <Radio
-                            key={paymentMethod.id}
-                            value={paymentMethod.name}
-                          >
-                            {paymentMethod.name}
-                          </Radio>
-                        );
-                      })}
-                    </Radio.Group>
-                  </>
-                )}
-              </div> */}
+                      <Radio value="Card">Card</Radio>
+                      <Radio value="Bank Transfer">Bank Transfer</Radio>
+                    </div>
+                  </Radio.Group>
+                </div>
+              )}
+
+              {!!dva && (
+                <div className="single-employee-upload-form__section">
+                  <button
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      gap: '18px',
+                      background: 'none',
+                      border: 'none',
+                      alignItems: 'center',
+                      lineHeight: '16px',
+                      fontSize: '14px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={back}
+                  >
+                    <BackSVG /> <span>Back</span>
+                  </button>
+                </div>
+              )}
 
               <div className="single-employee-upload-form__section">
-                <InputV2
-                  type="number"
-                  label={`Amount (${currency})`}
-                  placeholder={`Amount (${currency})`}
-                  name="amount"
-                  value={values.amount}
-                  transformValue={Util.formatMoneyString(currency)}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.amount && errors.amount}
-                />
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px',
+                  }}
+                >
+                  <div>
+                    <InputV2
+                      type="number"
+                      label="Amount"
+                      placeholder={`Amount (${currency})`}
+                      name="amount"
+                      value={values.amount}
+                      transformValue={Util.formatMoneyString(currency)}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      disabled={!!dva}
+                      error={touched.amount && errors.amount}
+                    />
+                  </div>
+                  {!!dva && (
+                    <>
+                      <div>
+                        <p style={{ color: '#6D7A98', fontSize: '14px' }}>
+                          Transfer this exact amount into this account number
+                          via your Internet/Mobile Banking platform.
+                        </p>
+                      </div>
+
+                      <div
+                        style={{
+                          padding: '20px',
+                          borderRadius: '4px',
+                          background: '#F7F9FB',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '8px',
+                            color: '#162A56',
+                          }}
+                        >
+                          <p
+                            style={{
+                              color: 'rgba(22,42,86,.6)',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            {dva?.accountName}
+                          </p>
+                          <p style={{ fontSize: '24px' }}>
+                            {Util.formatAccountNumber(dva?.accountNumber)}
+                          </p>
+                          <p>{dva?.bankName}</p>
+                        </div>
+
+                        <button
+                          style={{
+                            display: 'flex',
+                            gap: '4px',
+                            background: '#ECF2FD',
+                            border: 'none',
+                            alignItems: 'center',
+                            lineHeight: '16px',
+                            fontSize: '14px',
+                            cursor: 'pointer',
+                            padding: '4px 8px',
+                            borderRadius: '4px',
+                            color: '#0F42A4',
+                          }}
+                          onClick={copyDVA}
+                          type="button"
+                        >
+                          <CopySVG /> <span>Copy</span>
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
+
+              {!!dva && (
+                <div className="single-employee-upload-form__section">
+                  <p
+                    className="text-center"
+                    style={{ color: '#6D7A98', fontSize: '14px' }}
+                  >
+                    Expires in {expiry.minute.toString().padStart(2, '0')}:
+                    {expiry.seconds.toString().padStart(2, '0')}
+                  </p>
+                </div>
+              )}
 
               <div className="form__submit-button">
                 <Button
                   type="submit"
-                  label="Proceed"
+                  label={dva ? 'I have paid' : 'Proceed'}
                   className="form__submit-button form__submit-button--full-width"
                   primary
                   showSpinner={isSubmitting}

@@ -514,4 +514,24 @@ export class Util {
 
     return validationErrors;
   }
+
+  static formatAccountNumber(accountNumber: string) {
+    const res: string[] = [];
+    let cur = '';
+    let count = 3;
+    accountNumber.split('').forEach((ch, i) => {
+      cur += ch;
+
+      if (cur.length === count) {
+        res.push(cur);
+        count = 4;
+        cur = '';
+      }
+    });
+    if (cur.length) {
+      res.push(cur);
+    }
+
+    return res.join(' ');
+  }
 }

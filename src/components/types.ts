@@ -268,7 +268,7 @@ export type EmployeeOnboarding = {
 /** Wallet Billing */
 export type WalletBilling = {
   amount: string;
-  // channel: PaymentMethodName;
+  channel: string;
 };
 /** NavListItem */
 export type IDashboardNavigationListItem = {

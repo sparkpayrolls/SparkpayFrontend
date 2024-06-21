@@ -1056,3 +1056,20 @@ export const InstagramSVG = () => (
     </defs>
   </svg>
 );
+
+export const CopySVG = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M10.5 11H11.75C12.4404 11 13 10.3284 13 9.5V3.5C13 2.67157 12.4404 2 11.75 2H6.75C6.05964 2 5.5 2.67157 5.5 3.5V5M9.25 14H4.25C3.55964 14 3 13.3284 3 12.5V6.5C3 5.67157 3.55964 5 4.25 5H9.25C9.94036 5 10.5 5.67157 10.5 6.5V12.5C10.5 13.3284 9.94036 14 9.25 14Z"
+      stroke="#0F42A4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

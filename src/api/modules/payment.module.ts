@@ -18,4 +18,10 @@ export class PaymentModule extends HttpRepository {
 
     return data;
   }
+
+  async generateDynamicVirtualAccount(payload?: unknown) {
+    const { data } = await this.post<string>(`/payments/generate-dva`, payload);
+
+    return data;
+  }
 }
