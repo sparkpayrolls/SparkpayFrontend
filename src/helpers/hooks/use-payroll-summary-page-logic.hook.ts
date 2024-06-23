@@ -15,8 +15,11 @@ export const usePayrollSummaryPageLogic = () => {
   const router = useRouter();
   const formRef = useRef<HTMLInputElement>(null);
   const { walletBalance, loading: loadingWalletBalance } = useWalletBalance();
-  const { params, setParams } = usePayrollProcessingParam();
-  const { summary, loading: loadingSummary } = usePayrollSummary(params);
+  const { params, setParams, isReady } = usePayrollProcessingParam();
+  const { summary, loading: loadingSummary } = usePayrollSummary(
+    params,
+    isReady,
+  );
 
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const signedParams = Util.signPayload(params);

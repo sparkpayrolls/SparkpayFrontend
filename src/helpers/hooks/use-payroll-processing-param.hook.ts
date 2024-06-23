@@ -12,35 +12,38 @@ export type IProcessPayrollParam = {
   addons?: Addon[];
 };
 
+const defaultParams = {
+  proRateMonth: moment().format('MMMM'),
+  excludedEmployeeIds: [],
+  cycle: 1,
+  year: +moment().format('YYYY'),
+};
+
 export const usePayrollProcessingParam = () => {
   const router = useRouter();
-  const thisMoment = moment();
-  const [params, setParams] = useState<IProcessPayrollParam>({
-    proRateMonth: thisMoment.format('MMMM'),
-    excludedEmployeeIds: [],
-    cycle: 1,
-    year: +thisMoment.format('YYYY'),
-  });
+  const [params, setParams] = useState<IProcessPayrollParam>(defaultParams);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (router.isReady) {
       const queryParams = router.query.params as string;
       const decoded =
-        Util.decodePayload<Record<string, unknown>>(queryParams) || {};
-      const update = { ...params, ...decoded };
-      if (
-        !Util.deepEquals(update, params) ||
-        !Util.deepEquals(params, update)
-      ) {
-        setParams(update);
-      }
+        Util.decodePayload<typeof defaultParams>(queryParams) || defaultParams;
+
+      setParams(decoded);
+      setIsReady(true);
     }
-  }, [router, params]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady]);
+
+  useEffect(() => {
+    router.replace(`${router.pathname}?params=${Util.signPayload(params)}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   const _setParams = (_params: Partial<IProcessPayrollParam>) => {
-    const newParams = { ...params, ..._params };
-    router.replace(`${router.pathname}?params=${Util.signPayload(newParams)}`);
+    setParams({ ...params, ..._params });
   };
 
-  return { params, setParams: _setParams };
+  return { params, setParams: _setParams, isReady };
 };

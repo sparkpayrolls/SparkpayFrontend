@@ -18,12 +18,15 @@ export const useCreatePayrollPageLogic = () => {
     setParams: (_params: unknown) => unknown;
   } | null>(null);
   const { walletBalance, loading: loadingWalletBalance } = useWalletBalance();
-  const { params, setParams } = usePayrollProcessingParam();
+  const { params, setParams, isReady } = usePayrollProcessingParam();
   const {
     payroll,
     loading: loadingPayroll,
     getPayroll,
-  } = useProcessPayroll(params, { ignoreExcludedEmployee: true });
+  } = useProcessPayroll(params, {
+    ignoreExcludedEmployee: true,
+    paramsReady: isReady,
+  });
 
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const employees = payroll?.payrollEmployees || [];

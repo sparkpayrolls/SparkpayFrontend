@@ -7,6 +7,7 @@ import { IProcessPayrollParam } from './use-payroll-processing-param.hook';
 
 type IuseProcessPayrollConfig = {
   ignoreExcludedEmployee?: boolean;
+  paramsReady?: boolean;
 };
 
 export const useProcessPayroll = (
@@ -20,6 +21,9 @@ export const useProcessPayroll = (
   const [param, setParam] = useState(params);
 
   const getPayroll = useCallback(async () => {
+    if (!config.paramsReady) {
+      return;
+    }
     try {
       setLoading(true);
       const payroll = await $api.payroll.processPayroll(param);
@@ -30,7 +34,7 @@ export const useProcessPayroll = (
     } finally {
       setLoading(false);
     }
-  }, [param]);
+  }, [param, config.paramsReady]);
 
   useEffect(() => {
     getPayroll();
