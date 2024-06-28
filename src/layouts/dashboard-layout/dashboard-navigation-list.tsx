@@ -5,7 +5,7 @@ import {
   EmployeeSvg,
   OrganizationSettingsSvg,
   PayrollSvg,
-  RemittancesSvg,
+  // RemittancesSvg,
   WalletBillingsSvg,
 } from '@/components/svg';
 import {
@@ -90,14 +90,14 @@ export const navListItems = (
     title: 'Admin\xa0Management',
     permissions: [['Admin', 'read']],
   },
-  {
-    Icon: RemittancesSvg,
-    href: '/remittances',
-    match: '/remittances',
-    router,
-    title: 'Remittances',
-    permissions: [['Remittance', 'read']],
-  },
+  // {
+  //   Icon: RemittancesSvg,
+  //   href: '/remittances',
+  //   match: '/remittances',
+  //   router,
+  //   title: 'Remittances',
+  //   permissions: [['Remittance', 'read']],
+  // },
   {
     Icon: AuditTrailSvg,
     href: '/audit',
