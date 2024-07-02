@@ -105,7 +105,7 @@ export const useEmployeeListContext = () => {
           const current = {
             firstname,
             lastname,
-            salary: salary.replace(/\D/g, ''),
+            salary: salary.replace(/[^\d.]/g, ''),
             email,
             phoneNumber,
             payoutMethod: payoutMethod.id,
