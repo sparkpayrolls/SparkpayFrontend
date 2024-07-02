@@ -128,7 +128,7 @@ export class Util {
   static formatMoneyNumber(val: number, precision = 0) {
     const [num, dec] = val.toFixed(precision).split('.');
     const withComma = (+num).toLocaleString();
-    if (!dec) {
+    if (!dec || Number(dec) === 0) {
       return withComma;
     }
 

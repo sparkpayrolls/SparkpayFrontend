@@ -178,7 +178,7 @@ export const EmployeeTable = (props: IEmployeeTable) => {
                       </span>
                     </td>
                     <td>
-                      {currency} {Util.formatMoneyNumber(employee.salary)}
+                      {currency} {Util.formatMoneyNumber(employee.salary, 2)}
                     </td>
                     <td>
                       <StatusChip status={employee.status} />
