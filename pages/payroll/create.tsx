@@ -15,6 +15,9 @@ import withAuth from 'src/helpers/HOC/withAuth';
 import { useCreatePayrollPageLogic } from 'src/helpers/hooks/use-create-payroll-page-logic.hook';
 import { Util } from 'src/helpers/util';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
+import search_icon from '../../../SparkpayFrontend/public/svgs/search-icon.svg';
+import Image from 'next/image';
+import payroll_dropdown from '../../../SparkpayFrontend/public/svgs/payroll-dropdown.svg'
 
 const CreatePayroll: NextPage = () => {
   const [search, setSearch] = useState('');
@@ -75,18 +78,20 @@ const CreatePayroll: NextPage = () => {
           {hasEmployees ? (
             <>
               <div className="inputs">
-                <InputV2
-                  label="Cycle"
-                  className="inputs__cycle"
-                  type="number"
-                  placeholder="Cycle"
-                  defaultValue={params.cycle}
-                  onChange={(event) =>
-                    setParams({ cycle: +event.target.value })
-                  }
+              <div className="inputs__search-component">
+              <InputV2
+                  label="Search"
+                  className="inputs__search"
+                  type="search"
+                  placeholder="Search by employee name"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
-                <DatePicker
-                  label="Prorate Month"
+                 <Image src={search_icon} alt="search icon" className="search-icon" />
+                </div>
+
+                 <DatePicker
+                  label="Month"
                   picker="month"
                   format={'MMMM/YYYY'}
                   className="inputs__prorate-month"
@@ -104,12 +109,14 @@ const CreatePayroll: NextPage = () => {
                   }}
                 />
                 <InputV2
-                  label="Search"
-                  className="inputs__search"
-                  type="search"
-                  placeholder="Search by Employee Name"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  label="Cycle"
+                  className="inputs__cycle"
+                  type="number"
+                  placeholder="Cycle"
+                  defaultValue={params.cycle}
+                  onChange={(event) =>
+                    setParams({ cycle: +event.target.value })
+                  }
                 />
               </div>
               <TableV2
@@ -125,8 +132,9 @@ const CreatePayroll: NextPage = () => {
                     >
                       Name
                     </CheckboxTableColumn>
-                    <th>Salary ({currency})</th>
-                    <th>Net Salary ({currency}) </th>
+                    <th>Gross Amount({currency})</th>
+                    <th>Net Amount ({currency}) </th>
+                    <th></th>
                     <IF condition={headerRow.has('bonuses')}>
                       <th>Bonuses ({currency})</th>
                     </IF>
@@ -170,6 +178,9 @@ const CreatePayroll: NextPage = () => {
                           <td>
                             {currency} {Util.formatMoneyNumber(e.netSalary)}
                           </td>
+                          <td>
+                          <Image src={payroll_dropdown} alt="payroll dropdown" className="payroll_dropdown" />
+                            </td>
                           <IF condition={headerRow.has('bonuses')}>
                             <td>
                               {currency}{' '}

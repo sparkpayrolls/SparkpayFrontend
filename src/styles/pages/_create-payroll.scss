@@ -68,24 +68,56 @@
 
     .input-v2__input,
     .date-picker__input {
-      padding: 10px;
+      padding: 10px; 
+        border: 1px solid #DDE5EE;
+    }
+
+    .date-picker__container {
+    background-color: #ffffff;
     }
 
     .date-picker__calendar {
       right: 10px;
       top: 10px;
     }
+&__search-component{
+  background: #ffffff;
+  width: 100%;
+  position: relative;
+  cursor: pointer;
 
+
+  > *:nth-child(2) {
+    position: absolute !important;
+    top: 70%;
+    right: 0.8125rem;
+    transform: translateY(-50%);
+    color: #6D7A98;
+    width: 24px;
+    height: 24px;
+  }
+}
     &__cycle {
-      min-width: 100px;
+      width: 102px;
+      background-color: #ffffff;
+      border: 1px solid #DDE5EE;
+      cursor: pointer;
+
     }
 
     &__prorate-month {
-      min-width: 150px;
+    min-width: 176px;
+    cursor: pointer;
+
+ ;
+
     }
 
     &__search {
-      min-width: 300px;
+      min-width: 368px;
+      background-color: #ffffff;
+      border: 1px solid #DDE5EE;
+      cursor: pointer;
     }
 
     > div {
