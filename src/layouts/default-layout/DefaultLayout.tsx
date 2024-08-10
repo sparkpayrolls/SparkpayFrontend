@@ -246,12 +246,12 @@ const DefaultLayout: React.FC = ({ children }) => {
 
               <ul>
                 <li>
-                  <Link href="#">
+                  <Link href="terms&conditions">
                     <a className="footer__link">Terms &amp; Condition</a>
                   </Link>
                 </li>
                 <li>
-                  <Link href="#">
+                  <Link href="privacy-policy">
                     <a className="footer__link">Privacy Policy</a>
                   </Link>
                 </li>
