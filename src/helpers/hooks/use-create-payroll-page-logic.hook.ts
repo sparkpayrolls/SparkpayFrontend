@@ -37,6 +37,18 @@ export const useCreatePayrollPageLogic = () => {
   const totals: Record<string, number> = {
     'Total Salary Amount': 0,
     'Total Net Salary': 0,
+    'Total Taxes':0,
+    'Total Bonuses':0
+  };
+
+  const payrolltotals: Record<string, number> = {
+    'Gross Pay': 0,
+    'Bonus': 0,
+    'Prorate':0,
+    'Employee NC':0,
+    'Employee Pension':0,
+    'Total Taxes': 0,
+    'Net Pay': 0,
   };
   const headerRow: Set<string> = new Set();
   const remittanceRows: string[] = [];
@@ -66,9 +78,24 @@ export const useCreatePayrollPageLogic = () => {
           employee.bonuses.map((d) => d.amount),
         );
       }
-      if (!headerRow.has('bonuses')) {
-        headerRow.add('bonuses');
+
+      
+      // if (!headerRow.has('bonuses')) {
+      //   headerRow.add('bonuses');
+      // }
+    }
+    if (employee.bonuses && employee.bonuses.length) {
+      payrolltotals['Total Bonuses'] = payrolltotals['Total Bonuses'] || 0;
+      if (isIncluded) {
+        payrolltotals['Total Bonuses'] += Util.sum(
+          employee.bonuses.map((d) => d.amount),
+        );
       }
+
+      
+      // if (!headerRow.has('bonuses')) {
+      //   headerRow.add('bonuses');
+      // }
     }
     if (employee.remittances && employee.remittances.length) {
       employee.remittances.forEach((remittance) => {
@@ -180,6 +207,7 @@ export const useCreatePayrollPageLogic = () => {
     params,
     selected,
     totals,
+    payrolltotals,
     thisMoment,
     onEmployeeClick,
   };

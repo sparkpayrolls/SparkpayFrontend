@@ -363,6 +363,11 @@ export type ISearchInput = {
   onSearch?(value: string): any;
 };
 
+export type IPayrollInput = {
+  placeholder?: string;
+  value?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+};
 export type ITableLayout = {
   // eslint-disable-next-line no-undef
   title?: string | JSX.Element;
@@ -437,7 +442,7 @@ export type ITotalCard = {
   loading?: boolean;
   title: string;
   value: string;
-  type?: 'primary' | 'secondary';
+  // type?: 'primary' | 'secondary';
 };
 
 export interface ButtonProps {

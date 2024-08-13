@@ -18,6 +18,8 @@ import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2
 import search_icon from '../../../SparkpayFrontend/public/svgs/search-icon.svg';
 import Image from 'next/image';
 import payroll_dropdown from '../../../SparkpayFrontend/public/svgs/payroll-dropdown.svg'
+import PayrollDropdown from '@/components/PayrollDropdown/payroll-dropdown';
+
 
 const CreatePayroll: NextPage = () => {
   const [search, setSearch] = useState('');
@@ -42,6 +44,14 @@ const CreatePayroll: NextPage = () => {
     onEmployeeClick,
   } = useCreatePayrollPageLogic();
 
+  const [expandedRow, setExpandedRow] = useState<string | null>(null);
+
+  const handleRowClick = (rowId: string) => {
+    setExpandedRow(expandedRow === rowId ? null : rowId);
+    console.log("Clicked row ID:", rowId);
+  console.log("Current expandedRow state:", expandedRow)
+  };
+  
   return (
     <DashboardLayoutV2
       loading={loadingPayroll && !hasEmployees}
@@ -75,9 +85,7 @@ const CreatePayroll: NextPage = () => {
               : []
           }
         >
-          {hasEmployees ? (
-            <>
-              <div className="inputs">
+          <div className="inputs">
               <div className="inputs__search-component">
               <InputV2
                   label="Search"
@@ -119,6 +127,9 @@ const CreatePayroll: NextPage = () => {
                   }
                 />
               </div>
+              <div className='create-payroll-content'>
+              {hasEmployees ? (
+            <>              
               <TableV2
                 className="payroll-create-table"
                 loading={loadingPayroll}
@@ -130,7 +141,7 @@ const CreatePayroll: NextPage = () => {
                       onChange={onCheckall}
                       element="th"
                     >
-                      Name
+                    Employee Name
                     </CheckboxTableColumn>
                     <th>Gross Amount({currency})</th>
                     <th>Net Amount ({currency}) </th>
@@ -159,7 +170,8 @@ const CreatePayroll: NextPage = () => {
                       const employee = e.employee as Employee;
 
                       return (
-                        <tr key={employee.id}>
+                        <>
+                        <tr key={employee.id}  onClick={() => handleRowClick(employee.id)}>
                           <CheckboxTableColumn
                             checked={!selected.includes(employee.id)}
                             onChange={onCheck(employee.id)}
@@ -179,8 +191,19 @@ const CreatePayroll: NextPage = () => {
                             {currency} {Util.formatMoneyNumber(e.netSalary)}
                           </td>
                           <td>
-                          <Image src={payroll_dropdown} alt="payroll dropdown" className="payroll_dropdown" />
-                            </td>
+                                <Image
+                                  src={payroll_dropdown}
+                                  alt="Dropdown Icon"
+                                  style={{
+                                    cursor: 'pointer',
+                                    transform:
+                                      expandedRow === employee.id ? 'rotate(180deg)' : 'rotate(0)',
+                                  }}
+                                />
+                              </td>
+
+
+
                           <IF condition={headerRow.has('bonuses')}>
                             <td>
                               {currency}{' '}
@@ -216,7 +239,18 @@ const CreatePayroll: NextPage = () => {
                             );
                           })}
                         </tr>
+                        {expandedRow === employee.id && (
+                          <tr className="dropdown-row">
+                            <td colSpan={remittanceRows.length + 4}>
+                              <PayrollDropdown />
+                            </td>
+                          </tr>
+                        )}
+                        </>
+                        
+                        
                       );
+                     
                     })}
                 </tbody>
               </TableV2>
@@ -248,26 +282,34 @@ const CreatePayroll: NextPage = () => {
                 </>
               )}
             </div>
-          )}
-        </TableLayout>
-
-        {hasEmployees && (
+          )
+          
+          }
+           {hasEmployees && (
           <div className="create-payroll-page__totals">
-            <div className="create-payroll-page__totals__items">
+            <p>Total Earnings and Taxes</p>
+            <div className="create-payroll-page__totals__section">
+             <div className="create-payroll-page__totals__items">
               {Object.keys(totals).map((key, i) => {
                 return (
                   <TotalCard
                     key={key}
                     loading={loadingPayroll}
                     title={key}
-                    type={i === 0 ? 'primary' : 'secondary'}
+                    // type={i === 0 ? 'primary' : 'secondary'}
                     value={`${currency} ${Util.formatMoneyNumber(totals[key])}`}
                   />
                 );
               })}
             </div>
+            </div>
+           
           </div>
-        )}
+        )
+        
+        }
+              </div>        
+        </TableLayout>      
       </div>
     </DashboardLayoutV2>
   );
