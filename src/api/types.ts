@@ -329,6 +329,13 @@ export type Payroll = Document & {
   payDate: string;
   employees?: unknown[];
   size?: number;
+  totalSalary?: number;
+  totalNetSalary?: number;
+  totalBonus?: number;
+  totalDeductions?: number;
+  totalPension?: number;
+  totalNHF?: number;
+  totalTax?: number;
 };
 
 export type PaymentMethodName = 'Bank Transfer' | 'Card';
@@ -440,6 +447,12 @@ export type Remittance = {
   groupId?: string;
 };
 
+export type PayrollEmployeeRemittance = {
+  name: string;
+  amount: number;
+  meta: unknown;
+};
+
 export type PayrollEmployee = Document & {
   salary: number;
   employee: string | Employee;
@@ -451,6 +464,13 @@ export type PayrollEmployee = Document & {
   bonuses?: Addon[];
   remittances?: Remittance[];
   remark?: string;
+  totalBonus?: number;
+  totalDeductions?: number;
+  proratedSalary?: number;
+  prorateDays?: number;
+  pension?: PayrollEmployeeRemittance;
+  nhf?: PayrollEmployeeRemittance;
+  tax?: PayrollEmployeeRemittance;
 };
 
 export type ProcessPayrollPayload = {
@@ -640,7 +660,10 @@ export type NigerianTaxGroupMeta = {
   whTaxRate?: number;
 };
 
-export type ICreatePayrollPayload = { payDate: string } & ProcessPayrollPayload;
+export type ICreatePayrollPayload = {
+  payDate: string;
+} & ProcessPayrollPayload &
+  Record<string, unknown>;
 
 export type PayrollUpdateResponse = {
   message: string;

@@ -1,186 +1,294 @@
 import { EditPayrollEmployeeModal } from '@/components/Modals/EditPayrollEmployeeModal.component';
 import NiceModal from '@ebay/nice-modal-react';
-import moment from 'antd/node_modules/moment';
-import { useState, useRef, useEffect } from 'react';
-import { Employee, PayrollEmployee, Addon } from 'src/api/types';
+import moment from 'moment';
+import { useState, useEffect } from 'react';
+import { $api } from 'src/api';
+import { PayrollProcessor } from '../payroll-processor/payroll-processor';
+import { useWalletBalance } from './use-wallet-balance.hook';
 import { useAppSelector } from 'src/redux/hooks';
 import { Util } from '../util';
-import { usePayrollProcessingParam } from './use-payroll-processing-param.hook';
-import { useProcessPayroll } from './use-process-payroll.hook';
-import { useWalletBalance } from './use-wallet-balance.hook';
+import pick from 'lodash.pick';
+import { useRouter } from 'next/router';
+
+export const useProcessorData = (payload: {
+  proRateMonth: string;
+  isReady: boolean;
+  year: number;
+}) => {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<any>(null);
+
+  const { proRateMonth, year, isReady } = payload;
+
+  useEffect(() => {
+    if (isReady) {
+      setLoading(true);
+      $api.payroll
+        .getPayrollProcessorData({ proRateMonth, year })
+        .then((res) => {
+          setData(res);
+        })
+        .catch(() => {
+          // ...
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [proRateMonth, year, isReady]);
+
+  return { processorData: data, loading };
+};
 
 export const useCreatePayrollPageLogic = () => {
   const administrator = useAppSelector((state) => state.administrator);
-  const thisMoment = moment();
-  const [selected, setSelected] = useState<string[]>([]);
-  const modalParamUpdateRef = useRef<{
-    id: string;
-    setParams: (_params: unknown) => unknown;
-  } | null>(null);
   const { walletBalance, loading: loadingWalletBalance } = useWalletBalance();
-  const { params, setParams, isReady } = usePayrollProcessingParam();
-  const {
-    payroll,
-    loading: loadingPayroll,
-    getPayroll,
-  } = useProcessPayroll(params, {
-    ignoreExcludedEmployee: true,
-    paramsReady: isReady,
+  const router = useRouter();
+  const [params, setParams] = useState({
+    proRateMonth: moment().format('MMMM'),
+    year: moment().year(),
+    checked: [] as string[],
+    isReady: router.isReady,
   });
+  const { processorData, loading: loadingPayroll } = useProcessorData(params);
+  const [search, setSearch] = useState('');
+  const [updates, setUpdates] = useState<Record<string, any>>({});
 
+  const { isReady, query } = router;
+
+  useEffect(() => {
+    try {
+      const inflated = Util.inflate(
+        (Util.decodePayload(
+          query.params?.toString() || '',
+        ) as unknown) as string,
+      );
+
+      if (inflated.params) {
+        setParams((p) => ({ ...p, ...inflated.params, isReady: true }));
+      }
+
+      if (inflated.updates) {
+        setUpdates(inflated.updates);
+      }
+    } catch (error) {
+      //...
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady]);
+
+  useEffect(() => {
+    router.replace(
+      `${router.pathname}?params=${Util.signPayload(
+        Util.deflate({ params, updates }),
+      )}`,
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params, updates]);
+
+  const deflated = Util.signPayload(Util.deflate({ params, updates }));
+  const summaryUrl = `/payroll/summary?params=${deflated}`;
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const employees = payroll?.payrollEmployees || [];
-  const { excludedEmployeeIds } = params;
-  const signedParams = Util.signPayload(params);
-  const summaryUrl = `/payroll/summary?params=${signedParams}`;
+  const payroll: ReturnType<typeof PayrollProcessor.process> =
+    processorData &&
+    PayrollProcessor.process({
+      ...processorData,
+      employees: processorData.employees.map((e: any) => ({
+        ...e,
+        excludeFromTotals: !params.checked.includes(e.id),
+        salary: updates[e.id]?.salary || e.salary,
+        bonus: e.bonus
+          .concat(updates[e.id]?.bonus || [])
+          .filter(
+            (_: any, i: number) => !updates[e.id]?.deletedBonus?.includes(i),
+          ),
+        deductions: e.deductions
+          .concat(updates[e.id]?.deductions || [])
+          .filter(
+            (_: any, i: number) =>
+              !updates[e.id]?.deletedDeduction?.includes(i),
+          ),
+        prorate:
+          'prorate' in (updates[e.id] || {})
+            ? updates[e.id].prorate
+            : e.prorate,
+      })),
+    });
+  const { employees } = processorData || {};
 
-  const totals: Record<string, number> = {
-    'Total Salary Amount': 0,
-    'Total Net Salary': 0,
-  };
-  const headerRow: Set<string> = new Set();
-  const remittanceRows: string[] = [];
-
-  employees.forEach((employee) => {
-    const isIncluded = !selected.includes((employee.employee as Employee).id);
-
-    if (isIncluded) {
-      totals['Total Salary Amount'] += employee.salary;
-      totals['Total Net Salary'] += employee.netSalary;
+  useEffect(() => {
+    if (Array.isArray(employees)) {
+      setParams((p) => ({ ...p, checked: employees.map((e) => e.id) }));
     }
-    if (employee.deductions && employee.deductions.length) {
-      totals['Total Deductions'] = totals['Total Deductions'] || 0;
-      if (isIncluded) {
-        totals['Total Deductions'] += Util.sum(
-          employee.deductions.map((d) => d.amount),
-        );
-      }
-      if (!headerRow.has('deductions')) {
-        headerRow.add('deductions');
-      }
-    }
-    if (employee.bonuses && employee.bonuses.length) {
-      totals['Total Bonuses'] = totals['Total Bonuses'] || 0;
-      if (isIncluded) {
-        totals['Total Bonuses'] += Util.sum(
-          employee.bonuses.map((d) => d.amount),
-        );
-      }
-      if (!headerRow.has('bonuses')) {
-        headerRow.add('bonuses');
-      }
-    }
-    if (employee.remittances && employee.remittances.length) {
-      employee.remittances.forEach((remittance) => {
-        const name = `Total ${remittance.name}`;
-        totals[name] = totals[name] || 0;
-        if (isIncluded) {
-          totals[name] += remittance.amount;
-        }
-        if (!remittanceRows.includes(`${remittance.name} (${currency})`)) {
-          remittanceRows.push(`${remittance.name} (${currency})`);
-        }
-      });
-    }
-  });
+  }, [employees]);
 
-  const onCheckall = () => {
-    let _employees: string[] = [];
-    if (selected.length === 0) {
-      _employees = employees.map((e) => (e.employee as Employee).id);
-    }
-
-    setParams({ excludedEmployeeIds: _employees });
-  };
-
-  const onCheck = (id: string) => {
+  const handleCheck = (id: string) => {
     return () => {
-      let _employees: string[] = selected;
-      if (_employees.includes(id)) {
-        _employees = selected.filter((e: any) => e !== id);
-      } else {
-        _employees = [...selected, id];
+      if (params.checked.includes(id)) {
+        setParams({
+          ...params,
+          checked: params.checked.filter((c) => c !== id),
+        });
+        return;
       }
 
-      setParams({ excludedEmployeeIds: _employees });
+      setParams({ ...params, checked: [...params.checked, id] });
     };
   };
 
-  const onEmployeeClick = (payrollEmployee: PayrollEmployee) => {
-    const employee = payrollEmployee.employee as Employee;
-    const name = `${employee.firstname} ${employee.lastname}`;
-    const addons = [
-      ...(payrollEmployee.bonuses || []),
-      ...(payrollEmployee.deductions || []),
-    ];
-    const modalParams = {
-      currency,
-      salary: payrollEmployee.salary,
-      name,
-      employee: employee.id,
-      hook: getPayroll,
-      addons,
-      year: params.year,
-      month: params.proRateMonth,
-      payrollCycle: params.cycle,
-      onCustomAddon(addons: Addon[]) {
-        setParams({
-          addons: ([] as typeof addons)
-            .concat(addons)
-            .concat(
-              params.addons?.filter((a) => a.entity !== employee.id) || [],
-            ),
-        });
-      },
-      loadingPayroll,
-      remittances: payrollEmployee.remittances || [],
-      enabledRemittances: payroll?.enabledRemittances,
-    };
-
-    if (modalParamUpdateRef.current?.id === employee.id) {
-      modalParamUpdateRef.current.setParams(modalParams);
+  const handleCheckAll = () => {
+    if (params.checked.length === employees.length) {
+      setParams({ ...params, checked: [] });
+      return;
     }
 
+    setParams({ ...params, checked: employees.map((e: any) => e.id) });
+  };
+
+  const handleEmployeeClick = (employee: any) => {
+    const emp = employees.find((e: any) => e.id === employee.id);
     return () => {
       NiceModal.show(EditPayrollEmployeeModal, {
-        getParams: () => modalParams,
-        paramUpdateRef(ref: (_params: unknown) => unknown) {
-          if (ref) {
-            modalParamUpdateRef.current = {
-              id: employee.id,
-              setParams: ref,
-            };
-          } else {
-            modalParamUpdateRef.current = null;
+        employee,
+        currency,
+        year: params.year,
+        month: params.proRateMonth,
+        bonus: emp.bonus
+          .concat(updates[employee.id]?.bonus || [])
+          .map((_: any, index: number) => ({ ..._, index }))
+          .filter(
+            (_: any, i: number) =>
+              !updates[employee.id]?.deletedBonus?.includes(i),
+          ),
+        deductions: emp.deductions
+          .concat(updates[employee.id]?.deductions || [])
+          .map((_: any, index: number) => ({ ..._, index }))
+          .filter(
+            (_: any, i: number) =>
+              !updates[employee.id]?.deletedDeduction?.includes(i),
+          ),
+        prorate:
+          'prorate' in (updates[emp.id] || {})
+            ? updates[emp.id].prorate
+            : emp.prorate,
+        handleUpdates(update: { type: string; payload: any }) {
+          switch (update.type) {
+            case 'salary': {
+              setUpdates((updates) => ({
+                ...updates,
+                [employee.id]: {
+                  ...(updates[employee.id] || {}),
+                  salary: update.payload,
+                },
+              }));
+              break;
+            }
+            case 'delete:Bonus': {
+              setUpdates((updates) => ({
+                ...updates,
+                [employee.id]: {
+                  ...(updates[employee.id] || {}),
+                  deletedBonus: [
+                    ...(updates[employee.id]?.deletedBonus || []),
+                    update.payload,
+                  ],
+                },
+              }));
+              break;
+            }
+            case 'delete:Deduction': {
+              setUpdates((updates) => ({
+                ...updates,
+                [employee.id]: {
+                  ...(updates[employee.id] || {}),
+                  deletedDeduction: [
+                    ...(updates[employee.id]?.deletedDeduction || []),
+                    update.payload,
+                  ],
+                },
+              }));
+              break;
+            }
+            case 'delete:Prorate': {
+              setUpdates((updates) => ({
+                ...updates,
+                [employee.id]: {
+                  ...(updates[employee.id] || {}),
+                  prorate: null,
+                },
+              }));
+              break;
+            }
+            case 'add:Bonus': {
+              setUpdates((updates) => ({
+                ...updates,
+                [employee.id]: {
+                  ...(updates[employee.id] || {}),
+                  bonus: [
+                    ...(updates[employee.id]?.bonus || []),
+                    pick(update.payload, ['name', 'amount']),
+                  ],
+                },
+              }));
+              break;
+            }
+            case 'add:Deduction': {
+              setUpdates((updates) => ({
+                ...updates,
+                [employee.id]: {
+                  ...(updates[employee.id] || {}),
+                  deductions: [
+                    ...(updates[employee.id]?.deductions || []),
+                    pick(update.payload, ['name', 'amount']),
+                  ],
+                },
+              }));
+              break;
+            }
+            case 'add:Prorate': {
+              setUpdates((updates) => ({
+                ...updates,
+                [employee.id]: {
+                  ...(updates[employee.id] || {}),
+                  prorate: {
+                    startDate: update.payload.startDate.toISOString(),
+                    endDate: update.payload.endDate.toISOString(),
+                  },
+                },
+              }));
+              break;
+            }
           }
+        },
+        getIndex(type: string) {
+          if (type === 'Bonus')
+            return emp.bonus.concat(updates[employee.id]?.bonus || []).length;
+          return emp.deductions.concat(updates[employee.id]?.deductions || [])
+            .length;
         },
       });
     };
   };
 
-  useEffect(() => {
-    setSelected(excludedEmployeeIds || []);
-  }, [excludedEmployeeIds]);
-
   return {
+    payroll,
+    loadingPayroll,
     walletBalance,
     loadingWalletBalance,
-    onCheckall,
-    onCheck,
-    payroll,
-    employees,
-    loadingPayroll,
     currency,
+    search,
+    setSearch,
     summaryUrl,
-    hasEmployees: !!employees.length,
-    allExcluded: employees.length === selected.length,
-    headerRow,
-    remittanceRows,
-    setParams,
+    hasEmployees: Boolean(payroll?.employees?.length),
     params,
-    selected,
-    totals,
-    thisMoment,
-    onEmployeeClick,
+    setParams,
+    thisMoment: moment().year(params.year).month(params.proRateMonth),
+    allChecked: params.checked.length === payroll?.employees?.length,
+    handleCheck,
+    handleCheckAll,
+    allUnchecked: !params.checked.length,
+    handleEmployeeClick,
   };
 };

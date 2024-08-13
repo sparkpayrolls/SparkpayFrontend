@@ -10,19 +10,19 @@ import { IF } from '@/components/Misc/if.component';
 import { Spinner } from '@/components/Spinner/Spinner.component';
 import { savePayrollValidationSchema } from 'src/helpers/validation';
 import withAuth from 'src/helpers/HOC/withAuth';
-import { InputV2 } from '@/components/Input/Input.component';
 import { useCreatePayrollFormContext } from 'src/helpers/hooks/use-payroll-create-form-context';
 import { usePayrollSummaryPageLogic } from 'src/helpers/hooks/use-payroll-summary-page-logic.hook';
+import pick from 'lodash.pick';
 
 const PayrollSummaryPage: NextPage = () => {
   const {
     createUrl,
     formRef,
-    loadingSummary,
+    loadingPayroll,
     walletBalance,
     loadingWalletBalance,
     currency,
-    summary,
+    payroll,
     params,
     getCreatePayrollFormHandler,
     getSaveClickHandler,
@@ -37,7 +37,7 @@ const PayrollSummaryPage: NextPage = () => {
         <div className="payroll-summary__button">
           <Button
             onClick={getSaveClickHandler()}
-            disabled={loadingSummary || formRef.current?.disabled}
+            disabled={loadingPayroll || formRef.current?.disabled}
             showSpinner={formRef.current?.disabled}
             type="button"
             label="Save Payroll"
@@ -62,51 +62,29 @@ const PayrollSummaryPage: NextPage = () => {
                   Payroll Size
                 </span>
                 <span className="summary-table__row__item__value">
-                  <IF condition={loadingSummary}>
+                  <IF condition={loadingPayroll}>
                     <Spinner size={16} color="--green" />
                   </IF>
-                  <IF condition={!loadingSummary}>
-                    {Util.formatNumber(summary?.payrollSize || 0)}
+                  <IF condition={!loadingPayroll}>
+                    {Util.formatNumber(
+                      payroll?.employees?.filter((e) => !e.excludeFromTotals)
+                        ?.length || 0,
+                    )}
                   </IF>
                 </span>
               </div>
             </div>
 
-            <div className="summary-table__row">
-              <div className="summary-table__row__item">
-                <span className="summary-table__row__item__title">
-                  Total Salaries
-                </span>
-                <span className="summary-table__row__item__value">
-                  <IF condition={loadingSummary}>
-                    <Spinner size={16} color="--green" />
-                  </IF>
-                  <IF condition={!loadingSummary}>
-                    {currency}{' '}
-                    {Util.formatMoneyNumber(summary?.totalSalaries || 0)}
-                  </IF>
-                </span>
-              </div>
-            </div>
-
-            <div className="summary-table__row">
-              <div className="summary-table__row__item">
-                <span className="summary-table__row__item__title">
-                  Total Net Salaries
-                </span>
-                <span className="summary-table__row__item__value">
-                  <IF condition={loadingSummary}>
-                    <Spinner size={16} color="--green" />
-                  </IF>
-                  <IF condition={!loadingSummary}>
-                    {currency}{' '}
-                    {Util.formatMoneyNumber(summary?.totalNetSalaries || 0)}
-                  </IF>
-                </span>
-              </div>
-            </div>
-
-            {summary?.items?.map((item) => {
+            {[
+              { name: 'Total Salary', value: payroll?.totalSalary },
+              { name: 'Total Net Salary', value: payroll?.totalNetSalary },
+              { name: 'Total Bonus', value: payroll?.totalBonus },
+              { name: 'Total Deductions', value: payroll?.totalDeductions },
+              { name: 'Total Tax', value: payroll?.totalTax },
+              { name: 'Total Pension', value: payroll?.totalPension },
+              { name: 'Total NHF', value: payroll?.totalNHF },
+              { name: 'Total Fee', value: payroll?.totalFees },
+            ].map((item) => {
               return (
                 <div key={item.name} className="summary-table__row">
                   <div className="summary-table__row__item">
@@ -114,10 +92,10 @@ const PayrollSummaryPage: NextPage = () => {
                       {item.name}
                     </span>
                     <span className="summary-table__row__item__value">
-                      <IF condition={loadingSummary}>
+                      <IF condition={loadingPayroll}>
                         <Spinner size={16} color="--green" />
                       </IF>
-                      <IF condition={!loadingSummary}>
+                      <IF condition={!loadingPayroll}>
                         {currency} {Util.formatMoneyNumber(item.value)}
                       </IF>
                     </span>
@@ -127,31 +105,17 @@ const PayrollSummaryPage: NextPage = () => {
             })}
 
             <div className="summary-table__row">
-              <div className="summary-table__row__item">
-                <span className="summary-table__row__item__title">Fee</span>
-                <span className="summary-table__row__item__value">
-                  <IF condition={loadingSummary}>
-                    <Spinner size={16} color="--green" />
-                  </IF>
-                  <IF condition={!loadingSummary}>
-                    {currency} {Util.formatMoneyNumber(summary?.fee || 0)}
-                  </IF>
-                </span>
-              </div>
-            </div>
-
-            <div className="summary-table__row">
               <div className="summary-table__row__item summary-table__row__item--large">
                 <span className="summary-table__row__item__title summary-table__row__item--large__title">
                   Total Payroll Cost
                 </span>
                 <span className="summary-table__row__item__value summary-table__row__item--large__value">
-                  <IF condition={loadingSummary}>
+                  <IF condition={loadingPayroll}>
                     <Spinner size={16} color="--green" />
                   </IF>
-                  <IF condition={!loadingSummary}>
+                  <IF condition={!loadingPayroll}>
                     {currency}{' '}
-                    {Util.formatMoneyNumber(summary?.totalAmount || 0)}
+                    {Util.formatMoneyNumber(payroll?.totalCharge || 0)}
                   </IF>
                 </span>
               </div>
@@ -160,7 +124,8 @@ const PayrollSummaryPage: NextPage = () => {
           <Formik
             key={JSON.stringify(params)}
             initialValues={{
-              ...params,
+              ...pick(params, ['year', 'proRateMonth']),
+              employeeIds: params.checked,
               payDate: '',
             }}
             validationSchema={savePayrollValidationSchema}
@@ -170,7 +135,6 @@ const PayrollSummaryPage: NextPage = () => {
               const {
                 handleSubmit,
                 handleBlur,
-                values,
                 errors,
                 touched,
                 isSubmitting,
@@ -178,7 +142,6 @@ const PayrollSummaryPage: NextPage = () => {
 
               const {
                 proRateMonth,
-                handleCycleChange,
                 handleProRateMonthBlur,
                 handlePayDateChange,
                 handleProRateMonthChange,
@@ -193,20 +156,6 @@ const PayrollSummaryPage: NextPage = () => {
                     <p className="payroll-summary__form__header__sub-title">
                       Enter date for salary to be disbursed
                     </p>
-                  </div>
-
-                  <div className="payroll-summary__form__input">
-                    <InputV2
-                      label="Cycle"
-                      placeholder="Cycle"
-                      defaultValue={values.cycle}
-                      type="number"
-                      onChange={handleCycleChange}
-                      onBlur={handleBlur}
-                      name="cycle"
-                      disabled={isSubmitting}
-                      error={touched.cycle && errors.cycle}
-                    />
                   </div>
 
                   <div className="payroll-summary__form__input">

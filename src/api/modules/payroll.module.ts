@@ -176,4 +176,10 @@ export class PayrollModule extends HttpRepository {
 
     return data;
   }
+
+  async getPayrollProcessorData(params: ProcessPayrollPayload) {
+    const { data } = await this.get('payrolls/processor-data', { params });
+
+    return data;
+  }
 }

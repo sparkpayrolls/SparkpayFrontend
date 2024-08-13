@@ -1,6 +1,5 @@
 import { FormikProps } from 'formik';
 import moment from 'moment';
-import { ChangeEvent } from 'react';
 import { ICreatePayrollPayload } from 'src/api/types';
 
 export const useCreatePayrollFormContext = () => {
@@ -15,13 +14,6 @@ export const useCreatePayrollFormContext = () => {
       .clone()
       .month(values.proRateMonth)
       .year(values.year || thisMoment.year());
-    const handleCycleChange = (event: ChangeEvent<HTMLInputElement>) => {
-      setValues({
-        ...values,
-        cycle: +event.target.value || ('' as any),
-      });
-      setParams({ cycle: +event.target.value || 0 });
-    };
     const handleProRateMonthChange = (value: unknown | null) => {
       const val = value as moment.Moment | null;
       setValues({
@@ -50,7 +42,6 @@ export const useCreatePayrollFormContext = () => {
 
     return {
       proRateMonth,
-      handleCycleChange,
       handleProRateMonthBlur,
       handlePayDateChange,
       handleProRateMonthChange,

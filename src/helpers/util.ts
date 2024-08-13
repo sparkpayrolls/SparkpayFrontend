@@ -3,6 +3,7 @@ import { IAllowedPermissions } from '@/components/types';
 import { sign, verify } from 'jsonwebtoken';
 import type momentNamespace from 'moment';
 import { NextRouter } from 'next/router';
+import pako from 'pako';
 import { HttpError } from 'src/api/repo/http.error';
 import {
   Administrator,
@@ -126,7 +127,7 @@ export class Util {
   }
 
   static formatMoneyNumber(val: number, precision = 0) {
-    const [num, dec] = val.toFixed(precision).split('.');
+    const [num, dec] = (val || 0).toFixed(precision).split('.');
     const withComma = (+num).toLocaleString();
     if (!dec || Number(dec) === 0) {
       return withComma;
@@ -349,7 +350,7 @@ export class Util {
     };
   }
 
-  static signPayload<T extends Record<string, unknown>>(payload: T) {
+  static signPayload(payload: any) {
     const { jwtSecretKey } = config();
 
     return sign(payload, jwtSecretKey as string);
@@ -533,5 +534,45 @@ export class Util {
     }
 
     return res.join(' ');
+  }
+
+  static getPreciseNumber(val: number, precision: number) {
+    return Number(val.toFixed(precision));
+  }
+
+  static WORK_DAYS = new Set([
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+  ]);
+
+  static calculateWorkDaysBetweenDates(
+    dateOne: momentNamespace.Moment,
+    dateTwo: momentNamespace.Moment,
+  ) {
+    const _dateOne = dateOne.clone();
+    let days = 0;
+    while (_dateOne.isSameOrBefore(dateTwo)) {
+      if (Util.WORK_DAYS.has(_dateOne.format('dddd'))) {
+        days += 1;
+      }
+      _dateOne.add(1, 'day');
+    }
+
+    return days;
+  }
+
+  static deflate(payload: unknown) {
+    return Buffer.from(pako.deflate(JSON.stringify(payload))).toString(
+      'base64',
+    );
+  }
+
+  static inflate(payload: string) {
+    return JSON.parse(
+      pako.inflate(Buffer.from(payload, 'base64'), { to: 'string' }).toString(),
+    );
   }
 }

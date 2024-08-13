@@ -102,7 +102,6 @@ export const savePayrollValidationSchema = Yup.object().shape({
   payDate: Yup.string().required('pay date is required'),
   proRateMonth: Yup.string().required('select a prorate month'),
   year: Yup.number().required('select a prorate month'),
-  cycle: Yup.number().required('enter payroll cycle'),
 });
 export const EmployeeOnboardingValidationSchema = Yup.object().shape({
   country: format.country,
@@ -231,6 +230,40 @@ export const SalaryAddonValidation = Yup.object().shape({
     )
     .required()
     .min(1),
+});
+
+export const PayrollEmployeeAddonValidation = Yup.object().shape({
+  type: Yup.string().required('Addon type is required'),
+  amount: Yup.string().when(
+    ['type'],
+    (
+      type: string,
+      schema: Yup.StringSchema<
+        string | undefined,
+        Record<string, any>,
+        string | undefined
+      >,
+    ) => {
+      if (type === 'Prorate') return schema;
+
+      return schema.required('Amount is required');
+    },
+  ),
+  name: Yup.string().when(
+    ['type'],
+    (
+      type: string,
+      schema: Yup.StringSchema<
+        string | undefined,
+        Record<string, any>,
+        string | undefined
+      >,
+    ) => {
+      if (type === 'Prorate') return schema;
+
+      return schema.required('Addon name is required');
+    },
+  ),
 });
 
 export const CreateAdministratorValidation = Yup.object().shape({

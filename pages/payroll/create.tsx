@@ -2,46 +2,41 @@ import { Button } from '@/components/Button/Button.component';
 import { TotalCard } from '@/components/Card/total-card.component';
 import { DatePicker } from '@/components/Input/date-picker.component';
 import { InputV2 } from '@/components/Input/Input.component';
-import { IF } from '@/components/Misc/if.component';
 import { FileStorageSVG } from '@/components/svg';
 import { CheckboxTableColumn } from '@/components/Table/check-box-table-col.component';
 import { TableLayout } from '@/components/Table/table-layout.component';
 import { TableV2 } from '@/components/Table/Table.component';
 import { WalletBalanceChip } from '@/components/WalletBalanceChip/wallet-balance-chip.component';
 import { NextPage } from 'next';
-import { useState } from 'react';
-import { Employee } from 'src/api/types';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { useCreatePayrollPageLogic } from 'src/helpers/hooks/use-create-payroll-page-logic.hook';
 import { Util } from 'src/helpers/util';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 
 const CreatePayroll: NextPage = () => {
-  const [search, setSearch] = useState('');
   const {
-    setParams,
-    hasEmployees,
-    employees,
-    loadingPayroll,
-    loadingWalletBalance,
     currency,
+    payroll,
+    loadingPayroll,
     walletBalance,
-    params,
-    allExcluded,
+    loadingWalletBalance,
+    search,
+    setSearch,
     summaryUrl,
-    headerRow,
-    remittanceRows,
-    onCheckall,
-    onCheck,
-    selected,
-    totals,
+    hasEmployees,
+    params,
+    setParams,
     thisMoment,
-    onEmployeeClick,
+    allChecked,
+    handleCheck,
+    handleCheckAll,
+    allUnchecked,
+    handleEmployeeClick,
   } = useCreatePayrollPageLogic();
 
   return (
     <DashboardLayoutV2
-      loading={loadingPayroll && !hasEmployees}
+      loading={loadingPayroll}
       title="Create payroll"
       href="/payroll"
     >
@@ -60,11 +55,11 @@ const CreatePayroll: NextPage = () => {
               ? [
                   {
                     label: 'Proceed',
-                    href: allExcluded ? '' : summaryUrl,
+                    href: summaryUrl,
                     primary: true,
                     type: 'button',
-                    disabled: allExcluded,
-                    title: allExcluded
+                    disabled: allUnchecked,
+                    title: allUnchecked
                       ? 'Select at least one employee to proceed'
                       : '',
                   },
@@ -75,16 +70,6 @@ const CreatePayroll: NextPage = () => {
           {hasEmployees ? (
             <>
               <div className="inputs">
-                <InputV2
-                  label="Cycle"
-                  className="inputs__cycle"
-                  type="number"
-                  placeholder="Cycle"
-                  defaultValue={params.cycle}
-                  onChange={(event) =>
-                    setParams({ cycle: +event.target.value })
-                  }
-                />
                 <DatePicker
                   label="Prorate Month"
                   picker="month"
@@ -97,6 +82,7 @@ const CreatePayroll: NextPage = () => {
                   onChange={(value) => {
                     if (value) {
                       setParams({
+                        ...params,
                         proRateMonth: value.format('MMMM'),
                         year: value.year(),
                       });
@@ -119,49 +105,41 @@ const CreatePayroll: NextPage = () => {
                 <thead>
                   <tr>
                     <CheckboxTableColumn
-                      checked={!selected.length}
-                      onChange={onCheckall}
+                      checked={allChecked}
+                      onChange={handleCheckAll}
                       element="th"
                     >
                       Name
                     </CheckboxTableColumn>
-                    <th>Salary ({currency})</th>
-                    <th>Net Salary ({currency}) </th>
-                    <IF condition={headerRow.has('bonuses')}>
-                      <th>Bonuses ({currency})</th>
-                    </IF>
-                    <IF condition={headerRow.has('deductions')}>
-                      <th>Deductions ({currency})</th>
-                    </IF>
-                    {remittanceRows.map((row) => {
-                      return <th key={row}>{row}</th>;
-                    })}
+                    <th>Salary</th>
+                    <th>Net Salary</th>
+                    <th>Bonus</th>
+                    <th>Deduction</th>
+                    <th>Tax</th>
+                    <th>Pension</th>
+                    <th>NHF</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {employees
-                    .filter(({ employee }) => {
-                      const { firstname, lastname } = (employee ||
-                        {}) as Employee;
+                  {payroll?.employees
+                    .filter(({ firstname, lastname }) => {
                       const name = `${firstname} ${lastname}`;
 
                       return !search || name.toLowerCase().includes(search);
                     })
                     .map((e) => {
-                      const employee = e.employee as Employee;
-
                       return (
-                        <tr key={employee.id}>
+                        <tr key={e.id}>
                           <CheckboxTableColumn
-                            checked={!selected.includes(employee.id)}
-                            onChange={onCheck(employee.id)}
+                            checked={params.checked.includes(e.id)}
+                            onChange={handleCheck(e.id)}
                             element="td"
                           >
                             <button
                               className="create-payroll-page__employee-name"
-                              onClick={onEmployeeClick(e)}
+                              onClick={handleEmployeeClick(e)}
                             >
-                              {employee.firstname} {employee.lastname}
+                              {e.firstname} {e.lastname}
                             </button>
                           </CheckboxTableColumn>
                           <td>
@@ -170,40 +148,25 @@ const CreatePayroll: NextPage = () => {
                           <td>
                             {currency} {Util.formatMoneyNumber(e.netSalary)}
                           </td>
-                          <IF condition={headerRow.has('bonuses')}>
-                            <td>
-                              {currency}{' '}
-                              {Util.formatMoneyNumber(
-                                Util.sum(e.bonuses?.map((d) => d.amount) || []),
-                              )}
-                            </td>
-                          </IF>
-                          <IF condition={headerRow.has('deductions')}>
-                            <td>
-                              {currency}{' '}
-                              {Util.formatMoneyNumber(
-                                Util.sum(
-                                  e.deductions?.map((d) => d.amount) || [],
-                                ),
-                              )}
-                            </td>
-                          </IF>
-                          {remittanceRows.map((row) => {
-                            const remittances = e.remittances || [];
-                            const remittance = remittances.find(
-                              (r) =>
-                                r.name === row.replace(` (${currency})`, ''),
-                            );
-
-                            return (
-                              <td key={`${employee.id}-${row}`}>
-                                {currency}{' '}
-                                {Util.formatMoneyNumber(
-                                  remittance?.amount || 0,
-                                )}
-                              </td>
-                            );
-                          })}
+                          <td>
+                            {currency} {Util.formatMoneyNumber(e.totalBonus)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.totalDeductions)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.tax?.amount || 0)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.pension?.amount || 0)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.nhf?.amount || 0)}
+                          </td>
                         </tr>
                       );
                     })}
@@ -243,17 +206,62 @@ const CreatePayroll: NextPage = () => {
         {hasEmployees && (
           <div className="create-payroll-page__totals">
             <div className="create-payroll-page__totals__items">
-              {Object.keys(totals).map((key, i) => {
-                return (
-                  <TotalCard
-                    key={key}
-                    loading={loadingPayroll}
-                    title={key}
-                    type={i === 0 ? 'primary' : 'secondary'}
-                    value={`${currency} ${Util.formatMoneyNumber(totals[key])}`}
-                  />
-                );
-              })}
+              <TotalCard
+                loading={loadingPayroll}
+                title={'Total Salary'}
+                type="primary"
+                value={`${currency} ${Util.formatMoneyNumber(
+                  payroll?.totalSalary,
+                )}`}
+              />
+
+              <TotalCard
+                loading={loadingPayroll}
+                title={'Total Net Salary'}
+                value={`${currency} ${Util.formatMoneyNumber(
+                  payroll?.totalNetSalary,
+                )}`}
+              />
+
+              <TotalCard
+                loading={loadingPayroll}
+                title={'Total Bonus'}
+                value={`${currency} ${Util.formatMoneyNumber(
+                  payroll?.totalBonus,
+                )}`}
+              />
+
+              <TotalCard
+                loading={loadingPayroll}
+                title={'Total Deduction'}
+                value={`${currency} ${Util.formatMoneyNumber(
+                  payroll?.totalDeductions,
+                )}`}
+              />
+
+              <TotalCard
+                loading={loadingPayroll}
+                title={'Total Tax'}
+                value={`${currency} ${Util.formatMoneyNumber(
+                  payroll?.totalTax,
+                )}`}
+              />
+
+              <TotalCard
+                loading={loadingPayroll}
+                title={'Total Pension'}
+                value={`${currency} ${Util.formatMoneyNumber(
+                  payroll?.totalPension,
+                )}`}
+              />
+
+              <TotalCard
+                loading={loadingPayroll}
+                title={'Total NHF'}
+                value={`${currency} ${Util.formatMoneyNumber(
+                  payroll?.totalNHF,
+                )}`}
+              />
             </div>
           </div>
         )}

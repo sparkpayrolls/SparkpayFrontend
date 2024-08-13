@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import { TableLayout } from '@/components/Table/table-layout.component';
-import { TotalCard } from '@/components/Card/total-card.component';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
 import { useCallback, useEffect, useState } from 'react';
@@ -25,7 +24,6 @@ import {
 import { HttpError } from 'src/api/repo/http.error';
 import { TableV2 } from '@/components/Table/Table.component';
 import { TableEmptyState } from '@/components/EmptyState/table-emptystate.component';
-import { IF } from '@/components/Misc/if.component';
 import { useSocket } from 'src/helpers/hooks/use-socket.hook';
 import { useWalletBalance } from 'src/helpers/hooks/use-wallet-balance.hook';
 import { SearchForm } from '@/components/Form/search.form';
@@ -218,6 +216,111 @@ const PayDetails: NextPage = () => {
                     loading={loading && !payroll}
                   />
                   <SinglePayrollDetail
+                    title="Total Salary"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalSalary ||
+                              totals['Total Salary Amount'] ||
+                              0,
+                            2,
+                          )}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
+                    title="Total Net Salary"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalSalary ||
+                              totals['Total Net Salary'] ||
+                              0,
+                            2,
+                          )}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
+                    title="Total Bonus"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalBonus || totals['Total Bonuses'] || 0,
+                            2,
+                          )}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
+                    title="Total Deductions"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalDeductions ||
+                              totals['Total Deductions'] ||
+                              0,
+                            2,
+                          )}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
+                    title="Total Tax"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(payroll?.totalTax || 0, 2)}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
+                    title="Total Pension"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalPension || 0,
+                            2,
+                          )}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
+                    title="Total NHF"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(payroll?.totalNHF || 0, 2)}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
                     title="Fee"
                     loading={loading && !payroll}
                     details={
@@ -336,17 +439,13 @@ const PayDetails: NextPage = () => {
                       />
                     </th>
                     <th style={{ paddingLeft: 0 }}>Name</th>
-                    <th>Salary ({currency})</th>
-                    <th>Net Salary ({currency}) </th>
-                    <IF condition={headerRow.has('bonuses')}>
-                      <th>Bonuses ({currency})</th>
-                    </IF>
-                    <IF condition={headerRow.has('deductions')}>
-                      <th>Deductions ({currency})</th>
-                    </IF>
-                    {remittanceRows.map((row) => {
-                      return <th key={row}>{row}</th>;
-                    })}
+                    <th>Salary</th>
+                    <th>Net Salary </th>
+                    <th>Bonuses</th>
+                    <th>Deductions</th>
+                    <th>Tax</th>
+                    <th>Pension</th>
+                    <th>NHF</th>
                     <th>Payout Status</th>
                   </tr>
                 </thead>
@@ -379,40 +478,32 @@ const PayDetails: NextPage = () => {
                           <td>
                             {currency} {Util.formatMoneyNumber(e.netSalary)}
                           </td>
-                          <IF condition={headerRow.has('bonuses')}>
-                            <td>
-                              {currency}{' '}
-                              {Util.formatMoneyNumber(
-                                Util.sum(e.bonuses?.map((d) => d.amount) || []),
-                              )}
-                            </td>
-                          </IF>
-                          <IF condition={headerRow.has('deductions')}>
-                            <td>
-                              {currency}{' '}
-                              {Util.formatMoneyNumber(
-                                Util.sum(
-                                  e.deductions?.map((d) => d.amount) || [],
-                                ),
-                              )}
-                            </td>
-                          </IF>
-                          {remittanceRows.map((row) => {
-                            const remittances = e.remittances || [];
-                            const remittance = remittances.find(
-                              (r) =>
-                                r.name === row.replace(` (${currency})`, ''),
-                            );
-
-                            return (
-                              <td key={`${employee.id}-${row}`}>
-                                {currency}{' '}
-                                {Util.formatMoneyNumber(
-                                  remittance?.amount || 0,
-                                )}
-                              </td>
-                            );
-                          })}
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(
+                              Util.sum(e.bonuses?.map((d) => d.amount) || []),
+                            )}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(
+                              Util.sum(
+                                e.deductions?.map((d) => d.amount) || [],
+                              ),
+                            )}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.tax?.amount || 0)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.pension?.amount || 0)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.nhf?.amount || 0)}
+                          </td>
                           <td>
                             <div className="d-flex align-items-center justify-content-space-between">
                               <StatusChip
@@ -457,7 +548,7 @@ const PayDetails: NextPage = () => {
               />
             )}
           </div>
-          <div className="create-payroll-page__totals">
+          {/* <div className="create-payroll-page__totals">
             <div className="create-payroll-page__totals__items">
               {Object.keys(totals).map((key, i) => {
                 return (
@@ -471,7 +562,7 @@ const PayDetails: NextPage = () => {
                 );
               })}
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </DashboardLayoutV2>

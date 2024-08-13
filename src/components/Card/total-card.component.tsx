@@ -4,7 +4,7 @@ import { ITotalCard } from '../types';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 export const TotalCard = (props: ITotalCard) => {
-  const { type = 'primary' } = props;
+  const { type = 'secondary' } = props;
 
   return (
     <div className={`total-card total-card--${type}`}>
