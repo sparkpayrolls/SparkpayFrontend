@@ -30,6 +30,48 @@ interface Props {
   loading?: boolean;
 }
 
+const DashboardHeader = ({ pageTitle }: { pageTitle: string }) => {
+  const { url } = useUrl();
+  return (
+    <>
+      <Title title={pageTitle || 'SparkPay | Payroll with ease'} />
+      <Head>
+        <meta
+          name="description"
+          content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
+        />
+        <meta
+          name="keywords"
+          content="sparkpay, payroll online, online payroll, payroll, payroll processor, payroll saas, process payroll online, payroll software as a service"
+        />
+        <meta name="robots" content="all" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={url} />
+        <meta
+          property="og:description"
+          content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
+        />
+        <meta
+          property="og:image"
+          content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
+        />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={url} />
+        <meta
+          property="twitter:description"
+          content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
+        />
+        <meta
+          property="twitter:image"
+          content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
+        />
+      </Head>
+    </>
+  );
+};
+
 // eslint-disable-next-line no-undef
 const DashboardLayout: React.FC<Props> = ({
   children,
@@ -41,7 +83,6 @@ const DashboardLayout: React.FC<Props> = ({
   const router = useRouter();
   const [loadingCompanySelect, setLoadingCompanySelect] = useState('');
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
-  const { url } = useUrl();
   const topBarClassName = classNames('dashboardLayout__top-bar', {
     'line-loader': loading,
   });
@@ -87,43 +128,13 @@ const DashboardLayout: React.FC<Props> = ({
     setVisibleDrawer(false);
   };
 
+  if (typeof window === 'undefined') {
+    return <DashboardHeader pageTitle={pageTitle} />;
+  }
+
   return (
     <>
-      <Title title={pageTitle || 'SparkPay | Payroll with ease'} />
-      <Head>
-        <meta
-          name="description"
-          content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
-        />
-        <meta
-          name="keywords"
-          content="sparkpay, payroll online, online payroll, payroll, payroll processor, payroll saas, process payroll online, payroll software as a service"
-        />
-        <meta name="robots" content="all" />
-
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={url} />
-        <meta
-          property="og:description"
-          content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
-        />
-        <meta
-          property="og:image"
-          content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
-        />
-
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={url} />
-        <meta
-          property="twitter:description"
-          content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
-        />
-        <meta
-          property="twitter:image"
-          content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
-        />
-      </Head>
-
+      <DashboardHeader pageTitle={pageTitle} />
       <div className="dashboardLayout">
         <nav className="dashboard-navigation">
           <Link href="/">

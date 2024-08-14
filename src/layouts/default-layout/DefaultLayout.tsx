@@ -71,13 +71,52 @@ export const Title = (props: { title: string }) => {
   );
 };
 
+const DefaultHead = () => {
+  const { url } = useUrl();
+
+  return (
+    <Head>
+      <meta
+        name="description"
+        content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
+      />
+      <meta
+        name="keywords"
+        content="sparkpay, payroll online, online payroll, payroll, payroll processor, payroll saas, process payroll online, payroll software as a service"
+      />
+      <meta name="robots" content="all" />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={url} />
+      <meta
+        property="og:description"
+        content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
+      />
+      <meta
+        property="og:image"
+        content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
+      />
+
+      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:url" content={url} />
+      <meta
+        property="twitter:description"
+        content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
+      />
+      <meta
+        property="twitter:image"
+        content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
+      />
+    </Head>
+  );
+};
+
 // eslint-disable-next-line no-undef
 const DefaultLayout: React.FC = ({ children }) => {
   const [navigation, setNavigation] = useState({
     'navigation--attach': false,
     'navigation--show': false,
   });
-  const { url } = useUrl();
   const { width } = useWindowDimensions();
 
   useTawkto();
@@ -100,41 +139,13 @@ const DefaultLayout: React.FC = ({ children }) => {
     }));
   };
 
+  if (typeof window === 'undefined') {
+    return <DefaultHead />;
+  }
+
   return (
     <>
-      <Head>
-        <meta
-          name="description"
-          content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
-        />
-        <meta
-          name="keywords"
-          content="sparkpay, payroll online, online payroll, payroll, payroll processor, payroll saas, process payroll online, payroll software as a service"
-        />
-        <meta name="robots" content="all" />
-
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={url} />
-        <meta
-          property="og:description"
-          content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
-        />
-        <meta
-          property="og:image"
-          content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
-        />
-
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={url} />
-        <meta
-          property="twitter:description"
-          content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
-        />
-        <meta
-          property="twitter:image"
-          content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
-        />
-      </Head>
+      <DefaultHead />
       <header className="default-layout__header" id="top">
         <Link href="/">
           <a className="default-layout__header-brand">

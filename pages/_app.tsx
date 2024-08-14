@@ -60,7 +60,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             <AuthManager>
               <Component {...pageProps} />
             </AuthManager>
-            <ToastContainer hideProgressBar={true} autoClose={3000} />
+            {typeof window !== 'undefined' && (
+              <ToastContainer hideProgressBar={true} autoClose={3000} />
+            )}
           </NiceModal.Provider>
         </PersistGateWrapper>
       </Provider>

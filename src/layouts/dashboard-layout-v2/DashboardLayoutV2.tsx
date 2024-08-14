@@ -5,14 +5,7 @@ import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 import { Title, useUrl } from '../default-layout/DefaultLayout';
 
-const DashboardLayoutV2 = (
-  props: PropsWithChildren<{
-    title: string;
-    href?: string;
-    action?(): any;
-    loading?: boolean;
-  }>,
-) => {
+const DashboardHeader = (props: { title: string }) => {
   const { url } = useUrl();
 
   return (
@@ -51,6 +44,25 @@ const DashboardLayoutV2 = (
           content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
         />
       </Head>
+    </>
+  );
+};
+
+const DashboardLayoutV2 = (
+  props: PropsWithChildren<{
+    title: string;
+    href?: string;
+    action?(): any;
+    loading?: boolean;
+  }>,
+) => {
+  if (typeof window === 'undefined') {
+    return <DashboardHeader title={props.title} />;
+  }
+
+  return (
+    <>
+      <DashboardHeader title={props.title} />
 
       <Container loading={props.loading} className="dashboard-layout-v2">
         <div className="dashboard-layout-v2__body">
