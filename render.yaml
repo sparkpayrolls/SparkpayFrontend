@@ -1,0 +1,23 @@
+# Exported from Render on 2024-08-16T06:31:19Z
+services:
+  - type: web
+    name: sparkpaydev-ui
+    runtime: docker
+    repo: https://github.com/sparkpayrolls/SparkpayFrontend
+    branch: dev
+    plan: free
+    envVars:
+      - key: PORT
+        sync: false
+      - key: NEXT_PUBLIC_JWT_KEY
+        sync: false
+      - key: NEXT_PUBLIC_PAYSTACK_KEY
+        sync: false
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
+    region: oregon
+    dockerContext: .
+    dockerfilePath: ./Dockerfile
+    buildComman: docker build --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL --build-arg NEXT_PUBLIC_PAYSTACK_KEY=$NEXT_PUBLIC_PAYSTACK_KEY --build-arg NEXT_PUBLIC_JWT_KEY=$NEXT_PUBLIC_JWT_KEY --build-arg NODE_ENV=$NODE_ENV -t sparkpaydev-ui .
+    pullRequestPreviewsEnabled: false
+version: '1'
