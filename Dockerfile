@@ -4,7 +4,7 @@ RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
-RUN echo "Build-time variable: $NEXT_PUBLIC_API_URL"
+RUN echo "Build-time variable: $TEST_VAR"
 
 COPY package.json .
 COPY yarn.lock .
