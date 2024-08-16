@@ -12,25 +12,29 @@ const getSocketClient = () => {
     _client = null;
   }
   if (!_client) {
-    authToken = _authToken;
-    const { apiUrl } = config();
-    _client = io(`${apiUrl}`, {
-      transports: ['websocket'],
-      query: {
-        authorization: authToken,
-      },
-      transportOptions: {
-        websocket: {
-          headers: {
-            authorization: authToken,
-          },
-          extraHeaders: {
-            authorization: authToken,
+    if (config().apiUrl) {
+      authToken = _authToken;
+      const { apiUrl } = config();
+      _client = io(`${apiUrl}`, {
+        transports: ['websocket'],
+        query: {
+          authorization: authToken,
+        },
+        transportOptions: {
+          websocket: {
+            headers: {
+              authorization: authToken,
+            },
+            extraHeaders: {
+              authorization: authToken,
+            },
           },
         },
-      },
-    });
-    client = _client;
+      });
+      client = _client;
+    } else {
+      setTimeout(getSocketClient, 3000);
+    }
   }
 
   return _client;

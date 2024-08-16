@@ -10,6 +10,7 @@ import { commitCompanies } from 'src/redux/slices/companies/companies.slice';
 import { commitUser, logOut } from 'src/redux/slices/user/user.slice';
 import { useSocket } from './use-socket.hook';
 import useApiCall from './useapicall.hook';
+import { config } from '../config';
 
 export const useAppLogic = () => {
   const router = useRouter();
@@ -51,20 +52,25 @@ export const useAppLogic = () => {
 
   useEffect(() => {
     startLoading();
-    Promise.all([
-      $api.user.getProfile(),
-      $api.company.getCompanies(),
-      $api.company.getCurrentCompany(),
-    ])
-      .then(([user, companies, administrator]) => {
-        dispatch(commitUser(user));
-        dispatch(commitCompanies(companies));
-        dispatch(commitAministrator(administrator));
-      })
-      .catch(() => {
-        /** */
-      })
-      .finally(stopLoading);
+    const loadAuth = () => {
+      if (config().apiUrl)
+        Promise.all([
+          $api.user.getProfile(),
+          $api.company.getCompanies(),
+          $api.company.getCurrentCompany(),
+        ])
+          .then(([user, companies, administrator]) => {
+            dispatch(commitUser(user));
+            dispatch(commitCompanies(companies));
+            dispatch(commitAministrator(administrator));
+          })
+          .catch(() => {
+            /** */
+          })
+          .finally(stopLoading);
+      else setTimeout(loadAuth, 3000);
+    };
+    loadAuth();
   }, [dispatch, startLoading, stopLoading]);
 
   useEffect(() => {
