@@ -33,7 +33,7 @@ const getSocketClient = () => {
       });
       client = _client;
     } else {
-      setTimeout(getSocketClient, 3000);
+      setTimeout(getSocketClient, 500);
     }
   }
 

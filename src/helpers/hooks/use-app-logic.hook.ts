@@ -68,7 +68,7 @@ export const useAppLogic = () => {
             /** */
           })
           .finally(stopLoading);
-      else setTimeout(loadAuth, 3000);
+      else setTimeout(loadAuth, 500);
     };
     loadAuth();
   }, [dispatch, startLoading, stopLoading]);
