@@ -9,12 +9,11 @@ import logo from '../../../public/svgs/logo.svg';
 import { Title, useUrl } from '../default-layout/DefaultLayout';
 import { IAuthLayout } from './auth-layout-types';
 
-export const AuthLayout = (props: PropsWithChildren<IAuthLayout>) => {
+const AuthHead = (props: PropsWithChildren<IAuthLayout>) => {
   const { url } = useUrl();
-  useTawkto();
 
   return (
-    <div className="login">
+    <>
       <Title title={props.title || 'SparkPay | Payroll with ease'} />
       <Head>
         <meta
@@ -52,6 +51,20 @@ export const AuthLayout = (props: PropsWithChildren<IAuthLayout>) => {
           content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
         />
       </Head>
+    </>
+  );
+};
+
+export const AuthLayout = (props: PropsWithChildren<IAuthLayout>) => {
+  useTawkto();
+
+  if (typeof window === 'undefined') {
+    return <AuthHead />;
+  }
+
+  return (
+    <div className="login">
+      <AuthHead />
       <div className="login__side-info">
         <Link href="/">
           <a className="login__side-info--logo">
@@ -60,7 +73,7 @@ export const AuthLayout = (props: PropsWithChildren<IAuthLayout>) => {
         </Link>
 
         <div className="login__side-info--graphics">
-          <Image src={auth_frame} alt="graphics svg" />
+          <Image src={auth_frame} alt="graphics svg" priority />
         </div>
 
         <div className="login__side-info--txt-area">

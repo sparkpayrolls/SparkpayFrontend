@@ -9,9 +9,10 @@ import { store } from '../src/redux/store';
 import NiceModal from '@ebay/nice-modal-react';
 import { PersistGate, PersistGateProps } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { Detector } from 'react-detect-offline';
 import { useAppLogic } from 'src/helpers/hooks/use-app-logic.hook';
+import { config } from 'src/helpers/config';
 
 let persistor = persistStore(store);
 const AuthManager = (props: PropsWithChildren<unknown>) => {
@@ -47,6 +48,17 @@ const PersistGateWrapper = (props: PersistGateProps) => {
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    fetch('/api/config')
+      .then((res) => res.json())
+      .then((data) => {
+        config.setEnv(data);
+      })
+      .catch(() => {
+        //...
+      });
+  }, []);
+
   return (
     <>
       <Head>
@@ -60,7 +72,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             <AuthManager>
               <Component {...pageProps} />
             </AuthManager>
-            <ToastContainer hideProgressBar={true} autoClose={3000} />
+            {typeof window !== 'undefined' && (
+              <ToastContainer hideProgressBar={true} autoClose={3000} />
+            )}
           </NiceModal.Provider>
         </PersistGateWrapper>
       </Provider>

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { config } from '../helpers/config';
 import { AuthModule } from './modules/auth.module';
@@ -13,7 +13,6 @@ import { PaymentModule } from './modules/payment.module';
 import { AuditModule } from './modules/audit.module';
 import { PayoutModule } from './modules/payout.module';
 import { FileModule } from './modules/file.module';
-import { RemittanceModule } from './modules/remittances/remittance.module';
 import { Admin } from './modules/admin.module';
 import { GroupModule } from './modules/group.module';
 import { RolesModule } from './modules/roles.module';
@@ -27,12 +26,20 @@ import moment from 'moment';
 
 let authToken: string;
 let authDetails: AuthDetails;
-let tokenInterceptor: number;
-let authInterceptor: number;
+let tokenInterceptor: (_cfg: AxiosRequestConfig) => unknown;
+let authInterceptor: (_error: AxiosError) => unknown;
 export class $api {
-  static $axios = axios.create({
-    baseURL: config().apiUrl,
-  });
+  static $axios = () => {
+    const { apiUrl: baseURL } = config();
+    const _$axios = axios.create({
+      baseURL,
+    });
+
+    _$axios.interceptors.request.use(tokenInterceptor);
+    _$axios.interceptors.response.use((res) => res, authInterceptor);
+
+    return _$axios;
+  };
 
   static registerInterceptors(
     _authToken: string,
@@ -41,10 +48,7 @@ export class $api {
     authToken = _authToken;
     authDetails = JSON.parse(Cookies.get('auth_details') || '""');
 
-    $api.$axios.interceptors.request.eject(tokenInterceptor);
-    $api.$axios.interceptors.response.eject(authInterceptor);
-
-    tokenInterceptor = $api.$axios.interceptors.request.use(async (_config) => {
+    tokenInterceptor = async (_config: AxiosRequestConfig) => {
       if (
         moment(authDetails.accessTokenExpires).isBefore(moment()) &&
         moment(authDetails.refreshTokenExpires).isAfter(moment())
@@ -71,25 +75,22 @@ export class $api {
           Authorization: `Bearer ${authToken}`,
         },
       };
-    });
+    };
 
-    authInterceptor = $api.$axios.interceptors.response.use(
-      (res) => res,
-      (error: AxiosError) => {
-        switch (error.response?.status) {
-          case 401: {
-            logOut(dispatch);
-            break;
-          }
-          case 403: {
-            dispatch(commitAministrator(null));
-            refreshCompanies(dispatch);
-          }
+    authInterceptor = (error: AxiosError) => {
+      switch (error.response?.status) {
+        case 401: {
+          logOut(dispatch);
+          break;
         }
+        case 403: {
+          dispatch(commitAministrator(null));
+          refreshCompanies(dispatch);
+        }
+      }
 
-        return Promise.reject(error);
-      },
-    );
+      return Promise.reject(error);
+    };
   }
 
   static auth = new AuthModule($api.$axios);
@@ -116,8 +117,6 @@ export class $api {
 
   static file = new FileModule(this.$axios);
 
-  static remittance = new RemittanceModule(this.$axios);
-
   static admin = new Admin(this.$axios);
 
   static group = new GroupModule(this.$axios);
@@ -125,6 +124,6 @@ export class $api {
   static role = new RolesModule(this.$axios);
 
   static async joinWaitList(email: string, name: string) {
-    await $api.$axios.post('/join-wait-list', { email, name });
+    await $api.$axios().post('/join-wait-list', { email, name });
   }
 }

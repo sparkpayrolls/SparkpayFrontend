@@ -1,4 +1,4 @@
-FROM node:14.19-alpine as builder
+FROM node:18-alpine as builder
 
 RUN mkdir -p /usr/src/app
 
@@ -13,7 +13,7 @@ COPY . .
 
 RUN yarn run build
 
-FROM node:14.19-alpine
+FROM node:18-alpine
 
 RUN mkdir -p /usr/src/app
 

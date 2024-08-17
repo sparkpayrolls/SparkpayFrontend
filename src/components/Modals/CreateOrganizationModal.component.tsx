@@ -74,6 +74,7 @@ const CreateOrganizationForm = ({ modal }: { modal: NiceModalHandler }) => {
 
   return (
     <Formik
+      key={JSON.stringify(initialValues)}
       initialValues={initialValues}
       validationSchema={createOrganizationValidationSchema}
       onSubmit={handleSubmit}

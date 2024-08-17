@@ -18,6 +18,7 @@ interface ISignUpForm {
   email: string;
   password: string;
   subcribeToMailList: boolean;
+  inviteCode?: string;
 }
 
 export const useCreateAccountPageContext = () => {
@@ -63,10 +64,7 @@ export const useCreateAccountPageContext = () => {
   ) => {
     try {
       actions.setSubmitting(true);
-      const { user, ...authDetails } = await $api.auth.signup({
-        ...values,
-        inviteCode,
-      });
+      const { user, ...authDetails } = await $api.auth.signup(values);
       Cookies.set('auth_token', authDetails.accessToken);
       Cookies.set('auth_details', JSON.stringify(authDetails));
       $api.registerInterceptors(authDetails.accessToken, dispatch);
@@ -97,6 +95,7 @@ export const useCreateAccountPageContext = () => {
     email: '',
     password: '',
     subcribeToMailList: true,
+    inviteCode,
   };
 
   return {

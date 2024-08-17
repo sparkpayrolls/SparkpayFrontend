@@ -31,6 +31,7 @@ const CreateAccount: NextPage = () => {
       </p>
 
       <Formik
+        key={JSON.stringify(initialValues)}
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={signupValidationSchema}
