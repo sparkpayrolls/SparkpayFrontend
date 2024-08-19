@@ -168,11 +168,11 @@ const DefaultLayout: React.FC = ({ children }) => {
                   <a className="navigation__link">Services</a>
                 </Link>
               </li>
-              <li className="navigation__list-item">
+              {/* <li className="navigation__list-item">
                 <Link href="/pricing">
                   <a className="navigation__link">Pricing</a>
                 </Link>
-              </li>
+              </li> */}
               <li className="navigation__list-item navigation__hide">
                 <Link href="#">
                   <a className="navigation__link">FAQ</a>
@@ -244,11 +244,11 @@ const DefaultLayout: React.FC = ({ children }) => {
                     <a className="footer__link">About us</a>
                   </Link>
                 </li> */}
-                <li>
+                {/* <li>
                   <Link href="/pricing">
                     <a className="footer__link">Pricing</a>
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
 
