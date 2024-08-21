@@ -77,6 +77,9 @@ export class PayrollProcessor {
         precision,
         proratedSalary,
         totalBonus,
+        pension:
+          (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
+        nhf: nhf.amount,
       });
       const netSalary = Util.getPreciseNumber(
         proratedSalary +
@@ -188,6 +191,8 @@ export class PayrollProcessor {
     precision: number;
     proratedSalary: number;
     totalBonus: number;
+    pension: number;
+    nhf: number;
   }) {
     const {
       employee,
@@ -195,6 +200,8 @@ export class PayrollProcessor {
       precision,
       proratedSalary,
       totalBonus,
+      pension,
+      nhf,
     } = payload;
     const _options = employee.statutoryDeductionOptions?.tax ||
       options || { enabled: false, addToCharge: false };
@@ -205,6 +212,8 @@ export class PayrollProcessor {
       precision,
       proratedSalary,
       totalBonus,
+      pension,
+      nhf,
     });
   }
 
