@@ -498,7 +498,11 @@ const PayDetails: NextPage = () => {
                           </td>
                           <td>
                             {currency}{' '}
-                            {Util.formatMoneyNumber(e.pension?.amount || 0)}
+                            {Util.formatMoneyNumber(
+                              (e.pension?.employeeContribution as number) +
+                                (e.pension?.voluntaryContribution as number) ||
+                                0,
+                            )}
                           </td>
                           <td>
                             {currency}{' '}
