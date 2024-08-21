@@ -81,7 +81,8 @@ export class PayrollProcessor {
       const netSalary = Util.getPreciseNumber(
         proratedSalary +
           totalBonus -
-          pension.amount -
+          ((pension.employeeContribution || 0) +
+            (pension.voluntaryPension || 0)) -
           nhf.amount -
           tax.amount -
           totalDeductions,
