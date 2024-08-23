@@ -43,17 +43,14 @@ export class TaxProcessor {
       };
     }
 
-    let firstConsolidatedRelief = Util.getPreciseNumber(
-      grossSalary * 0.01,
-      precision,
+    const firstConsolidatedRelief = Math.max(
+      Util.getPreciseNumber(grossSalary * 0.01, precision),
+      Util.getPreciseNumber(2e5 / 12, precision),
     );
     const secondConsolidatedRelief = Util.getPreciseNumber(
-      grossSalary * 0.2,
+      (grossSalary - pension - nhf) * 0.2,
       precision,
     );
-    if (firstConsolidatedRelief < Util.getPreciseNumber(2e5 / 12, precision)) {
-      firstConsolidatedRelief = Util.getPreciseNumber(2e5 / 12, precision);
-    }
 
     const taxRelief = Util.getPreciseNumber(
       firstConsolidatedRelief +
