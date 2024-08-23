@@ -6,6 +6,7 @@
   .payroll-create-table {
     width: 70%;
     border: 1px solid #dde5ee;
+    overflow-y: auto;
   }
   &__dropdown {
     cursor: pointer;
@@ -19,12 +20,11 @@
     border: 1px solid #dde5ee;
     padding: 10px;
     border-radius: 4px;
-    max-height: 276px;
+    max-height: 400px;
     width: 100%;
-    background: #fff;
     position: sticky;
     top: 0;
-    // right: 0;
+   
     p {
       color: #0b2253;
       font-size: 16px;
@@ -35,13 +35,15 @@
       width: 30%;
       margin: 0 40px 0 0;
       position: sticky;
+      top: 0;
+
     }
 
     &__section {
       background: $gray-filled;
       padding-top: 8px;
       color: #6d7a98;
-      height: 212px;
+      // height: 212px;
     }
     &__items {
       .total-card {
@@ -52,9 +54,6 @@
           display: flex;
           justify-content: space-between;
           margin-top: 15px;
-          position: sticky;
-          top: 0;
-          right: 0;
         }
 
         &__title {
@@ -96,8 +95,9 @@
     gap: 1rem;
     padding-bottom: 0.5rem;
     max-width: 100%;
-    z-index: 1000;
-
+    z-index: 10;
+    position: sticky;
+    top: 2.5rem;
     .input-v2__input,
     .date-picker__input {
       padding: 10px;
@@ -153,6 +153,7 @@
     }
   }
 
+ 
   .payroll {
     &__content {
       background: $gray-filled;
@@ -244,6 +245,8 @@
     width: 100%;
     justify-content: space-between;
     gap: 3rem;
+    position: sticky;
+    top: 0;
   }
 }
 .edit-payroll-employee {
@@ -291,6 +294,19 @@
     border-top: 1px solid #dde5ee;
     padding: 10px 0 0 5px;
   }
+  &__prorateUpdate{
+    background: $gray-filled;
+    padding:12px 8px 12px 8px;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    
+  }
+  &__totalSales {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0 0 5px;
+  }
   &__salarytitle {
     color: gray;
     font-size: $space-6;
@@ -299,7 +315,6 @@
   }
   &__table-section {
     width: 100%;
-
 
     thead th {
       padding-bottom: 0.5rem;
@@ -339,4 +354,15 @@
 
 .dropdown-row td {
   padding: 20px;
+}
+
+.employee-payroll-breakdown{
+  flex-basis: 38%;
+  margin:0;
+}
+
+.employee-payroll-breakdown .total-card:last-child .total-card__title,
+.employee-payroll-breakdown .total-card:last-child .total-card__value {
+  font-weight: bold;
+  font-size: $space-7;
 }

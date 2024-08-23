@@ -1,19 +1,17 @@
+import { useEffect } from 'react';
 import { Container } from '@/components/Shared/container.component';
 import { BackSVG } from '@/components/svg';
 import Head from 'next/head';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 import { Title, useUrl } from '../default-layout/DefaultLayout';
+import PayrollScrollState from '../../components/Payroll/payroll-scroll-state';
 
-const DashboardLayoutV2 = (
-  props: PropsWithChildren<{
-    title: string;
-    href?: string;
-    action?(): any;
-    loading?: boolean;
-  }>,
-) => {
+
+const DashboardHeader = (props: { title: string }) => {
   const { url } = useUrl();
+
+
 
   return (
     <>
@@ -51,6 +49,38 @@ const DashboardLayoutV2 = (
           content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
         />
       </Head>
+    </>
+  );
+};
+
+const DashboardLayoutV2 = (
+  props: PropsWithChildren<{
+    title: string;
+    href?: string;
+    action?(): any;
+    loading?: boolean;
+    getScroll?:any,
+  }>,
+) => {
+  if (typeof window === 'undefined') {
+    return <DashboardHeader title={props.title} />;
+  }
+
+  useEffect(() => {
+    if (props.getScroll) {
+      console.log('Adding scroll event listener');
+      window.addEventListener('scroll', props.getScroll);
+
+      return () => {
+        console.log('Removing scroll event listener');
+        window.removeEventListener('scroll', props.getScroll);
+      };
+    }
+  }, [props.getScroll]);
+
+  return (
+    <>
+      <DashboardHeader title={props.title} />
 
       <Container loading={props.loading} className="dashboard-layout-v2">
         <div className="dashboard-layout-v2__body">
@@ -71,7 +101,9 @@ const DashboardLayoutV2 = (
               </button>
             )}
           </Container>
-          <div className="dashboard-layout-v2__content">{props.children}</div>
+          <div className="dashboard-layout-v2__content" onScroll={props.getScroll}>
+            {props.children} 
+          </div>
         </div>
       </Container>
     </>

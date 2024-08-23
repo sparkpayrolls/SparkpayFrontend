@@ -4,8 +4,6 @@ import { ITotalCard } from '../types';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 export const TotalCard = (props: ITotalCard) => {
-  // const { type = 'primary' } = props;
-
   return (
     <div className='total-card total-card'>
       <div className="total-card__content">
@@ -19,7 +17,7 @@ export const TotalCard = (props: ITotalCard) => {
 
         <span className="total-card__value">
           {props.loading ? (
-            <Skeleton width={50}  count={1} />
+            <Skeleton width={50} count={1} />
           ) : (
             props.value
           )}

@@ -1,265 +1,246 @@
 import NiceModal from '@ebay/nice-modal-react';
-import { Switch } from 'antd';
 import { Formik } from 'formik';
-import { Addon } from 'src/api/types';
-import {
-  useEditPayrollEmployeeModalLogic,
-  useUpdatePayrollEmployeeAddonFormHandlers,
-  IEditPayrollEmployeeModalParams,
-} from 'src/helpers/hooks/use-edit-payroll-employee-modal-logic.hook';
 import { Util } from 'src/helpers/util';
 import {
-  SalaryAddonValidation,
-  UpdateSalaryValidation,
+  PayrollEmployeeAddonValidation,
 } from 'src/helpers/validation';
 import { Button } from '../Button/Button.component';
 import { DatePicker } from '../Input/date-picker.component';
-import { InputV2 } from '../Input/Input.component';
-import { Select } from '../Input/select.component';
+import { InputV2, TextArea } from '../Input/Input.component';
 import { EditableSVG } from '../svg';
 import { ModalLayout } from './ModalLayout.component';
+import moment from 'moment';
+import { useState } from 'react';
+import { SelectInput } from '../Input/seletct-input';
+import { InfoSVG } from '../svg';
 
-type IEditPayrollEmployeeModal = {
-  getParams(): IEditPayrollEmployeeModalParams;
-  paramUpdateRef(
-    _ref: ((_param: IEditPayrollEmployeeModalParams) => unknown) | null,
-  ): unknown;
-};
+export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
+  const {
+    employee,
+    currency,
+    handleUpdates,
+    getIndex,
+    bonus,
+    deductions,
+    prorate,
+    year,
+    month,
+  } = props;
 
-export const EditPayrollEmployeeModal = NiceModal.create(
-  (props: IEditPayrollEmployeeModal) => {
-    const {
-      params,
-      addon,
-      onEditAddon,
-      onDeleteAddon,
-      onSubmitAddon,
-      onSubmitSalary,
-      onToggleRemittance,
-      onSelectGroup,
-      onClearGroup,
-    } = useEditPayrollEmployeeModalLogic(props);
-    if (!params) {
-      return null;
-    }
+  return (
+    <ModalLayout key={JSON.stringify(props)} 
+    title={`Salary Add-On (${employee.firstname} ${employee.lastname})`}>
+      {() => {
+        const [addons, setAddons] = useState(
+          bonus
+            .map((b: any) => ({ ...b, type: 'Bonus' }))
+            .concat(deductions.map((d: any) => ({ ...d, type: 'Deduction' })))
+            .concat(
+              prorate ? [{ type: 'Prorate', name: 'Prorate', ...prorate }] : [],
+            ),
+        );
+        const [deletedAddons, setDeletedAddons] = useState<number[]>([]);
+        const [initialValues, setInitialValues] = useState({
+          type: '',
+          name: '',
+          amount: '',
+          description: '',
+          startDate: moment().year(year).month(month).startOf('month'),
+          endDate: moment().year(year).month(month),
+        });
+        const deleteAddon = (addon: any, index: number) => {
+          handleUpdates({
+            type: `delete:${addon.type}`,
+            payload: addon.index,
+          });
+          setDeletedAddons(deletedAddons.concat([index]));
+        };
 
-    const {
-      currency,
-      salary,
-      name,
-      employee,
-      hook,
-      addons,
-      payrollCycle,
-      year,
-      month,
-      onCustomAddon,
-      loadingPayroll,
-      enabledRemittances,
-      remittances,
-    } = params;
+        return (
+          <div className="edit-payroll-employee">
+            {/* <div className="edit-payroll-employee__section">
+              <Formik
+                initialValues={{ salary: employee.salary }}
+                onSubmit={(values, helpers) => {
+                  handleUpdates({ type: 'salary', payload: values.salary });
+                  helpers.setSubmitting(false);
+                }}
+                validationSchema={UpdateSalaryValidation}
+              >
+                {(props) => {
+                  const {
+                    errors,
+                    handleChange,
+                    handleSubmit,
+                    isSubmitting,
+                    touched,
+                    values,
+                  } = props;
 
-    return (
-      <ModalLayout title={name}>
-        {() => {
-          return (
-            <div key={JSON.stringify(params)} className="edit-payroll-employee">
-              <div className="edit-payroll-employee__section">
-                <h3 className="edit-payroll-employee__section-title">
-                  Edit Salary
-                </h3>
+                  return (
+                    <form
+                      onSubmit={handleSubmit}
+                      className="edit-payroll-employee__form"
+                    >
+                      <InputV2
+                        type="number"
+                        label={`Salary Amount (${currency})`}
+                        placeholder={`Salary Amount (${currency})`}
+                        name="salary"
+                        value={values.salary}
+                        onChange={handleChange}
+                        transformValue={Util.formatMoneyString(currency)}
+                        disabled={isSubmitting}
+                        error={touched.salary && (errors.salary as string)}
+                      />
 
-                <Formik
-                  initialValues={{ salary }}
-                  onSubmit={onSubmitSalary({ employee, hook })}
-                  validationSchema={UpdateSalaryValidation}
-                >
-                  {(props) => {
-                    const {
-                      errors,
-                      handleChange,
-                      handleSubmit,
-                      isSubmitting,
-                      touched,
-                      values,
-                    } = props;
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        showSpinner={isSubmitting}
+                        label="Update Salary"
+                        primary
+                      />
+                    </form>
+                  );
+                }}
+              </Formik>
+            </div> */}
 
-                    return (
-                      <form
-                        onSubmit={handleSubmit}
-                        className="edit-payroll-employee__form"
-                      >
-                        <InputV2
-                          type="number"
-                          label={`Salary Amount (${currency})`}
-                          placeholder={`Salary Amount (${currency})`}
-                          name="salary"
-                          value={values.salary}
-                          onChange={handleChange}
-                          transformValue={Util.formatMoneyString(currency)}
-                          disabled={isSubmitting || loadingPayroll}
-                          error={touched.salary && errors.salary}
-                        />
+            <div className="edit-payroll-employee__section">
+              {Boolean(addons.length) && (
+                <table className="edit-payroll-employee__table-section">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Amount</th>
+                      <th>Name</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {addons.map((bonus: any, i: number) => {
+                      if (deletedAddons.includes(i)) {
+                        return null;
+                      }
 
-                        <Button
-                          type="submit"
-                          disabled={
-                            isSubmitting ||
-                            values.salary === salary ||
-                            loadingPayroll
-                          }
-                          showSpinner={isSubmitting || loadingPayroll}
-                          label="Update Salary"
-                          primary
-                        />
-                      </form>
-                    );
-                  }}
-                </Formik>
-              </div>
+                      return (
+                        <tr key={`${employee}-addon-${bonus.amount}`}>
+                          <td>{bonus.type}</td>
+                          <td>
+                            {!bonus.amount
+                              ? `${moment(bonus.startDate).format(
+                                  'DD',
+                                )} --> ${moment(bonus.endDate).format('DD/MM')}`
+                              : `${currency} ${Util.formatMoneyNumber(
+                                  +bonus.amount,
+                                )}`}
+                          </td>
+                          <td>{bonus.name}</td>
+                          <td className="edit-payroll-employee__table-section--actions">
+                            <button
+                              onClick={() => {
+                                deleteAddon(bonus, i);
+                                setInitialValues({
+                                  ...bonus,
+                                  startDate: moment(
+                                    bonus.startDate || initialValues.startDate,
+                                  ),
+                                  endDate: moment(
+                                    bonus.endDate || initialValues.endDate,
+                                  ),
+                                });
+                              }}
+                              title="Edit"
+                            >
+                              <EditableSVG />
+                            </button>
+                            <button
+                              onClick={() => {
+                                deleteAddon(bonus, i);
+                              }}
+                              title="Delete"
+                            >
+                              <i className="fa fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
 
-              <div className="edit-payroll-employee__section">
-                <h3 className="edit-payroll-employee__section-title">
-                  Add Salary Addon
-                </h3>
+              <Formik
+                key={JSON.stringify(initialValues)}
+                initialValues={initialValues}
+                onSubmit={(values, helpers) => {
+                  handleUpdates({
+                    type: `add:${values.type}`,
+                    payload: values,
+                  });
+                  setAddons(
+                    addons.concat({ ...values, index: getIndex(values.type) }),
+                  );
+                  helpers.setSubmitting(false);
+                  setInitialValues({
+                    type: '',
+                    name: '',
+                    amount: '',
+                    description: '',
+                    startDate: moment()
+                      .year(year)
+                      .month(month)
+                      .startOf('month'),
+                    endDate: moment().year(year).month(month),
+                  });
+                }}
+                validationSchema={PayrollEmployeeAddonValidation}
+              >
+                {(props) => {
+                  const {
+                    errors,
+                    handleBlur,
+                    handleChange,
+                    handleSubmit,
+                    isSubmitting,
+                    touched,
+                    values,
+                    setValues,
+                  } = props;
 
-                {!!addons.length && (
-                  <table className="edit-payroll-employee__table-section">
-                    <thead>
-                      <tr>
-                        <th>Type</th>
-                        <th>Amount</th>
-                        <th>Name</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {addons.map((addon, i) => {
-                        const [date] = addon.dates;
-                        const { month } = date;
-                        const [start, end] = date.days || [];
-                        const prorateRange = `${start}/${month} -> ${end}/${month}`;
-                        const isProrateAddon = addon.type === 'prorate';
-                        const amount = `${currency} ${Util.formatMoneyNumber(
-                          +addon.amount,
-                        )}`;
+                  return (
+                    <form
+                      onSubmit={handleSubmit}
+                      className="edit-payroll-employee__form2"
+                    >
+                      <SelectInput
+                        key={JSON.stringify(values)}
+                        label="Select Add-on"
+                        placeholder="Choose the required add-on"
+                        loading={isSubmitting}
+                        name="type"
+                        options={['Bonus', 'Deduction'].concat(
+                          prorate ? [] : ['Prorate'],
+                        )}
+                        value={values.type}
+                        onBlur={handleBlur}
+                        error={(touched.type && errors.type) || ''}
+                        onChange={handleChange}
+                      />
 
-                        return (
-                          <tr key={`${employee}-addon-${i}`}>
-                            <td>{addon.type}</td>
-                            <td title={isProrateAddon ? amount : ''}>
-                              {isProrateAddon ? prorateRange : amount}
-                            </td>
-                            <td>{addon.name}</td>
-                            <td className="edit-payroll-employee__table-section--actions">
-                              <button
-                                disabled={loadingPayroll}
-                                onClick={onEditAddon(addon)}
-                                title="Edit"
-                              >
-                                <EditableSVG />
-                              </button>
-                              <button
-                                disabled={loadingPayroll}
-                                onClick={onDeleteAddon({
-                                  addon,
-                                  addons,
-                                  hook,
-                                  onCustomAddon,
-                                  month,
-                                  year,
-                                })}
-                                title="Delete"
-                              >
-                                <i className="fa fa-trash"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                )}
+                      {values.type !== 'Prorate' && (
+                        <>
+                          <TextArea
+                            label="Description"
+                            placeholder="Description"
+                            name="description"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={touched.description && errors.description}
+                            value={values.description}
+                          />
 
-                <Formik
-                  key={JSON.stringify(addon)}
-                  initialValues={
-                    {
-                      type: '',
-                      name: '',
-                      amount: '',
-                      payrollCycle,
-                      frequency: 'once',
-                      startYear: year,
-                      dates: [{ days: [], month, year: year }],
-                      ...(addon || {}),
-                    } as Addon
-                  }
-                  onSubmit={onSubmitAddon({
-                    onCustomAddon,
-                    hook,
-                    employee,
-                    addons,
-                  })}
-                  validationSchema={SalaryAddonValidation}
-                >
-                  {(props) => {
-                    const {
-                      errors,
-                      handleBlur,
-                      handleChange,
-                      handleSubmit,
-                      isSubmitting,
-                      setTouched,
-                      setValues,
-                      touched,
-                      values,
-                    } = props;
-                    const {
-                      handleTypeChange,
-                      handleDatesChange,
-                      prorateDates,
-                    } = useUpdatePayrollEmployeeAddonFormHandlers({
-                      values,
-                      setValues: setValues as any,
-                      month,
-                      year,
-                    });
-
-                    return (
-                      <form
-                        onSubmit={handleSubmit}
-                        className="edit-payroll-employee__form2"
-                      >
-                        <Select
-                          label="Type"
-                          placeholder="Type"
-                          disabled={isSubmitting}
-                          options={[
-                            { value: 'bonus', label: 'Bonus' },
-                            { value: 'deduction', label: 'Deduction' },
-                            { value: 'prorate', label: 'Prorate' },
-                          ]}
-                          value={values.type}
-                          onBlur={() =>
-                            setTouched({ ...touched, type: true }, true)
-                          }
-                          error={(touched.type && errors.type) || ''}
-                          onChange={handleTypeChange}
-                        />
-
-                        <InputV2
-                          label="Name"
-                          placeholder="Name"
-                          name="name"
-                          value={values.name}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          error={touched.name && errors.name}
-                          disabled={isSubmitting || loadingPayroll}
-                        />
-
-                        {values.type !== 'prorate' && (
                           <InputV2
                             label="Amount"
                             type="number"
@@ -270,122 +251,97 @@ export const EditPayrollEmployeeModal = NiceModal.create(
                             value={values.amount}
                             error={touched.amount && errors.amount}
                             transformValue={Util.formatMoneyString(currency)}
-                            disabled={isSubmitting || loadingPayroll}
+                            disabled={isSubmitting}
                           />
-                        )}
+                        </>
+                      )}
 
-                        {values.type === 'prorate' && (
+                      {values.type === 'Prorate' && (
+                        <>
+                          <TextArea
+                            label="Name"
+                            name="Name"
+                            id="name"
+                            placeholder=" Add a name"
+                            error={touched.description && errors.description}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.description}
+                          />
                           <DatePicker.RangePicker
-                            disabled={isSubmitting || loadingPayroll}
+                            disabled={isSubmitting}
                             label="Dates"
                             key={Math.random()}
-                            onBlur={() =>
-                              setTouched({ ...touched, dates: [] }, true)
-                            }
-                            defaultValue={prorateDates}
-                            onChange={handleDatesChange as any}
-                            error={
-                              (touched.dates &&
-                                errors.dates &&
-                                'Dates are required') ||
-                              ''
-                            }
+                            defaultValue={[values.startDate, values.endDate]}
+                            onChange={(_values: any) => {
+                              if (_values) {
+                                setValues({
+                                  ...values,
+                                  startDate: _values[0],
+                                  endDate: _values[1],
+                                });
+                              }
+                            }}
                           />
+                        </>
+                      )}
+                      {values.type === 'Prorate' &&
+                        values.startDate &&
+                        values.endDate && (
+                          <p className="edit-payroll-employee__text">
+                            Select the number of days in the month you want to
+                            pay this employee, to update their base salary for
+                            this payroll.
+                          </p>
                         )}
 
-                        <Button
-                          type="submit"
-                          disabled={isSubmitting || loadingPayroll}
-                          label="Save Addon"
-                          showSpinner={isSubmitting || loadingPayroll}
-                          primary
-                        />
-                      </form>
-                    );
-                  }}
-                </Formik>
-              </div>
-              {!!enabledRemittances.length && (
-                <div className="edit-payroll-employee__section">
-                  <h3 className="edit-payroll-employee__section-title">
-                    Toggle Remittances
-                  </h3>
+                      <p className="edit-payroll-employee__salarytext">
+                        Add another add-on
+                      </p>
 
-                  <ul>
-                    {enabledRemittances.map((enabledRemittance) => {
-                      const {
-                        name,
-                        groups,
-                        hasGroupsFeature,
-                      } = enabledRemittance;
-
-                      const remittance = remittances.find(
-                        (remittance) => remittance.name === name,
-                      );
-
-                      return (
-                        <li key={name} style={{ marginBottom: '2rem' }}>
-                          <h4 className="edit-payroll-employee__section-sub-title">
-                            {name}
-                          </h4>
-
-                          <div>
-                            <Switch
-                              className="organization-menu__dropdown__item__switch"
-                              defaultChecked={!!remittance}
-                              loading={loadingPayroll}
-                              disabled={loadingPayroll}
-                              onChange={onToggleRemittance({
-                                employee,
-                                hook,
-                                name,
-                              })}
-                            />
-                            {hasGroupsFeature && (
-                              <>
-                                <Select
-                                  label="Tax Group (optional)"
-                                  placeholder="Tax Group (optional)"
-                                  containerClassName="edit-payroll-employee__select"
-                                  disabled={!remittance || loadingPayroll}
-                                  options={groups.map((group) => ({
-                                    value: group.id,
-                                    label: group.name,
-                                  }))}
-                                  defaultValue={remittance?.groupId}
-                                  onChange={onSelectGroup({
-                                    employee,
-                                    name,
-                                    hook,
-                                  })}
-                                />
-                                {remittance?.groupId && (
-                                  <button
-                                    className="edit-payroll-employee__clear-btn"
-                                    onClick={onClearGroup({
-                                      employee,
-                                      hook,
-                                      name,
-                                      groupId: remittance?.groupId as string,
-                                    })}
-                                    disabled={loadingPayroll}
-                                  >
-                                    Clear
-                                  </button>
-                                )}
-                              </>
-                            )}
+                      {(values.type === 'Bonus' ||
+                        values.type === 'Deduction') && (
+                        <>
+                          <div className="edit-payroll-employee__totalSales">
+                            <p>{values.description}:</p>
+                            <p>{values?.amount}</p>
                           </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              )}
+                          <div className="edit-payroll-employee__totaltext">
+                            <p>Total:</p>
+                            <p>{values?.amount}</p>
+                          </div>
+                        </>
+                      )}
+
+                      {values.type === 'Prorate' &&
+                        values.startDate &&
+                        values.endDate && (
+                          <div className="edit-payroll-employee__prorateUpdate">
+                            <span>
+                              <InfoSVG />
+                            </span>
+                            <p>
+                              8 days salary will be paid to this staff this
+                              month
+                            </p>
+                          </div>
+                        )}
+
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        label="Save Addon"
+                        showSpinner={isSubmitting}
+                        primary
+                      />
+                    </form>
+                  );
+                }}
+              </Formik>
             </div>
-          );
-        }}
-      </ModalLayout>
-    );
-  },
-);
+          </div>
+        );
+      }}
+    </ModalLayout>
+  );
+});

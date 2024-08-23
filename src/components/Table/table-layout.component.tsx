@@ -7,6 +7,7 @@ import { SearchForm } from '../Form/search.form';
 import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IF } from '../Misc/if.component';
 import { ITableLayout } from '../types';
+import PayrollScrollState from '../Payroll/payroll-scroll-state';
 
 export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
   const showTopBar =
@@ -57,11 +58,27 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
       };
     }
   }, [containerRef, props.children, props.fixedHeader]);
+  const { styles, handleScroll } = PayrollScrollState();
+
+  useEffect(() => {
+    console.log('Input color updated:', styles);
+    const scrollableContent = document.querySelector(
+      '.dashboard-layout-v2__content',
+    );
+    scrollableContent?.addEventListener('scroll', handleScroll);
+    return () => {
+      scrollableContent?.removeEventListener('scroll', handleScroll);
+    };
+  }, [styles, handleScroll]);
 
   return (
     <div className={className}>
       <IF condition={showTopBar}>
-        <div className="table-layout__top-bar">
+        <div
+          className="table-layout__top-bar"
+          
+          style={{...styles, boxShadow:"none",}}
+        >
           <IF condition={!!props.title}>
             <p className="table-layout__top-bar__title">{props.title}</p>
           </IF>

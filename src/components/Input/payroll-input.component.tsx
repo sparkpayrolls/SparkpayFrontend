@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import { PayrollEditSVG } from '../svg'; // Adjust the import path accordingly
+import { PayrollDeleteSVG } from '../svg';
 import { IPayrollInput } from '../types';
 
-export const PayrollInput: React.FC<IPayrollInput> = ({ placeholder, value, onChange }) => {
+export const PayrollInput: React.FC<IPayrollInput> = ({ placeholder, value }) => {
   const [inputValue, setInputValue] = useState(value);
 
   return (
     <div className='payroll__input-section'>
       <input
-        type='text'
+        type='number'
         placeholder={placeholder} // Placeholder text if the input is empty
         className='payroll__input-value'
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <span className='payroll-input__icon'>
+      <div style={{display:'flex', gap:'1px'}}>
+      <span className='payroll-input__icon mr-4' >
         <PayrollEditSVG />
       </span>
+      <span className='payroll-input__icon'>
+        <PayrollDeleteSVG />
+      </span>
+      </div>
+  
     </div>
   );
 };
