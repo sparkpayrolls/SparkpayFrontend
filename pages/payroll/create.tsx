@@ -12,9 +12,9 @@ import withAuth from 'src/helpers/HOC/withAuth';
 import { useCreatePayrollPageLogic } from 'src/helpers/hooks/use-create-payroll-page-logic.hook';
 import { Util } from 'src/helpers/util';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
-import search_icon from '../../../SparkpayFrontend/public/svgs/search-icon.svg';
+import { SearchSVG } from '@/components/svg';
 import Image from 'next/image';
-import payroll_dropdown from '../../../SparkpayFrontend/public/svgs/payroll-dropdown.svg';
+import payroll_dropdown from '../../public/svgs/payroll-dropdown.svg';
 import PayrollDropdown from '@/components/payrollDropdown/payroll-dropdown';
 import { Button } from '@/components/Button/Button.component';
 import PayrollScrollState from '../../src/components/Payroll/payroll-scroll-state';
@@ -106,11 +106,7 @@ const CreatePayroll: NextPage = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Image
-                src={search_icon}
-                alt="search icon"
-                className="search-icon"
-              />
+             <SearchSVG/>
             </div>
 
             <DatePicker
