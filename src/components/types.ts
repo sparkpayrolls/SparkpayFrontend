@@ -362,7 +362,11 @@ export type ISearchInput = {
   value?: string;
   onSearch?(value: string): any;
 };
-
+export type IPayrollInput = {
+  placeholder?: string;
+  value?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+};
 export type ITableLayout = {
   // eslint-disable-next-line no-undef
   title?: string | JSX.Element;

@@ -3,16 +3,16 @@ import { Formik } from 'formik';
 import { Util } from 'src/helpers/util';
 import {
   PayrollEmployeeAddonValidation,
-  UpdateSalaryValidation,
 } from 'src/helpers/validation';
 import { Button } from '../Button/Button.component';
 import { DatePicker } from '../Input/date-picker.component';
-import { InputV2 } from '../Input/Input.component';
+import { InputV2, TextArea } from '../Input/Input.component';
 import { EditableSVG } from '../svg';
 import { ModalLayout } from './ModalLayout.component';
 import moment from 'moment';
 import { useState } from 'react';
 import { SelectInput } from '../Input/seletct-input';
+import { InfoSVG } from '../svg';
 
 export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
   const {
@@ -28,10 +28,8 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
   } = props;
 
   return (
-    <ModalLayout
-      key={JSON.stringify(props)}
-      title={`${employee.firstname} ${employee.lastname}`}
-    >
+    <ModalLayout key={JSON.stringify(props)} 
+    title={`Salary Add-On (${employee.firstname} ${employee.lastname})`}>
       {() => {
         const [addons, setAddons] = useState(
           bonus
@@ -46,6 +44,7 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
           type: '',
           name: '',
           amount: '',
+          description: '',
           startDate: moment().year(year).month(month).startOf('month'),
           endDate: moment().year(year).month(month),
         });
@@ -60,63 +59,6 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
         return (
           <div className="edit-payroll-employee">
             <div className="edit-payroll-employee__section">
-              <h3 className="edit-payroll-employee__section-title">
-                Edit Salary
-              </h3>
-
-              <Formik
-                initialValues={{ salary: employee.salary }}
-                onSubmit={(values, helpers) => {
-                  handleUpdates({ type: 'salary', payload: values.salary });
-                  helpers.setSubmitting(false);
-                }}
-                validationSchema={UpdateSalaryValidation}
-              >
-                {(props) => {
-                  const {
-                    errors,
-                    handleChange,
-                    handleSubmit,
-                    isSubmitting,
-                    touched,
-                    values,
-                  } = props;
-
-                  return (
-                    <form
-                      onSubmit={handleSubmit}
-                      className="edit-payroll-employee__form"
-                    >
-                      <InputV2
-                        type="number"
-                        label={`Salary Amount (${currency})`}
-                        placeholder={`Salary Amount (${currency})`}
-                        name="salary"
-                        value={values.salary}
-                        onChange={handleChange}
-                        transformValue={Util.formatMoneyString(currency)}
-                        disabled={isSubmitting}
-                        error={touched.salary && (errors.salary as string)}
-                      />
-
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        showSpinner={isSubmitting}
-                        label="Update Salary"
-                        primary
-                      />
-                    </form>
-                  );
-                }}
-              </Formik>
-            </div>
-
-            <div className="edit-payroll-employee__section">
-              <h3 className="edit-payroll-employee__section-title">
-                Add Salary Addon
-              </h3>
-
               {Boolean(addons.length) && (
                 <table className="edit-payroll-employee__table-section">
                   <thead>
@@ -196,6 +138,7 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                     type: '',
                     name: '',
                     amount: '',
+                    description: '',
                     startDate: moment()
                       .year(year)
                       .month(month)
@@ -224,8 +167,8 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                     >
                       <SelectInput
                         key={JSON.stringify(values)}
-                        label="Type"
-                        placeholder="Type"
+                        label="Select Add-on"
+                        placeholder="Choose the required add-on"
                         loading={isSubmitting}
                         name="type"
                         options={['Bonus', 'Deduction'].concat(
@@ -239,15 +182,14 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
 
                       {values.type !== 'Prorate' && (
                         <>
-                          <InputV2
-                            label="Name"
-                            placeholder="Name"
-                            name="name"
-                            value={values.name}
+                          <TextArea
+                            label="Description"
+                            placeholder="Description"
+                            name="description"
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            error={touched.name && errors.name}
-                            disabled={isSubmitting}
+                            error={touched.description && errors.description}
+                            value={values.description}
                           />
 
                           <InputV2
@@ -266,22 +208,75 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                       )}
 
                       {values.type === 'Prorate' && (
-                        <DatePicker.RangePicker
-                          disabled={isSubmitting}
-                          label="Dates"
-                          key={Math.random()}
-                          defaultValue={[values.startDate, values.endDate]}
-                          onChange={(_values: any) => {
-                            if (_values) {
-                              setValues({
-                                ...values,
-                                startDate: _values[0],
-                                endDate: _values[1],
-                              });
-                            }
-                          }}
-                        />
+                        <>
+                          <TextArea
+                            label="Name"
+                            name="Name"
+                            id="name"
+                            placeholder=" Add a name"
+                            error={touched.description && errors.description}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.description}
+                          />
+                          <DatePicker.RangePicker
+                            disabled={isSubmitting}
+                            label="Dates"
+                            key={Math.random()}
+                            defaultValue={[values.startDate, values.endDate]}
+                            onChange={(_values: any) => {
+                              if (_values) {
+                                setValues({
+                                  ...values,
+                                  startDate: _values[0],
+                                  endDate: _values[1],
+                                });
+                              }
+                            }}
+                          />
+                        </>
                       )}
+                      {values.type === 'Prorate' &&
+                        values.startDate &&
+                        values.endDate && (
+                          <p className="edit-payroll-employee__text">
+                            Select the number of days in the month you want to
+                            pay this employee, to update their base salary for
+                            this payroll.
+                          </p>
+                        )}
+
+                      <p className="edit-payroll-employee__salarytext">
+                        Add another add-on
+                      </p>
+
+                      {(values.type === 'Bonus' ||
+                        values.type === 'Deduction') && (
+                        <>
+                          <div className="edit-payroll-employee__totalSales">
+                            <p>{values.description}:</p>
+                            <p>{values?.amount}</p>
+                          </div>
+                          <div className="edit-payroll-employee__totaltext">
+                            <p>Total:</p>
+                            <p>{values?.amount}</p>
+                          </div>
+                        </>
+                      )}
+
+                      {values.type === 'Prorate' &&
+                        values.startDate &&
+                        values.endDate && (
+                          <div className="edit-payroll-employee__prorateUpdate">
+                            <span>
+                              <InfoSVG />
+                            </span>
+                            <p>
+                              8 days salary will be paid to this staff this
+                              month
+                            </p>
+                          </div>
+                        )}
 
                       <Button
                         type="submit"

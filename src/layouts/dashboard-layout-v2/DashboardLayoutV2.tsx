@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Container } from '@/components/Shared/container.component';
 import { BackSVG } from '@/components/svg';
 import Head from 'next/head';
@@ -54,11 +55,24 @@ const DashboardLayoutV2 = (
     href?: string;
     action?(): any;
     loading?: boolean;
+    getScroll?:any,
   }>,
 ) => {
   if (typeof window === 'undefined') {
     return <DashboardHeader title={props.title} />;
   }
+
+  
+  useEffect(() => {
+    if (props.getScroll) {
+      window.addEventListener('scroll', props.getScroll);
+
+      return () => {
+        window.removeEventListener('scroll', props.getScroll);
+      };
+    }
+  }, [props.getScroll]);
+
 
   return (
     <>
@@ -83,7 +97,7 @@ const DashboardLayoutV2 = (
               </button>
             )}
           </Container>
-          <div className="dashboard-layout-v2__content">{props.children}</div>
+          <div className="dashboard-layout-v2__content" onScroll={props.getScroll}>{props.children}</div>
         </div>
       </Container>
     </>

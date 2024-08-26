@@ -4,10 +4,9 @@ import { ITotalCard } from '../types';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 export const TotalCard = (props: ITotalCard) => {
-  const { type = 'secondary' } = props;
 
   return (
-    <div className={`total-card total-card--${type}`}>
+    <div className={`total-card total-card`}>
       <div className="total-card__content">
         <span className="total-card__title">
           {props.loading ? (
