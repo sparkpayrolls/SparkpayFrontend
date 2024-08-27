@@ -104,6 +104,12 @@ export class PayrollProcessor {
         tax,
         nhf,
         excludeFromTotals: Boolean(excludeFromTotals),
+        salaryBreakdown: Object.entries(
+          employee.salaryBreakdown || salaryBreakdown || {},
+        ).map(([name, value]) => ({
+          name,
+          value: (proratedSalary * value) / 100,
+        })),
       });
 
       if (!excludeFromTotals) {
