@@ -18,6 +18,14 @@ export class PayrollModule extends HttpRepository {
     return this.get<Payroll[]>(`/payrolls${query}`);
   }
 
+  async downloadReport(payrolls: string[]) {
+    const { data } = await this.get<string>(`/payrolls/report`, {
+      params: { payrolls },
+    });
+
+    return data;
+  }
+
   async pausePendingPayroll(id: string) {
     const { data } = await this.put<Payroll>(`/payrolls/${id}/pause`);
 

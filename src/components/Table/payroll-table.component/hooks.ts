@@ -42,6 +42,25 @@ export const usePayrollTableContext = () => {
   ) => {
     setParams({ page, perPage, search, all });
   };
+  const downloadReport = async (id: string) => {
+    try {
+      setLoading(true);
+      const report = await $api.payroll.downloadReport([id]);
+
+      Util.downloadFile({
+        file: `data:application/pdf;base64,${report}`,
+        name: 'payslip.pdf',
+      });
+
+      toast.success('payroll report downloaded successfully');
+    } catch (error) {
+      Util.onNonAuthError(error, (err) => {
+        toast.error(err.message);
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   const pausePayroll = async (id: string) => {
     try {
       setLoading(true);
@@ -96,6 +115,12 @@ export const usePayrollTableContext = () => {
     const canActivate = Util.canActivate([['Payroll', 'write']], administrator);
     const items: IKebabItem[] = [
       { href: `/payroll/${payroll.id}`, value: 'View' },
+      {
+        action() {
+          downloadReport(payroll.id);
+        },
+        value: 'Download Report',
+      },
     ];
     if (canActivate) {
       if (payroll.status === 'pending') {
