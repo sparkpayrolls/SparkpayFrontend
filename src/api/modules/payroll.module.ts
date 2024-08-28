@@ -18,9 +18,9 @@ export class PayrollModule extends HttpRepository {
     return this.get<Payroll[]>(`/payrolls${query}`);
   }
 
-  async downloadReport(payrolls: string[]) {
+  async downloadReport(payroll: string[]) {
     const { data } = await this.get<string>(`/payrolls/report`, {
-      params: { payrolls },
+      params: { payroll },
     });
 
     return data;
