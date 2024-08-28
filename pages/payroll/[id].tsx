@@ -169,8 +169,8 @@ const PayDetails: NextPage = () => {
       const report = await $api.payroll.downloadReport([payroll?.id]);
 
       Util.downloadFile({
-        file: `data:application/pdf;base64,${report}`,
-        name: 'payslip.pdf',
+        file: `data:application/vnd.ms-excel;base64,${report}`,
+        name: 'payroll_report.xlsx',
       });
 
       toast.success('payroll report downloaded successfully');
