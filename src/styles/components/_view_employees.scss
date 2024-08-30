@@ -1,0 +1,56 @@
+.view-employees {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  &__header {
+    &__text {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 32px;
+      color: #0e347e;
+      > span {
+        cursor: pointer;
+      }
+    }
+  }
+  &__tax {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 42px;
+    &__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      &-cont {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 8px 13px;
+        border-radius: 8px;
+        width: 297px;
+        background-color: #f7f9fb;
+        &__info {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          &-sm {
+            font-size: 14px;
+            line-height: 22px;
+            font-weight: 400;
+            color: #6d7a98;
+          }
+          &-md {
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 16px;
+          }
+        }
+      }
+    }
+  }
+}

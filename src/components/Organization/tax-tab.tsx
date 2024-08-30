@@ -3,6 +3,7 @@ import { Formik, FormikProps } from 'formik';
 import { TaxInfo } from '../types';
 import { OrgInput } from './org-comp';
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 type Errors = {
   id?: string;
@@ -14,11 +15,8 @@ type FormValues = {
   rate: string;
   state: string;
 };
-type InfoProp = {
-  viewEmployees: any;
-};
-function TaxTab(props: InfoProp) {
-  const { viewEmployees } = props;
+
+function TaxTab() {
   // const [error, setError] = useState<string>('');
   const [errors, setErrors] = useState<Errors>({});
   const [Fvalues, setFvalues] = useState<FormValues>({
@@ -169,12 +167,11 @@ function TaxTab(props: InfoProp) {
                 <button className="info__remittance__form__save-btn">
                   Save Changes
                 </button>
-                <button
-                  onClick={() => viewEmployees(true)}
-                  className="info__remittance__form__view-btn"
-                >
-                  View Employees
-                </button>
+                <Link href="/organisations/view_employees">
+                  <a className="info__remittance__form__view-btn">
+                    View Employees
+                  </a>
+                </Link>
               </div>
             </form>
           );

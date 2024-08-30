@@ -3,18 +3,15 @@ import { Formik, FormikProps } from 'formik';
 import { OrgInput } from './org-comp';
 import React, { useState } from 'react';
 import { NhfInfo } from '../types';
+import Link from 'next/link';
 
 type Errors = {
   id?: string;
   rate?: string;
   state?: string;
 };
-type InfoProp = {
-  viewEmployees: any;
-};
 
-export const NhfTab = (props: InfoProp) => {
-  const { viewEmployees } = props;
+export const NhfTab = () => {
   const [errors, setErrors] = useState<Errors>({});
   const [Fvalues, setFvalues] = useState<NhfInfo>({
     status: '',
@@ -115,12 +112,11 @@ export const NhfTab = (props: InfoProp) => {
                 <button className="info__remittance__form__save-btn">
                   Save Changes
                 </button>
-                <button
-                  onClick={() => viewEmployees(true)}
-                  className="info__remittance__form__view-btn"
-                >
-                  View Employees
-                </button>
+                <Link href="/organisations/view_employees">
+                  <a className="info__remittance__form__view-btn">
+                    View Employees
+                  </a>
+                </Link>
               </div>
             </form>
           );

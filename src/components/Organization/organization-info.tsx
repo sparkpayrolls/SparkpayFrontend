@@ -3,6 +3,7 @@ import { SingleDetail } from '../Employee/single-detail.component';
 import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
 import { EditPenSvg, UploadFile } from '../../../src/components/svg/index';
 import { Country } from 'src/api/types';
+import Skeleton from 'react-loading-skeleton';
 
 function OrganizationInfo() {
   const {
@@ -12,7 +13,23 @@ function OrganizationInfo() {
     loading,
     moment,
   } = useOrganizationDetails();
-  return (
+  return loading ? (
+    <div className="info__left-cont">
+      <div className="info__left-cont__top">
+        <Skeleton width={200} height={50} />
+        <Skeleton width={200} height={50} />
+      </div>
+
+      <div className="info__left-cont__bottom">
+        <div className="info__left-cont__info-column">
+          <Skeleton height={40} width={440} />
+          <Skeleton height={40} width={440} />
+          <Skeleton height={40} width={440} />
+          <Skeleton height={40} width={440} />
+        </div>
+      </div>
+    </div>
+  ) : (
     <div className="info__left-cont">
       <div className="info__left-cont__top">
         <p className="info__hero-text">Information</p>
@@ -29,7 +46,7 @@ function OrganizationInfo() {
 
       <div className="info__left-cont__bottom">
         <div className="info__left-cont__info-column">
-          <SingleDetail title="name" details="Credpal" />
+          <SingleDetail title="name" details={organization?.name} />
           <SingleDetail title="Email Address" details={organization?.email} />
           <SingleDetail
             title="RC Number"

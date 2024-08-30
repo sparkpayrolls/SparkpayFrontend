@@ -37,6 +37,10 @@
 @import './components/chart';
 @import './components/app-loader';
 @import './components/success-message';
+@import './components/organization-settings';
+@import './components/org-info';
+@import './components/view_employees';
+@import './components/helper-info';
 
 // PAGES
 @import './pages/home';
@@ -62,8 +66,6 @@
 @import './pages/administrators';
 @import './pages/tax-group-details';
 @import './pages/pricing';
-@import './components/organization-settings';
-@import './components/org-info';
 
 // TAILWINDCSS
 @import 'tailwindcss/base';
