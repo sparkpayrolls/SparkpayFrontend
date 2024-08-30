@@ -5,11 +5,12 @@ import { Formik } from 'formik';
 import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
 import { EditOrganisationDetailsValidationSchema } from 'src/helpers/validation';
-import { Company } from 'src/api/types';
+import { Company, Country } from 'src/api/types';
 import { Util } from 'src/helpers/util';
-import { NameValueInputGroup } from '../Input/name-value.component';
 import { HttpError } from 'src/api/repo/http.error';
 import { $api } from 'src/api';
+import { SingleDetail } from '../Employee/single-detail.component';
+import { UploadFile } from '../svg';
 
 type IOrganisationDetailsModal = PropsWithChildren<{
   organization?: Company;
@@ -18,7 +19,7 @@ type IOrganisationDetailsModal = PropsWithChildren<{
 export const OrganisationDetailsModal = NiceModal.create(
   (props: IOrganisationDetailsModal) => {
     return (
-      <ModalLayout title="Edit Organisation Details">
+      <ModalLayout title="Edit Details">
         {(modal) => {
           return (
             <OrganisationDetailsForm
@@ -45,6 +46,8 @@ const OrganisationDetailsForm = (props: IOrganisationDetailsForm) => {
     phonenumber: organization?.phonenumber,
     salaryBreakdown: organization?.salaryBreakdown || [],
     logo: organization?.logo,
+    country: organization?.country,
+    rcnumber: organization?.rcNumber,
   };
 
   return (
@@ -127,59 +130,31 @@ const OrganisationDetailsForm = (props: IOrganisationDetailsForm) => {
               autoComplete="off"
             >
               <div className="organisation-detail__section">
-                <label htmlFor="logo" className="image-upload-input">
-                  <input
-                    type="file"
-                    name="logo"
-                    id="logo"
-                    className="sr-only"
-                    accept=".jpg,.png,.jpeg"
-                    onChange={(event) => {
-                      const files = event.target.files;
-                      if (files) {
-                        const file = files[0];
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          setValues({
-                            ...values,
-                            logo: `${reader.result}:filename${file.name}`,
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
+                <div
+                  style={{ display: 'flex' }}
+                  className="organisation-detail__flex"
+                >
+                  <InputV2
+                    type="text"
+                    label="Name"
+                    placeholder="Name"
+                    name="name"
+                    value={values.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.name && errors.name}
                   />
-                  <span className="text__label label" role="label">
-                    Logo
-                  </span>
-                  <div>
-                    {values.logo && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={values.logo.split(':filename')[0]}
-                        alt="company-logo"
-                      />
-                    )}
-                    <span
-                      className="text__label placeholder"
-                      role="placeholder"
-                    >
-                      {values.logo ? 'Change your logo' : 'Upload your logo'}
-                    </span>
-                  </div>
-                </label>
-              </div>
-              <div className="organisation-detail__section">
-                <InputV2
-                  type="text"
-                  label="Company Name"
-                  placeholder="Company Name"
-                  name="name"
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.name && errors.name}
-                />
+                  <InputV2
+                    type="phone"
+                    label="Phone Number"
+                    placeholder="phone Number"
+                    name="phonenumber"
+                    value={values.phonenumber}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.phonenumber && errors.phonenumber}
+                  />
+                </div>
               </div>
 
               <div className="organisation-detail__section">
@@ -197,34 +172,69 @@ const OrganisationDetailsForm = (props: IOrganisationDetailsForm) => {
 
               <div className="organisation-detail__section">
                 <InputV2
-                  type="tel"
-                  label="Phone No."
-                  placeholder="Phone No."
-                  name="phonenumber"
-                  value={values.phonenumber}
+                  type="text"
+                  label="Country"
+                  placeholder="Country"
+                  name="country"
+                  value={(values?.country as Country)?.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  error={touched.phonenumber && errors.phonenumber}
+                  error={touched.country && errors.country}
                 />
+              </div>
+              <div className="organisation-detail__section">
+                <InputV2
+                  type="text"
+                  label="RC Number"
+                  placeholder="AP 703 321 AAA"
+                  name="rcnumber"
+                  value={values.rcnumber}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.rcnumber && errors.rcnumber}
+                />
+              </div>
+              <div className="organisation-detail__section">
+                {' '}
+                <div className="info__left-cont__logo">
+                  <SingleDetail
+                    title="Logo"
+                    details={
+                      organization?.logo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={organization.logo} alt="company-logo" />
+                      ) : (
+                        'N/A'
+                      )
+                    }
+                  />{' '}
+                  <div className="info__upload">
+                    <label htmlFor="logoUpload">
+                      <UploadFile /> Upload Logo
+                    </label>
+                    <input
+                      type="file"
+                      id="logoUpload"
+                      accept=".jpg,.png,.jpeg"
+                      onChange={(event) => {
+                        const files = event.target.files;
+                        if (files) {
+                          const file = files[0];
+                          const reader = new FileReader();
+                          reader.onload = () => {
+                            setValues({
+                              ...values,
+                              logo: `${reader.result}:filename${file.name}`,
+                            });
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="organisation-detail__section">
-                <NameValueInputGroup
-                  className="organisation-salary-breakdown"
-                  label="Salary Breakdown"
-                  items={values.salaryBreakdown}
-                  transformValue={(v: number) => {
-                    return `${(+v).toFixed(1)}%`;
-                  }}
-                  onChange={(e) => {
-                    setValues({
-                      ...values,
-                      salaryBreakdown: e.target.value as any,
-                    });
-                  }}
-                  error={errors.salaryBreakdown}
-                />
-              </div>
               <div className="form__submit-button">
                 <Button
                   type="submit"

@@ -183,6 +183,7 @@ export type Company = Document & {
   bank?: string;
   bvn?: string;
   bvnName?: string;
+  rcNumber: string;
 };
 
 export enum PermissionGroupEnum {

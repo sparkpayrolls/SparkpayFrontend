@@ -270,6 +270,26 @@ export type WalletBilling = {
   amount: string;
   channel: string;
 };
+/**remittance tax info*/
+export type TaxInfo = {
+  status: string;
+  taxType: string;
+  taxId: string;
+  taxtRate: string;
+  taxState: string;
+};
+
+export type PensionInfo = {
+  status: string;
+  PesionType: string;
+  PensionId: string;
+};
+/**remittance NHF info*/
+export type NhfInfo = {
+  status: string;
+  NhfId: string;
+};
+
 /** NavListItem */
 export type IDashboardNavigationListItem = {
   router: NextRouter;
@@ -334,6 +354,10 @@ export type IEmployeeTab = {
   paginationMeta: PaginationMeta;
   refreshEmployees: IGetEmployees;
 };
+
+export type ITaxTab = {};
+export type INhfTab = {};
+export type IPensionTab = {};
 
 export type ITab = {
   default?: string;
