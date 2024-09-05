@@ -61,6 +61,7 @@ export type ProcessedEmployee = {
   proratedSalary: number;
   prorateDays: number;
   excludeFromTotals: boolean;
+  salaryBreakdown: { name: string; value: number }[];
 };
 
 export type ProcessedPayroll = {

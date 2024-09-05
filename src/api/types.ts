@@ -452,7 +452,7 @@ export type PayrollEmployeeRemittance = {
   name: string;
   amount: number;
   meta: unknown;
-};
+} & Record<string, unknown>;
 
 export type PayrollEmployee = Document & {
   salary: number;

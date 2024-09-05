@@ -160,6 +160,28 @@ const PayDetails: NextPage = () => {
       setApiCalls(Math.max(apiCalls - 1, 0));
     }
   };
+  const downloadReport = async () => {
+    try {
+      setApiCalls(Math.max(apiCalls + 1, 1));
+      if (loading || !payroll) {
+        return;
+      }
+      const report = await $api.payroll.downloadReport([payroll?.id]);
+
+      Util.downloadFile({
+        file: `data:application/vnd.ms-excel;base64,${report}`,
+        name: 'payroll_report.xlsx',
+      });
+
+      toast.success('payroll report downloaded successfully');
+    } catch (error) {
+      Util.onNonAuthError(error, (err) => {
+        toast.error(err.message);
+      });
+    } finally {
+      setApiCalls(Math.max(apiCalls - 1, 0));
+    }
+  };
 
   useEffect(() => {
     getPayroll();
@@ -395,6 +417,10 @@ const PayDetails: NextPage = () => {
                   <KebabMenu
                     items={[
                       {
+                        action: downloadReport,
+                        value: 'Download Report',
+                      },
+                      {
                         action() {
                           if (selected.length) {
                             downloadPayslips({
@@ -498,7 +524,11 @@ const PayDetails: NextPage = () => {
                           </td>
                           <td>
                             {currency}{' '}
-                            {Util.formatMoneyNumber(e.pension?.amount || 0)}
+                            {Util.formatMoneyNumber(
+                              (e.pension?.employeeContribution as number) +
+                                (e.pension?.voluntaryContribution as number) ||
+                                0,
+                            )}
                           </td>
                           <td>
                             {currency}{' '}
