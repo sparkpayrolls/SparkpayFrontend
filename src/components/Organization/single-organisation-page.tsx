@@ -7,7 +7,8 @@ import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
 import RemittanceInformation from './remittance-information';
 
 const OrganisationDetailsUnsecured = () => {
-  const { loading, organization } = useOrganizationDetails();
+  const organizationDetails = useOrganizationDetails();
+  const { loading, organization } = organizationDetails;
 
   return (
     <DashboardLayout loading={loading} pageTitle="Organisation Details">
@@ -27,7 +28,7 @@ const OrganisationDetailsUnsecured = () => {
         {!!organization && (
           <div className="organization-settings">
             <div className="organization-settings__flex">
-              <OrganizationInfo />
+              <OrganizationInfo organizationDetails={organizationDetails} />
               <SalaryBreakdown />
             </div>
             <RemittanceInformation />

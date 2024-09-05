@@ -69,6 +69,7 @@ export const EditOrganisationDetailsValidationSchema = Yup.object().shape({
   name: Yup.string().required('Company name is required'),
   phonenumber: format.phonenumber,
   logo: Yup.string().optional(),
+  rcNumber: Yup.string().optional(),
   salaryBreakdown: Yup.array()
     .of(
       Yup.object().shape({

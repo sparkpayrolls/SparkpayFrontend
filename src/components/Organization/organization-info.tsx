@@ -1,18 +1,23 @@
 import React from 'react';
 import { SingleDetail } from '../Employee/single-detail.component';
 import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
-import { EditPenSvg, UploadFile } from '../../../src/components/svg/index';
+import { EditPenSvg } from '../../../src/components/svg/index';
 import { Country } from 'src/api/types';
 import Skeleton from 'react-loading-skeleton';
 
-function OrganizationInfo() {
+type Props = {
+  organizationDetails: ReturnType<typeof useOrganizationDetails>;
+};
+
+function OrganizationInfo(props: Props) {
   const {
     onEditDetails,
     organization,
     canEdit,
     loading,
     moment,
-  } = useOrganizationDetails();
+  } = props.organizationDetails;
+
   return loading ? (
     <div className="info__left-cont">
       <div className="info__left-cont__top">
@@ -80,14 +85,7 @@ function OrganizationInfo() {
               'N/A'
             )
           }
-        />{' '}
-        <div className="info__upload">
-          <label htmlFor="logoUpload">
-            {' '}
-            <UploadFile /> Upload Logo
-          </label>
-          <input type="file" id="logoUpload" />
-        </div>
+        />
       </div>
     </div>
   );

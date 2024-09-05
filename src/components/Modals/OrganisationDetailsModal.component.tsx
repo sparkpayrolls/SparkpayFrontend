@@ -5,7 +5,7 @@ import { Formik } from 'formik';
 import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
 import { EditOrganisationDetailsValidationSchema } from 'src/helpers/validation';
-import { Company, Country } from 'src/api/types';
+import { Company } from 'src/api/types';
 import { Util } from 'src/helpers/util';
 import { HttpError } from 'src/api/repo/http.error';
 import { $api } from 'src/api';
@@ -44,10 +44,8 @@ const OrganisationDetailsForm = (props: IOrganisationDetailsForm) => {
     name: organization?.name,
     email: organization?.email,
     phonenumber: organization?.phonenumber,
-    salaryBreakdown: organization?.salaryBreakdown || [],
     logo: organization?.logo,
-    country: organization?.country,
-    rcnumber: organization?.rcNumber,
+    rcNumber: organization?.rcNumber,
   };
 
   return (
@@ -59,15 +57,11 @@ const OrganisationDetailsForm = (props: IOrganisationDetailsForm) => {
           const toast = (await import('react-toastify')).toast;
           try {
             helpers.setSubmitting(true);
-            const { logo, salaryBreakdown, ...others } = values;
+            const { logo, ...others } = values;
             const [data, filename] = logo?.split(':filename') || [];
             const update = {
               ...others,
               logoFile: { filename, data },
-              salaryBreakdown: salaryBreakdown.map((b) => ({
-                name: b.name,
-                value: b.value,
-              })),
             };
             if (!filename || !data) {
               // @ts-ignore
@@ -103,25 +97,11 @@ const OrganisationDetailsForm = (props: IOrganisationDetailsForm) => {
             touched,
             isSubmitting,
             setValues,
-            setErrors,
           } = props;
-          if (!errors.salaryBreakdown) {
-            const totalSalaryBreakdown = values.salaryBreakdown.reduce(
-              (acc, cur) => {
-                if (!+cur.value) return acc;
 
-                return acc + +cur.value;
-              },
-              0,
-            );
-            if (totalSalaryBreakdown !== 100) {
-              setErrors({
-                ...errors,
-                salaryBreakdown: 'Total salary breakdown should be 100%',
-              });
-              return null;
-            }
-          }
+          const logo =
+            values.logo?.split(':filename')?.reverse()?.pop() ||
+            organization?.logo;
 
           return (
             <form
@@ -173,36 +153,25 @@ const OrganisationDetailsForm = (props: IOrganisationDetailsForm) => {
               <div className="organisation-detail__section">
                 <InputV2
                   type="text"
-                  label="Country"
-                  placeholder="Country"
-                  name="country"
-                  value={(values?.country as Country)?.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.country && errors.country}
-                />
-              </div>
-              <div className="organisation-detail__section">
-                <InputV2
-                  type="text"
                   label="RC Number"
                   placeholder="AP 703 321 AAA"
-                  name="rcnumber"
-                  value={values.rcnumber}
+                  name="rcNumber"
+                  value={values.rcNumber || ''}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  error={touched.rcnumber && errors.rcnumber}
+                  error={touched.rcNumber && errors.rcNumber}
                 />
               </div>
+
               <div className="organisation-detail__section">
                 {' '}
                 <div className="info__left-cont__logo">
                   <SingleDetail
                     title="Logo"
                     details={
-                      organization?.logo ? (
+                      logo ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={organization.logo} alt="company-logo" />
+                        <img src={logo} alt="company-logo" />
                       ) : (
                         'N/A'
                       )
@@ -215,7 +184,7 @@ const OrganisationDetailsForm = (props: IOrganisationDetailsForm) => {
                     <input
                       type="file"
                       id="logoUpload"
-                      accept=".jpg,.png,.jpeg"
+                      accept=".jpg,.png,.jpeg,.svg"
                       onChange={(event) => {
                         const files = event.target.files;
                         if (files) {
