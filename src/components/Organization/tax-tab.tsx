@@ -1,95 +1,34 @@
 import { Radio } from 'antd';
-import { Formik, FormikProps } from 'formik';
-import { TaxInfo } from '../types';
-import { OrgInput } from './org-comp';
-import React, { useState } from 'react';
-import Link from 'next/link';
+import { Formik } from 'formik';
+import { useTaxTabContext } from './organization-hooks';
+import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
+import { InputV2 } from '../Input/Input.component';
+import { SelectInput } from '../Input/seletct-input';
+import { IF } from '../Misc/if.component';
+import { Util } from 'src/helpers/util';
+import { Button } from '../Button/Button.component';
 
-type Errors = {
-  id?: string;
-  rate?: string;
-  state?: string;
-};
-type FormValues = {
-  id: string;
-  rate: string;
-  state: string;
+export type TaxTabProps = {
+  organizationDetails: ReturnType<typeof useOrganizationDetails>;
 };
 
-function TaxTab() {
-  // const [error, setError] = useState<string>('');
-  const [errors, setErrors] = useState<Errors>({});
-  const [Fvalues, setFvalues] = useState<FormValues>({
-    id: '',
-    rate: '',
-    state: '',
-  });
-  // const [taxId, setTaxId] = useState<string>('');
-  const formatId = (value: string) => {
-    const cleaned = value.replace(/\D/g, '');
-    const parts = cleaned.match(/.{1,3}/g);
-    if (parts) {
-      return parts.join('-');
-    }
-    return cleaned;
-  };
-  const FormatRate = (value: string) => {
-    const cleaned = value.replace(/[^\d]/g, '');
-    if (cleaned) {
-      return `${cleaned}%`;
-    }
-    return '';
-  };
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'id') {
-      const formattedId = formatId(value);
-      setFvalues((prev) => ({ ...prev, [name]: formattedId }));
-    } else if (name === 'rate') {
-      const formattedRate = FormatRate(value);
-      setFvalues((prev) => ({ ...prev, [name]: formattedRate }));
-    } else {
-      setFvalues((prev) => ({ ...prev, [name]: value }));
-      validateForm();
-    }
-  };
+function TaxTab(props: TaxTabProps) {
+  const { initialValues, handleSubmit } = useTaxTabContext(props);
 
-  const validateForm = () => {
-    const newErrors: Errors = {};
-
-    if (Fvalues.id.length < 9) {
-      newErrors.id = 'Incomplete tax id';
-    }
-    if (Fvalues.id.length > 11) {
-      newErrors.id = 'Enter a valid id';
-    }
-
-    if (Fvalues.id.length === 11) {
-      return;
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
   return (
     <>
-      <Formik
-        initialValues={{
-          status: 'Remit',
-          taxId: '',
-          taxState: '',
-          taxtRate: '',
-          taxType: 'Paye',
-        }}
-        onSubmit={() => {}}
-      >
-        {(props: FormikProps<TaxInfo>) => {
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        {(_props) => {
           const {
+            values,
+            touched,
+            errors,
+            handleBlur,
             handleChange,
             handleSubmit,
-            // isSubmitting,
-            // handleBlur,
-            values,
-          } = props;
+            isSubmitting,
+          } = _props;
+
           return (
             <form
               className="info__remittance__form"
@@ -112,6 +51,7 @@ function TaxTab() {
                       </div>
                     </Radio.Group>
                   </div>
+
                   <div className="info__remittance__form__checkbox-cont">
                     <p className="info__remittance__form__hero-text">
                       Tax Type
@@ -122,56 +62,93 @@ function TaxTab() {
                       onChange={handleChange}
                     >
                       <div className="info__remittance__form__checkbox">
-                        <Radio value="Paye">Paye</Radio>
-                        <Radio value="WithHolding">WithHolding</Radio>
+                        <Radio value="paye">Paye</Radio>
+                        <Radio value="withholding">WithHolding</Radio>
                       </div>
                     </Radio.Group>
                   </div>
                 </div>
+
                 <div className="info__remittance__input-cont">
                   <div>
-                    <p className="info__remittance__form__hero-text">Tax Id</p>
-                    <OrgInput
-                      name="id"
-                      placeholder="Enter tax id"
-                      min={9}
-                      error={errors.id}
-                      value={Fvalues.id}
-                      onChange={handleInputChange}
-                      maxLength={11}
+                    <InputV2
+                      label="Tax Id"
+                      name="taxId"
+                      placeholder="Enter Tax ID"
+                      error={errors.taxId}
+                      value={values.taxId}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
                     />
                   </div>
+
                   <div>
-                    <p className="info__remittance__form__hero-text">Rate %</p>
-                    <OrgInput
-                      placeholder="Enter rate"
-                      type="number"
-                      value={Fvalues.rate}
-                      onChange={handleInputChange}
-                    />
+                    <IF condition={values.taxType === 'withholding'}>
+                      <InputV2
+                        placeholder="Enter Withholding Tax Rate"
+                        type="number"
+                        name="taxRate"
+                        value={values.taxRate}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="Withholding Tax Rate %"
+                      />
+                    </IF>
+
+                    <IF condition={values.taxType !== 'withholding'}>
+                      <InputV2
+                        placeholder="Enter health relief amount"
+                        type="number"
+                        name="healthRelief"
+                        value={values.healthRelief}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        transformValue={Util.formatMoneyString('')}
+                        label="Health Relief"
+                      />
+                    </IF>
                   </div>
+
                   <div>
-                    <p className="info__remittance__form__hero-text">
-                      Tax state
-                    </p>
-                    <OrgInput
-                      placeholder="Enter tax state"
-                      error={errors.state}
-                      value={Fvalues.state}
-                      onChange={handleInputChange}
+                    <SelectInput
+                      label="Tax state"
+                      name="taxState"
+                      placeholder="Select Tax State"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.taxState}
+                      error={touched.taxState && errors.taxState}
+                      options={props.organizationDetails.states}
+                      displayValue="name"
+                      actualValue="id"
+                      showSearch="Search State"
                     />
                   </div>
                 </div>
               </div>
+
               <div className="info__remittance__form__action">
-                <button className="info__remittance__form__save-btn">
-                  Save Changes
-                </button>
-                <Link href="/organisations/view_employees">
-                  <a className="info__remittance__form__view-btn">
-                    View Employees
-                  </a>
-                </Link>
+                {props.organizationDetails.canEdit && (
+                  <Button
+                    showSpinner={isSubmitting}
+                    disabled={isSubmitting}
+                    primary
+                    className="info__remittance__form__save-btn"
+                    type="submit"
+                  >
+                    Save Changes
+                  </Button>
+                )}
+
+                <div></div>
+
+                <Button
+                  element="a"
+                  href="/organisations/view_employees"
+                  className="info__remittance__form__view-btn"
+                >
+                  View Employees
+                </Button>
               </div>
             </form>
           );

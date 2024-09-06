@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Link from 'next/link';
 import { Spinner } from '../Spinner/Spinner.component';
 import { ButtonProps } from '../types';
@@ -20,7 +20,7 @@ export const Button = ({
   href,
   danger,
   ...props
-}: ButtonProps) => {
+}: PropsWithChildren<ButtonProps>) => {
   const mode = primary ? 'button--primary' : 'button--secondary';
   const buttonClassName = classNames(
     'button',
@@ -39,7 +39,7 @@ export const Button = ({
           style={{ backgroundColor }}
           {...props}
         >
-          {showLabel && label}
+          {showLabel && (label || props.children)}
           {showSpinner ? <Spinner /> : null}
         </a>
       </Link>
@@ -53,7 +53,7 @@ export const Button = ({
       style={{ backgroundColor }}
       {...props}
     >
-      {showLabel && label}
+      {showLabel && (label || props.children)}
       {showSpinner ? <Spinner /> : null}
     </button>
   );

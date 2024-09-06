@@ -213,6 +213,14 @@ export const SelectInput = (props: ISelectInput) => {
         id={`${inputId}_list`}
         className="select-input__options"
         ref={optionsRef}
+        style={{
+          position: 'fixed',
+          width: selectRef.current?.getBoundingClientRect()?.width,
+          left: selectRef.current?.getBoundingClientRect()?.x,
+          top:
+            (selectRef.current?.getBoundingClientRect()?.y || 0) +
+            (selectRef.current?.getBoundingClientRect()?.y || 0) * 0.05,
+        }}
       >
         {props.showSearch && (
           <div className="select-input__search-input">

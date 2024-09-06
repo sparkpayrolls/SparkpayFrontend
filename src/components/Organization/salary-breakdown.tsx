@@ -4,23 +4,24 @@ import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
 import { Breakdown } from './org-comp';
 import Skeleton from 'react-loading-skeleton';
 
-function SalaryBreakdown() {
+type Props = {
+  organizationDetails: ReturnType<typeof useOrganizationDetails>;
+};
+
+function SalaryBreakdown(props: Props) {
   const [breakdown, setBreakdown] = useState<boolean>(false);
   const [hint, setHint] = useState<boolean>(false);
-  const { organization, loading } = useOrganizationDetails();
+  const { organization, loading, canEdit } = props.organizationDetails;
   const [edit, setEdit] = useState<boolean>(false);
+
   return loading ? (
     <div className="info__right-cont">
       <div className="info__right-cont__flex">
         <div className="info__right-cont__flex-text">
-          <span
-            className="info__right-cont__back-icon"
-            onClick={() => setBreakdown(!breakdown)}
-          >
+          <span className="info__right-cont__back-icon">
             <Skeleton height={40} width={100} />{' '}
           </span>
         </div>
-        <Skeleton height={40} width={175} />
       </div>
       <form className="info__right-cont__breakdown">
         <div className="info__right-cont__breakdown__wrapper">
@@ -93,12 +94,14 @@ function SalaryBreakdown() {
                   </span>
                 </span>
 
-                <button
-                  onClick={() => setBreakdown(!breakdown)}
-                  className="info__breakdown-button"
-                >
-                  Set Breakdown
-                </button>
+                {canEdit && (
+                  <button
+                    onClick={() => setBreakdown(!breakdown)}
+                    className="info__breakdown-button"
+                  >
+                    Set Breakdown
+                  </button>
+                )}
               </div>
               <div className={`info__right-cont__banner ${hint ? 'show' : ''}`}>
                 <p>
@@ -132,13 +135,15 @@ function SalaryBreakdown() {
               </span>
             </span>
 
-            <button
-              onClick={() => setEdit(!edit)}
-              className="info__breakdown-button"
-            >
-              Edit
-              <EditPenSvg />
-            </button>
+            {canEdit && (
+              <button
+                onClick={() => setEdit(!edit)}
+                className="info__breakdown-button"
+              >
+                Edit
+                <EditPenSvg />
+              </button>
+            )}
           </div>
           <div className={`info__right-cont__banner ${hint ? 'show' : ''}`}>
             <p>

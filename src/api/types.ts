@@ -172,6 +172,11 @@ export type EmployeeGroup = Document & {
   employee: string | Employee;
 };
 
+export type StatutoryDeduction = {
+  enabled: boolean;
+  addToCharge: boolean;
+} & Record<string, unknown>;
+
 export type Company = Document & {
   name: string;
   email: string;
@@ -184,6 +189,7 @@ export type Company = Document & {
   bvn?: string;
   bvnName?: string;
   rcNumber: string;
+  statutoryDeductions?: Record<string, StatutoryDeduction>;
 };
 
 export enum PermissionGroupEnum {
