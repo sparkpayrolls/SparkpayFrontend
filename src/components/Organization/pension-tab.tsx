@@ -1,92 +1,31 @@
 import { Radio } from 'antd';
-import { Formik, FormikProps } from 'formik';
-import { PensionInfo } from '../types';
-import { OrgInput } from './org-comp';
-import React, { useState } from 'react';
-import Link from 'next/link';
+import { Formik } from 'formik';
+import { RemittanceTabProps } from './types';
+import { useRemittanceTabContext } from './organization-hooks';
+import { InputV2 } from '../Input/Input.component';
+import { Button } from '../Button/Button.component';
+import { SelectInput } from '../Input/seletct-input';
 
-type Errors = {
-  id?: string;
-  rate?: string;
-  state?: string;
-};
-type FormValues = {
-  id: string;
-  rate: string;
-  state: string;
-};
+export const PensionTab = (props: RemittanceTabProps) => {
+  const { initialValues, handleSubmit } = useRemittanceTabContext(
+    props,
+    'pension',
+  );
 
-export const PensionTab = () => {
-  const [errors, setErrors] = useState<Errors>({});
-  const [Fvalues, setFvalues] = useState<FormValues>({
-    id: '',
-    rate: '',
-    state: '',
-  });
-  // const [taxId, setTaxId] = useState<string>('');
-  const formatId = (value: string) => {
-    const cleaned = value.replace(/\D/g, '');
-    const parts = cleaned.match(/.{1,3}/g);
-    if (parts) {
-      return parts.join('-');
-    }
-    return cleaned;
-  };
-  const FormatRate = (value: string) => {
-    const cleaned = value.replace(/[^\d]/g, '');
-    if (cleaned) {
-      return `${cleaned}%`;
-    }
-    return '';
-  };
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'id') {
-      const formattedId = formatId(value);
-      setFvalues((prev) => ({ ...prev, [name]: formattedId }));
-    } else if (name === 'rate') {
-      const formattedRate = FormatRate(value);
-      setFvalues((prev) => ({ ...prev, [name]: formattedRate }));
-    } else {
-      setFvalues((prev) => ({ ...prev, [name]: value }));
-      validateForm();
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors: Errors = {};
-
-    if (Fvalues.id.length < 11) {
-      newErrors.id = 'Incomplete tax id';
-    }
-    if (Fvalues.id.length > 11) {
-      newErrors.id = 'Enter a valid id';
-    }
-
-    if (Fvalues.id.length == 11) {
-      newErrors.id = 'raxoo';
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
   return (
     <>
-      <Formik
-        initialValues={{
-          status: 'Remit',
-          PensionId: '',
-          PesionType: 'Quote',
-        }}
-        onSubmit={() => {}}
-      >
-        {(props: FormikProps<PensionInfo>) => {
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        {(_props) => {
           const {
+            values,
+            touched,
+            errors,
+            handleBlur,
             handleChange,
             handleSubmit,
-            // isSubmitting,
-            // handleBlur,
-            values,
-          } = props;
+            isSubmitting,
+          } = _props;
+
           return (
             <form
               className="info__remittance__form"
@@ -109,48 +48,78 @@ export const PensionTab = () => {
                       </div>
                     </Radio.Group>
                   </div>
+
                   <div className="info__remittance__form__checkbox-cont">
                     <p className="info__remittance__form__hero-text">
                       Pension Type
                     </p>
                     <Radio.Group
-                      name="PesionType"
-                      value={values.PesionType}
+                      name="pensionType"
+                      value={values.pensionType}
                       onChange={handleChange}
                     >
                       <div className="info__remittance__form__checkbox">
-                        <Radio value="Quote">Quote</Radio>
-                        <Radio value="Deduct">Deduct</Radio>
+                        <Radio value="deduct">Deduct</Radio>
+                        <Radio value="quote">Quote</Radio>
                       </div>
                     </Radio.Group>
                   </div>
                 </div>
-                <div className="info__remittance__input-cont">
+                <div
+                  className="info__remittance__input-cont"
+                  style={{ justifyContent: 'flex-start', gap: '89px' }}
+                >
                   <div>
-                    <p className="info__remittance__form__hero-text">
-                      Pension ID
-                    </p>
-                    <OrgInput
-                      name="id"
-                      placeholder="XXX-XXX-XXX"
-                      min={9}
-                      error={errors.id}
-                      value={Fvalues.id}
-                      onChange={handleInputChange}
-                      maxLength={11}
+                    <InputV2
+                      label="Pension ID"
+                      name="pensionId"
+                      placeholder="Enter Pension ID"
+                      error={touched.pensionId && errors.pensionId}
+                      value={values.pensionId}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div>
+                    <SelectInput
+                      label="Pension Fund Administrator"
+                      name="pfa"
+                      placeholder="Select PFA"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.pfa}
+                      error={touched.pfa && errors.pfa}
+                      options={props.organizationDetails.pfas}
+                      displayValue="name"
+                      actualValue="id"
+                      showSearch="Search PFAs"
                     />
                   </div>
                 </div>
               </div>
               <div className="info__remittance__form__action">
-                <button className="info__remittance__form__save-btn">
-                  Save Changes
-                </button>
-                <Link href="/organisations/view_employees">
-                  <a className="info__remittance__form__view-btn">
-                    View Employees
-                  </a>
-                </Link>
+                {props.organizationDetails.canEdit && (
+                  <Button
+                    showSpinner={isSubmitting}
+                    disabled={isSubmitting}
+                    primary
+                    className="info__remittance__form__save-btn"
+                    type="submit"
+                  >
+                    Save Changes
+                  </Button>
+                )}
+
+                <div></div>
+
+                <Button
+                  element="a"
+                  href="/organisations/view_employees"
+                  className="info__remittance__form__view-btn"
+                >
+                  View Employees
+                </Button>
               </div>
             </form>
           );

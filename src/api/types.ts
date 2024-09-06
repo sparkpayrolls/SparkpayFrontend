@@ -536,6 +536,12 @@ export type State = Document & {
   meta?: Record<string, unknown>;
 };
 
+export type PensionFundAdministrator = Document & {
+  country: string | Country;
+  name: string;
+  meta?: Record<string, unknown>;
+};
+
 export type SalaryBreakdown = {
   name: string;
   value: number;
