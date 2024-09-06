@@ -66,7 +66,7 @@ export const useOrganizationDetails = () => {
       .catch(() => {
         // do nothing...
       });
-  }, [country.id, getOrganization]);
+  }, [country?.id, getOrganization]);
 
   return {
     onEditDetails,
