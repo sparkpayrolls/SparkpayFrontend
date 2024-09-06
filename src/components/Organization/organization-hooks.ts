@@ -32,8 +32,8 @@ export const useRemittanceTabContext = (
   props: RemittanceTabProps,
   remittance = 'tax',
 ) => {
-  const settings =
-    props.organizationDetails.organization?.statutoryDeductions?.[remittance];
+  const settings: Record<string, string> = props.organizationDetails
+    .organization?.statutoryDeductions?.[remittance] as Record<string, string>;
   let initialValues: Record<string, string> = {
     status: settings?.enabled ? 'Enabled' : 'Disabled',
   };
