@@ -482,12 +482,12 @@ export interface ButtonProps {
   /**
    * Button contents
    */
-  label: string | ReactElement;
+  label?: string | ReactElement;
 
   /**
    * Button type 'button' | 'submit'
    */
-  type: 'button' | 'submit';
+  type?: 'button' | 'submit';
   /**
    * Optional click handler
    */

@@ -29,9 +29,9 @@ const OrganisationDetailsUnsecured = () => {
           <div className="organization-settings">
             <div className="organization-settings__flex">
               <OrganizationInfo organizationDetails={organizationDetails} />
-              <SalaryBreakdown />
+              <SalaryBreakdown organizationDetails={organizationDetails} />
             </div>
-            <RemittanceInformation />
+            <RemittanceInformation organizationDetails={organizationDetails} />
           </div>
         )}
       </div>

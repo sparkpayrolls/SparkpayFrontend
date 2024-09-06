@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import NiceModal from '@ebay/nice-modal-react';
 import useApiCall from './useapicall.hook';
 import { useCallback, useEffect, useState } from 'react';
-import { Company } from 'src/api/types';
+import { Company, Country, State } from 'src/api/types';
 import { Util } from '../util';
 import { $api } from 'src/api';
 import { toast } from 'react-toastify';
@@ -14,7 +14,9 @@ export const useOrganizationDetails = () => {
   const [loading, apiCallStarted, apiCallDone] = useApiCall();
 
   const administrator = useAppSelector((state) => state.administrator);
+  const country = (administrator?.company as Company)?.country as Country;
   const [organization, setOrganization] = useState<Company | null>();
+  const [states, setStates] = useState<State[]>([]);
   const dispatch = useAppDispatch();
   const organisationId = (administrator?.company as Company)?.id;
   const canEdit = Util.canActivate([['Company', 'write']], administrator);
@@ -55,7 +57,16 @@ export const useOrganizationDetails = () => {
 
   useEffect(() => {
     getOrganization();
-  }, [getOrganization]);
+
+    $api.country
+      .getStates(country.id, { all: true })
+      .then(({ data: states }) => {
+        setStates(states);
+      })
+      .catch(() => {
+        // do nothing...
+      });
+  }, [country.id, getOrganization]);
 
   return {
     onEditDetails,
@@ -63,5 +74,6 @@ export const useOrganizationDetails = () => {
     organization,
     canEdit,
     moment,
+    states,
   };
 };
