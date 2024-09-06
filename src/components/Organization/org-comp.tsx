@@ -1,12 +1,6 @@
 /* eslint-disable no-unused-vars */
 import classNames from 'classnames';
-import {
-  ChangeEventHandler,
-  CSSProperties,
-  DetailedHTMLProps,
-  InputHTMLAttributes,
-  useState,
-} from 'react';
+import { DetailedHTMLProps, InputHTMLAttributes, useState } from 'react';
 import { ChevronBack, DeleteBd } from '../svg';
 
 interface InputProps {

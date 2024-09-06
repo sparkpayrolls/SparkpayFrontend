@@ -80,6 +80,7 @@ export const SelectInput = (props: ISelectInput) => {
     'select-input--dirty': !!Object.keys(selected).length,
     'select-input--has-error': !!props.error,
     'select-input--drop-top': props.dropTop,
+    'select-input--table-style': props.applyTableStyle,
   });
   const placeholderClassName = classNames({
     'select-input__placeholder':
@@ -196,7 +197,7 @@ export const SelectInput = (props: ISelectInput) => {
         </span>
         {!loading && (
           <span className="select-input__svg">
-            <SelectInputSVG />
+            {props.customIcon || <SelectInputSVG />}
           </span>
         )}
         {loading && (

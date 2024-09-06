@@ -1,15 +1,19 @@
 .info {
+  > span {
+    cursor: pointer;
+  }
   &__helper {
     position: absolute;
-    transform: translatey(0px) scaley(-0);
+    transform: translate(-260px, 0px);
     min-height: 0;
     opacity: 1;
     width: max-content;
+    max-width: 297px;
     padding: 16px;
     background-color: #ffffff;
     border-radius: 8px;
-    transition: transform 0.3s ease, opacity 1.2s ease;
-    box-shadow: 0 4px 4px #d7dce8;
+    // box-shadow: 0 4px 4px #d7dce8;
+    transition: transform 0.3s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 
     p {
       font-size: 16px;
@@ -18,9 +22,15 @@
       color: #000000;
     }
     &.show {
-      transform: translatey(10px) scaley(1);
+      transform: translate(-260px, 10px);
       width: max-content;
       opacity: 1;
+      box-shadow: 0 4px 4px #d7dce8;
+    }
+    &.leave {
+      transform: translate(-260px, 0px);
+      width: max-content;
+      opacity: 0;
     }
   }
 }

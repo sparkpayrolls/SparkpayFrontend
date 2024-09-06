@@ -153,6 +153,8 @@ export type ISelectInput = {
   loading?: boolean;
   placeholder?: string;
   showSearch?: boolean | string;
+  applyTableStyle?: boolean;
+  customIcon?: ReactNode;
 };
 
 /** AddEmployee */

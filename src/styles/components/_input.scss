@@ -502,6 +502,15 @@
       transform: rotate(0);
     }
   }
+  &--table-style {
+    .select-input__selector {
+      background-color: transparent;
+      padding: 0;
+      border: 0;
+
+      color: red;
+    }
+  }
 }
 .select-input--open.select-input--drop-top {
   .select-input__svg {

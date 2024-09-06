@@ -24,11 +24,7 @@ const Employees = () => {
   };
   const selectedTab = Array.isArray(tab) ? tab[0] : tab || 'Tax';
   return (
-    <DashboardLayout
-      customWidth="100%"
-      loading={loading}
-      pageTitle="Tax Employees"
-    >
+    <DashboardLayout fullWidth loading={loading} pageTitle="Tax Employees">
       <div className="view-employees">
         <div className="view-employees__header">
           <p className="view-employees__header__text">

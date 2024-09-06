@@ -3,15 +3,26 @@ import { Info } from '../svg';
 
 function HelperInfo(props: { children: ReactNode }) {
   const [hint, setHint] = useState<boolean>();
+  const [show, setShow] = useState<boolean>();
+  const toggle = () => {
+    if (!hint) {
+      setShow(true);
+      setTimeout(() => setHint(true));
+    } else {
+      setHint(false);
+      setTimeout(() => setShow(false), 100);
+    }
+  };
   return (
     <div className="info">
-      <span
-        onMouseEnter={() => setHint(true)}
-        onMouseLeave={() => setHint(false)}
-      >
+      <span onMouseEnter={toggle} onMouseLeave={toggle}>
         <Info />
       </span>
-      <p className={`info__helper ${hint ? 'show' : ''}`}>{props.children}</p>
+      {show && (
+        <div className={`info__helper ${hint ? 'show' : 'leave'}`}>
+          <p>{props.children}</p>
+        </div>
+      )}
     </div>
   );
 }

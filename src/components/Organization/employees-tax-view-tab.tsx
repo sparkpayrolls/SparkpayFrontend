@@ -1,6 +1,7 @@
 import React from 'react';
 import HelperInfo from '../Info/info';
-import { SearchSVG } from '../svg';
+import { FilterSVG, SearchSVG } from '../svg';
+import ViewEmployeesTable from './view-employees-table';
 
 function EmployeesTaxViewTab() {
   return (
@@ -29,22 +30,27 @@ function EmployeesTaxViewTab() {
             <p className="view-employees__tax__top-cont__info-sm">
               Non Active Tax Employees
             </p>
-            <HelperInfo>Employees who are not tax remittances</HelperInfo>
+            <HelperInfo>Employees who are not on tax remittances</HelperInfo>
           </div>
           <p className="view-employees__tax__top-cont__info-md">10 Employees</p>
         </div>
       </div>
-      <div>
-        <p>30 Employees</p>
-        <div>
-          <div>
-            <input type="text" />
-            <SearchSVG />
+      <div className="view-employees__tax__mid">
+        <p className="view-employees__tax__mid-text">30 Employees</p>
+        <div className="view-employees__tax__mid__filter-cont">
+          <div className="view-employees__tax__mid__filter">
+            <input placeholder="Search by name" type="text" />
+            <span>
+              <SearchSVG />
+            </span>
           </div>
-          <button>filter</button>
+          <button className="view-employees__tax__mid__filter__action">
+            Filter
+            <FilterSVG />
+          </button>
         </div>
       </div>
-      <div></div>
+      <ViewEmployeesTable />
     </div>
   );
 }
