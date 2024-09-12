@@ -7,7 +7,13 @@
     border: 1px solid #eaedf4;
     box-sizing: border-box;
     border-radius: 8px;
-
+    &__hero-text {
+      font-size: 20px;
+      font-weight: 700px;
+      line-height: 32px;
+      font-family: 'Karla';
+      color: #0e347e;
+    }
     &__top {
       display: flex;
       flex-direction: column;
@@ -65,26 +71,41 @@
     position: relative;
     overflow-y: scroll;
     scrollbar-width: none;
+    &__hero-text {
+      text-wrap: nowrap;
+      font-size: 20px;
+      font-weight: 700px;
+      line-height: 32px;
+      font-family: 'Karla';
+      color: #0e347e;
+      @media screen and (max-width: 1024px) {
+        font-size: 18px;
+      }
+    }
     &__flex {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      @media screen and (min-width: 426px) {
+      @media screen and (min-width: 425px) {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        gap: 4px;
       }
     }
 
     &__flex-text {
       display: flex;
-      justify-content: space-between;
       align-items: center;
       gap: 12px;
       span:hover {
         opacity: 0.8;
         transition: opacity 0.3s ease;
+      }
+      @media screen and (max-width: 375px) {
+        justify-content: space-between;
+        gap: 6px;
       }
     }
     &__back-icon {
@@ -254,6 +275,9 @@
     line-height: 32px;
     font-family: 'Karla';
     color: #0e347e;
+    @media screen and (max-width: 425px) {
+      font-size: 18px;
+    }
   }
   &__edit-button {
     display: flex;
@@ -266,6 +290,11 @@
     font-size: 14px;
     line-height: 16px;
     color: #1d4ed8;
+    @media screen and (max-width: 375px) {
+      width: 100%;
+      justify-content: center;
+      gap: 16px;
+    }
   }
   &__breakdown-button {
     display: flex;
@@ -279,6 +308,11 @@
     line-height: 16px;
     color: #1d4ed8;
     width: fit-content;
+    @media screen and (max-width: 375px) {
+      width: 100%;
+      justify-content: center;
+      gap: 16px;
+    }
   }
 
   &__upload {
@@ -350,9 +384,7 @@
         width: 100%;
         max-width: 312px;
         border: 1px solid transparent;
-        // @media screen and (min-width: 768px) {
-        //   width: 312px;
-        // }
+
         &--focus {
           border: 1px solid #1d4ed8;
         }
@@ -430,6 +462,12 @@
       display: flex;
       justify-content: space-between;
       gap: 10px;
+      @media screen and (max-width: 375px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 10px;
+      }
       div {
         display: flex;
         flex-direction: column;

@@ -65,7 +65,7 @@ export const useOrganizationDetails = () => {
     getOrganization();
 
     $api.country
-      .getStates(country.id, { all: true })
+      .getStates(country?.id || '', { all: true })
       .then(({ data: states }) => {
         setStates(states);
       })
@@ -74,7 +74,7 @@ export const useOrganizationDetails = () => {
       });
 
     $api.country
-      .getPFAs(country.id, { all: true })
+      .getPFAs(country?.id || '', { all: true })
       .then(({ data: pfas }) => {
         setPFAs(pfas);
       })

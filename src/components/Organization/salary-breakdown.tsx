@@ -82,7 +82,9 @@ function SalaryBreakdown(props: Props) {
             <>
               <div className="info__right-cont__flex">
                 <span className="info__right-cont__flex-text">
-                  <p className="info__hero-text ">Salary Breakdown</p>
+                  <p className="info__right-cont__hero-text">
+                    Salary Breakdown
+                  </p>
                   <span
                     onMouseEnter={() => {
                       setHint(true);
@@ -123,7 +125,7 @@ function SalaryBreakdown(props: Props) {
         <>
           <div className="info__right-cont__flex">
             <span className="info__right-cont__flex-text">
-              <p className="info__hero-text ">Salary Breakdown</p>
+              <p className="info__right-cont__hero-text">Salary Breakdown</p>
               <span
                 onMouseEnter={() => {
                   setHint(true);
