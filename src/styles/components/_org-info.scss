@@ -7,21 +7,41 @@
     border: 1px solid #eaedf4;
     box-sizing: border-box;
     border-radius: 8px;
+
     &__top {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
+      align-items: left;
+      gap: 16px;
       margin-bottom: 1.5rem;
+      @media screen and (min-width: 425px) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
     }
     &__bottom {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
+      gap: 22px;
+      @media screen and (min-width: 425px) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
     }
     &__info-column {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 44px;
+      gap: 22px;
+      @media screen and (min-width: 425px) {
+        gap: 44px;
+      }
     }
     &__logo {
       display: flex;
@@ -47,8 +67,14 @@
     scrollbar-width: none;
     &__flex {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
+      @media screen and (min-width: 426px) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
     }
 
     &__flex-text {
@@ -235,7 +261,6 @@
     gap: 8px;
     background-color: #f7f9fb;
     padding: 8px 18px;
-    margin-left: 18px;
     border-radius: 8px;
     font-weight: 500;
     font-size: 14px;
@@ -253,6 +278,7 @@
     font-size: 14px;
     line-height: 16px;
     color: #1d4ed8;
+    width: fit-content;
   }
 
   &__upload {
@@ -305,8 +331,15 @@
       }
       &__action {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         align-items: center;
+        gap: 24px;
+        @media screen and (min-width: 567px) {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
       }
       &__input-cont {
         > * {
@@ -355,14 +388,16 @@
       }
 
       &__save-btn {
-        padding: 16px 40px;
+        padding: 16px 20px;
         background-color: #1d4ed8;
         border-radius: 8px;
-        font-size: 18px;
-        font-weight: 500;
+        width: 100%;
         color: #ffffff;
         line-height: 24px;
         font-family: 'Inter';
+        @media screen and (min-width: 567px) {
+          max-width: 258px;
+        }
       }
       &__view-btn {
         padding: 16px 40px;
@@ -371,9 +406,13 @@
         border-radius: 8px;
         font-size: 18px;
         font-weight: 500;
+        width: 100%;
         color: #1d4ed8;
         line-height: 24px;
         font-family: 'Inter';
+        @media screen and (min-width: 567px) {
+          max-width: 258px;
+        }
       }
       &__checkbox {
         font-size: 14px;

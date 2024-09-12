@@ -50,7 +50,9 @@
       cursor: pointer;
     }
   }
-
+  &__input[type='checkbox'] {
+    cursor: pointer;
+  }
   &__input {
     outline: none;
     width: 100%;
@@ -317,6 +319,7 @@
 }
 
 .select-input {
+  cursor: pointer;
   position: relative;
   display: block;
   min-width: 3rem;
@@ -421,6 +424,9 @@
       max-height: 12rem;
       overflow-y: auto;
       padding-top: 60px;
+      &::-webkit-scrollbar {
+        width: 0px;
+      }
     }
   }
 
@@ -443,6 +449,7 @@
 
   &__search-input {
     position: absolute;
+    background-color: white;
     width: calc(100% - 8px);
   }
 
@@ -511,6 +518,9 @@
       border: 0;
 
       color: red;
+      &::placeholder {
+        color: red;
+      }
     }
   }
 }

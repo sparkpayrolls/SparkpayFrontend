@@ -34,7 +34,8 @@
   &--successful,
   &--active,
   &--CREATE,
-  &--Accepted {
+  &--Accepted,
+  &--Enabled {
     color: $green-600;
 
     .status-chip__indicator {
@@ -49,7 +50,8 @@
   &--failed,
   &--deactivated,
   &--DELETE,
-  &--Rejected {
+  &--Rejected,
+  &--Disabled {
     color: $red-600;
 
     .status-chip__indicator {

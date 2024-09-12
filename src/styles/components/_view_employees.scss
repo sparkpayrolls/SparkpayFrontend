@@ -26,16 +26,26 @@
     gap: 42px;
     &__top {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 10px;
+      @media screen and (min-width: 426px) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
       &-cont {
         display: flex;
         flex-direction: column;
         gap: 16px;
         padding: 8px 13px;
         border-radius: 8px;
-        width: 297px;
+        width: 100%;
+
         background-color: #f7f9fb;
+        @media screen and (min-width: 426px) {
+          max-width: 297px;
+        }
         &__info {
           display: flex;
           align-items: center;
@@ -57,8 +67,15 @@
     }
     &__mid {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: space-between;
+      gap: 16px;
+      @media screen and (min-width: 426px) {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
       &-text {
         font-size: 18px;
         font-weight: 700;
@@ -121,7 +138,19 @@
       scrollbar-width: none;
 
       &__cont {
-        padding: 25px 20px;
+        &--drop {
+          width: 121px;
+        }
+        &--flex {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          &-space {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+        }
       }
       &__check-box {
         input[type='checkbox'] {
@@ -146,15 +175,15 @@
         width: 100%;
 
         input {
+          box-sizing: border-box;
           width: 100%;
           background-color: transparent;
           font-size: 16px;
           line-height: 24px;
-          padding: 24px 16px;
+          outline: none;
         }
         input:focus {
-          outline: #1d4ed8;
-          transition: border 0.3s ease-in-out;
+          outline: 1px solid #1d4ed8;
         }
       }
       &-flex {
@@ -172,27 +201,21 @@
         min-width: 1000px;
 
         th {
+          text-wrap: nowrap;
           text-align: left;
-          padding: 16px 20px;
           background-color: #f7f9fb;
-          font-weight: bold;
+          font-weight: 700;
           font-size: 14px;
           line-height: 16px;
           color: #6d7a98;
         }
         td {
+          text-wrap: nowrap;
           font-size: 14px;
           font-weight: 400;
           line-height: 16px;
           color: #0b2253;
           border-bottom: 1px solid #f7f9fb;
-
-          input {
-            background-color: transparent;
-
-            font-size: 16px;
-            line-height: 24px;
-          }
         }
       }
     }
