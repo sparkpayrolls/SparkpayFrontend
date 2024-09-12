@@ -1,19 +1,15 @@
 import { Radio } from 'antd';
 import { Formik } from 'formik';
-import { useTaxTabContext } from './organization-hooks';
-import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
+import { useRemittanceTabContext } from './organization-hooks';
 import { InputV2 } from '../Input/Input.component';
 import { SelectInput } from '../Input/seletct-input';
 import { IF } from '../Misc/if.component';
 import { Util } from 'src/helpers/util';
 import { Button } from '../Button/Button.component';
+import { RemittanceTabProps } from './types';
 
-export type TaxTabProps = {
-  organizationDetails: ReturnType<typeof useOrganizationDetails>;
-};
-
-function TaxTab(props: TaxTabProps) {
-  const { initialValues, handleSubmit } = useTaxTabContext(props);
+function TaxTab(props: RemittanceTabProps) {
+  const { initialValues, handleSubmit } = useRemittanceTabContext(props);
 
   return (
     <>

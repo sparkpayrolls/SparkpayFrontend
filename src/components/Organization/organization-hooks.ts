@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { TaxTabProps } from './tax-tab';
 import { FormikHelpers } from 'formik';
 import { omit } from 'lodash';
 import { $api } from 'src/api';
 import { HttpError } from 'src/api/repo/http.error';
+import { RemittanceTabProps } from './types';
 
 export const useRemittanceInformationContext = () => {
   const router = useRouter();
@@ -28,18 +28,43 @@ export const useRemittanceInformationContext = () => {
   };
 };
 
-export const useTaxTabContext = (props: TaxTabProps) => {
-  const taxSettings =
-    props.organizationDetails.organization?.statutoryDeductions?.tax;
-  const initialValues = {
-    status: taxSettings?.enabled ? 'Enabled' : 'Disabled',
-    taxId: (taxSettings?.taxId || '').toString(),
-    taxState: (taxSettings?.taxState || '').toString(),
-    taxRate: (taxSettings?.taxRate || 0.05).toString(),
-    taxType: (taxSettings?.taxType || 'paye').toString(),
-    healthRelief: (taxSettings?.healthRelief || 0).toString(),
+export const useRemittanceTabContext = (
+  props: RemittanceTabProps,
+  remittance = 'tax',
+) => {
+  const settings: Record<string, string> = props.organizationDetails
+    .organization?.statutoryDeductions?.[remittance] as Record<string, string>;
+  let initialValues: Record<string, string> = {
+    status: settings?.enabled ? 'Enabled' : 'Disabled',
   };
-  if (taxSettings?.addToCharge) {
+  if (remittance === 'tax') {
+    initialValues = {
+      ...initialValues,
+      taxId: (settings?.taxId || '').toString(),
+      taxState: (settings?.taxState || '').toString(),
+      taxRate: (settings?.taxRate || 0.05).toString(),
+      taxType: (settings?.taxType || 'paye').toString(),
+      healthRelief: (settings?.healthRelief || 0).toString(),
+    };
+  }
+
+  if (remittance === 'nhf') {
+    initialValues = {
+      ...initialValues,
+      nhfId: (settings?.nhfId || '').toString(),
+    };
+  }
+
+  if (remittance === 'pension') {
+    initialValues = {
+      ...initialValues,
+      pensionId: (settings?.pensionId || '').toString(),
+      pensionType: (settings?.pensionType || 'deduct').toString(),
+      pfa: (settings?.pfa || '').toString(),
+    };
+  }
+
+  if (settings?.addToCharge) {
     initialValues.status = 'Remit';
   }
 
@@ -57,7 +82,7 @@ export const useTaxTabContext = (props: TaxTabProps) => {
         statutoryDeductions: {
           ...(props.organizationDetails.organization?.statutoryDeductions ||
             {}),
-          tax: {
+          [remittance]: {
             ...omit(values, ['status']),
             enabled: ['Enabled', 'Remit'].includes(values.status),
             addToCharge: values.status === 'Remit',

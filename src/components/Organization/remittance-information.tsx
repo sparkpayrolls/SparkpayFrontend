@@ -31,10 +31,10 @@ function RemittanceInformation(props: RemittanceInformationProps) {
               <TaxTab organizationDetails={props.organizationDetails} />
             </TabPane>
             <TabPane key="nhf" tab="NHF">
-              <NhfTab />
+              <NhfTab organizationDetails={props.organizationDetails} />
             </TabPane>
             <TabPane key="pension" tab="Pension">
-              <PensionTab />
+              <PensionTab organizationDetails={props.organizationDetails} />
             </TabPane>
           </Tab>
         )}

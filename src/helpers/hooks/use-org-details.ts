@@ -2,7 +2,12 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import NiceModal from '@ebay/nice-modal-react';
 import useApiCall from './useapicall.hook';
 import { useCallback, useEffect, useState } from 'react';
-import { Company, Country, State } from 'src/api/types';
+import {
+  Company,
+  Country,
+  PensionFundAdministrator,
+  State,
+} from 'src/api/types';
 import { Util } from '../util';
 import { $api } from 'src/api';
 import { toast } from 'react-toastify';
@@ -17,6 +22,7 @@ export const useOrganizationDetails = () => {
   const country = (administrator?.company as Company)?.country as Country;
   const [organization, setOrganization] = useState<Company | null>();
   const [states, setStates] = useState<State[]>([]);
+  const [pfas, setPFAs] = useState<PensionFundAdministrator[]>([]);
   const dispatch = useAppDispatch();
   const organisationId = (administrator?.company as Company)?.id;
   const canEdit = Util.canActivate([['Company', 'write']], administrator);
@@ -66,6 +72,15 @@ export const useOrganizationDetails = () => {
       .catch(() => {
         // do nothing...
       });
+
+    $api.country
+      .getPFAs(country.id, { all: true })
+      .then(({ data: pfas }) => {
+        setPFAs(pfas);
+      })
+      .catch(() => {
+        // do nothing...
+      });
   }, [country?.id, getOrganization]);
 
   return {
@@ -75,5 +90,6 @@ export const useOrganizationDetails = () => {
     canEdit,
     moment,
     states,
+    pfas,
   };
 };
