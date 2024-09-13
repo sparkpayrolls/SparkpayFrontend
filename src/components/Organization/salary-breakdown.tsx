@@ -1,18 +1,126 @@
-import React, { useState } from 'react';
-import { ChevronBack, EditPenSvg, IllustrationSvg, Info } from '../svg';
-import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
+import { ChevronBack, EditPenSvg, IllustrationSvg, InfoSVG } from '../svg';
 import { Breakdown } from './org-comp';
 import Skeleton from 'react-loading-skeleton';
+import classNames from 'classnames';
+import { IF } from '../Misc/if.component';
+import { OrganizationDashboardPieChart } from '../Chart/organizationdashoard-chart';
+import { Button } from '../Button/Button.component';
+import { RemittanceTabProps } from './types';
+import { useSalaryBreakdownContext } from './organization-hooks';
 
-type Props = {
-  organizationDetails: ReturnType<typeof useOrganizationDetails>;
+export const InfoPopUp = (props: PropsWithChildren<unknown>) => {
+  const [shouldPop, setShouldPop] = useState(false);
+  const [className, setClassName] = useState(
+    classNames('info__right-cont__banner d-none'),
+  );
+
+  useEffect(() => {
+    if (shouldPop) {
+      setClassName('info__right-cont__banner');
+      setTimeout(() => setClassName('info__right-cont__banner show'), 10);
+    } else {
+      setClassName('info__right-cont__banner');
+      setTimeout(() => setClassName('info__right-cont__banner d-none'), 200);
+    }
+  }, [shouldPop]);
+
+  return (
+    <>
+      <span
+        onMouseEnter={() => setShouldPop(true)}
+        onMouseLeave={() => setShouldPop(false)}
+        style={{ cursor: 'pointer' }}
+      >
+        <InfoSVG />
+      </span>
+
+      <div className={className}>{props.children}</div>
+    </>
+  );
 };
 
-function SalaryBreakdown(props: Props) {
-  const [breakdown, setBreakdown] = useState<boolean>(false);
-  const [hint, setHint] = useState<boolean>(false);
-  const { organization, loading, canEdit } = props.organizationDetails;
-  const [edit, setEdit] = useState<boolean>(false);
+const PopUp = () => (
+  <InfoPopUp>
+    <p>
+      A salary breakdown is the detailed list of how an employee&apos;s salary
+      is divided into various components such as base pay, bonuses, benefits,
+      and taxes.
+    </p>
+  </InfoPopUp>
+);
+
+const BreakdownItem = (props: {
+  value: number;
+  name: string;
+  color: string;
+}) => {
+  return (
+    <div style={{ display: 'flex', gap: '4px' }}>
+      <div>
+        <div
+          style={{
+            width: '10px',
+            height: '10px',
+            borderRadius: '50%',
+            background: props.color,
+          }}
+        ></div>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+          padding: '4px 8px',
+        }}
+      >
+        <p
+          style={{
+            fontWeight: 500,
+            fontSize: '1rem',
+            lineHeight: '1rem',
+            color: '#0B2253',
+          }}
+        >
+          {props.name}
+        </p>
+
+        <p
+          style={{
+            fontWeight: 400,
+            fontSize: '.875rem',
+            lineHeight: '1rem',
+            color: '#6D7A98',
+          }}
+        >
+          {props.value}%
+        </p>
+      </div>
+    </div>
+  );
+};
+
+function SalaryBreakdown(props: RemittanceTabProps) {
+  const {
+    _breakdown,
+    backgroundColors,
+    chartLabels,
+    chartValues,
+    organization,
+    breakdown,
+    loading,
+    canEdit,
+    saving,
+    edit,
+    setEdit,
+    canSave,
+    addBreakdown,
+    handleBreakdown,
+    handleBreakdownDelete,
+    savBreakdown,
+  } = useSalaryBreakdownContext(props);
 
   return loading ? (
     <div className="info__right-cont">
@@ -42,97 +150,54 @@ function SalaryBreakdown(props: Props) {
     <div className="info__right-cont">
       {edit ? (
         <>
-          {organization?.salaryBreakdown ? (
-            <>
-              <div className="info__right-cont__flex">
-                <div className="info__right-cont__flex-text">
-                  <span
-                    className="info__right-cont__back-icon"
-                    onClick={() => setEdit(!edit)}
-                  >
-                    <ChevronBack />
-                  </span>
-                </div>
-              </div>
-              <form
-                className="info__right-cont__breakdown"
-                onSubmit={(e) => e.preventDefault()}
+          <div className="info__right-cont__flex">
+            <div className="info__right-cont__flex-text">
+              <span
+                className="info__right-cont__back-icon"
+                onClick={() => setEdit(!edit)}
               >
-                {' '}
-                <div className="info__right-cont__breakdown__wrapper">
-                  {organization?.salaryBreakdown?.map((breakdown, i) => (
-                    <Breakdown
-                      value={breakdown.value}
-                      name={breakdown.name}
-                      key={i}
-                    />
-                  ))}
-                </div>
-                <div className="info__right-cont__breakdown__action">
-                  <button className="info__right-cont__breakdown__action__add">
-                    Add
-                  </button>
-                  <button className="info__right-cont__breakdown__action__save">
-                    Save
-                  </button>
-                </div>
-              </form>
-            </>
-          ) : (
-            <>
-              <div className="info__right-cont__flex">
-                <span className="info__right-cont__flex-text">
-                  <p className="info__hero-text ">Salary Breakdown</p>
-                  <span
-                    onMouseEnter={() => {
-                      setHint(true);
-                    }}
-                    onMouseLeave={() => setHint(false)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <Info />
-                  </span>
-                </span>
+                <ChevronBack />
+              </span>
+            </div>
+          </div>
+          <div className="info__right-cont__breakdown">
+            {' '}
+            <div className="info__right-cont__breakdown__wrapper">
+              {breakdown.map((_breakdown, i) => (
+                <Breakdown
+                  value={_breakdown.value}
+                  name={_breakdown.name}
+                  handler={handleBreakdown(i)}
+                  onDelete={handleBreakdownDelete(i)}
+                  key={i}
+                />
+              ))}
+            </div>
+            <div className="info__right-cont__breakdown__action">
+              <Button
+                onClick={addBreakdown}
+                className="info__right-cont__breakdown__action__add"
+              >
+                Add
+              </Button>
 
-                {canEdit && (
-                  <button
-                    onClick={() => setBreakdown(!breakdown)}
-                    className="info__breakdown-button"
-                  >
-                    Set Breakdown
-                  </button>
-                )}
-              </div>
-              <div className={`info__right-cont__banner ${hint ? 'show' : ''}`}>
-                <p>
-                  A salary breakdown is the detailed list of how an employee’s
-                  salary is divided into various components such as base pay,
-                  bonuses, benefits, and taxes.
-                </p>
-              </div>
-              <div className="info__right-cont__cont">
-                <div>
-                  <p>No salary breakdown yet. Set your salary breakdown.</p>
-                  <IllustrationSvg />
-                </div>
-              </div>
-            </>
-          )}
+              <Button
+                disabled={!canSave || saving}
+                className="info__right-cont__breakdown__action__save"
+                showSpinner={saving}
+                onClick={savBreakdown}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
         </>
       ) : (
         <>
           <div className="info__right-cont__flex">
             <span className="info__right-cont__flex-text">
               <p className="info__hero-text ">Salary Breakdown</p>
-              <span
-                onMouseEnter={() => {
-                  setHint(true);
-                }}
-                onMouseLeave={() => setHint(false)}
-                style={{ cursor: 'pointer' }}
-              >
-                <Info />
-              </span>
+              <PopUp />
             </span>
 
             {canEdit && (
@@ -145,19 +210,55 @@ function SalaryBreakdown(props: Props) {
               </button>
             )}
           </div>
-          <div className={`info__right-cont__banner ${hint ? 'show' : ''}`}>
-            <p>
-              A salary breakdown is the detailed list of how an employee’s
-              salary is divided into various components such as base pay,
-              bonuses, benefits, and taxes.
-            </p>
-          </div>
-          <div className="info__right-cont__cont">
-            <div>
-              <p>No salary breakdown yet. Set your salary breakdown.</p>
-              <IllustrationSvg />
+
+          <IF condition={!organization?.salaryBreakdown?.length}>
+            <div className="info__right-cont__cont">
+              <div>
+                <p>No salary breakdown yet. Set your salary breakdown.</p>
+                <IllustrationSvg />
+              </div>
             </div>
-          </div>
+          </IF>
+
+          <IF condition={organization?.salaryBreakdown?.length}>
+            <div
+              style={{
+                maxHeight: '200px',
+                marginInline: 'auto',
+                marginBlock: '45px',
+              }}
+            >
+              <OrganizationDashboardPieChart
+                labels={chartLabels}
+                currency=""
+                innerRadius={0.85}
+                datasets={[
+                  { data: chartValues, backgroundColor: backgroundColors },
+                ]}
+              />
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                maxWidth: '390px',
+                marginInline: 'auto',
+              }}
+            >
+              {_breakdown.map((breakdown, i) => {
+                return (
+                  <BreakdownItem
+                    name={breakdown.name}
+                    value={breakdown.value}
+                    key={i}
+                    color={backgroundColors[i]}
+                  />
+                );
+              })}
+            </div>
+          </IF>
         </>
       )}
     </div>

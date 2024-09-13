@@ -137,7 +137,7 @@ export const DeleteBd = () => (
   </svg>
 );
 
-export const Info = () => (
+export const InfoSVG = () => (
   <svg
     width="24"
     height="24"

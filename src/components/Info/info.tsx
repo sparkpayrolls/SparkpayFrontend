@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { Info } from '../svg';
+import { InfoSVG } from '../svg';
 
 function HelperInfo(props: { children: ReactNode }) {
   const [hint, setHint] = useState<boolean>();
@@ -16,7 +16,7 @@ function HelperInfo(props: { children: ReactNode }) {
   return (
     <div className="info">
       <span onMouseEnter={toggle} onMouseLeave={toggle}>
-        <Info />
+        <InfoSVG />
       </span>
       {show && (
         <div className={`info__helper ${hint ? 'show' : 'leave'}`}>

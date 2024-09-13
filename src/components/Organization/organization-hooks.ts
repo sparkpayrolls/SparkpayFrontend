@@ -5,6 +5,9 @@ import { omit } from 'lodash';
 import { $api } from 'src/api';
 import { HttpError } from 'src/api/repo/http.error';
 import { RemittanceTabProps } from './types';
+import { SalaryBreakdown } from 'src/api/types';
+import cloneDeep from 'lodash.clonedeep';
+import { useState } from 'react';
 
 export const useRemittanceInformationContext = () => {
   const router = useRouter();
@@ -109,4 +112,101 @@ export const useRemittanceTabContext = (
   };
 
   return { initialValues, handleSubmit };
+};
+
+export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
+  const { organization, loading, canEdit } = props.organizationDetails;
+  const [breakdown, setBreakdown] = useState(
+    organization?.salaryBreakdown || [],
+  );
+  const [saving, setSaving] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const colors = ['#0B2253', '#6D7A98', '#42D0C8'];
+  const chartValues: number[] = [];
+  const chartLabels: string[] = [];
+  const backgroundColors: string[] = [];
+  const _breakdown = breakdown.filter(
+    (b) => b.name && Number.isFinite(b.value),
+  );
+  const canSave =
+    _breakdown.length &&
+    _breakdown.reduce((a, c) => a + c.value, 0) === 100 &&
+    (!organization?.salaryBreakdown?.length ||
+      cloneDeep(_breakdown)
+        .reverse()
+        .some((b) => {
+          return (
+            organization?.salaryBreakdown?.findIndex(
+              (_b) => b.name === _b.name && b.value === _b.value,
+            ) === -1
+          );
+        }));
+
+  _breakdown.forEach((b, i) => {
+    chartLabels.push(b.name);
+    chartValues.push(b.value);
+    backgroundColors.push(colors[i % 3]);
+  });
+
+  const addBreakdown = () => {
+    setBreakdown(_breakdown.concat({ name: '', value: 0 }));
+  };
+
+  const handleBreakdown = (i: number) => {
+    return (val: Record<string, unknown>) => {
+      const b = cloneDeep(breakdown);
+
+      b[i] = val as SalaryBreakdown;
+      setBreakdown(b);
+    };
+  };
+
+  const handleBreakdownDelete = (i: number) => {
+    return () => {
+      const b = cloneDeep(breakdown);
+      b.splice(i, 1);
+
+      setBreakdown(b);
+    };
+  };
+
+  const savBreakdown = async () => {
+    if (!props.organizationDetails.canEdit) {
+      return;
+    }
+    setSaving(true);
+    const toast = (await import('react-toastify')).toast;
+    try {
+      await $api.company.updateCompanyById(
+        props.organizationDetails.organization?.id || '',
+        { salaryBreakdown: _breakdown },
+      );
+      toast.success('Salary Breakdown updated successfully.');
+    } catch (error) {
+      const httpError = error as HttpError;
+
+      toast.error(httpError.errors.salaryBreakdown || httpError.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return {
+    loading,
+    canEdit,
+    saving,
+    edit,
+    setEdit,
+    canSave,
+    addBreakdown,
+    handleBreakdown,
+    handleBreakdownDelete,
+    savBreakdown,
+    breakdown,
+    organization,
+    chartLabels,
+    chartValues,
+    backgroundColors,
+    _breakdown,
+  };
 };

@@ -65,6 +65,7 @@ interface IOrganizationDashboardPieChart {
   labels: string[];
   datasets: ChartDataset<'pie', number[]>[];
   currency: string;
+  innerRadius?: number;
 }
 
 export const OrganizationDashboardPieChart = (
@@ -83,7 +84,7 @@ export const OrganizationDashboardPieChart = (
     colorField: 'type', // or seriesField in some cases
     color: datasets[0].backgroundColor as string,
     radius: 1,
-    innerRadius: 0.7,
+    innerRadius: props.innerRadius || 0.7,
     // autoFit: false,
     // height: 380,
     label: {

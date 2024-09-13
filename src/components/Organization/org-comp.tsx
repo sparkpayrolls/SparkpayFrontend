@@ -1,23 +1,35 @@
-import { useState } from 'react';
+import { ChangeEvent, MouseEventHandler, useState } from 'react';
 import { ChevronBack, DeleteBd } from '../svg';
 
 type BreakDown = {
   name: string;
-  value: any;
+  value: number;
+  handler: (_v: Record<string, unknown>) => unknown;
+  onDelete: MouseEventHandler<HTMLButtonElement>;
 };
 export const Breakdown = (props: BreakDown) => {
-  const [edit, setEdit] = useState<boolean>(false);
-  const [show, setShow] = useState<boolean>(false);
+  const [edit, setEdit] = useState<boolean>(!props.name);
+  const [show, setShow] = useState<boolean>(!props.name);
 
   const toggle = () => {
-    if (!edit) {
-      setShow(true);
-      setTimeout(() => setEdit(true));
-    } else {
-      setEdit(false);
-      setTimeout(() => setShow(false), 200);
+    if (props.name) {
+      if (!edit) {
+        setShow(true);
+        setTimeout(() => setEdit(true));
+      } else {
+        setEdit(false);
+        setTimeout(() => setShow(false), 200);
+      }
     }
   };
+
+  const handleChange = (name: string) => {
+    return (ev: ChangeEvent<HTMLInputElement>) => {
+      const value = Number(ev.target.value) || ev.target.value;
+      props.handler({ ...props, [name]: value });
+    };
+  };
+
   return (
     <div className="info__right-cont__breakdown__box">
       <div className="info__right-cont__breakdown__cont">
@@ -33,9 +45,9 @@ export const Breakdown = (props: BreakDown) => {
           >
             <ChevronBack />
           </span>
-          <span>
+          <button onClick={props.onDelete}>
             <DeleteBd />
-          </span>
+          </button>
         </div>
       </div>
       {show && (
@@ -47,13 +59,21 @@ export const Breakdown = (props: BreakDown) => {
           <div className="info__right-cont__breakdown__inputs__cont">
             <label htmlFor="name">Name</label>
             <div className="info__right-cont__breakdown__inputs__cont__input">
-              <input defaultValue={props.name} type="text" id="name" />
+              <input
+                onChange={handleChange('name')}
+                value={props.name}
+                type="text"
+              />
             </div>
           </div>
           <div className="info__right-cont__breakdown__inputs__cont">
             <label htmlFor="name">Percentage %</label>
             <div className="info__right-cont__breakdown__inputs__cont__input">
-              <input defaultValue={`${props.value}%`} type="text" id="name" />
+              <input
+                onChange={handleChange('value')}
+                value={props.value}
+                type="number"
+              />
             </div>
           </div>
         </div>
