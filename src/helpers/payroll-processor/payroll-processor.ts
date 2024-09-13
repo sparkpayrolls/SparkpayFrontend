@@ -38,6 +38,9 @@ export class PayrollProcessor {
       totalPension: 0,
       totalNHF: 0,
       totalTax: 0,
+      totalPayrollPension: 0,
+      totalPayrollNHF: 0,
+      totalPayrollTax: 0,
       totalCharge: 0,
       employees: [],
     };
@@ -143,8 +146,11 @@ export class PayrollProcessor {
           { statutory: pension, key: 'totalPension' },
           { statutory: nhf, key: 'totalNHF' },
           { statutory: tax, key: 'totalTax' },
-        ].forEach(({ statutory, key }) => {
-          if (statutory.addToCharge) {
+          { statutory: pension, key: 'totalPayrollPension', skipCheck: true },
+          { statutory: nhf, key: 'totalPayrollNHF', skipCheck: true },
+          { statutory: tax, key: 'totalPayrollTax', skipCheck: true },
+        ].forEach(({ statutory, key, skipCheck }) => {
+          if (skipCheck || statutory.addToCharge) {
             response[key as 'totalNHF'] = this.sum(
               precision,
               response[key as 'totalNHF'],

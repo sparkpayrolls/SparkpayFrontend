@@ -1,3 +1,7 @@
+import {
+  ProcessedEmployee,
+  ProcessedPayroll,
+} from 'src/helpers/payroll-processor/types';
 import { HttpRepository } from '../repo/http.repo';
 import {
   Addon,
@@ -189,5 +193,18 @@ export class PayrollModule extends HttpRepository {
     const { data } = await this.get('payrolls/processor-data', { params });
 
     return data;
+  }
+
+  async getRemittanceEmployees(params: Record<string, any> = {}) {
+    return this.get<
+      Omit<ProcessedPayroll, 'employees'> & {
+        employees: (Employee & ProcessedEmployee)[];
+        taxEmployees: number;
+        nhfEmployees: number;
+        pensionEmployees: number;
+      }
+    >('/payrolls/remittance-employees', {
+      params,
+    });
   }
 }

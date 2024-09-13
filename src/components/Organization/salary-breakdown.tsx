@@ -1,48 +1,29 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { ChevronBack, EditPenSvg, IllustrationSvg, InfoSVG } from '../svg';
 import { Breakdown } from './org-comp';
 import Skeleton from 'react-loading-skeleton';
-import classNames from 'classnames';
 import { IF } from '../Misc/if.component';
 import { OrganizationDashboardPieChart } from '../Chart/organizationdashoard-chart';
 import { Button } from '../Button/Button.component';
 import { RemittanceTabProps } from './types';
 import { useSalaryBreakdownContext } from './organization-hooks';
+import { Popover } from 'antd';
 
 export const InfoPopUp = (props: PropsWithChildren<unknown>) => {
-  const [shouldPop, setShouldPop] = useState(false);
-  const [className, setClassName] = useState(
-    classNames('info__right-cont__banner d-none'),
-  );
-
-  useEffect(() => {
-    if (shouldPop) {
-      setClassName('info__right-cont__banner');
-      setTimeout(() => setClassName('info__right-cont__banner show'), 10);
-    } else {
-      setClassName('info__right-cont__banner');
-      setTimeout(() => setClassName('info__right-cont__banner d-none'), 200);
-    }
-  }, [shouldPop]);
-
   return (
     <>
-      <span
-        onMouseEnter={() => setShouldPop(true)}
-        onMouseLeave={() => setShouldPop(false)}
-        style={{ cursor: 'pointer' }}
-      >
-        <InfoSVG />
-      </span>
-
-      <div className={className}>{props.children}</div>
+      <Popover placement="bottom" trigger="hover" content={props.children}>
+        <span>
+          <InfoSVG />
+        </span>
+      </Popover>
     </>
   );
 };
 
 const PopUp = () => (
   <InfoPopUp>
-    <p>
+    <p className="info__right-cont__banner">
       A salary breakdown is the detailed list of how an employee&apos;s salary
       is divided into various components such as base pay, bonuses, benefits,
       and taxes.

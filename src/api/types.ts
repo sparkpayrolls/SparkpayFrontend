@@ -139,6 +139,9 @@ export type Employee = Document & {
   groups: EmployeeGroup[];
   status: EmployeeStatus;
   phoneNumber?: string;
+  taxId?: string;
+  taxState?: string;
+  bvn?: string;
 };
 
 export enum GroupTypeEnum {

@@ -159,6 +159,7 @@ export const SelectInput = (props: ISelectInput) => {
     <span ref={selectRef} className={className} id={inputId}>
       {props.label && <label>{props.label}</label>}
       <span
+        style={props.selectorStyle}
         className="select-input__selector"
         onClick={() => {
           if (!loading) {

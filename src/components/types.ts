@@ -8,6 +8,7 @@ import { Moment } from 'moment';
 import { NextRouter } from 'next/router';
 import React, {
   ChangeEventHandler,
+  CSSProperties,
   DetailedHTMLProps,
   FocusEventHandler,
   MouseEventHandler,
@@ -156,6 +157,7 @@ export type ISelectInput = {
   showSearch?: boolean | string;
   applyTableStyle?: boolean;
   customIcon?: ReactNode;
+  selectorStyle?: CSSProperties;
 };
 
 /** AddEmployee */
@@ -386,6 +388,7 @@ export type ITableLayout = {
   searchPlaceholder?: string;
   searchDelay?: number;
   fixedHeader?: boolean;
+  filterButtonClassName?: string;
 };
 
 export type ICheckboxTableColumn = {

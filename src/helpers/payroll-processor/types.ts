@@ -73,6 +73,9 @@ export type ProcessedPayroll = {
   totalPension: number;
   totalNHF: number;
   totalTax: number;
+  totalPayrollPension: number;
+  totalPayrollNHF: number;
+  totalPayrollTax: number;
   totalCharge: number;
   employees: ProcessedEmployee[];
 };
