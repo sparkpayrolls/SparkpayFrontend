@@ -115,7 +115,7 @@ export const PensionTab = (props: RemittanceTabProps) => {
 
                 <Button
                   element="a"
-                  href="/organisations/view_employees"
+                  href="/organisations/remittance-employees?tab=pension"
                   className="info__remittance__form__view-btn"
                 >
                   View Employees

@@ -75,7 +75,7 @@ export const NhfTab = (props: RemittanceTabProps) => {
 
                 <Button
                   element="a"
-                  href="/organisations/view_employees"
+                  href="/organisations/remittance-employees?tab=nhf"
                   className="info__remittance__form__view-btn"
                 >
                   View Employees

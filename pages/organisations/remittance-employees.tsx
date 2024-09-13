@@ -28,21 +28,22 @@ const Employees = () => {
       <div className="view-employees">
         <div className="view-employees__header">
           <p className="view-employees__header__text">
-            <Link href={'/organisations'}>
+            <Link href={`/organisations?tab=${selectedTab}`}>
               <a>
                 <ChevronBack />
               </a>
             </Link>
-            {selectedTab} Employees
+            <span style={{ textTransform: 'capitalize' }}>{selectedTab}</span>{' '}
+            Employees
           </p>
         </div>
 
-        <Tab onChange={onTabChange} active={selectedTab} default={'Tax'}>
-          <TabPane key="Tax" tab="Tax Employees">
+        <Tab onChange={onTabChange} active={selectedTab} default={'tax'}>
+          <TabPane key="tax" tab="Tax Employees">
             <EmployeesTaxViewTab />
           </TabPane>
-          <TabPane key="NHF" tab="NHF Employees"></TabPane>
-          <TabPane key="Pension" tab="Pension Employees"></TabPane>
+          <TabPane key="nhf" tab="NHF Employees"></TabPane>
+          <TabPane key="pension" tab="Pension Employees"></TabPane>
         </Tab>
       </div>
     </DashboardLayout>
