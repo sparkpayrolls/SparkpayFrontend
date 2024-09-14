@@ -140,6 +140,7 @@ export type Employee = Document & {
   status: EmployeeStatus;
   phoneNumber?: string;
   taxId?: string;
+  nhfId?: string;
   taxState?: string;
   bvn?: string;
   statutoryDeductions?: Record<string, StatutoryDeduction>;

@@ -9,9 +9,11 @@ import { InputV2 } from '../Input/Input.component';
 import { SelectInput } from '../Input/seletct-input';
 import { StatusChip } from '../StatusChip/status-chip.component';
 import { Switch } from 'antd';
-import { useEmployeesTaxViewTabContext } from './organization-hooks';
+import { useRemittanceEmployeesTabContext } from './organization-hooks';
+import { useStates } from 'src/helpers/hooks/use-org-details';
 
-function EmployeesTaxViewTab() {
+export const EmployeesTaxViewTab = () => {
+  const { states } = useStates();
   const {
     updateStatus,
     updateEmployee,
@@ -20,10 +22,9 @@ function EmployeesTaxViewTab() {
     currency,
     employeeLoading,
     loading,
-    states,
     data,
     setParams,
-  } = useEmployeesTaxViewTabContext();
+  } = useRemittanceEmployeesTabContext();
 
   return (
     <div className="view-employees__tax">
@@ -31,9 +32,9 @@ function EmployeesTaxViewTab() {
         <div className="view-employees__tax__top-cont">
           <div className="view-employees__tax__top-cont__info">
             <p className="view-employees__tax__top-cont__info-sm">
-              Total Amount Remittance
+              Total Remittance Amount
             </p>
-            <InfoPopUp>Total amount of tax remited to employees</InfoPopUp>
+            <InfoPopUp>Total amount of Tax Remittance</InfoPopUp>
           </div>
           <p className="view-employees__tax__top-cont__info-md">
             {!Number.isFinite(data?.data?.totalPayrollTax) ? (
@@ -48,7 +49,7 @@ function EmployeesTaxViewTab() {
             <div className="view-employees__tax__top-cont__info-sm">
               <p>Active Tax Employees</p>
             </div>
-            <InfoPopUp>Employees who are on tax remittances</InfoPopUp>
+            <InfoPopUp>Employees who are on Tax remittance</InfoPopUp>
           </div>
           <p className="view-employees__tax__top-cont__info-md">
             {!Number.isFinite(data?.data?.taxEmployees) ? (
@@ -63,7 +64,7 @@ function EmployeesTaxViewTab() {
             <p className="view-employees__tax__top-cont__info-sm">
               Non Active Tax Employees
             </p>
-            <InfoPopUp>Employees who are not on tax remittances</InfoPopUp>
+            <InfoPopUp>Employees who are not on Tax remittance</InfoPopUp>
           </div>
           <p className="view-employees__tax__top-cont__info-md">
             {!Number.isFinite(data?.data?.taxEmployees) ? (
@@ -205,6 +206,4 @@ function EmployeesTaxViewTab() {
       <Pagination refresh={setParams} meta={data?.meta} />
     </div>
   );
-}
-
-export default EmployeesTaxViewTab;
+};

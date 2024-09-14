@@ -9,7 +9,6 @@ import { PaginateParams, SalaryBreakdown } from 'src/api/types';
 import cloneDeep from 'lodash.clonedeep';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useStates } from 'src/helpers/hooks/use-org-details';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
 
@@ -215,10 +214,9 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
   };
 };
 
-export const useEmployeesTaxViewTabContext = () => {
+export const useRemittanceEmployeesTabContext = () => {
   const administrator = useAppSelector((state) => state.administrator);
   const [params, setParams] = useState<PaginateParams>({});
-  const { states } = useStates();
   // eslint-disable-next-line no-undef
   const [data, setData] = useState<Awaited<
     ReturnType<typeof $api.payroll.getRemittanceEmployees>
@@ -272,15 +270,21 @@ export const useEmployeesTaxViewTabContext = () => {
         .finally(stopLoadingEmployee);
     };
   };
-  // @ts-ignore
-  const updateStatus = (employee: typeof data.data.employees[0]) => {
+  const updateStatus = (
+    // @ts-ignore
+    employee: typeof data.data.employees[0],
+    remittance = 'tax',
+  ) => {
     return (enabled: boolean) => {
       updateEmployee(employee)({
         target: {
           name: 'statutoryDeductions',
           value: {
             ...(employee.statutoryDeductions || {}),
-            tax: { enabled },
+            [remittance]: {
+              ...((employee.statutoryDeductions || {})[remittance] || {}),
+              enabled,
+            },
           },
         },
       })?.then(getEmployees);
@@ -299,7 +303,6 @@ export const useEmployeesTaxViewTabContext = () => {
     currency,
     employeeLoading,
     loading,
-    states,
     data,
     setParams,
   };
