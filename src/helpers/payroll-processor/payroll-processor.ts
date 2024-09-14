@@ -73,6 +73,7 @@ export class PayrollProcessor {
         proratedSalary,
         precision,
         options: statutoryDeductionOptions?.nhf,
+        employee,
       });
       const tax = this.processTax({
         employee,
@@ -194,6 +195,7 @@ export class PayrollProcessor {
       salaryBreakdown: _salaryBreakdown,
       precision,
       proratedSalary,
+      voluntaryPension: employee.voluntaryPensionContribution,
     });
   }
 
@@ -230,12 +232,14 @@ export class PayrollProcessor {
   }
 
   private static processNHF(payload: {
+    employee: Employee;
     proratedSalary: number;
     precision: number;
     options?: StatutoryDeductionOptions;
   }) {
-    const { proratedSalary, precision, options } = payload;
-    const { enabled, addToCharge } = options || {};
+    const { proratedSalary, precision, options, employee } = payload;
+    const { enabled, addToCharge } =
+      employee.statutoryDeductionOptions?.nhf || options || {};
     if (!enabled) {
       return {
         amount: 0,

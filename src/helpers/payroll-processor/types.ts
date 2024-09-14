@@ -24,6 +24,7 @@ export type Employee = {
     startDate: string;
     endDate: string;
   };
+  voluntaryPensionContribution?: number;
 };
 
 export type Fees = {
