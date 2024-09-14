@@ -142,6 +142,7 @@ export type Employee = Document & {
   taxId?: string;
   taxState?: string;
   bvn?: string;
+  statutoryDeductions?: Record<string, StatutoryDeduction>;
 };
 
 export enum GroupTypeEnum {

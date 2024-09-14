@@ -15,14 +15,52 @@ import moment from 'moment';
 import { refreshCompanies } from 'src/redux/slices/companies/companies.slice';
 import { OrganisationDetailsModal } from '@/components/Modals/OrganisationDetailsModal.component';
 
+export const useStates = () => {
+  const [states, setStates] = useState<State[]>([]);
+  const administrator = useAppSelector((state) => state.administrator);
+  const country = (administrator?.company as Company)?.country as Country;
+
+  useEffect(() => {
+    $api.country
+      .getStates(country?.id || '', { all: true })
+      .then(({ data: states }) => {
+        setStates(states);
+      })
+      .catch(() => {
+        // do nothing...
+      });
+  }, [country?.id]);
+
+  return { states };
+};
+
+export const usePFAs = () => {
+  const [pfas, setPFAs] = useState<PensionFundAdministrator[]>([]);
+  const administrator = useAppSelector((state) => state.administrator);
+  const country = (administrator?.company as Company)?.country as Country;
+
+  useEffect(() => {
+    $api.country
+      .getPFAs(country?.id || '', { all: true })
+      .then(({ data: pfas }) => {
+        setPFAs(pfas);
+      })
+      .catch(() => {
+        // do nothing...
+      });
+  }, [country?.id]);
+
+  return { pfas };
+};
+
 export const useOrganizationDetails = () => {
   const [loading, apiCallStarted, apiCallDone] = useApiCall();
-
+  const { pfas } = usePFAs();
   const administrator = useAppSelector((state) => state.administrator);
   const country = (administrator?.company as Company)?.country as Country;
   const [organization, setOrganization] = useState<Company | null>();
-  const [states, setStates] = useState<State[]>([]);
-  const [pfas, setPFAs] = useState<PensionFundAdministrator[]>([]);
+  const { states } = useStates();
+
   const dispatch = useAppDispatch();
   const organisationId = (administrator?.company as Company)?.id;
   const canEdit = Util.canActivate([['Company', 'write']], administrator);
@@ -63,24 +101,6 @@ export const useOrganizationDetails = () => {
 
   useEffect(() => {
     getOrganization();
-
-    $api.country
-      .getStates(country?.id || '', { all: true })
-      .then(({ data: states }) => {
-        setStates(states);
-      })
-      .catch(() => {
-        // do nothing...
-      });
-
-    $api.country
-      .getPFAs(country?.id || '', { all: true })
-      .then(({ data: pfas }) => {
-        setPFAs(pfas);
-      })
-      .catch(() => {
-        // do nothing...
-      });
   }, [country?.id, getOrganization]);
 
   return {

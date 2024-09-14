@@ -5,9 +5,13 @@ import { omit } from 'lodash';
 import { $api } from 'src/api';
 import { HttpError } from 'src/api/repo/http.error';
 import { RemittanceTabProps } from './types';
-import { SalaryBreakdown } from 'src/api/types';
+import { PaginateParams, SalaryBreakdown } from 'src/api/types';
 import cloneDeep from 'lodash.clonedeep';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useStates } from 'src/helpers/hooks/use-org-details';
+import { Util } from 'src/helpers/util';
+import { useAppSelector } from 'src/redux/hooks';
 
 export const useRemittanceInformationContext = () => {
   const router = useRouter();
@@ -208,5 +212,95 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
     chartValues,
     backgroundColors,
     _breakdown,
+  };
+};
+
+export const useEmployeesTaxViewTabContext = () => {
+  const administrator = useAppSelector((state) => state.administrator);
+  const [params, setParams] = useState<PaginateParams>({});
+  const { states } = useStates();
+  // eslint-disable-next-line no-undef
+  const [data, setData] = useState<Awaited<
+    ReturnType<typeof $api.payroll.getRemittanceEmployees>
+  > | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [employeeLoading, setEmployeeLoading] = useState<
+    Record<string, boolean>
+  >({});
+  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
+  const isEmpty = (data?.meta?.total || 0) <= 0;
+
+  const getEmployees = useCallback(() => {
+    setLoading(true);
+    $api.payroll
+      .getRemittanceEmployees(params)
+      .then(setData)
+      .catch((error) => {
+        Util.onNonAuthError(error, (httpError) => {
+          toast.error(httpError.message);
+        });
+      })
+      .finally(() => setLoading(false));
+  }, [params]);
+  const handleSearch = (search: string) => {
+    setParams({ ...params, search });
+  };
+  const startLoadingEmployee = (employee: string) => {
+    setEmployeeLoading((e) => ({ ...e, [employee]: true }));
+
+    return () => {
+      setEmployeeLoading((e) => ({ ...e, [employee]: false }));
+    };
+  };
+  // @ts-ignore
+  const updateEmployee = (employee: typeof data.data.employees[0]) => {
+    return (ev: any) => {
+      if (ev.target.value === employee[ev.target.name as 'taxId']) {
+        return;
+      }
+      const stopLoadingEmployee = startLoadingEmployee(
+        `${employee.id}_${ev.target.name}`,
+      );
+
+      return $api.employee
+        .updateSingleEmployee(employee.id, {
+          [ev.target.name]: ev.target.value,
+        })
+        .catch(() => {
+          toast.error('Error updating employee tax details');
+        })
+        .finally(stopLoadingEmployee);
+    };
+  };
+  // @ts-ignore
+  const updateStatus = (employee: typeof data.data.employees[0]) => {
+    return (enabled: boolean) => {
+      updateEmployee(employee)({
+        target: {
+          name: 'statutoryDeductions',
+          value: {
+            ...(employee.statutoryDeductions || {}),
+            tax: { enabled },
+          },
+        },
+      })?.then(getEmployees);
+    };
+  };
+
+  useEffect(() => {
+    getEmployees();
+  }, [getEmployees]);
+
+  return {
+    updateStatus,
+    updateEmployee,
+    handleSearch,
+    isEmpty,
+    currency,
+    employeeLoading,
+    loading,
+    states,
+    data,
+    setParams,
   };
 };

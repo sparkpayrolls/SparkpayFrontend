@@ -1,9 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { $api } from 'src/api';
-import { PaginateParams } from 'src/api/types';
 import { Util } from 'src/helpers/util';
-import { toast } from 'react-toastify';
-import { useAppSelector } from 'src/redux/hooks';
 import { InfoPopUp } from './salary-breakdown';
 import Skeleton from 'react-loading-skeleton';
 import { TableLayout } from '../Table/table-layout.component';
@@ -14,30 +9,21 @@ import { InputV2 } from '../Input/Input.component';
 import { SelectInput } from '../Input/seletct-input';
 import { StatusChip } from '../StatusChip/status-chip.component';
 import { Switch } from 'antd';
+import { useEmployeesTaxViewTabContext } from './organization-hooks';
 
 function EmployeesTaxViewTab() {
-  const administrator = useAppSelector((state) => state.administrator);
-  const [params, setParams] = useState<PaginateParams>({});
-  // eslint-disable-next-line no-undef
-  const [data, setData] = useState<Awaited<
-    ReturnType<typeof $api.payroll.getRemittanceEmployees>
-  > | null>(null);
-  const [loading, setLoading] = useState(true);
-  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const isEmpty = (data?.meta?.total || 0) <= 0;
-
-  useEffect(() => {
-    setLoading(true);
-    $api.payroll
-      .getRemittanceEmployees(params)
-      .then(setData)
-      .catch((error) => {
-        Util.onNonAuthError(error, (httpError) => {
-          toast.error(httpError.message);
-        });
-      })
-      .finally(() => setLoading(false));
-  }, [params]);
+  const {
+    updateStatus,
+    updateEmployee,
+    handleSearch,
+    isEmpty,
+    currency,
+    employeeLoading,
+    loading,
+    states,
+    data,
+    setParams,
+  } = useEmployeesTaxViewTabContext();
 
   return (
     <div className="view-employees__tax">
@@ -85,7 +71,7 @@ function EmployeesTaxViewTab() {
             ) : (
               <>
                 {Util.formatNumber(
-                  (data?.data?.taxEmployees || 0) - (data?.meta?.total || 0),
+                  (data?.meta?.total || 0) - (data?.data?.taxEmployees || 0),
                 )}{' '}
                 Employees
               </>
@@ -105,9 +91,7 @@ function EmployeesTaxViewTab() {
           )
         }
         searchPlaceholder="Search by name"
-        onSearch={(search) => {
-          setParams({ ...params, search });
-        }}
+        onSearch={handleSearch}
         // onFilter={() => {}}
         // filterButtonClassName="view-employees__tax__mid__filter__action"
         fixedHeader
@@ -144,16 +128,25 @@ function EmployeesTaxViewTab() {
                       style={{ borderRadius: 0, background: 'transparent' }}
                       placeholder="Enter Tax ID"
                       defaultValue={employee.taxId}
+                      loading={employeeLoading[`${employee.id}_taxId`]}
+                      disabled={employeeLoading[`${employee.id}_taxId`]}
+                      onBlur={updateEmployee(employee)}
+                      name="taxId"
                     />
                   </td>
 
                   <td style={{ padding: 0 }}>
                     <SelectInput
-                      options={['Abuja']}
                       showSearch="Search States"
                       placeholder="Select State"
+                      selected={{ id: employee.taxState }}
+                      options={states}
+                      displayValue="name"
+                      actualValue="id"
                       selectorStyle={{ background: 'none', borderRadius: 0 }}
-                      value={employee.taxState}
+                      loading={employeeLoading[`${employee.id}_taxState`]}
+                      name="taxState"
+                      onBlur={updateEmployee(employee)}
                     />
                   </td>
 
@@ -162,6 +155,10 @@ function EmployeesTaxViewTab() {
                       style={{ borderRadius: 0, background: 'transparent' }}
                       placeholder="Enter BVN"
                       defaultValue={employee.bvn}
+                      loading={employeeLoading[`${employee.id}_bvn`]}
+                      disabled={employeeLoading[`${employee.id}_bvn`]}
+                      name="bvn"
+                      onBlur={updateEmployee(employee)}
                     />
                   </td>
 
@@ -177,7 +174,14 @@ function EmployeesTaxViewTab() {
 
                       <Switch
                         className="organization-menu__dropdown__item__switch"
-                        checked={(employee.tax?.amount || 0) > 0}
+                        defaultChecked={(employee.tax?.amount || 0) > 0}
+                        loading={
+                          employeeLoading[`${employee.id}_statutoryDeductions`]
+                        }
+                        disabled={
+                          employeeLoading[`${employee.id}_statutoryDeductions`]
+                        }
+                        onChange={updateStatus(employee)}
                       />
                     </div>
                   </td>
