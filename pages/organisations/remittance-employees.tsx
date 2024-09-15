@@ -1,30 +1,17 @@
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import { ChevronBack } from '@/components/svg';
-import { useRouter } from 'next/router';
 import { Tab } from '@/components/Tab/tab.component';
-import { stringifyUrl } from 'query-string';
 import { TabPane } from '@/components/Tab/tabpane.component';
 import Link from 'next/link';
 import { EmployeesTaxViewTab } from '@/components/Organization/employees-tax-view-tab';
 import { EmployeesNHFViewTab } from '@/components/Organization/employees-nhf-view-tab';
 import { EmployeesPensionViewTab } from '@/components/Organization/employees-pension-view-tab';
+import { useSelectedTab } from 'src/helpers/hooks/use-selected-tab';
 
 import 'react-loading-skeleton/dist/skeleton.css';
 
 const Employees = () => {
-  const router = useRouter();
-  const { tab } = router.query;
-
-  const onTabChange = (tab: string) => {
-    const { pathname, query } = router;
-    const url = stringifyUrl({
-      url: pathname,
-      query: { ...query, tab },
-    });
-
-    router.push(url);
-  };
-  const selectedTab = Array.isArray(tab) ? tab[0] : tab || 'Tax';
+  const { onTabChange, selectedTab } = useSelectedTab('tax');
 
   return (
     <DashboardLayout fullWidth pageTitle="Tax Employees">

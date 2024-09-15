@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
 import { FormikHelpers } from 'formik';
 import { omit } from 'lodash';
 import { $api } from 'src/api';
@@ -11,28 +9,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
-
-export const useRemittanceInformationContext = () => {
-  const router = useRouter();
-  const { tab } = router.query;
-
-  const onTabChange = (tab: string) => {
-    const { pathname, query } = router;
-    const url = stringifyUrl({
-      url: pathname,
-      query: { ...query, tab },
-    });
-
-    router.push(url);
-  };
-
-  const selectedTab = Array.isArray(tab) ? tab[0] : tab || 'tax';
-
-  return {
-    selectedTab,
-    onTabChange,
-  };
-};
 
 export const useRemittanceTabContext = (
   props: RemittanceTabProps,

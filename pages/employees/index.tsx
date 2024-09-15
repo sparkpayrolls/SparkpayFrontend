@@ -16,7 +16,6 @@ import { PlusSvg } from '@/components/svg';
 import { Tab } from '@/components/Tab/tab.component';
 import { TabPane } from '@/components/Tab/tabpane.component';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
 import {
   MoreMenuHorizontalSVG,
   EditSquareSVG,
@@ -24,6 +23,7 @@ import {
 } from '@/components/svg';
 import { Dropdown, Menu } from 'antd';
 import Link from 'next/link';
+import { useSelectedTab } from 'src/helpers/hooks/use-selected-tab';
 
 const EmployeePage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
@@ -35,8 +35,7 @@ const EmployeePage: NextPage = () => {
   );
   const [employeeQuery, setEmployeeQuery] = useState<Record<string, any>>({});
   const router = useRouter();
-  const { tab } = router.query;
-  const selectedTab = Array.isArray(tab) ? tab[0] : tab || 'employees';
+  const { onTabChange, selectedTab } = useSelectedTab('employees');
 
   const getEmployees = useCallback(
     async (
@@ -85,16 +84,6 @@ const EmployeePage: NextPage = () => {
       router.push('/employees/employee-list');
     }
   }, [loading, employees, onAddEmployee, router]);
-
-  const onTabChange = (tab: string) => {
-    const { pathname, query } = router;
-    const url = stringifyUrl({
-      url: pathname,
-      query: { ...query, tab },
-    });
-
-    router.push(url);
-  };
 
   const onCreateGroup = () => {
     NiceModal.show(CreateEmployeeGroupModal).then(() => {

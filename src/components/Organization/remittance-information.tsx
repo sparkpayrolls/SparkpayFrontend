@@ -4,16 +4,16 @@ import { TabPane } from '../Tab/tabpane.component';
 import TaxTab from './tax-tab';
 import { NhfTab } from './nhf-tab';
 import { PensionTab } from './pension-tab';
-import { useRemittanceInformationContext } from './organization-hooks';
 import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
 import Skeleton from 'react-loading-skeleton';
+import { useSelectedTab } from 'src/helpers/hooks/use-selected-tab';
 
 export type RemittanceInformationProps = {
   organizationDetails: ReturnType<typeof useOrganizationDetails>;
 };
 
 function RemittanceInformation(props: RemittanceInformationProps) {
-  const { selectedTab, onTabChange } = useRemittanceInformationContext();
+  const { selectedTab, onTabChange } = useSelectedTab('tax');
 
   return (
     <div className="info__remittance">
