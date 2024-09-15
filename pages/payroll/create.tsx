@@ -116,7 +116,9 @@ const CreatePayroll: NextPage = () => {
                     <th>Bonus</th>
                     <th>Deduction</th>
                     <th>Tax</th>
-                    <th>Pension</th>
+                    <th>Employer Pension</th>
+                    <th>Employee Pension</th>
+                    <th>Voluntary Pension</th>
                     <th>NHF</th>
                   </tr>
                 </thead>
@@ -162,8 +164,19 @@ const CreatePayroll: NextPage = () => {
                           <td>
                             {currency}{' '}
                             {Util.formatMoneyNumber(
-                              (e.pension?.employeeContribution as number) +
-                                (e.pension?.voluntaryPension as number) || 0,
+                              e.pension?.employerContribution as number,
+                            )}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(
+                              e.pension?.employeeContribution as number,
+                            )}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(
+                              e.pension?.voluntaryPension as number,
                             )}
                           </td>
                           <td>
@@ -246,7 +259,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total Tax'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalTax,
+                  payroll?.totalPayrollTax,
                 )}`}
               />
 
@@ -254,7 +267,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total Pension'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalPension,
+                  payroll?.totalPayrollPension,
                 )}`}
               />
 
@@ -262,7 +275,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total NHF'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalNHF,
+                  payroll?.totalPayrollNHF,
                 )}`}
               />
             </div>

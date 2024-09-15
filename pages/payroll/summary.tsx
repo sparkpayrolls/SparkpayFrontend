@@ -80,9 +80,9 @@ const PayrollSummaryPage: NextPage = () => {
               { name: 'Total Net Salary', value: payroll?.totalNetSalary },
               { name: 'Total Bonus', value: payroll?.totalBonus },
               { name: 'Total Deductions', value: payroll?.totalDeductions },
-              { name: 'Total Tax', value: payroll?.totalTax },
-              { name: 'Total Pension', value: payroll?.totalPension },
-              { name: 'Total NHF', value: payroll?.totalNHF },
+              { name: 'Total Tax', value: payroll?.totalPayrollTax },
+              { name: 'Total Pension', value: payroll?.totalPayrollPension },
+              { name: 'Total NHF', value: payroll?.totalPayrollNHF },
               { name: 'Total Fee', value: payroll?.totalFees },
             ].map((item) => {
               return (

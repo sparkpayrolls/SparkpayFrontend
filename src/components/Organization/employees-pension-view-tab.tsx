@@ -151,7 +151,7 @@ export const EmployeesPensionViewTab = () => {
                           `${employee.id}_voluntaryPensionContribution`
                         ]
                       }
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true)}
                       name="voluntaryPensionContribution"
                     />
                   </td>

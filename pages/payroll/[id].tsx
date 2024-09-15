@@ -310,7 +310,10 @@ const PayDetails: NextPage = () => {
                       payroll && (
                         <>
                           {currency}{' '}
-                          {Util.formatMoneyNumber(payroll?.totalTax || 0, 2)}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalPayrollTax || 0,
+                            2,
+                          )}
                         </>
                       )
                     }
@@ -323,7 +326,7 @@ const PayDetails: NextPage = () => {
                         <>
                           {currency}{' '}
                           {Util.formatMoneyNumber(
-                            payroll?.totalPension || 0,
+                            payroll?.totalPayrollPension || 0,
                             2,
                           )}
                         </>
@@ -337,7 +340,10 @@ const PayDetails: NextPage = () => {
                       payroll && (
                         <>
                           {currency}{' '}
-                          {Util.formatMoneyNumber(payroll?.totalNHF || 0, 2)}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalPayrollNHF || 0,
+                            2,
+                          )}
                         </>
                       )
                     }

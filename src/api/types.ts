@@ -351,6 +351,9 @@ export type Payroll = Document & {
   totalPension?: number;
   totalNHF?: number;
   totalTax?: number;
+  totalPayrollPension?: number;
+  totalPayrollNHF?: number;
+  totalPayrollTax?: number;
 };
 
 export type PaymentMethodName = 'Bank Transfer' | 'Card';

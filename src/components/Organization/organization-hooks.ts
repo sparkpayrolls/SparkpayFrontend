@@ -226,8 +226,11 @@ export const useRemittanceEmployeesTabContext = () => {
       setEmployeeLoading((e) => ({ ...e, [employee]: false }));
     };
   };
-  // @ts-ignore
-  const updateEmployee = (employee: typeof data.data.employees[0]) => {
+  const updateEmployee = (
+    // @ts-ignore
+    employee: typeof data.data.employees[0],
+    shouldRefresh = false,
+  ) => {
     return (ev: any) => {
       if (ev.target.value === employee[ev.target.name as 'taxId']) {
         return;
@@ -239,6 +242,11 @@ export const useRemittanceEmployeesTabContext = () => {
       return $api.employee
         .updateSingleEmployee(employee.id, {
           [ev.target.name]: ev.target.value,
+        })
+        .then(() => {
+          if (shouldRefresh) {
+            return getEmployees();
+          }
         })
         .catch(() => {
           toast.error('Error updating employee tax details');
