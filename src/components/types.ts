@@ -65,7 +65,6 @@ export interface ITable {
   kebabMenuItems?: IKebabItem[];
   isNotSelectable?: boolean;
   isNotSearchable?: boolean;
-  allowSearch?: boolean;
   buttons?: {
     href?: string;
     label: string;

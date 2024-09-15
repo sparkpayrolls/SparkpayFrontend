@@ -51,7 +51,6 @@ const GroupEmployeesPage = () => {
           <div className="group-details__add-employee-section mt-1">
             <div className="group-employee-table">
               <Table
-                allowSearch
                 title={`${Util.formatMoneyNumber(
                   paginationMeta.total,
                 )} Employees`}
