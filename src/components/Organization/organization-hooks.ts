@@ -260,7 +260,10 @@ export const useRemittanceEmployeesTabContext = () => {
     remittance = 'tax',
   ) => {
     return (enabled: boolean) => {
-      updateEmployee(employee)({
+      updateEmployee(
+        employee,
+        true,
+      )({
         target: {
           name: 'statutoryDeductions',
           value: {
@@ -271,7 +274,7 @@ export const useRemittanceEmployeesTabContext = () => {
             },
           },
         },
-      })?.then(getEmployees);
+      });
     };
   };
 
