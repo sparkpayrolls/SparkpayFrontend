@@ -20,7 +20,6 @@ import React, {
 import { InputRangeProps } from 'react-input-range';
 import {
   Administrator,
-  Audit,
   AuditAction,
   Company,
   CompanyWallet,
@@ -30,16 +29,12 @@ import {
   InviteTypeStatus,
   OrganisationDashboardData,
   PaginationMeta,
-  PaymentMethod,
-  PaymentMethodName,
   PayoutMethod,
-  Payroll,
   PayrollStatus,
   PermissionGroup,
   PermissionLevel,
   SalaryAddOnStatus,
   UserDashboardData,
-  WalletTransaction,
   WalletTransactionStatus,
 } from 'src/api/types';
 import { IKebabItem } from './KebabMenu/KebabMenu.component';
@@ -341,10 +336,6 @@ export type IEmployeeTab = {
   paginationMeta: PaginationMeta;
   refreshEmployees: IGetEmployees;
 };
-
-export type ITaxTab = {};
-export type INhfTab = {};
-export type IPensionTab = {};
 
 export type ITab = {
   default?: string;
