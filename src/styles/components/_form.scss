@@ -100,7 +100,17 @@
 .organisation-detail,
 .change-password-form {
   &__section:not(:last-child) {
-    margin-bottom: $space-2;
+    margin-bottom: 42px;
+  }
+}
+
+.organisation-detail {
+  > input {
+    max-width: 190px;
+  }
+  &__flex {
+    display: flex;
+    gap: 20px;
   }
 }
 .reset-button {

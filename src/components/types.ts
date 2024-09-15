@@ -8,6 +8,7 @@ import { Moment } from 'moment';
 import { NextRouter } from 'next/router';
 import React, {
   ChangeEventHandler,
+  CSSProperties,
   DetailedHTMLProps,
   FocusEventHandler,
   MouseEventHandler,
@@ -19,7 +20,6 @@ import React, {
 import { InputRangeProps } from 'react-input-range';
 import {
   Administrator,
-  Audit,
   AuditAction,
   Company,
   CompanyWallet,
@@ -29,16 +29,12 @@ import {
   InviteTypeStatus,
   OrganisationDashboardData,
   PaginationMeta,
-  PaymentMethod,
-  PaymentMethodName,
   PayoutMethod,
-  Payroll,
   PayrollStatus,
   PermissionGroup,
   PermissionLevel,
   SalaryAddOnStatus,
   UserDashboardData,
-  WalletTransaction,
   WalletTransactionStatus,
 } from 'src/api/types';
 import { IKebabItem } from './KebabMenu/KebabMenu.component';
@@ -153,6 +149,9 @@ export type ISelectInput = {
   loading?: boolean;
   placeholder?: string;
   showSearch?: boolean | string;
+  applyTableStyle?: boolean;
+  customIcon?: ReactNode;
+  selectorStyle?: CSSProperties;
 };
 
 /** AddEmployee */
@@ -270,6 +269,7 @@ export type WalletBilling = {
   amount: string;
   channel: string;
 };
+
 /** NavListItem */
 export type IDashboardNavigationListItem = {
   router: NextRouter;
@@ -318,7 +318,9 @@ export type IStatusChip = {
     | InviteTypeStatus
     | GroupStatus
     | SalaryAddOnStatus
-    | InviteTypeStatus;
+    | InviteTypeStatus
+    | 'Enabled'
+    | 'Disabled';
 };
 
 /** TransactionMethod */
@@ -376,6 +378,7 @@ export type ITableLayout = {
   searchPlaceholder?: string;
   searchDelay?: number;
   fixedHeader?: boolean;
+  filterButtonClassName?: string;
 };
 
 export type ICheckboxTableColumn = {
@@ -456,12 +459,12 @@ export interface ButtonProps {
   /**
    * Button contents
    */
-  label: string | ReactElement;
+  label?: string | ReactElement;
 
   /**
    * Button type 'button' | 'submit'
    */
-  type: 'button' | 'submit';
+  type?: 'button' | 'submit';
   /**
    * Optional click handler
    */

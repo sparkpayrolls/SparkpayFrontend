@@ -24,6 +24,7 @@ export type Employee = {
     startDate: string;
     endDate: string;
   };
+  voluntaryPensionContribution?: number;
 };
 
 export type Fees = {
@@ -73,6 +74,9 @@ export type ProcessedPayroll = {
   totalPension: number;
   totalNHF: number;
   totalTax: number;
+  totalPayrollPension: number;
+  totalPayrollNHF: number;
+  totalPayrollTax: number;
   totalCharge: number;
   employees: ProcessedEmployee[];
 };

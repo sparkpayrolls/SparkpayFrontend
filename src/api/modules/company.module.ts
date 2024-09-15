@@ -64,6 +64,7 @@ export class CompanyModule extends HttpRepository {
         | 'bvnName'
         | 'bvn'
         | 'accountNumber'
+        | 'statutoryDeductions'
       > & {
         logoFile: FileUploadPayload;
       }

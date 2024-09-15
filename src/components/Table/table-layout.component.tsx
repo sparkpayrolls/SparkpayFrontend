@@ -77,7 +77,10 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
             </IF>
 
             <IF condition={!!props.onFilter}>
-              <FilterButton onClick={props.onFilter} />
+              <FilterButton
+                className={props.filterButtonClassName}
+                onClick={props.onFilter}
+              />
             </IF>
 
             <IF condition={!!props.menuItems}>

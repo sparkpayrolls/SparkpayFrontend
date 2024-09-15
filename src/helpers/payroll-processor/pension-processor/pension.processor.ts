@@ -41,12 +41,12 @@ export class PensionProcessor {
       precision,
     );
     let employeeContribution = Util.getPreciseNumber(
-      (salary * employeePercent) / 100,
+      (salary * employeePercent) / 100 + voluntaryPension,
       precision,
     );
 
     if (type === 'quote') {
-      employeeContribution = 0;
+      employeeContribution = voluntaryPension;
       employerContribution = Util.getPreciseNumber(
         (salary * employerPercent * 2) / 100,
         precision,

@@ -69,15 +69,7 @@ export const EditOrganisationDetailsValidationSchema = Yup.object().shape({
   name: Yup.string().required('Company name is required'),
   phonenumber: format.phonenumber,
   logo: Yup.string().optional(),
-  salaryBreakdown: Yup.array()
-    .of(
-      Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        value: Yup.string().required('Value is required'),
-      }),
-    )
-    .min(1)
-    .required('At least, one item and should sum up to 100%'),
+  rcNumber: Yup.string().optional(),
 });
 
 export const userChangePasswordValidationSchema = Yup.object().shape({

@@ -10,13 +10,12 @@ import NiceModal from '@ebay/nice-modal-react';
 import { PersistGate, PersistGateProps } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { PropsWithChildren, useEffect } from 'react';
-import { Detector } from 'react-detect-offline';
 import { useAppLogic } from 'src/helpers/hooks/use-app-logic.hook';
 import { config } from 'src/helpers/config';
 
 let persistor = persistStore(store);
 const AuthManager = (props: PropsWithChildren<unknown>) => {
-  const { loading, renderDetectOnline } = useAppLogic();
+  const { loading } = useAppLogic();
 
   if (typeof window === 'undefined') {
     return <>{props.children}</>;
@@ -24,7 +23,6 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
 
   return (
     <>
-      <Detector render={renderDetectOnline} />
       {loading ? (
         <div className="app-loader">
           {
