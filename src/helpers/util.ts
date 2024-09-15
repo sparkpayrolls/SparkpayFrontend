@@ -136,7 +136,7 @@ export class Util {
     return `${withComma}.${dec}`;
   }
 
-  static formatNumber(val: number) {
+  static formatNumber(val = 0) {
     return Util.formatMoneyNumber(val).split('.')[0];
   }
 
