@@ -195,7 +195,7 @@ export const EmployeesPensionViewTab = () => {
 
                       <Switch
                         className="organization-menu__dropdown__item__switch"
-                        defaultChecked={(employee.pension?.amount || 0) > 0}
+                        checked={(employee.pension?.amount || 0) > 0}
                         loading={
                           employeeLoading[`${employee.id}_statutoryDeductions`]
                         }

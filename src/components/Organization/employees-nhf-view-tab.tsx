@@ -156,7 +156,7 @@ export const EmployeesNHFViewTab = () => {
 
                       <Switch
                         className="organization-menu__dropdown__item__switch"
-                        defaultChecked={(employee.nhf?.amount || 0) > 0}
+                        checked={(employee.nhf?.amount || 0) > 0}
                         loading={
                           employeeLoading[`${employee.id}_statutoryDeductions`]
                         }

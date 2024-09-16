@@ -175,7 +175,7 @@ export const EmployeesTaxViewTab = () => {
 
                       <Switch
                         className="organization-menu__dropdown__item__switch"
-                        defaultChecked={(employee.tax?.amount || 0) > 0}
+                        checked={(employee.tax?.amount || 0) > 0}
                         loading={
                           employeeLoading[`${employee.id}_statutoryDeductions`]
                         }

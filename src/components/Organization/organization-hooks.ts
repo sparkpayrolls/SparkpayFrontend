@@ -206,7 +206,7 @@ export const useRemittanceEmployeesTabContext = () => {
 
   const getEmployees = useCallback(() => {
     setLoading(true);
-    $api.payroll
+    return $api.payroll
       .getRemittanceEmployees(params)
       .then(setData)
       .catch((error) => {
