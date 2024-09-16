@@ -30,6 +30,7 @@ export type Employee = {
 export type Fees = {
   baseFee: number;
   perEmployee: number;
+  perRemittanceEmployee: number;
 };
 
 export type ProcessPayload = {

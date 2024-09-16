@@ -117,6 +117,10 @@ export class PayrollProcessor {
       });
 
       if (!excludeFromTotals) {
+        const hasRemittance = [nhf, pension, tax].some(
+          (r) => r.addToCharge && r.amount > 0,
+        );
+
         response.totalSalary = this.sum(
           precision,
           response.totalSalary,
@@ -141,6 +145,7 @@ export class PayrollProcessor {
           precision,
           response.totalFees,
           fees.perEmployee,
+          hasRemittance ? fees.perRemittanceEmployee : 0,
         );
 
         [
