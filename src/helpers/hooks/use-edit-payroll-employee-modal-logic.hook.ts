@@ -15,7 +15,6 @@ export type IEditPayrollEmployeeModalParams = {
   employee: string;
   hook(): unknown;
   addons: Addon[];
-  payrollCycle: string;
   year: string;
   month: string;
   onCustomAddon(_addon: Record<string, unknown>[]): unknown;

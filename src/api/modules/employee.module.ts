@@ -175,7 +175,6 @@ export class EmployeeModule extends HttpRepository {
       | 'amount'
       | 'type'
       | 'frequency'
-      | 'payrollCycle'
       | 'startYear'
       | 'dates'
     >,
@@ -198,7 +197,6 @@ export class EmployeeModule extends HttpRepository {
         | 'amount'
         | 'type'
         | 'frequency'
-        | 'payrollCycle'
         | 'startYear'
         | 'dates'
         | 'status'

@@ -435,7 +435,6 @@ export type SalaryAddOn = Document & {
   status?: SalaryAddOnStatus;
   amount: number;
   meta?: unknown;
-  payrollCycle?: string;
   frequency: SalaryAddOnFrequency;
   dates: SalaryAddonDate[];
   startYear?: number;

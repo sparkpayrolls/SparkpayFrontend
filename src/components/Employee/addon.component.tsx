@@ -197,7 +197,6 @@ export const Addon = (props: IAddon) => {
                       </>
                     )}
                   </td>
-                  <td>{addon.payrollCycle}</td>
                   <td>{addon.frequency}</td>
                   <td>
                     {Array.isArray(date) ? (

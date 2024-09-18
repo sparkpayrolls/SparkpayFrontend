@@ -17,7 +17,6 @@ type Addon = Pick<
   | 'amount'
   | 'type'
   | 'frequency'
-  | 'payrollCycle'
   | 'startYear'
   | 'dates'
 >;
@@ -37,7 +36,6 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
     <Formik
       initialValues={{
         dates: [],
-        payrollCycle: '',
         name: '',
         type: '' as any,
         amount: '' as any,
@@ -55,7 +53,6 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
             amount: values.amount || 0,
             type: values.type,
             frequency: values.frequency,
-            payrollCycle: values.payrollCycle,
             startYear: values.startYear,
             dates: values.dates,
           };
@@ -180,20 +177,6 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
                 error={touched.amount && errors.amount}
               />
             )}
-
-            <InputV2
-              label="Payroll Cycle"
-              type="string"
-              placeholder="Payroll Cycle"
-              value={values.payrollCycle}
-              name="payrollCycle"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.payrollCycle && errors.payrollCycle}
-              helper={
-                '`all` for all payroll cycles or a positive number from 1 up'
-              }
-            />
 
             <Select
               label="Frequency"

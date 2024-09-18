@@ -180,12 +180,6 @@ export const SalaryAddonValidation = Yup.object().shape({
       return schema.required('Amount is required');
     },
   ),
-  payrollCycle: Yup.string()
-    .matches(
-      /^(all|[1-9]+[0-9]*)$/gi,
-      '`all` for all payroll cycles or a positive number from 1 up',
-    )
-    .required('payroll cycle is required'),
   frequency: Yup.string().required('Frequency is required'),
   startYear: Yup.string().when(
     ['frequency'],
