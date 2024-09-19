@@ -179,7 +179,7 @@ export const EmployeesPensionViewTab = () => {
                       selectorStyle={{ background: 'none', borderRadius: 0 }}
                       loading={employeeLoading[`${employee.id}_pfa`]}
                       name="pfa"
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, false, true)}
                     />
                   </td>
 

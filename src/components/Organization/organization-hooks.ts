@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
+import _isEmpty from 'lodash.isempty';
 
 export const useRemittanceTabContext = (
   props: RemittanceTabProps,
@@ -230,9 +231,14 @@ export const useRemittanceEmployeesTabContext = () => {
     // @ts-ignore
     employee: typeof data.data.employees[0],
     shouldRefresh = false,
+    skipIfEmpty = false,
   ) => {
     return (ev: any) => {
-      if (ev.target.value === employee[ev.target.name as 'taxId']) {
+      console.log({ skipIfEmpty, value: ev.target.values });
+      if (
+        ev.target.value === employee[ev.target.name as 'taxId'] ||
+        (skipIfEmpty && _isEmpty(ev.target.value))
+      ) {
         return;
       }
       const stopLoadingEmployee = startLoadingEmployee(
