@@ -1,6 +1,7 @@
 export type Addon = {
   name?: string;
   amount: number;
+  isNotTaxable?: boolean;
 };
 
 export type SalaryBreakdown = Record<string, number>;

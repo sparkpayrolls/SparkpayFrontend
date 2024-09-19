@@ -438,6 +438,7 @@ export type SalaryAddOn = Document & {
   frequency: SalaryAddOnFrequency;
   dates: SalaryAddonDate[];
   startYear?: number;
+  isNotTaxable?: boolean;
 };
 
 export type Addon = {

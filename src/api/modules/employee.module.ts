@@ -177,6 +177,7 @@ export class EmployeeModule extends HttpRepository {
       | 'frequency'
       | 'startYear'
       | 'dates'
+      | 'isNotTaxable'
     >,
   ) {
     const { data } = await this.post<SalaryAddOn>('/employees/addons', {

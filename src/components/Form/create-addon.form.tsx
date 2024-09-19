@@ -19,6 +19,7 @@ type Addon = Pick<
   | 'frequency'
   | 'startYear'
   | 'dates'
+  | 'isNotTaxable'
 >;
 
 type ICreateAddonForm = {
@@ -42,6 +43,7 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
         frequency: '' as any,
         description: '',
         startYear: '' as any,
+        isNotTaxable: false,
         ...initialValues,
       }}
       onSubmit={async (values, helpers) => {
@@ -55,7 +57,14 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
             frequency: values.frequency,
             startYear: values.startYear,
             dates: values.dates,
+            isNotTaxable: values.isNotTaxable,
           };
+
+          if ((payload.type as string) === 'untaxed-bonus') {
+            payload.isNotTaxable = true;
+            payload.type = 'bonus';
+          }
+
           let addon: SalaryAddOn;
           if (id) {
             addon = await $api.employee.updateSalaryAddon(id, payload);
@@ -160,6 +169,7 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
               value={values.type}
               options={[
                 { value: 'bonus', label: 'Bonus' },
+                { value: 'untaxed-bonus', label: 'Untaxed Bonus' },
                 { value: 'deduction', label: 'Deduction' },
                 { value: 'prorate', label: 'Prorate' },
               ]}

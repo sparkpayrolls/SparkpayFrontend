@@ -80,7 +80,10 @@ export class PayrollProcessor {
         options: statutoryDeductionOptions?.pension,
         precision,
         proratedSalary,
-        totalBonus,
+        totalBonus: this.sumAddons(
+          employee.bonus.filter((b) => !b.isNotTaxable),
+          precision,
+        ),
         pension:
           (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
         nhf: nhf.amount,
