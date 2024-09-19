@@ -48,6 +48,7 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
           amount: '',
           startDate: moment().year(year).month(month).startOf('month'),
           endDate: moment().year(year).month(month),
+          isNotTaxable: false,
         });
         const deleteAddon = (addon: any, index: number) => {
           handleUpdates({
@@ -135,7 +136,9 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
 
                       return (
                         <tr key={`${employee}-addon-${bonus.amount}`}>
-                          <td>{bonus.type}</td>
+                          <td>
+                            {bonus.isNotTaxable ? 'Untaxed Bonus' : bonus.type}
+                          </td>
                           <td>
                             {!bonus.amount
                               ? `${moment(bonus.startDate).format(
@@ -158,6 +161,9 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                                   endDate: moment(
                                     bonus.endDate || initialValues.endDate,
                                   ),
+                                  type: bonus.isNotTaxable
+                                    ? 'Untaxed Bonus'
+                                    : bonus.type,
                                 });
                               }}
                               title="Edit"
@@ -184,6 +190,10 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                 key={JSON.stringify(initialValues)}
                 initialValues={initialValues}
                 onSubmit={(values, helpers) => {
+                  if (values.type === 'Untaxed Bonus') {
+                    values.isNotTaxable = true;
+                  }
+
                   handleUpdates({
                     type: `add:${values.type}`,
                     payload: values,
@@ -201,6 +211,7 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                       .month(month)
                       .startOf('month'),
                     endDate: moment().year(year).month(month),
+                    isNotTaxable: false,
                   });
                 }}
                 validationSchema={PayrollEmployeeAddonValidation}
@@ -228,7 +239,7 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                         placeholder="Type"
                         loading={isSubmitting}
                         name="type"
-                        options={['Bonus', 'Deduction'].concat(
+                        options={['Bonus', 'Untaxed Bonus', 'Deduction'].concat(
                           prorate ? [] : ['Prorate'],
                         )}
                         value={values.type}
