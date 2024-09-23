@@ -7,7 +7,7 @@ import { OrganizationDashboardPieChart } from '../Chart/organizationdashoard-cha
 import { Button } from '../Button/Button.component';
 import { RemittanceTabProps } from './types';
 import { useSalaryBreakdownContext } from './organization-hooks';
-import { Popover } from 'antd';
+import { Alert, Popover } from 'antd';
 
 export const InfoPopUp = (props: PropsWithChildren<unknown>) => {
   return (
@@ -144,6 +144,12 @@ function SalaryBreakdown(props: RemittanceTabProps) {
           <div className="info__right-cont__breakdown">
             {' '}
             <div className="info__right-cont__breakdown__wrapper">
+              <IF condition={!canSave}>
+                <Alert
+                  type="error"
+                  message={'Total breakdown should sum up to 100%'}
+                />
+              </IF>
               {breakdown.map((_breakdown, i) => (
                 <Breakdown
                   value={_breakdown.value}

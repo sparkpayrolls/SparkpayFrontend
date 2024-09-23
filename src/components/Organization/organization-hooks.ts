@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
 import _isEmpty from 'lodash.isempty';
+import pick from 'lodash.pick';
 
 export const useRemittanceTabContext = (
   props: RemittanceTabProps,
@@ -159,7 +160,7 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
     try {
       await $api.company.updateCompanyById(
         props.organizationDetails.organization?.id || '',
-        { salaryBreakdown: _breakdown },
+        { salaryBreakdown: _breakdown.map((b) => pick(b, ['name', 'value'])) },
       );
       toast.success('Salary Breakdown updated successfully.');
     } catch (error) {
