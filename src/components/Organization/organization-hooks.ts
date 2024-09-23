@@ -97,9 +97,7 @@ export const useRemittanceTabContext = (
 
 export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
   const { organization, loading, canEdit } = props.organizationDetails;
-  const [breakdown, setBreakdown] = useState(
-    organization?.salaryBreakdown || [],
-  );
+  const [breakdown, setBreakdown] = useState<SalaryBreakdown[]>([]);
   const [saving, setSaving] = useState(false);
   const [edit, setEdit] = useState(false);
   const colors = ['#0B2253', '#6D7A98', '#42D0C8'];
@@ -172,6 +170,10 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
       setSaving(false);
     }
   };
+
+  useEffect(() => {
+    setBreakdown(organization?.salaryBreakdown || []);
+  }, [organization?.salaryBreakdown]);
 
   return {
     loading,
