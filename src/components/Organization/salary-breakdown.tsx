@@ -101,6 +101,7 @@ function SalaryBreakdown(props: RemittanceTabProps) {
     handleBreakdown,
     handleBreakdownDelete,
     savBreakdown,
+    totalBreakDown,
   } = useSalaryBreakdownContext(props);
 
   return loading ? (
@@ -144,7 +145,7 @@ function SalaryBreakdown(props: RemittanceTabProps) {
           <div className="info__right-cont__breakdown">
             {' '}
             <div className="info__right-cont__breakdown__wrapper">
-              <IF condition={!canSave}>
+              <IF condition={totalBreakDown !== 100}>
                 <Alert
                   type="error"
                   message={'Total breakdown should sum up to 100%'}

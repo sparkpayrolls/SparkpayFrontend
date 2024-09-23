@@ -109,9 +109,10 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
   const _breakdown = breakdown.filter(
     (b) => b.name && Number.isFinite(b.value),
   );
+  const totalBreakDown = _breakdown.reduce((a, c) => a + c.value, 0);
   const canSave =
     _breakdown.length &&
-    _breakdown.reduce((a, c) => a + c.value, 0) === 100 &&
+    totalBreakDown === 100 &&
     (!organization?.salaryBreakdown?.length ||
       cloneDeep(_breakdown)
         .reverse()
@@ -189,6 +190,7 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
     chartValues,
     backgroundColors,
     _breakdown,
+    totalBreakDown,
   };
 };
 
