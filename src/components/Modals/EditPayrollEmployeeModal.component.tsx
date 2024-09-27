@@ -1,13 +1,11 @@
+import { useEffect } from 'react';
 import NiceModal from '@ebay/nice-modal-react';
 import { Formik } from 'formik';
 import { Util } from 'src/helpers/util';
-import {
-  PayrollEmployeeAddonValidation,
-} from 'src/helpers/validation';
+import { PayrollEmployeeAddonValidation } from 'src/helpers/validation';
 import { Button } from '../Button/Button.component';
 import { DatePicker } from '../Input/date-picker.component';
 import { InputV2, TextArea } from '../Input/Input.component';
-import { EditableSVG } from '../svg';
 import { ModalLayout } from './ModalLayout.component';
 import moment from 'moment';
 import { useState } from 'react';
@@ -19,47 +17,67 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
     employee,
     currency,
     handleUpdates,
-    getIndex,
-    bonus,
-    deductions,
     prorate,
-    year,
-    month,
+    type,
+    description,
+    amount,
+    isEdit,
   } = props;
 
   return (
-    <ModalLayout key={JSON.stringify(props)} 
-    title={`Salary Add-On (${employee.firstname} ${employee.lastname})`}>
+    <ModalLayout
+      key={JSON.stringify(props)}
+      title={`Salary Add-On (${employee.firstname} ${employee.lastname})`}
+    >
       {() => {
-        const [addons, setAddons] = useState(
-          bonus
-            .map((b: any) => ({ ...b, type: 'Bonus' }))
-            .concat(deductions.map((d: any) => ({ ...d, type: 'Deduction' })))
-            .concat(
-              prorate ? [{ type: 'Prorate', name: 'Prorate', ...prorate }] : [],
-            ),
-        );
-        const [deletedAddons, setDeletedAddons] = useState<number[]>([]);
+        // const [addons, setAddons] = useState(
+        //   bonus
+        //     .map((b: any) => ({ ...b, type: 'Bonus' }))
+        //     .concat(deductions.map((d: any) => ({ ...d, type: 'Deduction' })))
+        //     .concat(
+        //       prorate ? [{ type: 'Prorate', name: 'Prorate', ...prorate }] : [],
+        //     ),
+        // );
+        // const [deletedAddons, setDeletedAddons] = useState<number[]>([]);
         const [initialValues, setInitialValues] = useState({
           type: '',
           name: '',
           amount: '',
           description: '',
-          startDate: moment().year(year).month(month).startOf('month'),
-          endDate: moment().year(year).month(month),
-        });
-        const deleteAddon = (addon: any, index: number) => {
-          handleUpdates({
-            type: `delete:${addon.type}`,
-            payload: addon.index,
-          });
-          setDeletedAddons(deletedAddons.concat([index]));
-        };
-
+          startDate: moment()
+          .year(new Date().getFullYear())
+          .month(new Date().getMonth())
+          .startOf('month'),
+        endDate: moment()
+          .year(new Date().getFullYear())
+          .month(new Date().getMonth())
+          .endOf('month'),
+          isNotTaxable: false,
+      });
+        // const deleteAddon = (addon: any, index: number) => {
+        //   handleUpdates({
+        //     type: `delete:${addon.type}`,
+        //     payload: addon.index,
+        //   });
+        //   setDeletedAddons(deletedAddons.concat([index]));
+        // };
+        useEffect(() => {
+          if (isEdit) {
+            setInitialValues((prevValues) => ({
+              ...prevValues,
+              type,
+              description,
+              amount,
+              isNotTaxable: false,
+              // isNotTaxable: false,
+            }));
+          }
+        }, [isEdit, type, description, amount]);
         return (
           <div className="edit-payroll-employee">
             <div className="edit-payroll-employee__section">
-              {Boolean(addons.length) && (
+              <p>You can add allowance to your employee’s salary here</p>
+              {/* {Boolean(addons.length) && (
                 <table className="edit-payroll-employee__table-section">
                   <thead>
                     <tr>
@@ -77,7 +95,9 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
 
                       return (
                         <tr key={`${employee}-addon-${bonus.amount}`}>
-                          <td>{bonus.type}</td>
+                          <td>
+                            {bonus.isNotTaxable ? 'Untaxed Bonus' : bonus.type}
+                          </td>
                           <td>
                             {!bonus.amount
                               ? `${moment(bonus.startDate).format(
@@ -100,6 +120,9 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                                   endDate: moment(
                                     bonus.endDate || initialValues.endDate,
                                   ),
+                                  type: bonus.isNotTaxable
+                                    ? 'Untaxed Bonus'
+                                    : bonus.type,
                                 });
                               }}
                               title="Edit"
@@ -120,35 +143,58 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                     })}
                   </tbody>
                 </table>
-              )}
+              )} */}
 
               <Formik
                 key={JSON.stringify(initialValues)}
                 initialValues={initialValues}
                 onSubmit={(values, helpers) => {
-                  handleUpdates({
-                    type: `add:${values.type}`,
-                    payload: values,
-                  });
-                  setAddons(
-                    addons.concat({ ...values, index: getIndex(values.type) }),
-                  );
+                  const { type, startDate, endDate } = values;
+                  if (values.type === 'Untaxed Bonus') {
+                    values.isNotTaxable = true;
+                  }
+                  if (type === 'Prorate' && startDate && endDate) {
+                    const totalDaysInMonth = moment(endDate).daysInMonth();
+                    const workedDays =
+                      moment(endDate).diff(moment(startDate), 'days') + 1;
+
+                    const proratedSalary =
+                      (employee.salary / totalDaysInMonth) * workedDays;
+                    handleUpdates({
+                      ...values,
+                      amount: proratedSalary.toFixed(2),
+                    });
+                  } else {
+                    handleUpdates(values);
+                  }
                   helpers.setSubmitting(false);
-                  setInitialValues({
-                    type: '',
-                    name: '',
-                    amount: '',
-                    description: '',
-                    startDate: moment()
-                      .year(year)
-                      .month(month)
-                      .startOf('month'),
-                    endDate: moment().year(year).month(month),
-                  });
+                  helpers.resetForm();
+                  NiceModal.hide(EditPayrollEmployeeModal);
                 }}
+                //   handleUpdates({
+                //     type: `add:${values.type}`,
+                //     payload: values,
+                //   });
+                //   setAddons(
+                //     addons.concat({ ...values, index: getIndex(values.type) }),
+                //   );
+                //   helpers.setSubmitting(false);
+                //   setInitialValues({
+                //     type: '',
+                //     name: '',
+                //     amount: '',
+                //     description: '',
+                //     startDate: moment()
+                //       .year(year)
+                //       .month(month)
+                //       .startOf('month'),
+                //     endDate: moment().year(year).month(month),
+                //     isNotTaxable: false,
+                //   });
+                // }}
                 validationSchema={PayrollEmployeeAddonValidation}
               >
-                {(props) => {
+                {(formikProps) => {
                   const {
                     errors,
                     handleBlur,
@@ -157,8 +203,9 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                     isSubmitting,
                     touched,
                     values,
+                    resetForm,
                     setValues,
-                  } = props;
+                  } = formikProps;
 
                   return (
                     <form
@@ -167,11 +214,11 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                     >
                       <SelectInput
                         key={JSON.stringify(values)}
-                        label="Select Add-on"
+                        label="Type"
                         placeholder="Choose the required add-on"
                         loading={isSubmitting}
                         name="type"
-                        options={['Bonus', 'Deduction'].concat(
+                        options={['Bonus', 'Untaxed Bonus', 'Deduction'].concat(
                           prorate ? [] : ['Prorate'],
                         )}
                         value={values.type}
@@ -186,8 +233,10 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                             label="Description"
                             placeholder="Description"
                             name="description"
+                            id="group_description"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            disabled={isSubmitting}
                             error={touched.description && errors.description}
                             value={values.description}
                           />
@@ -210,13 +259,14 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                       {values.type === 'Prorate' && (
                         <>
                           <TextArea
-                            label="Name"
-                            name="Name"
-                            id="name"
-                            placeholder=" Add a name"
-                            error={touched.description && errors.description}
+                            label="Description"
+                            placeholder="Description"
+                            name="description"
+                            id="group_description"
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            disabled={isSubmitting}
+                            error={touched.description && errors.description}
                             value={values.description}
                           />
                           <DatePicker.RangePicker
@@ -246,7 +296,21 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                           </p>
                         )}
 
-                      <p className="edit-payroll-employee__salarytext">
+                      <p
+                        className="edit-payroll-employee__salarytext"
+                        onClick={() => {
+                          resetForm(); // Call resetForm to clear the fields
+                          setValues({
+                            type: '',
+                            name: '', // Add this line
+                            description: '',
+                            amount: '',
+                            startDate: moment().startOf('month'),
+                            endDate: moment().endOf('month'),
+                            isNotTaxable:false
+                          });
+                        }}
+                      >
                         Add another add-on
                       </p>
 

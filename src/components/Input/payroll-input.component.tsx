@@ -1,53 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PayrollEditSVG } from '../svg';
-import { PayrollDeleteSVG } from '../svg';
-import { IPayrollInput } from '../types';
+// import { useCreatePayrollPageLogic } from 'src/helpers/hooks/use-create-payroll-page-logic.hook';
+import { ProcessedEmployee } from 'src/helpers/payroll-processor/types';
 
-export const PayrollInput: React.FC<IPayrollInput> = ({ placeholder, value }) => {
-  const [inputValue, setInputValue] = useState(value);
+export type PayrollDropdownProps = {
+  currency: string;
+  employee: ProcessedEmployee;
+  onSalaryChange: (newSalary: number) => void;
+};
+
+export const PayrollInput = (props: PayrollDropdownProps) => {
+  const { currency, employee, onSalaryChange } = props;
+  const [salary, setSalary] = useState('');
+
+  // const { handleEmployeeClick } = useCreatePayrollPageLogic();
+
+  useEffect(() => {
+    if (employee?.salary) {
+      setSalary(employee.salary.toString());
+    }
+  }, [employee]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSalary(e.target.value);
+    const numericValue = parseFloat(e.target.value) || 0;
+    onSalaryChange(numericValue);
+  };
 
   return (
-    <div className='payroll__input-section'>
+    <div className="payroll__input-section">
       <input
-        type='number'
-        placeholder={placeholder}
-        className='payroll__input-value'
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        // onClick={() => handleEmployeeClick(employee?.id)}
+        type="text"
+        className="payroll__input-value"
+        value={salary}
+        onChange={handleInputChange}
       />
-      <div style={{display:'flex', gap:'1px'}}>
-      <span className='payroll-input__icon mr-4' >
-        <PayrollEditSVG />
-      </span>
+      <div style={{ display: 'flex', gap: '1px' }}>
+        <span className="payroll-input__icon mr-4">
+          <PayrollEditSVG />
+        </span>
       </div>
-  
     </div>
   );
 };
-
-
-
-export const PayrollInputEdit: React.FC<IPayrollInput> = ({ placeholder, value }) => {
-    const [inputValue, setInputValue] = useState(value);
-  
-    return (
-      <div className='payroll__input-section'>
-        <input
-          type='number'
-          placeholder={placeholder} // Placeholder text if the input is empty
-          className='payroll__input-value'
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <div style={{display:'flex', gap:'1px'}}>
-        <span className='payroll-input__icon mr-4' >
-          <PayrollEditSVG />
-        </span>
-        <span className='payroll-input__icon'>
-          <PayrollDeleteSVG />
-        </span>
-        </div>
-    
-      </div>
-    );
-  };
