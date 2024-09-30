@@ -6,6 +6,7 @@ import { ProcessedEmployee } from 'src/helpers/payroll-processor/types';
 export type PayrollDropdownProps = {
   currency: string;
   employee: ProcessedEmployee;
+  salary:string;
   onSalaryChange: (_newSalary: number) => void;
 };
 
