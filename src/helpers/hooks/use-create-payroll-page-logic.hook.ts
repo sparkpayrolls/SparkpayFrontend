@@ -185,6 +185,7 @@ export const useCreatePayrollPageLogic = () => {
               }));
               break;
             }
+            case 'delete:Untaxed Bonus':
             case 'delete:Bonus': {
               setUpdates((updates) => ({
                 ...updates,
@@ -221,6 +222,7 @@ export const useCreatePayrollPageLogic = () => {
               }));
               break;
             }
+            case 'add:Untaxed Bonus':
             case 'add:Bonus': {
               setUpdates((updates) => ({
                 ...updates,
@@ -228,7 +230,7 @@ export const useCreatePayrollPageLogic = () => {
                   ...(updates[employee.id] || {}),
                   bonus: [
                     ...(updates[employee.id]?.bonus || []),
-                    pick(update.payload, ['name', 'amount']),
+                    pick(update.payload, ['name', 'amount', 'isNotTaxable']),
                   ],
                 },
               }));
@@ -263,7 +265,7 @@ export const useCreatePayrollPageLogic = () => {
           }
         },
         getIndex(type: string) {
-          if (type === 'Bonus')
+          if (['Bonus', 'Untaxed Bonus'].includes(type))
             return emp.bonus.concat(updates[employee.id]?.bonus || []).length;
           return emp.deductions.concat(updates[employee.id]?.deductions || [])
             .length;

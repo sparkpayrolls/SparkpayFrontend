@@ -34,7 +34,17 @@ export class EmployeeModule extends HttpRepository {
   async updateSingleEmployee(
     id: string,
     employee: Partial<
-      Pick<Employee, 'firstname' | 'lastname' | 'salary' | 'email'>
+      Pick<
+        Employee,
+        | 'firstname'
+        | 'lastname'
+        | 'salary'
+        | 'email'
+        | 'taxId'
+        | 'taxState'
+        | 'bvn'
+        | 'statutoryDeductions'
+      >
     >,
   ) {
     const { data } = await this.put<Employee>(`/employees/${id}`, employee);
@@ -165,9 +175,9 @@ export class EmployeeModule extends HttpRepository {
       | 'amount'
       | 'type'
       | 'frequency'
-      | 'payrollCycle'
       | 'startYear'
       | 'dates'
+      | 'isNotTaxable'
     >,
   ) {
     const { data } = await this.post<SalaryAddOn>('/employees/addons', {
@@ -188,7 +198,6 @@ export class EmployeeModule extends HttpRepository {
         | 'amount'
         | 'type'
         | 'frequency'
-        | 'payrollCycle'
         | 'startYear'
         | 'dates'
         | 'status'

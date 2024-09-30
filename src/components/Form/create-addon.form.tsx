@@ -17,9 +17,9 @@ type Addon = Pick<
   | 'amount'
   | 'type'
   | 'frequency'
-  | 'payrollCycle'
   | 'startYear'
   | 'dates'
+  | 'isNotTaxable'
 >;
 
 type ICreateAddonForm = {
@@ -37,13 +37,13 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
     <Formik
       initialValues={{
         dates: [],
-        payrollCycle: '',
         name: '',
         type: '' as any,
         amount: '' as any,
         frequency: '' as any,
         description: '',
         startYear: '' as any,
+        isNotTaxable: false,
         ...initialValues,
       }}
       onSubmit={async (values, helpers) => {
@@ -55,10 +55,16 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
             amount: values.amount || 0,
             type: values.type,
             frequency: values.frequency,
-            payrollCycle: values.payrollCycle,
             startYear: values.startYear,
             dates: values.dates,
+            isNotTaxable: values.isNotTaxable,
           };
+
+          if ((payload.type as string) === 'untaxed-bonus') {
+            payload.isNotTaxable = true;
+            payload.type = 'bonus';
+          }
+
           let addon: SalaryAddOn;
           if (id) {
             addon = await $api.employee.updateSalaryAddon(id, payload);
@@ -163,6 +169,7 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
               value={values.type}
               options={[
                 { value: 'bonus', label: 'Bonus' },
+                { value: 'untaxed-bonus', label: 'Untaxed Bonus' },
                 { value: 'deduction', label: 'Deduction' },
                 { value: 'prorate', label: 'Prorate' },
               ]}
@@ -180,20 +187,6 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
                 error={touched.amount && errors.amount}
               />
             )}
-
-            <InputV2
-              label="Payroll Cycle"
-              type="string"
-              placeholder="Payroll Cycle"
-              value={values.payrollCycle}
-              name="payrollCycle"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.payrollCycle && errors.payrollCycle}
-              helper={
-                '`all` for all payroll cycles or a positive number from 1 up'
-              }
-            />
 
             <Select
               label="Frequency"

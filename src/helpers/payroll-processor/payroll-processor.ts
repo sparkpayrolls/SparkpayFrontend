@@ -38,6 +38,9 @@ export class PayrollProcessor {
       totalPension: 0,
       totalNHF: 0,
       totalTax: 0,
+      totalPayrollPension: 0,
+      totalPayrollNHF: 0,
+      totalPayrollTax: 0,
       totalCharge: 0,
       employees: [],
     };
@@ -70,13 +73,17 @@ export class PayrollProcessor {
         proratedSalary,
         precision,
         options: statutoryDeductionOptions?.nhf,
+        employee,
       });
       const tax = this.processTax({
         employee,
         options: statutoryDeductionOptions?.pension,
         precision,
         proratedSalary,
-        totalBonus,
+        totalBonus: this.sumAddons(
+          employee.bonus.filter((b) => !b.isNotTaxable),
+          precision,
+        ),
         pension:
           (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
         nhf: nhf.amount,
@@ -104,9 +111,19 @@ export class PayrollProcessor {
         tax,
         nhf,
         excludeFromTotals: Boolean(excludeFromTotals),
+        salaryBreakdown: Object.entries(
+          employee.salaryBreakdown || salaryBreakdown || {},
+        ).map(([name, value]) => ({
+          name,
+          value: (proratedSalary * value) / 100,
+        })),
       });
 
       if (!excludeFromTotals) {
+        const hasRemittance = [nhf, pension, tax].some(
+          (r) => r.addToCharge && r.amount > 0,
+        );
+
         response.totalSalary = this.sum(
           precision,
           response.totalSalary,
@@ -131,14 +148,18 @@ export class PayrollProcessor {
           precision,
           response.totalFees,
           fees.perEmployee,
+          hasRemittance ? fees.perRemittanceEmployee : 0,
         );
 
         [
           { statutory: pension, key: 'totalPension' },
           { statutory: nhf, key: 'totalNHF' },
           { statutory: tax, key: 'totalTax' },
-        ].forEach(({ statutory, key }) => {
-          if (statutory.addToCharge) {
+          { statutory: pension, key: 'totalPayrollPension', skipCheck: true },
+          { statutory: nhf, key: 'totalPayrollNHF', skipCheck: true },
+          { statutory: tax, key: 'totalPayrollTax', skipCheck: true },
+        ].forEach(({ statutory, key, skipCheck }) => {
+          if (skipCheck || statutory.addToCharge) {
             response[key as 'totalNHF'] = this.sum(
               precision,
               response[key as 'totalNHF'],
@@ -182,6 +203,7 @@ export class PayrollProcessor {
       salaryBreakdown: _salaryBreakdown,
       precision,
       proratedSalary,
+      voluntaryPension: employee.voluntaryPensionContribution,
     });
   }
 
@@ -218,12 +240,14 @@ export class PayrollProcessor {
   }
 
   private static processNHF(payload: {
+    employee: Employee;
     proratedSalary: number;
     precision: number;
     options?: StatutoryDeductionOptions;
   }) {
-    const { proratedSalary, precision, options } = payload;
-    const { enabled, addToCharge } = options || {};
+    const { proratedSalary, precision, options, employee } = payload;
+    const { enabled, addToCharge } =
+      employee.statutoryDeductionOptions?.nhf || options || {};
     if (!enabled) {
       return {
         amount: 0,

@@ -27,6 +27,7 @@ import { Title, useUrl } from '../default-layout/DefaultLayout';
 interface Props {
   children?: ReactNode;
   pageTitle: string;
+  fullWidth?: boolean;
   loading?: boolean;
 }
 
@@ -76,6 +77,7 @@ const DashboardHeader = ({ pageTitle }: { pageTitle: string }) => {
 const DashboardLayout: React.FC<Props> = ({
   children,
   pageTitle,
+  fullWidth,
   loading,
 }: Props) => {
   const { user, companies, administrator } = useAppSelector((state) => state);
@@ -132,6 +134,10 @@ const DashboardLayout: React.FC<Props> = ({
     return <DashboardHeader pageTitle={pageTitle} />;
   }
 
+  const className = classNames('dashboardLayout__body', {
+    custom_width: fullWidth,
+  });
+
   return (
     <>
       <DashboardHeader pageTitle={pageTitle} />
@@ -186,7 +192,7 @@ const DashboardLayout: React.FC<Props> = ({
           />
         </div>
 
-        <main className="dashboardLayout__body">{children}</main>
+        <main className={className}>{children}</main>
       </div>
 
       <Drawer

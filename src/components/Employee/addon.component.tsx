@@ -157,7 +157,6 @@ export const Addon = (props: IAddon) => {
               <th>Type</th>
               <th>Description</th>
               <th>Amount</th>
-              <th>Payroll Cycle</th>
               <th>Frequency</th>
               <th>Next Date</th>
               <th>Status</th>
@@ -182,7 +181,7 @@ export const Addon = (props: IAddon) => {
               return (
                 <tr key={addon.id}>
                   <td className="white-space-nowrap">{addon.name}</td>
-                  <td>{addon.type}</td>
+                  <td>{addon.isNotTaxable ? 'untaxed bonus' : addon.type}</td>
                   <td>
                     <div className="addon__description">
                       {addon.description}
@@ -197,7 +196,6 @@ export const Addon = (props: IAddon) => {
                       </>
                     )}
                   </td>
-                  <td>{addon.payrollCycle}</td>
                   <td>{addon.frequency}</td>
                   <td>
                     {Array.isArray(date) ? (

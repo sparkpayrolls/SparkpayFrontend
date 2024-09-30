@@ -1,6 +1,7 @@
 export type Addon = {
   name?: string;
   amount: number;
+  isNotTaxable?: boolean;
 };
 
 export type SalaryBreakdown = Record<string, number>;
@@ -24,11 +25,13 @@ export type Employee = {
     startDate: string;
     endDate: string;
   };
+  voluntaryPensionContribution?: number;
 };
 
 export type Fees = {
   baseFee: number;
   perEmployee: number;
+  perRemittanceEmployee: number;
 };
 
 export type ProcessPayload = {
@@ -61,6 +64,7 @@ export type ProcessedEmployee = {
   proratedSalary: number;
   prorateDays: number;
   excludeFromTotals: boolean;
+  salaryBreakdown: { name: string; value: number }[];
 };
 
 export type ProcessedPayroll = {
@@ -72,6 +76,9 @@ export type ProcessedPayroll = {
   totalPension: number;
   totalNHF: number;
   totalTax: number;
+  totalPayrollPension: number;
+  totalPayrollNHF: number;
+  totalPayrollTax: number;
   totalCharge: number;
   employees: ProcessedEmployee[];
 };

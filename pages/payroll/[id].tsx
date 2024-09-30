@@ -160,6 +160,28 @@ const PayDetails: NextPage = () => {
       setApiCalls(Math.max(apiCalls - 1, 0));
     }
   };
+  const downloadReport = async () => {
+    try {
+      setApiCalls(Math.max(apiCalls + 1, 1));
+      if (loading || !payroll) {
+        return;
+      }
+      const report = await $api.payroll.downloadReport([payroll?.id]);
+
+      Util.downloadFile({
+        file: `data:application/vnd.ms-excel;base64,${report}`,
+        name: 'payroll_report.xlsx',
+      });
+
+      toast.success('payroll report downloaded successfully');
+    } catch (error) {
+      Util.onNonAuthError(error, (err) => {
+        toast.error(err.message);
+      });
+    } finally {
+      setApiCalls(Math.max(apiCalls - 1, 0));
+    }
+  };
 
   useEffect(() => {
     getPayroll();
@@ -288,7 +310,10 @@ const PayDetails: NextPage = () => {
                       payroll && (
                         <>
                           {currency}{' '}
-                          {Util.formatMoneyNumber(payroll?.totalTax || 0, 2)}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalPayrollTax || 0,
+                            2,
+                          )}
                         </>
                       )
                     }
@@ -301,7 +326,7 @@ const PayDetails: NextPage = () => {
                         <>
                           {currency}{' '}
                           {Util.formatMoneyNumber(
-                            payroll?.totalPension || 0,
+                            payroll?.totalPayrollPension || 0,
                             2,
                           )}
                         </>
@@ -315,7 +340,10 @@ const PayDetails: NextPage = () => {
                       payroll && (
                         <>
                           {currency}{' '}
-                          {Util.formatMoneyNumber(payroll?.totalNHF || 0, 2)}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalPayrollNHF || 0,
+                            2,
+                          )}
                         </>
                       )
                     }
@@ -394,6 +422,10 @@ const PayDetails: NextPage = () => {
                 >
                   <KebabMenu
                     items={[
+                      {
+                        action: downloadReport,
+                        value: 'Download Report',
+                      },
                       {
                         action() {
                           if (selected.length) {

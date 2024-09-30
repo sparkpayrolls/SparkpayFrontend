@@ -139,6 +139,14 @@ export type Employee = Document & {
   groups: EmployeeGroup[];
   status: EmployeeStatus;
   phoneNumber?: string;
+  taxId?: string;
+  nhfId?: string;
+  taxState?: string;
+  bvn?: string;
+  statutoryDeductions?: Record<string, StatutoryDeduction>;
+  voluntaryPensionContribution?: number;
+  pensionId?: string;
+  pfa?: string;
 };
 
 export enum GroupTypeEnum {
@@ -172,6 +180,11 @@ export type EmployeeGroup = Document & {
   employee: string | Employee;
 };
 
+export type StatutoryDeduction = {
+  enabled: boolean;
+  addToCharge: boolean;
+} & Record<string, unknown>;
+
 export type Company = Document & {
   name: string;
   email: string;
@@ -183,6 +196,8 @@ export type Company = Document & {
   bank?: string;
   bvn?: string;
   bvnName?: string;
+  rcNumber: string;
+  statutoryDeductions?: Record<string, StatutoryDeduction>;
 };
 
 export enum PermissionGroupEnum {
@@ -336,6 +351,9 @@ export type Payroll = Document & {
   totalPension?: number;
   totalNHF?: number;
   totalTax?: number;
+  totalPayrollPension?: number;
+  totalPayrollNHF?: number;
+  totalPayrollTax?: number;
 };
 
 export type PaymentMethodName = 'Bank Transfer' | 'Card';
@@ -417,10 +435,10 @@ export type SalaryAddOn = Document & {
   status?: SalaryAddOnStatus;
   amount: number;
   meta?: unknown;
-  payrollCycle?: string;
   frequency: SalaryAddOnFrequency;
   dates: SalaryAddonDate[];
   startYear?: number;
+  isNotTaxable?: boolean;
 };
 
 export type Addon = {
@@ -526,6 +544,12 @@ export type State = Document & {
   country: string | Country;
   name: string;
   code?: string;
+  meta?: Record<string, unknown>;
+};
+
+export type PensionFundAdministrator = Document & {
+  country: string | Country;
+  name: string;
   meta?: Record<string, unknown>;
 };
 

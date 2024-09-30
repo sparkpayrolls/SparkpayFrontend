@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { Slide, toast } from 'react-toastify';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { Administrator } from 'src/api/types';
 import { useAppDispatch } from 'src/redux/hooks';
@@ -17,32 +17,6 @@ export const useAppLogic = () => {
   const dispatch = useAppDispatch();
   const socket = useSocket();
   const [loading, startLoading, stopLoading] = useApiCall(1);
-  const [isOnline, setIsOnline] = useState(true);
-
-  const renderDetectOnline = ({ online }: { online: boolean }) => {
-    if (isOnline !== online) {
-      setIsOnline(online);
-      if (online) {
-        toast.dismiss('online-toast');
-      }
-
-      toast(online ? 'You are back online' : 'You are currently offline', {
-        toastId: 'online-toast',
-        autoClose: online ? 3000 : false,
-        draggable: online,
-        closeOnClick: online,
-        closeButton: online,
-        delay: online ? 600 : 0,
-        pauseOnFocusLoss: false,
-        pauseOnHover: false,
-        position: 'top-center',
-        type: online ? 'success' : 'warning',
-        transition: Slide,
-      });
-      return null;
-    }
-    return null;
-  };
 
   useEffect(() => {
     const token = Cookies.get('auth_token');
@@ -111,5 +85,5 @@ export const useAppLogic = () => {
     }
   }, [dispatch, socket]);
 
-  return { loading, renderDetectOnline };
+  return { loading };
 };
