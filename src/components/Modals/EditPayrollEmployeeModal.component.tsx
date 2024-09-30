@@ -10,7 +10,7 @@ import { ModalLayout } from './ModalLayout.component';
 import moment from 'moment';
 import { useState } from 'react';
 import { SelectInput } from '../Input/seletct-input';
-import { InfoSVG } from '../svg';
+import { InfoEmployeeSVG } from '../svg';
 
 export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
   const {
@@ -53,7 +53,7 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
           .month(new Date().getMonth())
           .endOf('month'),
           isNotTaxable: false,
-      });
+        });
         // const deleteAddon = (addon: any, index: number) => {
         //   handleUpdates({
         //     type: `delete:${addon.type}`,
@@ -69,7 +69,6 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
               description,
               amount,
               isNotTaxable: false,
-              // isNotTaxable: false,
             }));
           }
         }, [isEdit, type, description, amount]);
@@ -152,8 +151,8 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                   const { type, startDate, endDate } = values;
                   if (values.type === 'Untaxed Bonus') {
                     values.isNotTaxable = true;
-                  }
-                  if (type === 'Prorate' && startDate && endDate) {
+                  }   
+                   if (type === 'Prorate' && startDate && endDate) {
                     const totalDaysInMonth = moment(endDate).daysInMonth();
                     const workedDays =
                       moment(endDate).diff(moment(startDate), 'days') + 1;
@@ -167,6 +166,14 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                   } else {
                     handleUpdates(values);
                   }
+
+                  // handleUpdates({
+                  //   type: `add:${values.type}`,
+                  //   payload: values,
+                  // });
+                  // setAddons(
+                  //   addons.concat({ ...values, index: getIndex(values.type) }),
+                  // );
                   helpers.setSubmitting(false);
                   helpers.resetForm();
                   NiceModal.hide(EditPayrollEmployeeModal);
@@ -299,10 +306,10 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                       <p
                         className="edit-payroll-employee__salarytext"
                         onClick={() => {
-                          resetForm(); // Call resetForm to clear the fields
+                          resetForm(); 
                           setValues({
                             type: '',
-                            name: '', // Add this line
+                            name: '', 
                             description: '',
                             amount: '',
                             startDate: moment().startOf('month'),
@@ -333,7 +340,7 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                         values.endDate && (
                           <div className="edit-payroll-employee__prorateUpdate">
                             <span>
-                              <InfoSVG />
+                              <InfoEmployeeSVG />
                             </span>
                             <p>
                               8 days salary will be paid to this staff this

@@ -69,15 +69,7 @@ export const EditOrganisationDetailsValidationSchema = Yup.object().shape({
   name: Yup.string().required('Company name is required'),
   phonenumber: format.phonenumber,
   logo: Yup.string().optional(),
-  salaryBreakdown: Yup.array()
-    .of(
-      Yup.object().shape({
-        name: Yup.string().required('Name is required'),
-        value: Yup.string().required('Value is required'),
-      }),
-    )
-    .min(1)
-    .required('At least, one item and should sum up to 100%'),
+  rcNumber: Yup.string().optional(),
 });
 
 export const userChangePasswordValidationSchema = Yup.object().shape({
@@ -188,12 +180,6 @@ export const SalaryAddonValidation = Yup.object().shape({
       return schema.required('Amount is required');
     },
   ),
-  payrollCycle: Yup.string()
-    .matches(
-      /^(all|[1-9]+[0-9]*)$/gi,
-      '`all` for all payroll cycles or a positive number from 1 up',
-    )
-    .required('payroll cycle is required'),
   frequency: Yup.string().required('Frequency is required'),
   startYear: Yup.string().when(
     ['frequency'],
@@ -249,7 +235,22 @@ export const PayrollEmployeeAddonValidation = Yup.object().shape({
       return schema.required('Amount is required');
     },
   ),
-  name: Yup.string().when(
+  // name: Yup.string().when(
+  //   ['type'],
+  //   (
+  //     type: string,
+  //     schema: Yup.StringSchema<
+  //       string | undefined,
+  //       Record<string, any>,
+  //       string | undefined
+  //     >,
+  //   ) => {
+  //     if (type === 'Prorate') return schema;
+
+  //     return schema.required('Addon name is required');
+  //   },
+  // ),
+  description: Yup.string().when(
     ['type'],
     (
       type: string,
@@ -261,7 +262,7 @@ export const PayrollEmployeeAddonValidation = Yup.object().shape({
     ) => {
       if (type === 'Prorate') return schema;
 
-      return schema.required('Addon name is required');
+      return schema.required('Description is required');
     },
   ),
 });

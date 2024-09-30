@@ -100,15 +100,14 @@ const CreatePayroll: NextPage = () => {
                 label="Search"
                 className="inputs__search"
                 type="search"
-                placeholder="Search by employee name"
+                placeholder="Search by Employee Name"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
               <SearchSVG />
             </div>
-
             <DatePicker
-              label="Month"
+              label="Prorate Month"
               picker="month"
               format={'MMMM/YYYY'}
               className="inputs__prorate-month"
@@ -139,7 +138,7 @@ const CreatePayroll: NextPage = () => {
                           onChange={handleCheckAll}
                           element="th"
                         >
-                          Employee Name
+                          Name
                         </CheckboxTableColumn>
                         <th>Salary</th>
                         <th>Net Salary</th>
@@ -280,6 +279,14 @@ const CreatePayroll: NextPage = () => {
                         title={'Total Deduction'}
                         value={`${currency} ${Util.formatMoneyNumber(
                           payroll?.totalDeductions,
+                        )}`}
+                      />
+
+                      <TotalCard
+                        loading={loadingPayroll}
+                        title={'Total Tax'}
+                        value={`${currency} ${Util.formatMoneyNumber(
+                          payroll?.totalPayrollTax,
                         )}`}
                       />
 

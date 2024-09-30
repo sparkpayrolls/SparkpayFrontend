@@ -6,11 +6,11 @@ import { ProcessedEmployee } from 'src/helpers/payroll-processor/types';
 export type PayrollDropdownProps = {
   currency: string;
   employee: ProcessedEmployee;
-  onSalaryChange: (newSalary: number) => void;
+  onSalaryChange: (_newSalary: number) => void;
 };
 
 export const PayrollInput = (props: PayrollDropdownProps) => {
-  const { currency, employee, onSalaryChange } = props;
+  const { employee, onSalaryChange } = props;
   const [salary, setSalary] = useState('');
 
   // const { handleEmployeeClick } = useCreatePayrollPageLogic();
