@@ -413,6 +413,9 @@ export type IPagination = {
 export type IWalletBillingForm = {
   modal: NiceModalHandler;
   switchForm(value: 'NGMoreInfo'): void;
+  callBack?(): void;
+  loading?: boolean;
+  wallet?: CompanyWallet;
 };
 
 export type IWalletCard = {

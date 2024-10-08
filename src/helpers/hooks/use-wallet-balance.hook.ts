@@ -4,9 +4,9 @@ import { CompanyWallet } from 'src/api/types';
 import { useAppSelector } from 'src/redux/hooks';
 import { useSocket } from './use-socket.hook';
 
-export const useWallet = () => {
+export const useWallet = (companyWallet?: CompanyWallet) => {
   const administrator = useAppSelector((state) => state.administrator);
-  const [wallet, setWallet] = useState<CompanyWallet>();
+  const [wallet, setWallet] = useState(companyWallet);
   const [loading, setLoading] = useState(true);
   const socket = useSocket();
 
@@ -35,7 +35,7 @@ export const useWallet = () => {
     }
   }, [socket]);
 
-  return { loading, wallet };
+  return { loading, wallet, reloadWallet: getCompanyWallet };
 };
 
 export const useWalletBalance = () => {

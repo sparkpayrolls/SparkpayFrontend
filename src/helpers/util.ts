@@ -516,7 +516,7 @@ export class Util {
     return validationErrors;
   }
 
-  static formatAccountNumber(accountNumber: string) {
+  static formatAccountNumber(accountNumber = '') {
     const res: string[] = [];
     let cur = '';
     let count = 3;

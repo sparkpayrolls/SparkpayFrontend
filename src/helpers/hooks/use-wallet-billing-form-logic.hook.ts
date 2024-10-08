@@ -11,10 +11,11 @@ import debounce from 'lodash.debounce';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { useWallet } from './use-wallet-balance.hook';
 // import { usePaymentMethods } from './use-payment-methods.hooks';
 
 export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
-  const { modal /* switchForm */ } = params;
+  const { modal /* , switchForm */ } = params;
   const { administrator, user } = useAppSelector(({ administrator, user }) => ({
     user,
     administrator,
@@ -31,6 +32,9 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
   const company = administrator?.company as Company;
   const country = company.country as Country;
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
+  const { wallet, loading: loadingWallet, reloadWallet } = useWallet(
+    params.wallet,
+  );
 
   useEffect(() => {
     if (dva) {
@@ -154,6 +158,9 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
       setDVA(null);
     },
     expiry,
+    wallet,
+    loadingWallet,
+    reloadWallet,
   };
 };
 
@@ -208,7 +215,7 @@ export const useNGMoreInfoFormContext = (params: IWalletBillingForm) => {
       .updateCompanyById(company.id, values)
       .then(() => {
         return $api.companyWallet.createTransactionAccount({
-          provider: 'paystack',
+          provider: 'anchor',
         });
       })
       .then(() => {
@@ -219,8 +226,7 @@ export const useNGMoreInfoFormContext = (params: IWalletBillingForm) => {
           }),
         );
 
-        params.modal.resolve(true);
-        setTimeout(params.modal.hide, 100);
+        params.callBack && params.callBack();
       })
 
       .catch((error) => {

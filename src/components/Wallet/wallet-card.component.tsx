@@ -11,6 +11,7 @@ import CountUp from 'react-countup';
 import { useEffect, useState } from 'react';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
+import { IF } from '../Misc/if.component';
 
 export const WalletCard = (props: IWalletCard) => {
   const { title, amount, loading, wallet } = props;
@@ -72,7 +73,7 @@ export const WalletCard = (props: IWalletCard) => {
               )}
             </div>
 
-            {!loading && wallet?.account && (
+            <IF>
               <div>
                 <div
                   style={{
@@ -124,21 +125,19 @@ export const WalletCard = (props: IWalletCard) => {
                   </div>
                 </div>
               </div>
-            )}
+            </IF>
           </div>
         </div>
 
-        {!loading && !wallet?.account && (
-          <Button
-            label={<>{'Fund Payroll'}</>}
-            onClick={() => {
-              NiceModal.show(WalletBillingModal);
-            }}
-            className="wallet-billing-page__submit-btn"
-            primary
-            type="submit"
-          />
-        )}
+        <Button
+          label={<>{'Fund Payroll'}</>}
+          onClick={() => {
+            NiceModal.show(WalletBillingModal, { wallet });
+          }}
+          className="wallet-billing-page__submit-btn"
+          primary
+          type="submit"
+        />
 
         <div className="wallet-billing-page__wallet-yellow-image">
           <Image src={YellowImage} alt="yellowImage" />

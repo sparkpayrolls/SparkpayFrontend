@@ -22,26 +22,37 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { SelectInput } from '../Input/seletct-input';
 import { Radio } from 'antd';
 import { BackSVG, CopySVG } from '../svg';
+import { IF } from '../Misc/if.component';
+import { CompanyWallet } from 'src/api/types';
 
-export const WalletBillingModal = NiceModal.create(() => {
-  const [form, switchForm] = useState<'NGMoreInfo'>();
-  return (
-    <ModalLayout title="Fund Payroll">
-      {(modal) => {
-        let Component = WalletBillingForm;
+export const WalletBillingModal = NiceModal.create(
+  (props: { wallet?: CompanyWallet }) => {
+    const [form, switchForm] = useState<'NGMoreInfo'>();
+    return (
+      <ModalLayout title="Fund Payroll">
+        {(modal) => {
+          let Component = WalletBillingForm;
 
-        switch (form) {
-          case 'NGMoreInfo':
-            Component = NGMoreInfoForm;
-        }
+          switch (form) {
+            case 'NGMoreInfo':
+              Component = NGMoreInfoForm;
+          }
 
-        return <Component modal={modal} switchForm={switchForm} />;
-      }}
-    </ModalLayout>
-  );
-});
+          return (
+            <Component
+              modal={modal}
+              wallet={props.wallet}
+              switchForm={switchForm}
+            />
+          );
+        }}
+      </ModalLayout>
+    );
+  },
+);
 
 const WalletBillingForm = (props: IWalletBillingForm) => {
+  const { modal, switchForm } = props;
   const {
     handleWalletBillingFormSubmit,
     currency,
@@ -49,6 +60,9 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
     copyDVA,
     expiry,
     back,
+    wallet,
+    loadingWallet,
+    reloadWallet,
   } = useWalletBillingFormLogic(props);
 
   return (
@@ -64,7 +78,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
       <Formik
         initialValues={{
           amount: '',
-          channel: 'Card',
+          channel: 'Bank Transfer',
         }}
         onSubmit={handleWalletBillingFormSubmit}
         validationSchema={fundWalletValidationSchema}
@@ -102,8 +116,8 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                         gap: '56px',
                       }}
                     >
-                      <Radio value="Card">Card</Radio>
                       <Radio value="Bank Transfer">Bank Transfer</Radio>
+                      <Radio value="Card">Card</Radio>
                     </div>
                   </Radio.Group>
                 </div>
@@ -138,83 +152,88 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                     gap: '20px',
                   }}
                 >
-                  <div>
-                    <InputV2
-                      type="number"
-                      label="Amount"
-                      placeholder={`Amount (${currency})`}
-                      name="amount"
-                      value={values.amount}
-                      transformValue={Util.formatMoneyString(currency)}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      disabled={!!dva}
-                      error={touched.amount && errors.amount}
-                    />
-                  </div>
-                  {!!dva && (
-                    <>
+                  <IF condition={values.channel === 'Card'}>
+                    <div>
+                      <InputV2
+                        type="number"
+                        label="Amount"
+                        placeholder={`Amount (${currency})`}
+                        name="amount"
+                        value={values.amount}
+                        transformValue={Util.formatMoneyString(currency)}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        disabled={!!dva}
+                        error={touched.amount && errors.amount}
+                      />
+                    </div>
+                  </IF>
+
+                  <IF condition={wallet?.account && values.channel !== 'Card'}>
+                    <IF>
                       <div>
                         <p style={{ color: '#6D7A98', fontSize: '14px' }}>
                           Transfer this exact amount into this account number
                           via your Internet/Mobile Banking platform.
                         </p>
                       </div>
+                    </IF>
 
+                    <div
+                      style={{
+                        padding: '20px',
+                        borderRadius: '4px',
+                        background: '#F7F9FB',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
                       <div
                         style={{
-                          padding: '20px',
-                          borderRadius: '4px',
-                          background: '#F7F9FB',
                           display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
+                          flexDirection: 'column',
+                          gap: '8px',
+                          color: '#162A56',
                         }}
                       >
-                        <div
+                        <p
                           style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '8px',
-                            color: '#162A56',
+                            color: 'rgba(22,42,86,.6)',
+                            fontWeight: 'bold',
                           }}
                         >
-                          <p
-                            style={{
-                              color: 'rgba(22,42,86,.6)',
-                              fontWeight: 'bold',
-                            }}
-                          >
-                            {dva?.accountName}
-                          </p>
-                          <p style={{ fontSize: '24px' }}>
-                            {Util.formatAccountNumber(dva?.accountNumber)}
-                          </p>
-                          <p>{dva?.bankName}</p>
-                        </div>
-
-                        <button
-                          style={{
-                            display: 'flex',
-                            gap: '4px',
-                            background: '#ECF2FD',
-                            border: 'none',
-                            alignItems: 'center',
-                            lineHeight: '16px',
-                            fontSize: '14px',
-                            cursor: 'pointer',
-                            padding: '4px 8px',
-                            borderRadius: '4px',
-                            color: '#0F42A4',
-                          }}
-                          onClick={copyDVA}
-                          type="button"
-                        >
-                          <CopySVG /> <span>Copy</span>
-                        </button>
+                          {wallet?.account?.accountName}
+                        </p>
+                        <p style={{ fontSize: '24px' }}>
+                          {Util.formatAccountNumber(
+                            wallet?.account?.accountNumber,
+                          )}
+                        </p>
+                        <p>{wallet?.account?.bankName}</p>
                       </div>
-                    </>
-                  )}
+
+                      <button
+                        style={{
+                          display: 'flex',
+                          gap: '4px',
+                          background: '#ECF2FD',
+                          border: 'none',
+                          alignItems: 'center',
+                          lineHeight: '16px',
+                          fontSize: '14px',
+                          cursor: 'pointer',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          color: '#0F42A4',
+                        }}
+                        onClick={copyDVA}
+                        type="button"
+                      >
+                        <CopySVG /> <span>Copy</span>
+                      </button>
+                    </div>
+                  </IF>
                 </div>
               </div>
 
@@ -230,25 +249,37 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                 </div>
               )}
 
-              <div className="form__submit-button">
-                <Button
-                  type="submit"
-                  label={dva ? 'I have paid' : 'Proceed'}
-                  className="form__submit-button form__submit-button--full-width"
-                  primary
-                  showSpinner={isSubmitting}
-                  disabled={isSubmitting}
-                />
-              </div>
+              <IF condition={values.channel === 'Card'}>
+                <div className="form__submit-button">
+                  <Button
+                    type="submit"
+                    label={dva ? 'I have paid' : 'Proceed'}
+                    className="form__submit-button form__submit-button--full-width"
+                    primary
+                    showSpinner={isSubmitting}
+                    disabled={isSubmitting}
+                  />
+                </div>
+              </IF>
             </form>
           );
         }}
       </Formik>
+
+      <IF condition={!wallet?.account}>
+        <NGMoreInfoForm
+          modal={modal}
+          callBack={() => reloadWallet()}
+          switchForm={switchForm}
+          loading={loadingWallet}
+        />
+      </IF>
     </div>
   );
 };
 
 const NGMoreInfoForm = (props: IWalletBillingForm) => {
+  const { loading } = props;
   const {
     initialValues,
     banks,
@@ -279,7 +310,6 @@ const NGMoreInfoForm = (props: IWalletBillingForm) => {
           handleBlur(ev);
           const _values = { ...values, [ev.target.name]: ev.target.value };
 
-          console.log(_values.bank, _values.accountNumber);
           resolveAccount(_values.bank, _values.accountNumber);
         };
 
@@ -289,11 +319,14 @@ const NGMoreInfoForm = (props: IWalletBillingForm) => {
             className="single-employee-upload-form"
             autoComplete="off"
           >
-            <p className="employee-onboard__subtext">
-              A transaction account is required for amounts greater than
-              ₦500,000 and the information below is required for account
-              creation. Please ensure the details are correct before proceeding.
-            </p>
+            <IF>
+              <p className="employee-onboard__subtext">
+                A transaction account is required for amounts greater than
+                ₦500,000 and the information below is required for account
+                creation. Please ensure the details are correct before
+                proceeding.
+              </p>
+            </IF>
 
             <div className="single-employee-upload-form__section">
               <InputV2
@@ -305,6 +338,7 @@ const NGMoreInfoForm = (props: IWalletBillingForm) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.bvn && errors.bvn}
+                disabled={loading}
               />
             </div>
 
@@ -318,12 +352,31 @@ const NGMoreInfoForm = (props: IWalletBillingForm) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.bvnName && errors.bvnName}
+                disabled={loading}
+              />
+            </div>
+
+            <div className="single-employee-upload-form__section">
+              <InputV2
+                type="tel"
+                label="Account Number (for bvn validation)"
+                placeholder="Enter Account Number"
+                helper={resolutionResult.accountName}
+                value={values.accountNumber}
+                name="accountNumber"
+                onChange={handleChange}
+                onBlur={handleBankDetailsBlur}
+                error={
+                  resolutionResult.error ||
+                  (touched.accountNumber && errors.accountNumber)
+                }
+                disabled={loading}
               />
             </div>
 
             <div className="single-employee-upload-form__section">
               <SelectInput
-                label="Bank Name"
+                label="Bank"
                 name="bank"
                 placeholder="Select Bank Name"
                 onBlur={handleBankDetailsBlur}
@@ -336,31 +389,14 @@ const NGMoreInfoForm = (props: IWalletBillingForm) => {
               />
             </div>
 
-            <div className="single-employee-upload-form__section">
-              <InputV2
-                type="tel"
-                label="Account Number"
-                placeholder="Enter Account Number"
-                helper={resolutionResult.accountName}
-                value={values.accountNumber}
-                name="accountNumber"
-                onChange={handleChange}
-                onBlur={handleBankDetailsBlur}
-                error={
-                  resolutionResult.error ||
-                  (touched.accountNumber && errors.accountNumber)
-                }
-              />
-            </div>
-
             <div className="form__submit-button">
               <Button
                 type="submit"
                 label="Create Transaction Account"
                 className="form__submit-button form__submit-button--full-width"
                 primary
-                showSpinner={isSubmitting}
-                disabled={isSubmitting}
+                showSpinner={isSubmitting || loading}
+                disabled={isSubmitting || loading}
               />
             </div>
           </form>
