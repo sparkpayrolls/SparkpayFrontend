@@ -12,3 +12,46 @@
     }
   }
 }
+
+.country-dropdown-input {
+  position: relative;
+  z-index: 1;
+}
+
+.select-input__options {
+  overflow-y: auto;
+  max-height: 200px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  z-index: 1;
+}
+
+.dropdown-option {
+  display: flex;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.dropdown-image {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.select-input {
+  max-width: 100%;
+  white-space: nowrap;
+  background: white;
+  border-bottom: 1px solid #f5f6fa;
+}
+.country-dropdown-input {
+  .select-input__selector {
+    background: #ffffff !important;
+    border-bottom: 1px solid #f5f6fa;
+    border: none;
+  }
+}

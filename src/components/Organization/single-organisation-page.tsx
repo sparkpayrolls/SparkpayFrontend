@@ -5,10 +5,17 @@ import OrganizationInfo from './organization-info';
 import SalaryBreakdown from './salary-breakdown';
 import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
 import RemittanceInformation from './remittance-information';
+import CountryDropdown from './organization-country-dropdown';
 
 const OrganisationDetailsUnsecured = () => {
   const organizationDetails = useOrganizationDetails();
   const { loading, organization } = organizationDetails;
+
+
+  const handleCountryChange = (value: string) => {
+    console.log(`Selected Country: ${value}`);
+  };
+
 
   return (
     <DashboardLayout loading={loading} pageTitle="Organisation Details">
@@ -18,6 +25,7 @@ const OrganisationDetailsUnsecured = () => {
             <h5 className="organisation-details__organisation-header">
               Organisation Details
             </h5>
+            <CountryDropdown onChange={handleCountryChange} />
           </div>
         </div>
         {organization === null && (

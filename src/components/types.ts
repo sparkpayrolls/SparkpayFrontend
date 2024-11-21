@@ -152,6 +152,7 @@ export type ISelectInput = {
   applyTableStyle?: boolean;
   customIcon?: ReactNode;
   selectorStyle?: CSSProperties;
+  className?:string;
 };
 
 /** AddEmployee */
