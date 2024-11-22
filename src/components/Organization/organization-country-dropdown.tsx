@@ -51,7 +51,7 @@ const CountryDropdown = () => {
                   width={20}
                   height={20}
                 />
-                <span>{country.name}</span>
+                <span>{country.iso2}</span>
               </div>
             ),
           }))}
