@@ -235,7 +235,22 @@ export const PayrollEmployeeAddonValidation = Yup.object().shape({
       return schema.required('Amount is required');
     },
   ),
-  name: Yup.string().when(
+  // name: Yup.string().when(
+  //   ['type'],
+  //   (
+  //     type: string,
+  //     schema: Yup.StringSchema<
+  //       string | undefined,
+  //       Record<string, any>,
+  //       string | undefined
+  //     >,
+  //   ) => {
+  //     if (type === 'Prorate') return schema;
+
+  //     return schema.required('Addon name is required');
+  //   },
+  // ),
+  description: Yup.string().when(
     ['type'],
     (
       type: string,
@@ -247,7 +262,7 @@ export const PayrollEmployeeAddonValidation = Yup.object().shape({
     ) => {
       if (type === 'Prorate') return schema;
 
-      return schema.required('Addon name is required');
+      return schema.required('Description is required');
     },
   ),
 });
