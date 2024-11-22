@@ -33,17 +33,18 @@ const CountryDropdown = () => {
 
   return (
     <div className="country-dropdown-input">
-      <div className='country-dropdown-container'>
+      <div className="country-dropdown-container">
         <SelectInput
           label=""
           name="country"
           placeholder="Select Country"
-          onChange={handleCountryChange}  
+          onChange={handleCountryChange}
           value={selectedCountry}
           options={countries.map((country) => ({
             value: country.iso2,
             label: (
               <div className="dropdown-option">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={country.flag}
                   alt={`${country.name} flag`}
