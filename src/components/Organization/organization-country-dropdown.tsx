@@ -1,12 +1,9 @@
-import { Formik } from 'formik';
+import { useState } from 'react';
 import { SelectInput } from '../Input/seletct-input';
 
-const CountryDropdown = (props: any) => {
-  const { handleSubmit } = props;
+const CountryDropdown = () => {
+  const [selectedCountry, setSelectedCountry] = useState('');
 
-  const initialValues = {
-    country: '',
-  };
   const countries = [
     {
       name: 'Nigeria',
@@ -28,50 +25,42 @@ const CountryDropdown = (props: any) => {
     },
   ];
 
+  const handleCountryChange = (event: any) => {
+    const country = event.target.value;
+    setSelectedCountry(country);
+    console.log('Selected country:', country);
+  };
+
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      {({ values, handleBlur, handleChange, handleSubmit }) => (
-        <form
-          className="country-dropdown-input"
-          onSubmit={handleSubmit}
-          autoComplete="off"
-        >
-          <div className="country-dropdown-container">
-            <div>
-              <SelectInput
-                label=""
-                name="country"
-                placeholder="Select Country"
-                onBlur={handleBlur}
-                onChange={(event) => {
-                  handleChange(event);
-                  console.log('Selected country:', event.target.value);
-                }}
-                value={values.country}
-                options={countries.map((country) => ({
-                  value: country.iso2,
-                  label: (
-                    <div className="dropdown-option">
-                      <img
-                        src={country.flag}
-                        alt={`${country.name} flag`}
-                        className="country-flag"
-                        width={20}
-                        height={20}
-                      />
-                      <span>{country.name}</span>
-                    </div>
-                  ),
-                }))}
-                displayValue="label"
-                actualValue="value"
-                className="country-dropdown-select"
-              />
-            </div>
-          </div>
-        </form>
-      )}
-    </Formik>
+    <div className="country-dropdown-input">
+      <div className='country-dropdown-container'>
+        <SelectInput
+          label=""
+          name="country"
+          placeholder="Select Country"
+          onChange={handleCountryChange}  
+          value={selectedCountry}
+          options={countries.map((country) => ({
+            value: country.iso2,
+            label: (
+              <div className="dropdown-option">
+                <img
+                  src={country.flag}
+                  alt={`${country.name} flag`}
+                  className="country-flag"
+                  width={20}
+                  height={20}
+                />
+                <span>{country.name}</span>
+              </div>
+            ),
+          }))}
+          displayValue="label"
+          actualValue="value"
+          className="country-dropdown-select"
+        />
+      </div>
+    </div>
   );
 };
 

@@ -11,12 +11,6 @@ const OrganisationDetailsUnsecured = () => {
   const organizationDetails = useOrganizationDetails();
   const { loading, organization } = organizationDetails;
 
-
-  const handleCountryChange = (value: string) => {
-    console.log(`Selected Country: ${value}`);
-  };
-
-
   return (
     <DashboardLayout loading={loading} pageTitle="Organisation Details">
       <div className="organisation-details">
@@ -25,7 +19,7 @@ const OrganisationDetailsUnsecured = () => {
             <h5 className="organisation-details__organisation-header">
               Organisation Details
             </h5>
-            <CountryDropdown onChange={handleCountryChange} />
+            <CountryDropdown />
           </div>
         </div>
         {organization === null && (
