@@ -1,55 +1,55 @@
-  import withAuth from 'src/helpers/HOC/withAuth';
-  import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
-  import { NotFound } from '../Misc/not-found.component';
-  import OrganizationInfo from './organization-info';
-  import SalaryBreakdown from './salary-breakdown';
-  import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
-  import RemittanceInformation from './remittance-information';
-  import CountryDropdown from './organization-country-dropdown';
-  import { useEffect } from 'react';
-  import { useDispatch } from 'react-redux';
-  import { getCountries } from '../../redux/slices/countries/countries.slice';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import withAuth from 'src/helpers/HOC/withAuth';
+import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
+import { NotFound } from '../Misc/not-found.component';
+import OrganizationInfo from './organization-info';
+import SalaryBreakdown from './salary-breakdown';
+import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
+import RemittanceInformation from './remittance-information';
+import CountryDropdown from './organization-country-dropdown';
+import { getCountries } from '../../redux/slices/countries/countries.slice';
 
-  const OrganisationDetailsUnsecured = () => {
-    const organizationDetails = useOrganizationDetails();
-    const { loading, organization } = organizationDetails;
-     const dispatch = useDispatch();    
+const OrganisationDetailsUnsecured = () => {
+  const organizationDetails = useOrganizationDetails();
+  const { loading, organization } = organizationDetails;
+  const dispatch = useDispatch();
 
-     useEffect(() => {
-      getCountries(dispatch);
-    }, []);
+  useEffect(() => {
+    getCountries(dispatch);
+  }, []);
 
-    return (
-      <DashboardLayout loading={loading} pageTitle="Organisation Details">
-        <div className="organisation-details">
-          <div className=" organisation-details__organisation-details-container">
-            <div className="organisation-details__organisation-details-header">
-              <h5 className="organisation-details__organisation-header">
-                Organisation Details
-              </h5>
-              <CountryDropdown />
-            </div>
+  return (
+    <DashboardLayout loading={loading} pageTitle="Organisation Details">
+      <div className="organisation-details">
+        <div className=" organisation-details__organisation-details-container">
+          <div className="organisation-details__organisation-details-header">
+            <h5 className="organisation-details__organisation-header">
+              Organisation Details
+            </h5>
+            <CountryDropdown />
           </div>
-          {organization === null && (
-            <div className="employee-details__not-found">
-              <NotFound message="Organization not found" />
-            </div>
-          )}
-          {!!organization && (
-            <div className="organization-settings">
-              <div className="organization-settings__flex">
-                <OrganizationInfo organizationDetails={organizationDetails} />
-                <SalaryBreakdown organizationDetails={organizationDetails} />
-              </div>
-              <RemittanceInformation organizationDetails={organizationDetails} />
-            </div>
-          )}
         </div>
-      </DashboardLayout>
-    );
-  };
+        {organization === null && (
+          <div className="employee-details__not-found">
+            <NotFound message="Organization not found" />
+          </div>
+        )}
+        {!!organization && (
+          <div className="organization-settings">
+            <div className="organization-settings__flex">
+              <OrganizationInfo organizationDetails={organizationDetails} />
+              <SalaryBreakdown organizationDetails={organizationDetails} />
+            </div>
+            <RemittanceInformation organizationDetails={organizationDetails} />
+          </div>
+        )}
+      </div>
+    </DashboardLayout>
+  );
+};
 
-  export const OrganisationDetail = withAuth(OrganisationDetailsUnsecured, [
-    'Company',
-    'read',
-  ]);
+export const OrganisationDetail = withAuth(OrganisationDetailsUnsecured, [
+  'Company',
+  'read',
+]);
