@@ -123,69 +123,68 @@ const CreatePayroll: NextPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {payroll?.employees
-                    .filter(({ firstname, lastname }) => {
+                  {payroll?.employeesByCountry?.NG?.filter(
+                    ({ firstname, lastname }) => {
                       const name = `${firstname} ${lastname}`;
 
                       return !search || name.toLowerCase().includes(search);
-                    })
-                    .map((e) => {
-                      return (
-                        <tr key={e.id}>
-                          <CheckboxTableColumn
-                            checked={params.checked.includes(e.id)}
-                            onChange={handleCheck(e.id)}
-                            element="td"
+                    },
+                  ).map((e) => {
+                    return (
+                      <tr key={e.id}>
+                        <CheckboxTableColumn
+                          checked={params.checked.includes(e.id)}
+                          onChange={handleCheck(e.id)}
+                          element="td"
+                        >
+                          <button
+                            className="create-payroll-page__employee-name"
+                            onClick={handleEmployeeClick(e)}
                           >
-                            <button
-                              className="create-payroll-page__employee-name"
-                              onClick={handleEmployeeClick(e)}
-                            >
-                              {e.firstname} {e.lastname}
-                            </button>
-                          </CheckboxTableColumn>
-                          <td>
-                            {currency} {Util.formatMoneyNumber(e.salary)}
-                          </td>
-                          <td>
-                            {currency} {Util.formatMoneyNumber(e.netSalary)}
-                          </td>
-                          <td>
-                            {currency} {Util.formatMoneyNumber(e.totalBonus)}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(e.totalDeductions)}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(e.tax?.amount || 0)}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              e.pension?.employerContribution as number,
-                            )}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              e.pension?.employeeContribution as number,
-                            )}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              e.pension?.voluntaryPension as number,
-                            )}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(e.nhf?.amount || 0)}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                            {e.firstname} {e.lastname}
+                          </button>
+                        </CheckboxTableColumn>
+                        <td>
+                          {currency} {Util.formatMoneyNumber(e.salary)}
+                        </td>
+                        <td>
+                          {currency} {Util.formatMoneyNumber(e.netSalary)}
+                        </td>
+                        <td>
+                          {currency} {Util.formatMoneyNumber(e.totalBonus)}
+                        </td>
+                        <td>
+                          {currency} {Util.formatMoneyNumber(e.totalDeductions)}
+                        </td>
+                        <td>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(e.tax?.amount || 0)}
+                        </td>
+                        <td>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            e.pension?.employerContribution as number,
+                          )}
+                        </td>
+                        <td>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            e.pension?.employeeContribution as number,
+                          )}
+                        </td>
+                        <td>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            e.pension?.voluntaryPension as number,
+                          )}
+                        </td>
+                        <td>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(e.nhf?.amount || 0)}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </TableV2>
             </>
@@ -259,7 +258,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total Tax'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalPayrollTax,
+                  payroll?.payrollTotalsByCountry?.NG?.totalPayrollTax,
                 )}`}
               />
 
@@ -267,7 +266,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total Pension'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalPayrollPension,
+                  payroll?.payrollTotalsByCountry?.NG?.totalPayrollPension,
                 )}`}
               />
 
@@ -275,7 +274,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total NHF'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalPayrollNHF,
+                  payroll?.payrollTotalsByCountry?.NG?.totalPayrollNhf,
                 )}`}
               />
             </div>

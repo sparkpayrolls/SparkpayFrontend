@@ -3,13 +3,13 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
-import { ICreatePayrollPayload } from 'src/api/types';
 import { useAppSelector } from 'src/redux/hooks';
 import { Util } from '../util';
 import { useWalletBalance } from './use-wallet-balance.hook';
 import moment from 'moment';
 import { PayrollProcessor } from '../payroll-processor/payroll-processor';
 import { useProcessorData } from './use-create-payroll-page-logic.hook';
+import pick from 'lodash.pick';
 
 export const usePayrollSummaryPageLogic = () => {
   const administrator = useAppSelector((state) => state.administrator);
@@ -87,11 +87,16 @@ export const usePayrollSummaryPageLogic = () => {
             : e.prorate,
       })),
     });
+  const initialValues = {
+    ...pick(params, ['year', 'proRateMonth']),
+    employeeIds: params.checked,
+    payDate: '',
+  };
 
   const getCreatePayrollFormHandler = () => {
     return async (
-      values: ICreatePayrollPayload,
-      helpers: FormikHelpers<ICreatePayrollPayload>,
+      values: typeof initialValues,
+      helpers: FormikHelpers<typeof initialValues>,
     ) => {
       try {
         helpers.setSubmitting(true);
@@ -196,5 +201,6 @@ export const usePayrollSummaryPageLogic = () => {
       setParams((p) => ({ ...p, ...vals })),
     getCreatePayrollFormHandler,
     getSaveClickHandler,
+    initialValues,
   };
 };

@@ -1,10 +1,11 @@
 import { FormikProps } from 'formik';
 import moment from 'moment';
-import { ICreatePayrollPayload } from 'src/api/types';
 
-export const useCreatePayrollFormContext = () => {
+export const useCreatePayrollFormContext = <
+  T extends { proRateMonth: string; year: number; payDate: string }
+>() => {
   return (
-    props: FormikProps<ICreatePayrollPayload>,
+    props: FormikProps<T>,
     setParams: (_vals: Record<string, unknown>) => unknown,
     thisMoment: moment.Moment,
   ) => {

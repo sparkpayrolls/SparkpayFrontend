@@ -1,4 +1,4 @@
-import { Util } from 'src/helpers/util';
+import { Util } from '../../util';
 import { ProcessPayload } from './types';
 
 export class TaxProcessor {

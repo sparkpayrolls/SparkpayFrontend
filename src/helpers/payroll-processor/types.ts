@@ -12,6 +12,10 @@ export type StatutoryDeductionOptions = {
 } & Record<string, unknown>;
 
 export type Employee = {
+  country?: {
+    iso2: string;
+    currency: string;
+  };
   id: string;
   firstname: string;
   lastname: string;
@@ -28,20 +32,31 @@ export type Employee = {
   voluntaryPensionContribution?: number;
 };
 
-export type Fees = {
-  baseFee: number;
-  perEmployee: number;
-  perRemittanceEmployee: number;
-};
+export type Fees = Record<
+  string,
+  {
+    baseFee: number;
+    perEmployee: number;
+    perRemittanceEmployee: number;
+  }
+>;
 
 export type ProcessPayload = {
-  precision?: number;
+  precision: number;
   employees: Employee[];
-  fees: Fees;
-  statutoryDeductionOptions?: Record<string, StatutoryDeductionOptions>;
-  salaryBreakdown?: SalaryBreakdown;
+  feesByCountry: Fees;
   month: string;
   year: number;
+  salaryBreakdownByCountry?: Record<string, SalaryBreakdown>;
+  statutoryDeductionsByCountry?: Record<
+    string,
+    Record<string, StatutoryDeductionOptions>
+  >;
+  country: {
+    iso2: string;
+    currency: string;
+  };
+  conversionRates: Record<string, number>;
 };
 
 export type ProcessedEmployee = {
@@ -64,7 +79,8 @@ export type ProcessedEmployee = {
   proratedSalary: number;
   prorateDays: number;
   excludeFromTotals: boolean;
-  salaryBreakdown: { name: string; value: number }[];
+  salaryBreakdown?: { name: string; value: number }[];
+  remittances?: Record<string, { amount: number } & Record<string, unknown>>;
 };
 
 export type ProcessedPayroll = {
@@ -73,12 +89,18 @@ export type ProcessedPayroll = {
   totalBonus: number;
   totalDeductions: number;
   totalFees: number;
-  totalPension: number;
-  totalNHF: number;
-  totalTax: number;
-  totalPayrollPension: number;
-  totalPayrollNHF: number;
-  totalPayrollTax: number;
   totalCharge: number;
-  employees: ProcessedEmployee[];
+  employeesByCountry: Record<string, ProcessedEmployee[]>;
+  payrollSize: number;
+  currencyCount: number;
+  payrollTotalsByCountry: Record<
+    string,
+    Record<string, number> & {
+      payrollSize: number;
+      totalSalary: number;
+      totalNetSalary: number;
+      totalBonus: number;
+      totalDeductions: number;
+    }
+  >;
 };

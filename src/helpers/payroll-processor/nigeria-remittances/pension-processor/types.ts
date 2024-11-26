@@ -1,4 +1,4 @@
-import { SalaryBreakdown } from '../types';
+import { SalaryBreakdown } from '../../types';
 
 export type ProcessPayload = {
   enabled: boolean;

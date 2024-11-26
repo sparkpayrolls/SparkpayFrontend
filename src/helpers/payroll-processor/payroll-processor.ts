@@ -1,27 +1,24 @@
 import moment from 'moment';
-import pick from 'lodash.pick';
-import { PensionProcessor } from './pension-processor/pension.processor';
+import { camelCase, merge, pick } from 'lodash';
 import {
-  Addon,
   Employee,
+  ProcessedEmployee,
   ProcessedPayroll,
   ProcessPayload,
-  SalaryBreakdown,
-  StatutoryDeductionOptions,
 } from './types';
-import { TaxProcessor } from './tax-processor/tax-processor';
-import { Util } from '../util';
+import { Util } from './util';
+import { NigeriaRemittances } from './nigeria-remittances/nigeria-remittances';
 
 export class PayrollProcessor {
   static process(payload: ProcessPayload) {
     const {
       employees,
       precision = 4,
-      fees,
-      statutoryDeductionOptions,
-      salaryBreakdown,
+      feesByCountry,
       month,
       year,
+      country,
+      conversionRates,
     } = payload;
 
     const payrollDate = moment().year(year).month(month);
@@ -34,18 +31,20 @@ export class PayrollProcessor {
       totalNetSalary: 0,
       totalBonus: 0,
       totalDeductions: 0,
-      totalFees: Util.getPreciseNumber(fees.baseFee, precision),
-      totalPension: 0,
-      totalNHF: 0,
-      totalTax: 0,
-      totalPayrollPension: 0,
-      totalPayrollNHF: 0,
-      totalPayrollTax: 0,
+      totalFees: Util.getPreciseNumber(
+        feesByCountry[country?.iso2]?.baseFee || 0,
+        precision,
+      ),
+      employeesByCountry: {},
       totalCharge: 0,
-      employees: [],
+      payrollTotalsByCountry: {},
+      payrollSize: 0,
+      currencyCount: 0,
     };
+    const baseCurrency = country.currency;
 
-    employees.forEach((employee) => {
+    for (let i = 0; i < employees.length; i += 1) {
+      const employee = employees[i];
       const { salary, excludeFromTotals, prorate } = employee;
       let proratedSalary = salary;
       let prorateDays = 0;
@@ -60,217 +59,215 @@ export class PayrollProcessor {
           precision,
         );
       }
-      const totalBonus = this.sumAddons(employee.bonus, precision);
-      const totalDeductions = this.sumAddons(employee.deductions, precision);
-      const pension = this.processPension({
+
+      const totalBonus = Util.sumAddons(employee.bonus, precision);
+      const totalDeductions = Util.sumAddons(employee.deductions, precision);
+      const remittances = this.processRemittances({
+        ...payload,
         employee,
-        options: statutoryDeductionOptions?.pension,
-        salaryBreakdown,
-        precision,
         proratedSalary,
       });
-      const nhf = this.processNHF({
-        proratedSalary,
-        precision,
-        options: statutoryDeductionOptions?.nhf,
-        employee,
-      });
-      const tax = this.processTax({
-        employee,
-        options: statutoryDeductionOptions?.pension,
-        precision,
-        proratedSalary,
-        totalBonus: this.sumAddons(
-          employee.bonus.filter((b) => !b.isNotTaxable),
-          precision,
-        ),
-        pension:
-          (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
-        nhf: nhf.amount,
-      });
-      const netSalary = Util.getPreciseNumber(
-        proratedSalary +
-          totalBonus -
-          ((pension.employeeContribution || 0) +
-            (pension.voluntaryPension || 0)) -
-          nhf.amount -
-          tax.amount -
+      let netSalary = proratedSalary + totalBonus - totalDeductions;
+      if (remittances) {
+        netSalary -= remittances.totalEmployeeDeduction;
+      }
+
+      netSalary = Util.getPreciseNumber(netSalary, precision);
+
+      const processedEmployee: ProcessedEmployee = merge(
+        {
+          ...pick(employee, ['id', 'firstname', 'lastname']),
+          totalBonus,
           totalDeductions,
-        precision,
+          salary,
+          netSalary,
+          proratedSalary,
+          prorateDays,
+          excludeFromTotals: Boolean(excludeFromTotals),
+          remittances: remittances?.remittances,
+        },
+        remittances?.remittances,
+        pick(remittances, ['salaryBreakdown']),
       );
 
-      response.employees.push({
-        ...pick(employee, ['id', 'firstname', 'lastname']),
-        totalBonus,
-        totalDeductions,
-        salary,
-        netSalary,
-        pension,
-        proratedSalary,
-        prorateDays,
-        tax,
-        nhf,
-        excludeFromTotals: Boolean(excludeFromTotals),
-        salaryBreakdown: Object.entries(
-          employee.salaryBreakdown || salaryBreakdown || {},
-        ).map(([name, value]) => ({
-          name,
-          value: (proratedSalary * value) / 100,
-        })),
-      });
+      const iso2 = employee.country?.iso2 || country?.iso2 || 'NG';
+      if (!response.employeesByCountry[iso2]) {
+        response.employeesByCountry[iso2] = [];
+      }
 
+      response.employeesByCountry[iso2].push(processedEmployee);
       if (!excludeFromTotals) {
-        const hasRemittance = [nhf, pension, tax].some(
-          (r) => r.addToCharge && r.amount > 0,
-        );
+        const employeeCurrency = employee.country?.currency || baseCurrency;
+        const conversionRate =
+          conversionRates[`${baseCurrency}${employeeCurrency}`] || 1;
+        const rems = Object.entries(remittances?.remittances || {});
+        const hasRemittance =
+          rems.length && rems.some(([, r]) => r.addToCharge && r.amount > 0);
+        const fees = feesByCountry[iso2];
 
+        if (!response.payrollTotalsByCountry[iso2]) {
+          response.payrollTotalsByCountry[iso2] = {
+            payrollSize: 0,
+            totalSalary: 0,
+            totalNetSalary: 0,
+            totalBonus: 0,
+            totalDeductions: 0,
+          };
+        }
+
+        response.payrollSize += 1;
+        response.payrollTotalsByCountry[iso2].payrollSize += 1;
+
+        response.payrollTotalsByCountry[iso2].totalSalary = this.sum(
+          precision,
+          response.payrollTotalsByCountry[iso2].totalSalary,
+          salary,
+        );
         response.totalSalary = this.sum(
           precision,
           response.totalSalary,
-          salary,
+          Util.getPreciseNumber(salary / conversionRate, precision),
+        );
+
+        response.payrollTotalsByCountry[iso2].totalNetSalary = this.sum(
+          precision,
+          response.payrollTotalsByCountry[iso2].totalNetSalary,
+          netSalary,
         );
         response.totalNetSalary = this.sum(
           precision,
           response.totalNetSalary,
-          netSalary,
+          Util.getPreciseNumber(netSalary / conversionRate, precision),
+        );
+
+        response.payrollTotalsByCountry[iso2].totalBonus = this.sum(
+          precision,
+          response.payrollTotalsByCountry[iso2].totalBonus,
+          totalBonus,
         );
         response.totalBonus = this.sum(
           precision,
           response.totalBonus,
-          totalBonus,
+          Util.getPreciseNumber(totalBonus / conversionRate, precision),
+        );
+
+        response.payrollTotalsByCountry[iso2].totalDeductions = this.sum(
+          precision,
+          response.payrollTotalsByCountry[iso2].totalDeductions,
+          totalDeductions,
         );
         response.totalDeductions = this.sum(
           precision,
           response.totalDeductions,
-          totalDeductions,
+          Util.getPreciseNumber(totalDeductions / conversionRate, precision),
+        );
+
+        response.payrollTotalsByCountry[iso2].totalFees = this.sum(
+          precision,
+          response.payrollTotalsByCountry[iso2].totalFees,
+          fees?.perEmployee || 0,
+          hasRemittance ? fees?.perRemittanceEmployee || 0 : 0,
         );
         response.totalFees = this.sum(
           precision,
           response.totalFees,
-          fees.perEmployee,
-          hasRemittance ? fees.perRemittanceEmployee : 0,
+          Util.getPreciseNumber(
+            this.sum(
+              precision,
+              fees?.perEmployee || 0,
+              hasRemittance ? fees?.perRemittanceEmployee || 0 : 0,
+            ) / conversionRate,
+            precision,
+          ),
         );
 
-        [
-          { statutory: pension, key: 'totalPension' },
-          { statutory: nhf, key: 'totalNHF' },
-          { statutory: tax, key: 'totalTax' },
-          { statutory: pension, key: 'totalPayrollPension', skipCheck: true },
-          { statutory: nhf, key: 'totalPayrollNHF', skipCheck: true },
-          { statutory: tax, key: 'totalPayrollTax', skipCheck: true },
-        ].forEach(({ statutory, key, skipCheck }) => {
-          if (skipCheck || statutory.addToCharge) {
-            response[key as 'totalNHF'] = this.sum(
+        for (let j = 0; j < rems.length; j += 1) {
+          const [name, statutory] = rems[j];
+          if (statutory.addToCharge) {
+            const paymentKey = camelCase(`total_${name}`);
+
+            response.payrollTotalsByCountry[iso2][paymentKey] = this.sum(
               precision,
-              response[key as 'totalNHF'],
+              response.payrollTotalsByCountry[iso2][paymentKey] || 0,
               statutory.amount,
             );
-          }
-        });
-      }
-    });
 
-    response.totalCharge = this.sum(
-      precision,
-      response.totalNetSalary,
-      response.totalFees,
-      response.totalPension,
-    );
+            response.payrollTotalsByCountry[iso2].totalCharge = this.sum(
+              precision,
+              response.payrollTotalsByCountry[iso2].totalCharge,
+              statutory.amount,
+            );
+            response.totalCharge = this.sum(
+              precision,
+              response.totalCharge,
+              Util.getPreciseNumber(
+                statutory.amount / conversionRate,
+                precision,
+              ),
+            );
+          }
+
+          const displayKey = camelCase(`total_payroll_${name}`);
+
+          response.payrollTotalsByCountry[iso2][displayKey] = this.sum(
+            precision,
+            response.payrollTotalsByCountry[iso2][displayKey] || 0,
+            statutory.amount,
+          );
+        }
+
+        response.payrollTotalsByCountry[iso2].totalCharge = this.sum(
+          precision,
+          response.payrollTotalsByCountry[iso2].totalCharge,
+          fees?.perEmployee || 0,
+          hasRemittance ? fees?.perRemittanceEmployee || 0 : 0,
+          netSalary,
+        );
+        response.totalCharge = this.sum(
+          precision,
+          response.totalCharge,
+          Util.getPreciseNumber(
+            this.sum(
+              precision,
+              netSalary,
+              fees?.perEmployee || 0,
+              hasRemittance ? fees?.perRemittanceEmployee || 0 : 0,
+            ) / conversionRate,
+            precision,
+          ),
+        );
+      }
+    }
+
+    response.currencyCount = Object.keys(response.employeesByCountry).length;
 
     return response;
   }
 
-  private static processPension(payload: {
-    employee: Employee;
-    options?: StatutoryDeductionOptions;
-    salaryBreakdown?: SalaryBreakdown;
-    precision: number;
-    proratedSalary: number;
-  }) {
-    const {
-      employee,
-      options,
-      salaryBreakdown,
-      precision,
-      proratedSalary,
-    } = payload;
-    const _options = employee.statutoryDeductionOptions?.pension ||
-      options || { enabled: false, addToCharge: false };
-    const _salaryBreakdown = employee.salaryBreakdown || salaryBreakdown;
-
-    return PensionProcessor.process({
-      ..._options,
-      salaryBreakdown: _salaryBreakdown,
-      precision,
-      proratedSalary,
-      voluntaryPension: employee.voluntaryPensionContribution,
-    });
-  }
-
-  private static processTax(payload: {
-    employee: Employee;
-    options?: StatutoryDeductionOptions;
-    precision: number;
-    proratedSalary: number;
-    totalBonus: number;
-    pension: number;
-    nhf: number;
-  }) {
-    const {
-      employee,
-      options,
-      precision,
-      proratedSalary,
-      totalBonus,
-      pension,
-      nhf,
-    } = payload;
-    const _options = employee.statutoryDeductionOptions?.tax ||
-      options || { enabled: false, addToCharge: false };
-
-    return TaxProcessor.process({
-      ..._options,
-      employee,
-      precision,
-      proratedSalary,
-      totalBonus,
-      pension,
-      nhf,
-    });
-  }
-
-  private static processNHF(payload: {
-    employee: Employee;
-    proratedSalary: number;
-    precision: number;
-    options?: StatutoryDeductionOptions;
-  }) {
-    const { proratedSalary, precision, options, employee } = payload;
-    const { enabled, addToCharge } =
-      employee.statutoryDeductionOptions?.nhf || options || {};
-    if (!enabled) {
-      return {
-        amount: 0,
-        addToCharge: Boolean(addToCharge),
-      };
+  private static processRemittances(
+    payload: Omit<ProcessPayload, 'employees'> & {
+      employee: Employee;
+      proratedSalary: number;
+    },
+  ) {
+    switch (payload.employee?.country || payload.country?.iso2) {
+      case 'NG': {
+        return NigeriaRemittances.process({
+          precision: payload.precision,
+          employee: payload.employee,
+          salaryBreakdown: payload.salaryBreakdownByCountry?.NG,
+          proratedSalary: payload.proratedSalary,
+          statutoryDeductionOptions: payload.statutoryDeductionsByCountry?.NG,
+        });
+      }
+      default:
+        return null;
     }
-
-    return {
-      amount: Util.getPreciseNumber(proratedSalary * 0.025, precision),
-      addToCharge: Boolean(addToCharge),
-    };
-  }
-
-  private static sumAddons(addons: Addon[], precision: number) {
-    return Util.getPreciseNumber(
-      addons.reduce((acc, cur) => acc + cur.amount, 0),
-      precision,
-    );
   }
 
   private static sum(precision: number, ...numbers: number[]) {
     return Util.getPreciseNumber(
-      numbers.reduce((acc, cur) => acc + cur, 0),
+      numbers.reduce((acc, cur) => acc + (cur || 0), 0),
       precision,
     );
   }

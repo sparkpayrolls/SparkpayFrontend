@@ -37,10 +37,14 @@ export const EmployeesPensionViewTab = () => {
             <InfoPopUp>Total amount of Pension Remittance</InfoPopUp>
           </div>
           <p className="view-employees__tax__top-cont__info-md">
-            {!Number.isFinite(data?.data?.totalPayrollPension) ? (
+            {!Number.isFinite(
+              data?.data?.payrollTotalsByCountry?.NG?.totalPayrollPension,
+            ) ? (
               <Skeleton width={150} />
             ) : (
-              Util.formatMoneyString(currency)(data?.data?.totalPayrollPension)
+              Util.formatMoneyString(currency)(
+                data?.data?.payrollTotalsByCountry?.NG?.totalPayrollPension,
+              )
             )}
           </p>
         </div>

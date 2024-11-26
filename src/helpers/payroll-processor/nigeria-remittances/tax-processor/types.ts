@@ -1,4 +1,4 @@
-import { Employee } from '../types';
+import { Employee } from '../../types';
 
 export type ProcessPayload = {
   employee: Employee;
