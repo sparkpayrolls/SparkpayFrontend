@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import withAuth from 'src/helpers/HOC/withAuth';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 import { NotFound } from '../Misc/not-found.component';
@@ -8,16 +6,10 @@ import SalaryBreakdown from './salary-breakdown';
 import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
 import RemittanceInformation from './remittance-information';
 import CountryDropdown from './organization-country-dropdown';
-import { getCountries } from '../../redux/slices/countries/countries.slice';
 
 const OrganisationDetailsUnsecured = () => {
   const organizationDetails = useOrganizationDetails();
   const { loading, organization } = organizationDetails;
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    getCountries(dispatch);
-  }, []);
 
   return (
     <DashboardLayout loading={loading} pageTitle="Organisation Details">

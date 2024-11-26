@@ -10,27 +10,23 @@ const CountryDropdown = () => {
       iso2: 'NG',
       flag: 'https://cdn.britannica.com/68/5068-050-53E22285/Flag-Nigeria.jpg',
       id: '1',
-      isSelected: false,
     },
     {
       name: 'Ghana',
       iso2: 'GH',
       flag: 'https://cdn.britannica.com/54/5054-050-8EC06097/Flag-Ghana.jpg',
       id: '2',
-      isSelected: false,
     },
     {
       name: 'Kenya',
       iso2: 'KE',
       flag: 'https://cdn.britannica.com/15/15-050-B075588A/Flag-Kenya.jpg',
       id: '3',
-      isSelected: false,
     },
   ];
 
-  
-  const handleCountryChange = (e: any) => {
-    const country = e.target.value;
+  const handleCountryChange = (event: any) => {
+    const country = event.target.value;
     setSelectedCountry(country);
     console.log('Selected country:', country);
   };
@@ -48,6 +44,7 @@ const CountryDropdown = () => {
             value: country.iso2,
             label: (
               <div className="dropdown-option">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={country.flag}
                   alt={`${country.name} flag`}

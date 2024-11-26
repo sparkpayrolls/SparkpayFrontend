@@ -21,7 +21,6 @@ export const getCountries = async (dispatch: AppDispatch) => {
     const { data: countries } = await $api.country.getCountries({
       all: true,
     });
-    
 
     dispatch(commitCountries(countries));
   } catch (error) {

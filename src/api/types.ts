@@ -39,7 +39,7 @@ export type Country = Document & {
 
   code: string;
 
-  isSelected :boolean;
+  isSelected: boolean;
 };
 
 export type User = Document & {
