@@ -4,10 +4,12 @@ import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { Administrator } from 'src/api/types';
+import { Company } from 'src/api/types';
 import { useAppDispatch } from 'src/redux/hooks';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { commitCompanies } from 'src/redux/slices/companies/companies.slice';
 import { commitUser, logOut } from 'src/redux/slices/user/user.slice';
+import { commitCountries } from 'src/redux/slices/countries/countries.slice';
 import { useSocket } from './use-socket.hook';
 import useApiCall from './useapicall.hook';
 import { config } from '../config';
@@ -32,11 +34,30 @@ export const useAppLogic = () => {
           $api.user.getProfile(),
           $api.company.getCompanies(),
           $api.company.getCurrentCompany(),
+          $api.country.getCountries({ all: true }),
         ])
-          .then(([user, companies, administrator]) => {
+          .then(([user, companies, administrator, countries]) => {
+            const selectedCompany = companies.find(
+              (c) => c.id === String(administrator?.company),
+            );
+            const isAnyCountrySelected = countries.data.some(
+              (country) => country.isSelected,
+            );
+
+            if (selectedCompany && !isAnyCountrySelected) {
+              const companyCountryCode = (selectedCompany.company as Company)
+                .country;
+
+              countries.data = countries.data.map((country) => ({
+                ...country,
+                isSelected: country.code === companyCountryCode,
+              }));
+            }
+
             dispatch(commitUser(user));
             dispatch(commitCompanies(companies));
             dispatch(commitAministrator(administrator));
+            dispatch(commitCountries(countries.data));
           })
           .catch(() => {
             /** */
