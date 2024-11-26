@@ -38,8 +38,6 @@ export type Country = Document & {
   currencySymbol: string;
 
   code: string;
-
-  isSelected: boolean;
 };
 
 export type User = Document & {

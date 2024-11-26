@@ -19,12 +19,14 @@ import CountriesReducer from './slices/countries/countries.slice';
 import UserReducer from './slices/user/user.slice';
 import AdministratorReducer from './slices/administrator/administrator.slice';
 import CompaniesReducer from './slices/companies/companies.slice';
+import SelectedCountryReducer from './slices/selected-country/selected-country.slice';
 
 const reducers = combineReducers({
   countries: CountriesReducer,
   user: UserReducer,
   administrator: AdministratorReducer,
   companies: CompaniesReducer,
+  selectedCountry: SelectedCountryReducer,
 });
 
 const persistConfig = {
