@@ -57,7 +57,7 @@ export const useAppLogic = () => {
   }, [dispatch, startLoading, stopLoading]);
 
   useEffect(() => {
-    if (!countries.length) {
+    if (!countries.length && config().apiUrl) {
       getCountries(dispatch);
     }
 
