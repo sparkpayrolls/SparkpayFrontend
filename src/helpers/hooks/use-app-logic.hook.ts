@@ -3,20 +3,29 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
-import { Administrator } from 'src/api/types';
-import { useAppDispatch } from 'src/redux/hooks';
+import { Administrator, Company, Country } from 'src/api/types';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { commitCompanies } from 'src/redux/slices/companies/companies.slice';
 import { commitUser, logOut } from 'src/redux/slices/user/user.slice';
 import { useSocket } from './use-socket.hook';
 import useApiCall from './useapicall.hook';
 import { config } from '../config';
+import { getCountries } from 'src/redux/slices/countries/countries.slice';
+import { commitSelectedCountry } from 'src/redux/slices/selected-country/selected-country.slice';
 
 export const useAppLogic = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const socket = useSocket();
   const [loading, startLoading, stopLoading] = useApiCall(1);
+  const { countries, administrator, selectedCountry } = useAppSelector(
+    (state) => ({
+      countries: state.countries,
+      administrator: state.administrator,
+      selectedCountry: state.selectedCountry,
+    }),
+  );
 
   useEffect(() => {
     const token = Cookies.get('auth_token');
@@ -46,6 +55,20 @@ export const useAppLogic = () => {
     };
     loadAuth();
   }, [dispatch, startLoading, stopLoading]);
+
+  useEffect(() => {
+    if (!countries.length && config().apiUrl) {
+      getCountries(dispatch);
+    }
+
+    if (!selectedCountry && administrator) {
+      dispatch(
+        commitSelectedCountry(
+          (administrator.company as Company).country as Country,
+        ),
+      );
+    }
+  }, [dispatch, countries, administrator, selectedCountry]);
 
   useEffect(() => {
     const { 'email-verification-code': code } = router.query;
