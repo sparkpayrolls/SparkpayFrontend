@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import Image from 'next/image'; 
 import { SelectInput } from '../Input/seletct-input';
 import { useAppSelector, useAppDispatch } from 'src/redux/hooks';
 import { commitSelectedCountry } from '../../redux/slices/selected-country/selected-country.slice';
@@ -33,11 +34,11 @@ const CountryDropdown = () => {
             value: country.iso2,
             label: (
               <div className="dropdown-option">
-                <img
+                <Image
                   src={country.flag || `https://flagcdn.com/w40/${country.iso2.toLowerCase()}.png`}
                   className="country-flag"
-                  width={20}
-                  height={20}
+                  width={23}
+                  height={5}
                   alt={`${country.name} flag`} 
                 />
                 <span>{country.name}</span>
