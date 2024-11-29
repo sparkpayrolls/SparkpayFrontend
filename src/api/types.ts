@@ -38,6 +38,10 @@ export type Country = Document & {
   currencySymbol: string;
 
   code: string;
+
+  iso2: string;
+
+  flag: string;
 };
 
 export type User = Document & {

@@ -6,6 +6,9 @@ module.exports = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
+  images: {
+    domains: ['cdn.britannica.com'],
+  },
   // publicRuntimeConfig: {
   //   apiUrl: process.env.NEXT_PUBLIC_API_URL,
   //   paystackKey: process.env.NEXT_PUBLIC_PAYSTACK_KEY,

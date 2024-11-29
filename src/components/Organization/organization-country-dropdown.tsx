@@ -1,34 +1,16 @@
-import { useState } from 'react';
+import Image from 'next/image';
 import { SelectInput } from '../Input/seletct-input';
+import { useAppSelector, useAppDispatch } from 'src/redux/hooks';
+import { commitSelectedCountry } from '../../redux/slices/selected-country/selected-country.slice';
 
 const CountryDropdown = () => {
-  const [selectedCountry, setSelectedCountry] = useState('');
-
-  const countries = [
-    {
-      name: 'Nigeria',
-      iso2: 'NG',
-      flag: 'https://cdn.britannica.com/68/5068-050-53E22285/Flag-Nigeria.jpg',
-      id: '1',
-    },
-    {
-      name: 'Ghana',
-      iso2: 'GH',
-      flag: 'https://cdn.britannica.com/54/5054-050-8EC06097/Flag-Ghana.jpg',
-      id: '2',
-    },
-    {
-      name: 'Kenya',
-      iso2: 'KE',
-      flag: 'https://cdn.britannica.com/15/15-050-B075588A/Flag-Kenya.jpg',
-      id: '3',
-    },
-  ];
+  const { countries, selectedCountry } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
 
   const handleCountryChange = (event: any) => {
-    const country = event.target.value;
-    setSelectedCountry(country);
-    console.log('Selected country:', country);
+    const selectedIso2 = event.target.value;
+    const country = countries.find((country) => country.iso2 === selectedIso2);
+    dispatch(commitSelectedCountry(country || null));
   };
 
   return (
@@ -39,20 +21,19 @@ const CountryDropdown = () => {
           name="country"
           placeholder="Select Country"
           onChange={handleCountryChange}
-          value={selectedCountry}
+          value={selectedCountry ? selectedCountry.iso2 : ''}
           options={countries.map((country) => ({
             value: country.iso2,
             label: (
               <div className="dropdown-option">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={country.flag}
-                  alt={`${country.name} flag`}
                   className="country-flag"
-                  width={20}
-                  height={20}
+                  width={23}
+                  height={5}
+                  alt={`${country.name} flag`}
                 />
-                <span>{country.iso2}</span>
+                <span>{country.name}</span>
               </div>
             ),
           }))}
