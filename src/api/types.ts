@@ -39,8 +39,8 @@ export type Country = Document & {
 
   code: string;
 
-  iso2 : string;
-  
+  iso2: string;
+
   flag: string;
 };
 

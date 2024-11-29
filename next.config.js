@@ -7,7 +7,7 @@ module.exports = {
     includePaths: [path.join(__dirname, 'styles')],
   },
   images: {
-    domains: ['flagcdn.com'],
+    domains: ['cdn.britannica.com'],
   },
   // publicRuntimeConfig: {
   //   apiUrl: process.env.NEXT_PUBLIC_API_URL,
