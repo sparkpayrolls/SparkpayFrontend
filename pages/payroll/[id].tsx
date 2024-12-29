@@ -262,7 +262,7 @@ const PayDetails: NextPage = () => {
                         <>
                           {currency}{' '}
                           {Util.formatMoneyNumber(
-                            payroll?.totalSalary ||
+                            payroll?.totalNetSalary ||
                               totals['Total Net Salary'] ||
                               0,
                             2,
