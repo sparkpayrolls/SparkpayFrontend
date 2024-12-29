@@ -311,7 +311,7 @@ const PayDetails: NextPage = () => {
                         <>
                           {currency}{' '}
                           {Util.formatMoneyNumber(
-                            payroll?.totalPayrollTax || 0,
+                            payroll?.totalPayrollTax ?? 0,
                             2,
                           )}
                         </>
