@@ -55,7 +55,7 @@ export class Util {
     return [first, ...rest].join('');
   }
 
-  static noop = () => {
+  static readonly noop = () => {
     /** noop */
   };
 
@@ -250,7 +250,7 @@ export class Util {
           return {
             date: moment()
               .month(date.month)
-              .year(date.year || moment().year()),
+              .year(date.year ?? moment().year()),
             days: date.days,
           };
         })
@@ -353,14 +353,14 @@ export class Util {
   static signPayload(payload: any) {
     const { jwtSecretKey } = config();
 
-    return sign(payload, jwtSecretKey as string);
+    return sign(payload, jwtSecretKey);
   }
 
   static decodePayload<T extends Record<string, unknown>>(payload: string) {
     const { jwtSecretKey } = config();
 
     try {
-      const decoded = verify(payload, jwtSecretKey as string) as T & {
+      const decoded = verify(payload, jwtSecretKey) as T & {
         iat?: string;
       };
 
@@ -372,7 +372,7 @@ export class Util {
     }
   }
 
-  static COMPARABLE_TYPES = [
+  static readonly COMPARABLE_TYPES = [
     'number',
     'string',
     'boolean',
@@ -404,8 +404,8 @@ export class Util {
       let uniqueKey = uniqueKeys.next();
       while (!uniqueKey.done) {
         const key = uniqueKey.value;
-        const valueOne = (_paramOne || {})[key];
-        const valueTwo = (_paramTwo || {})[key];
+        const valueOne = _paramOne?.[key];
+        const valueTwo = _paramTwo?.[key];
         if (valueOne !== valueTwo) {
           if (Util.isComparable(valueOne) && Util.isComparable(valueTwo)) {
             _changes[`${path}${key}`] = { from: valueOne, to: valueTwo };
@@ -432,7 +432,7 @@ export class Util {
     return result.charAt(0).toUpperCase() + result.slice(1);
   }
 
-  static objectToDotNotation = (obj: unknown) => {
+  static readonly objectToDotNotation = (obj: unknown) => {
     const newObj = {} as Record<string, unknown>;
     const _objectToDotNotation = (
       _obj: unknown,
@@ -454,7 +454,7 @@ export class Util {
     return newObj;
   };
 
-  static getCustomBlurHandler = <T extends Record<string, unknown>>(
+  static readonly getCustomBlurHandler = <T extends Record<string, unknown>>(
     params: IgetCustomBlurHandler<T>,
   ) => {
     const { name, setTouched, touched } = params;
@@ -464,7 +464,10 @@ export class Util {
     };
   };
 
-  static getCustomChangeHandler = <T extends Record<string, unknown>, K>(
+  static readonly getCustomChangeHandler = <
+    T extends Record<string, unknown>,
+    K
+  >(
     params: IgetCustomChangeHandler<T>,
   ) => {
     const { name, setValues, values } = params;
@@ -516,11 +519,11 @@ export class Util {
     return validationErrors;
   }
 
-  static formatAccountNumber(accountNumber: string) {
+  static formatAccountNumber(accountNumber?: string) {
     const res: string[] = [];
     let cur = '';
     let count = 3;
-    accountNumber.split('').forEach((ch, i) => {
+    accountNumber?.split('')?.forEach((ch, i) => {
       cur += ch;
 
       if (cur.length === count) {
@@ -540,7 +543,7 @@ export class Util {
     return Number(val.toFixed(precision));
   }
 
-  static WORK_DAYS = new Set([
+  static readonly WORK_DAYS = new Set([
     'Monday',
     'Tuesday',
     'Wednesday',
@@ -574,5 +577,9 @@ export class Util {
     return JSON.parse(
       pako.inflate(Buffer.from(payload, 'base64'), { to: 'string' }).toString(),
     );
+  }
+
+  static copyToClipboard(value: string) {
+    return () => navigator.clipboard.writeText(value);
   }
 }

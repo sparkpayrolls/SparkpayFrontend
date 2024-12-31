@@ -16,71 +16,85 @@ export const WalletCard = (props: IWalletCard) => {
   const { title, amount, loading, wallet } = props;
   const administrator = useAppSelector((state) => state.administrator);
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const [_amount, setAmount] = useState({ amount, lastAmount: amount });
+  const [amountState, setAmountState] = useState({
+    amount,
+    lastAmount: amount,
+  });
   let countUpDuration = Math.abs(
-    (_amount.amount - _amount.lastAmount) / 333333,
+    (amountState.amount - amountState.lastAmount) / 333333,
   );
   if (countUpDuration > 10) {
     countUpDuration = 10;
   }
 
   useEffect(() => {
-    if (amount !== _amount.amount) {
-      setAmount({ lastAmount: _amount.amount || amount, amount });
+    if (amount !== amountState.amount) {
+      setAmountState({ lastAmount: amountState.amount || amount, amount });
     }
-  }, [_amount.amount, amount]);
+  }, [amountState.amount, amount]);
 
   return (
-    <>
-      <div className="wallet-billing-page__wallet-amount">
-        <div className="wallet-billing-page__wallet-purple-image">
-          <Image src={PurpleImage} alt="purple image" />
-        </div>
+    <div className="wallet-billing-page__wallet-amount">
+      <div className="wallet-billing-page__wallet-purple-image">
+        <Image src={PurpleImage} alt="purple image" />
+      </div>
 
-        <div className="wallet-billing-page__wallet-text">
-          <div
-            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
-          >
-            <div>
-              <p>{title}</p>
-              {loading ? (
-                <Skeleton
-                  className="wallet-billing-page__wallet-amount-skeleton"
-                  width={200}
-                  borderRadius={4}
-                  count={1}
-                />
-              ) : (
-                <CountUp
-                  className="wallet-billing-page__wallet-amount-text"
-                  start={_amount.lastAmount}
-                  end={_amount.amount}
-                  duration={countUpDuration}
-                  separator=","
-                  decimals={2}
-                  decimal="."
-                  delay={0}
-                  prefix={`${currency}\xa0`}
-                >
-                  {({ countUpRef }) => (
-                    <p
-                      className="wallet-billing-page__wallet-amount-text"
-                      ref={countUpRef as any}
-                    />
-                  )}
-                </CountUp>
-              )}
-            </div>
+      <div className="wallet-billing-page__wallet-text">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <p>{title}</p>
+            {loading ? (
+              <Skeleton
+                className="wallet-billing-page__wallet-amount-skeleton"
+                width={200}
+                borderRadius={4}
+                count={1}
+              />
+            ) : (
+              <CountUp
+                className="wallet-billing-page__wallet-amount-text"
+                start={amountState.lastAmount}
+                end={amountState.amount}
+                duration={countUpDuration}
+                separator=","
+                decimals={2}
+                decimal="."
+                delay={0}
+                prefix={`${currency}\xa0`}
+              >
+                {({ countUpRef }) => (
+                  <p
+                    className="wallet-billing-page__wallet-amount-text"
+                    ref={countUpRef as any}
+                  />
+                )}
+              </CountUp>
+            )}
+          </div>
 
-            {!loading && wallet?.account && (
-              <div>
-                <div
+          {!loading && wallet?.account && (
+            <div hidden>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px',
+                }}
+              >
+                <span
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '16px',
+                    gap: '4px',
                   }}
                 >
+                  Account Name
+                  <br />
+                  <i style={{ fontWeight: 'bold' }}>
+                    {wallet?.account?.accountName}
+                  </i>
+                </span>
+                <div style={{ display: 'flex', gap: '16px' }}>
                   <span
                     style={{
                       display: 'flex',
@@ -88,62 +102,47 @@ export const WalletCard = (props: IWalletCard) => {
                       gap: '4px',
                     }}
                   >
-                    Account Name
+                    Account Number
                     <br />
                     <i style={{ fontWeight: 'bold' }}>
-                      {wallet?.account?.accountName}
+                      {wallet?.account?.accountNumber}
                     </i>
                   </span>
-                  <div style={{ display: 'flex', gap: '16px' }}>
-                    <span
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '4px',
-                      }}
-                    >
-                      Account Number
-                      <br />
-                      <i style={{ fontWeight: 'bold' }}>
-                        {wallet?.account?.accountNumber}
-                      </i>
-                    </span>
-                    <span
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '4px',
-                      }}
-                    >
-                      Bank
-                      <br />
-                      <i style={{ fontWeight: 'bold' }}>
-                        {wallet?.account?.bankName}
-                      </i>
-                    </span>
-                  </div>
+                  <span
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '4px',
+                    }}
+                  >
+                    Bank
+                    <br />
+                    <i style={{ fontWeight: 'bold' }}>
+                      {wallet?.account?.bankName}
+                    </i>
+                  </span>
                 </div>
               </div>
-            )}
-          </div>
-        </div>
-
-        {!loading && !wallet?.account && (
-          <Button
-            label={<>{'Fund Payroll'}</>}
-            onClick={() => {
-              NiceModal.show(WalletBillingModal);
-            }}
-            className="wallet-billing-page__submit-btn"
-            primary
-            type="submit"
-          />
-        )}
-
-        <div className="wallet-billing-page__wallet-yellow-image">
-          <Image src={YellowImage} alt="yellowImage" />
+            </div>
+          )}
         </div>
       </div>
-    </>
+
+      {!loading && (
+        <Button
+          label={<>{'Fund Payroll'}</>}
+          onClick={() => {
+            NiceModal.show(WalletBillingModal, { wallet });
+          }}
+          className="wallet-billing-page__submit-btn"
+          primary
+          type="submit"
+        />
+      )}
+
+      <div className="wallet-billing-page__wallet-yellow-image">
+        <Image src={YellowImage} alt="yellowImage" />
+      </div>
+    </div>
   );
 };

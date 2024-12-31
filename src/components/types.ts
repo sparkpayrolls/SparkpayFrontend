@@ -318,7 +318,6 @@ export type IStatusChip = {
     | InviteTypeStatus
     | GroupStatus
     | SalaryAddOnStatus
-    | InviteTypeStatus
     | 'Enabled'
     | 'Disabled';
 };
@@ -413,6 +412,7 @@ export type IPagination = {
 export type IWalletBillingForm = {
   modal: NiceModalHandler;
   switchForm(value: 'NGMoreInfo'): void;
+  wallet?: CompanyWallet;
 };
 
 export type IWalletCard = {

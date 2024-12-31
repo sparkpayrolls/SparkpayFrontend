@@ -11,7 +11,6 @@ import debounce from 'lodash.debounce';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-// import { usePaymentMethods } from './use-payment-methods.hooks';
 
 export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
   const { modal /* switchForm */ } = params;
@@ -24,10 +23,6 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
     minute: 0,
     seconds: 0,
   });
-  // const {
-  //   paymentMethods,
-  //   loading: loadingPaymentMethods,
-  // } = usePaymentMethods();
   const company = administrator?.company as Company;
   const country = company.country as Country;
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
@@ -78,11 +73,6 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
       helpers.setSubmitting(false);
       return;
     }
-    // if (amount > 5e5) {
-    //   switchForm('NGMoreInfo');
-    //   helpers.setSubmitting(false);
-    //   return;
-    // }
     if (amount > 5e5 && values.channel === 'Card') {
       helpers.setErrors({
         amount:
@@ -104,7 +94,7 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
         });
     }
 
-    if (values.channel === 'Bank Transfer') {
+    if (values.channel === 'Bank Transfer-') {
       $api.payment
         .generateDynamicVirtualAccount({
           amount,
@@ -131,13 +121,10 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
       return;
     }
 
-    switch (country.name) {
-      case 'Nigeria': {
-        handleNigeriaSubmit(values, helpers);
-        break;
-      }
-      default:
-        console.log(`unsupported country - ${country.name}`);
+    if (country.name === 'Nigeria') {
+      handleNigeriaSubmit(values, helpers);
+    } else {
+      console.log(`unsupported country - ${country.name}`);
     }
   };
 
@@ -147,9 +134,6 @@ export const useWalletBillingFormLogic = (params: IWalletBillingForm) => {
     currency,
     // loadingPaymentMethods,
     dva,
-    copyDVA() {
-      navigator.clipboard.writeText(dva?.accountNumber);
-    },
     back() {
       setDVA(null);
     },
@@ -208,7 +192,7 @@ export const useNGMoreInfoFormContext = (params: IWalletBillingForm) => {
       .updateCompanyById(company.id, values)
       .then(() => {
         return $api.companyWallet.createTransactionAccount({
-          provider: 'paystack',
+          provider: 'korapay',
         });
       })
       .then(() => {

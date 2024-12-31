@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import NiceModal from '@ebay/nice-modal-react';
 import { ModalLayout } from './ModalLayout.component';
-// import { Radio } from 'antd';
 import { Formik, FormikProps } from 'formik';
 import { InputV2 } from '../Input/Input.component';
 import { Button } from '../Button/Button.component';
@@ -17,39 +16,49 @@ import {
   useNGMoreInfoFormContext,
   useWalletBillingFormLogic,
 } from 'src/helpers/hooks/use-wallet-billing-form-logic.hook';
-// import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { SelectInput } from '../Input/seletct-input';
 import { Radio } from 'antd';
 import { BackSVG, CopySVG } from '../svg';
+import { CompanyWallet } from 'src/api/types';
 
-export const WalletBillingModal = NiceModal.create(() => {
-  const [form, switchForm] = useState<'NGMoreInfo'>();
-  return (
-    <ModalLayout title="Fund Payroll">
-      {(modal) => {
-        let Component = WalletBillingForm;
+type WalletBillingModalProps = {
+  wallet?: CompanyWallet;
+};
+export const WalletBillingModal = NiceModal.create(
+  (props: WalletBillingModalProps) => {
+    const [form, setForm] = useState<'NGMoreInfo'>();
+    return (
+      <ModalLayout title="Fund Payroll">
+        {(modal) => {
+          let Component = WalletBillingForm;
 
-        switch (form) {
-          case 'NGMoreInfo':
+          if (form === 'NGMoreInfo') {
             Component = NGMoreInfoForm;
-        }
+          }
 
-        return <Component modal={modal} switchForm={switchForm} />;
-      }}
-    </ModalLayout>
-  );
-});
+          return (
+            <Component
+              modal={modal}
+              wallet={props.wallet}
+              switchForm={setForm}
+            />
+          );
+        }}
+      </ModalLayout>
+    );
+  },
+);
 
-const WalletBillingForm = (props: IWalletBillingForm) => {
+const WalletBillingForm = (walletBillingFormProps: IWalletBillingForm) => {
+  const { wallet } = walletBillingFormProps;
   const {
     handleWalletBillingFormSubmit,
     currency,
     dva,
-    copyDVA,
     expiry,
     back,
-  } = useWalletBillingFormLogic(props);
+  } = useWalletBillingFormLogic(walletBillingFormProps);
 
   return (
     <div className="add-employee-modal">
@@ -64,7 +73,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
       <Formik
         initialValues={{
           amount: '',
-          channel: 'Card',
+          channel: 'Bank Transfer',
         }}
         onSubmit={handleWalletBillingFormSubmit}
         validationSchema={fundWalletValidationSchema}
@@ -102,8 +111,8 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                         gap: '56px',
                       }}
                     >
-                      <Radio value="Card">Card</Radio>
                       <Radio value="Bank Transfer">Bank Transfer</Radio>
+                      <Radio value="Card">Card</Radio>
                     </div>
                   </Radio.Group>
                 </div>
@@ -138,7 +147,7 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                     gap: '20px',
                   }}
                 >
-                  <div>
+                  <div hidden={values.channel === 'Bank Transfer'}>
                     <InputV2
                       type="number"
                       label="Amount"
@@ -152,69 +161,77 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                       error={touched.amount && errors.amount}
                     />
                   </div>
-                  {!!dva && (
-                    <>
-                      <div>
-                        <p style={{ color: '#6D7A98', fontSize: '14px' }}>
-                          Transfer this exact amount into this account number
-                          via your Internet/Mobile Banking platform.
-                        </p>
-                      </div>
 
-                      <div
-                        style={{
-                          padding: '20px',
-                          borderRadius: '4px',
-                          background: '#F7F9FB',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '8px',
-                            color: '#162A56',
-                          }}
-                        >
-                          <p
-                            style={{
-                              color: 'rgba(22,42,86,.6)',
-                              fontWeight: 'bold',
-                            }}
-                          >
-                            {dva?.accountName}
+                  {(!!dva || !!wallet?.account) &&
+                    values.channel === 'Bank Transfer' && (
+                      <>
+                        <div hidden>
+                          <p style={{ color: '#6D7A98', fontSize: '14px' }}>
+                            Transfer this exact amount into this account number
+                            via your Internet/Mobile Banking platform.
                           </p>
-                          <p style={{ fontSize: '24px' }}>
-                            {Util.formatAccountNumber(dva?.accountNumber)}
-                          </p>
-                          <p>{dva?.bankName}</p>
                         </div>
 
-                        <button
+                        <div
                           style={{
-                            display: 'flex',
-                            gap: '4px',
-                            background: '#ECF2FD',
-                            border: 'none',
-                            alignItems: 'center',
-                            lineHeight: '16px',
-                            fontSize: '14px',
-                            cursor: 'pointer',
-                            padding: '4px 8px',
+                            padding: '20px',
                             borderRadius: '4px',
-                            color: '#0F42A4',
+                            background: '#F7F9FB',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                           }}
-                          onClick={copyDVA}
-                          type="button"
                         >
-                          <CopySVG /> <span>Copy</span>
-                        </button>
-                      </div>
-                    </>
-                  )}
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: '8px',
+                              color: '#162A56',
+                            }}
+                          >
+                            <p
+                              style={{
+                                color: 'rgba(22,42,86,.6)',
+                                fontWeight: 'bold',
+                              }}
+                            >
+                              {dva?.accountName || wallet?.account?.accountName}
+                            </p>
+                            <p style={{ fontSize: '24px' }}>
+                              {Util.formatAccountNumber(
+                                dva?.accountNumber ||
+                                  wallet?.account?.accountNumber,
+                              )}
+                            </p>
+                            <p>{dva?.bankName || wallet?.account?.bankName}</p>
+                          </div>
+
+                          <button
+                            style={{
+                              display: 'flex',
+                              gap: '4px',
+                              background: '#ECF2FD',
+                              border: 'none',
+                              alignItems: 'center',
+                              lineHeight: '16px',
+                              fontSize: '14px',
+                              cursor: 'pointer',
+                              padding: '4px 8px',
+                              borderRadius: '4px',
+                              color: '#0F42A4',
+                            }}
+                            onClick={Util.copyToClipboard(
+                              dva?.accountNumber ||
+                                wallet?.account?.accountNumber,
+                            )}
+                            type="button"
+                          >
+                            <CopySVG /> <span>Copy</span>
+                          </button>
+                        </div>
+                      </>
+                    )}
                 </div>
               </div>
 
@@ -230,7 +247,14 @@ const WalletBillingForm = (props: IWalletBillingForm) => {
                 </div>
               )}
 
-              <div className="form__submit-button">
+              {!wallet?.account && values.channel === 'Bank Transfer' && (
+                <NGMoreInfoForm {...walletBillingFormProps} />
+              )}
+
+              <div
+                className="form__submit-button"
+                hidden={values.channel === 'Bank Transfer'}
+              >
                 <Button
                   type="submit"
                   label={dva ? 'I have paid' : 'Proceed'}
@@ -290,9 +314,9 @@ const NGMoreInfoForm = (props: IWalletBillingForm) => {
             autoComplete="off"
           >
             <p className="employee-onboard__subtext">
-              A transaction account is required for amounts greater than
-              ₦500,000 and the information below is required for account
-              creation. Please ensure the details are correct before proceeding.
+              To create a transaction account for bank transfers, the
+              information below is required. Please ensure the details are
+              correct before proceeding.
             </p>
 
             <div className="single-employee-upload-form__section">
