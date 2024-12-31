@@ -203,6 +203,7 @@ export const useNGMoreInfoFormContext = (params: IWalletBillingForm) => {
           }),
         );
 
+        toast.success('Transaction account created');
         params.modal.resolve(true);
         setTimeout(params.modal.hide, 100);
       })
