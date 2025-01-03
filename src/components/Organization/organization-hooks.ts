@@ -98,6 +98,7 @@ export const useRemittanceTabContext = (
 export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
   const { organization, loading, canEdit } = props.organizationDetails;
   const [breakdown, setBreakdown] = useState<SalaryBreakdown[]>([]);
+  const selectedCountry = useAppSelector((state) => state.selectedCountry);
   const [saving, setSaving] = useState(false);
   const [edit, setEdit] = useState(false);
   const colors = ['#0B2253', '#6D7A98', '#42D0C8'];
@@ -116,9 +117,10 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
         .reverse()
         .some((b) => {
           return (
-            organization?.salaryBreakdown?.findIndex(
-              (_b) => b.name === _b.name && b.value === _b.value,
-            ) === -1
+            organization?.salaryBreakdownKeyedByCountry?.[
+              selectedCountry?.iso2 || ''
+            ]?.findIndex((_b) => b.name === _b.name && b.value === _b.value) ===
+            -1
           );
         }));
 
@@ -159,7 +161,14 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
     try {
       await $api.company.updateCompanyById(
         props.organizationDetails.organization?.id || '',
-        { salaryBreakdown: _breakdown.map((b) => pick(b, ['name', 'value'])) },
+        {
+          salaryBreakdownKeyedByCountry: {
+            ...(organization?.salaryBreakdownKeyedByCountry || {}),
+            [selectedCountry?.iso2 || '']: _breakdown.map((b) =>
+              pick(b, ['name', 'value']),
+            ),
+          },
+        },
       );
       toast.success('Salary Breakdown updated successfully.');
     } catch (error) {
@@ -172,8 +181,35 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
   };
 
   useEffect(() => {
-    setBreakdown(organization?.salaryBreakdown || []);
-  }, [organization?.salaryBreakdown]);
+    const breakdown = organization?.salaryBreakdownKeyedByCountry?.[
+      selectedCountry?.iso2 || ''
+    ]?.length
+      ? organization?.salaryBreakdownKeyedByCountry?.[
+          selectedCountry?.iso2 || ''
+        ]
+      : [
+          {
+            name: 'Basic Allowance',
+            value: 100,
+            deleted: false,
+          },
+          {
+            name: 'Transport Allowance',
+            value: 0,
+            deleted: false,
+          },
+          {
+            name: 'Housing Allowance',
+            value: 0,
+            deleted: false,
+          },
+        ];
+    setBreakdown(breakdown);
+  }, [
+    selectedCountry,
+    organization?.salaryBreakdown,
+    organization?.salaryBreakdownKeyedByCountry,
+  ]);
 
   return {
     loading,

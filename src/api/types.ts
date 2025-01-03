@@ -202,6 +202,7 @@ export type Company = Document & {
   bvnName?: string;
   rcNumber: string;
   statutoryDeductions?: Record<string, StatutoryDeduction>;
+  salaryBreakdownKeyedByCountry?: Record<string, SalaryBreakdown[]>;
 };
 
 export enum PermissionGroupEnum {
@@ -480,7 +481,7 @@ export type PayrollEmployee = Document & {
   employee: string | Employee;
   payroll: string | Payroll;
   netSalary: number;
-  transfer: string | unknown;
+  transfer?: string;
   payoutStatus?: PayrollEmployeePayoutStatus;
   deductions?: Addon[];
   bonuses?: Addon[];
@@ -597,7 +598,8 @@ export type EmployeeTaxDetail = Document & {
 export type EmployeeTaxDetailPayload = Pick<
   EmployeeTaxDetail,
   'employee' | 'taxId' | 'taxState'
-> & {};
+> &
+  Record<string, unknown>;
 
 export type AddEmployeeToNigerianTaxPayload = {
   employeeDetails: EmployeeTaxDetailPayload[];
