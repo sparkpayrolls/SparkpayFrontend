@@ -66,6 +66,7 @@ export class CompanyModule extends HttpRepository {
         | 'accountNumber'
         | 'statutoryDeductions'
         | 'salaryBreakdownKeyedByCountry'
+        | 'statutoryDeductionsKeyedByCountry'
       > & {
         logoFile: FileUploadPayload;
       }

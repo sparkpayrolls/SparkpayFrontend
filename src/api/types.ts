@@ -203,6 +203,10 @@ export type Company = Document & {
   rcNumber: string;
   statutoryDeductions?: Record<string, StatutoryDeduction>;
   salaryBreakdownKeyedByCountry?: Record<string, SalaryBreakdown[]>;
+  statutoryDeductionsKeyedByCountry?: Record<
+    string,
+    Record<string, StatutoryDeduction>
+  >;
 };
 
 export enum PermissionGroupEnum {

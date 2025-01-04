@@ -3,21 +3,29 @@ import { omit } from 'lodash';
 import { $api } from 'src/api';
 import { HttpError } from 'src/api/repo/http.error';
 import { RemittanceTabProps } from './types';
-import { PaginateParams, SalaryBreakdown } from 'src/api/types';
+import { Company, PaginateParams, SalaryBreakdown } from 'src/api/types';
 import cloneDeep from 'lodash.clonedeep';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Util } from 'src/helpers/util';
-import { useAppSelector } from 'src/redux/hooks';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import _isEmpty from 'lodash.isempty';
 import pick from 'lodash.pick';
+import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 export const useRemittanceTabContext = (
   props: RemittanceTabProps,
   remittance = 'tax',
 ) => {
+  const { selectedCountry, administrator } = useAppSelector((state) =>
+    pick(state, ['selectedCountry', 'administrator']),
+  );
+  const dispatch = useAppDispatch();
+  const iso2 = selectedCountry?.iso2 || '';
   const settings: Record<string, string> = props.organizationDetails
-    .organization?.statutoryDeductions?.[remittance] as Record<string, string>;
+    .organization?.statutoryDeductionsKeyedByCountry?.[iso2]?.[
+    remittance
+  ] as Record<string, string>;
   let initialValues: Record<string, string> = {
     status: settings?.enabled ? 'Enabled' : 'Disabled',
   };
@@ -62,23 +70,38 @@ export const useRemittanceTabContext = (
       if (!props.organizationDetails.canEdit) {
         return;
       }
+      const company = administrator?.company as Company;
       const update = {
-        statutoryDeductions: {
-          ...(props.organizationDetails.organization?.statutoryDeductions ||
-            {}),
-          [remittance]: {
-            ...omit(values, ['status']),
-            enabled: ['Enabled', 'Remit'].includes(values.status),
-            addToCharge: values.status === 'Remit',
+        statutoryDeductionsKeyedByCountry: {
+          ...(company?.statutoryDeductionsKeyedByCountry || {}),
+          [iso2]: {
+            ...(company?.statutoryDeductionsKeyedByCountry?.[iso2] || {}),
+            [remittance]: {
+              ...omit(values, ['status']),
+              enabled: ['Enabled', 'Remit'].includes(values.status),
+              addToCharge: values.status === 'Remit',
+            },
           },
         },
       };
 
-      await $api.company.updateCompanyById(
+      const res = await $api.company.updateCompanyById(
         props.organizationDetails.organization?.id || '',
         update,
       );
       toast.success('Remittance details updated successfully.');
+      if (administrator) {
+        dispatch(
+          commitAministrator({
+            ...administrator,
+            company: {
+              ...(administrator.company as typeof company),
+              statutoryDeductionsKeyedByCountry:
+                res.statutoryDeductionsKeyedByCountry,
+            },
+          }),
+        );
+      }
     } catch (error) {
       const httpError = error as HttpError;
       if (httpError.status === 422) {
