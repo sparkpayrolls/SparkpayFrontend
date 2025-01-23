@@ -30,6 +30,7 @@ import {
   OrganisationDashboardData,
   PaginationMeta,
   PayoutMethod,
+  PayrollApprovalAction,
   PayrollStatus,
   PermissionGroup,
   PermissionLevel,
@@ -141,7 +142,7 @@ export type ISelectInput = {
   label?: string;
   options: ISelectInputOptionItem[] | string[];
   error?: string | false;
-  displayValue?: string;
+  displayValue?: string | ((option: ISelectInputOptionItem) => string);
   actualValue?: string;
   name?: string;
   value?: string;
@@ -153,6 +154,7 @@ export type ISelectInput = {
   applyTableStyle?: boolean;
   customIcon?: ReactNode;
   selectorStyle?: CSSProperties;
+  onSearch?(query: string): unknown;
 };
 
 /** AddEmployee */
@@ -307,6 +309,7 @@ export type IIdentity = {
   type?: 'reverse';
   initial?: string;
   className?: string;
+  status?: IStatusChip['status'];
 };
 
 /** Statuschip */
@@ -320,7 +323,8 @@ export type IStatusChip = {
     | GroupStatus
     | SalaryAddOnStatus
     | 'Enabled'
-    | 'Disabled';
+    | 'Disabled'
+    | PayrollApprovalAction;
 };
 
 /** TransactionMethod */

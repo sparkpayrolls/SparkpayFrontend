@@ -310,7 +310,7 @@ export class Util {
     map.set('/employees', [['Employee', 'read']]);
     map.set('/payroll', [['Payroll', 'read']]);
     map.set('/transactions', [['Transaction', 'read']]);
-    map.set('/administrators', [['Admin', 'read']]);
+    map.set('/administrators', [['Administrator', 'read']]);
     map.set('/remittances', [['Remittance', 'read']]);
     map.set('/audit', [['AuditTrail', 'read']]);
 
@@ -575,7 +575,11 @@ export class Util {
 
   static inflate(payload: string) {
     return JSON.parse(
-      pako.inflate(Buffer.from(payload, 'base64'), { to: 'string' }).toString(),
+      pako
+        .inflate(new Uint8Array(Buffer.from(payload, 'base64')), {
+          to: 'string',
+        })
+        .toString(),
     );
   }
 

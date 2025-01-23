@@ -47,7 +47,10 @@ export class Admin extends HttpRepository {
     return data;
   }
 
-  async updateAdministrator(id: string, update: Pick<Administrator, 'role'>) {
+  async updateAdministrator(
+    id: string,
+    update: Partial<Pick<Administrator, 'role' | 'payrollApproverIndex'>>,
+  ) {
     const { data } = await this.put<Administrator>(
       `/administrators/${id}`,
       update,

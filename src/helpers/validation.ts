@@ -259,6 +259,11 @@ export const CreateAdministratorValidation = Yup.object().shape({
   name: Yup.string().required('Name is required'),
 });
 
+export const CreatePayrollApproverValidation = Yup.object().shape({
+  id: Yup.string().required('Select an administrator'),
+  payrollApproverIndex: Yup.string().required('Select an index'),
+});
+
 export const CreateRoleValidation = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   permissions: Yup.array()

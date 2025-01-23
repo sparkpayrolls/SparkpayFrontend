@@ -16,9 +16,11 @@ import { NotFound } from '@/components/Misc/not-found.component';
 import {
   Employee,
   Payroll,
+  PayrollApprovalAction,
   PayrollEmployee,
   PayrollEmployeePayoutStatus,
   PayrollStatus,
+  PayrollStatusEnum,
   Response,
 } from 'src/api/types';
 import { HttpError } from 'src/api/repo/http.error';
@@ -29,6 +31,8 @@ import { useWalletBalance } from 'src/helpers/hooks/use-wallet-balance.hook';
 import { SearchForm } from '@/components/Form/search.form';
 import { KebabMenu } from '@/components/KebabMenu/KebabMenu.component';
 import { toast } from 'react-toastify';
+import { Identity } from '@/components/Identity/identity.component';
+import { Button } from '@/components/Button/Button.component';
 
 const PayDetails: NextPage = () => {
   const router = useRouter();
@@ -209,8 +213,82 @@ const PayDetails: NextPage = () => {
     }
   }, [payroll, socket]);
 
+  const canApprove =
+    payroll?.status === PayrollStatusEnum.PendingApproval &&
+    payroll?.approvers?.some(
+      (app) => app.adminId === administrator?.id && !app.action,
+    );
+
+  const approveOrRejectPayroll = (action: PayrollApprovalAction) => {
+    return () => {
+      setApiCalls((c) => c + 1);
+      $api.payroll
+        .approveOrReject(payroll?.id as string, action)
+        .then((res) => {
+          setPayroll({ ...payroll, ...res.data });
+          toast.success(`Payroll ${action} action successful.`);
+        })
+        .catch((error) => {
+          toast.error(`Payroll ${action} action failed - ${error.message}`);
+        })
+        .finally(() => {
+          setApiCalls((c) => c - 1);
+        });
+    };
+  };
+
   return (
-    <DashboardLayoutV2 title="Payroll details" href="/payroll">
+    <DashboardLayoutV2
+      title="Payroll details"
+      href="/payroll"
+      rightTitleContent={
+        canApprove && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              width: '100%',
+              alignItems: 'center',
+              gap: '1rem',
+            }}
+          >
+            <div
+              style={{
+                minWidth: '157px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+              }}
+            >
+              <Button
+                showSpinner={loading}
+                onClick={approveOrRejectPayroll(PayrollApprovalAction.Approve)}
+                primary
+              >
+                Approve
+              </Button>
+            </div>
+
+            <div
+              style={{
+                minWidth: '157px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+              }}
+            >
+              <Button
+                showSpinner={loading}
+                onClick={approveOrRejectPayroll(PayrollApprovalAction.Reject)}
+                danger
+              >
+                Reject
+              </Button>
+            </div>
+          </div>
+        )
+      }
+    >
       {payrollNotFound && <NotFound message={`Payroll not found`} />}
       {!payrollNotFound && (
         <>
@@ -398,6 +476,28 @@ const PayDetails: NextPage = () => {
                       )
                     }
                   />
+                </div>
+                <div
+                  style={{
+                    marginTop: '1.25rem',
+                    display: 'flex',
+                    gap: '2rem',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {payroll?.approvers?.map((approver) => {
+                    return (
+                      <Identity
+                        key={approver.userId}
+                        image={approver.avatar}
+                        name={`${approver.firstname} ${approver.lastname} ${
+                          approver.adminId === administrator?.id ? '(you)' : ''
+                        }`}
+                        initial={approver.firstname.slice(0, 1)}
+                        status={approver.action ?? 'pending'}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </div>

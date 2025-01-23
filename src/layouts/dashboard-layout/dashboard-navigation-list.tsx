@@ -88,7 +88,7 @@ export const navListItems = (
     match: '/administrators',
     router,
     title: 'Admin\xa0Management',
-    permissions: [['Admin', 'read']],
+    permissions: [['Administrator', 'read']],
   },
   // {
   //   Icon: RemittancesSvg,

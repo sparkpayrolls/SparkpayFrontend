@@ -2,7 +2,7 @@ import { Container } from '@/components/Shared/container.component';
 import { BackSVG } from '@/components/svg';
 import Head from 'next/head';
 import Link from 'next/link';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { Title, useUrl } from '../default-layout/DefaultLayout';
 
 const DashboardHeader = (props: { title: string }) => {
@@ -54,6 +54,7 @@ const DashboardLayoutV2 = (
     href?: string;
     action?(): any;
     loading?: boolean;
+    rightTitleContent?: ReactNode;
   }>,
 ) => {
   if (typeof window === 'undefined') {
@@ -66,22 +67,35 @@ const DashboardLayoutV2 = (
 
       <Container loading={props.loading} className="dashboard-layout-v2">
         <div className="dashboard-layout-v2__body">
-          <Container>
-            {props.href && !props.action && (
-              <Link href={props.href}>
-                <a className="dashboard-layout-v2__back-button">
+          <Container
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+              maxWidth: '1368px',
+              marginInline: 'auto',
+            }}
+          >
+            <div>
+              {props.href && !props.action && (
+                <Link href={props.href}>
+                  <a className="dashboard-layout-v2__back-button">
+                    <BackSVG />
+                  </a>
+                </Link>
+              )}
+              {props.action && (
+                <button
+                  onClick={props.action}
+                  className="dashboard-layout-v2__back-button"
+                >
                   <BackSVG />
-                </a>
-              </Link>
-            )}
-            {props.action && (
-              <button
-                onClick={props.action}
-                className="dashboard-layout-v2__back-button"
-              >
-                <BackSVG />
-              </button>
-            )}
+                </button>
+              )}
+            </div>
+
+            <div style={{ width: '100%' }}>{props.rightTitleContent}</div>
           </Container>
           <div className="dashboard-layout-v2__content">{props.children}</div>
         </div>

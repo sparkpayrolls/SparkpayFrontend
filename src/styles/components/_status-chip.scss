@@ -34,6 +34,7 @@
   &--successful,
   &--active,
   &--CREATE,
+  &--approve,
   &--Accepted,
   &--Enabled {
     color: $green-600;
@@ -50,6 +51,8 @@
   &--failed,
   &--deactivated,
   &--DELETE,
+  &--reject,
+  &--rejected,
   &--Rejected,
   &--Disabled {
     color: $red-600;
@@ -64,6 +67,7 @@
   }
 
   &--pending,
+  &--pending-approval,
   &--EDIT,
   &--Pending {
     color: $orange-600;

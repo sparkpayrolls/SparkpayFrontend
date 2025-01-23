@@ -9,6 +9,7 @@ import {
   Employee,
   ICreatePayrollPayload,
   Payroll,
+  PayrollApprovalAction,
   PayrollEmployee,
   PayrollSummary,
   PayrollUpdateResponse,
@@ -206,5 +207,9 @@ export class PayrollModule extends HttpRepository {
     >('/payrolls/remittance-employees', {
       params,
     });
+  }
+
+  async approveOrReject(id: string, action: PayrollApprovalAction) {
+    return this.put<Payroll>(`/payrolls/${id}/approve-or-reject`, { action });
   }
 }
