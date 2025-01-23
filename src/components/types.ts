@@ -38,6 +38,7 @@ import {
   WalletTransactionStatus,
 } from 'src/api/types';
 import { IKebabItem } from './KebabMenu/KebabMenu.component';
+import { TableV2 } from './Table/Table.component';
 
 export interface ITable {
   children: () => ReactElement;
@@ -376,8 +377,9 @@ export type ITableLayout = {
   menuItems?: IKebabItem[];
   searchPlaceholder?: string;
   searchDelay?: number;
-  fixedHeader?: boolean;
+  fixedHeader?: boolean | ReturnType<typeof TableV2>;
   filterButtonClassName?: string;
+  fixedTitle?: boolean;
 };
 
 export type ICheckboxTableColumn = {
