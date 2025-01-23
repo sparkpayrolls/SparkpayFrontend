@@ -57,35 +57,6 @@ const PayDetails: NextPage = () => {
   const hasEmployees = !!employees?.data?.length;
   const payrollId = router.query.id as string;
 
-  employees?.data?.forEach((employee) => {
-    totals['Total Salary Amount'] += employee.salary;
-    totals['Total Net Salary'] += employee.netSalary;
-    if (employee.deductions && employee.deductions.length) {
-      totals['Total Deductions'] = totals['Total Deductions'] || 0;
-      totals['Total Deductions'] += Util.sum(
-        employee.deductions.map((d) => d.amount),
-      );
-      headerRow.add('deductions');
-    }
-    if (employee.bonuses && employee.bonuses.length) {
-      totals['Total Bonuses'] = totals['Total Bonuses'] || 0;
-      totals['Total Bonuses'] += Util.sum(
-        employee.bonuses.map((d) => d.amount),
-      );
-      headerRow.add('bonuses');
-    }
-    if (employee.remittances && employee.remittances.length) {
-      employee.remittances.forEach((remittance) => {
-        const name = `Total ${remittance.name}`;
-        totals[name] = totals[name] || 0;
-        totals[name] += remittance.amount;
-        if (!remittanceRows.includes(`${remittance.name} (${currency})`)) {
-          remittanceRows.push(`${remittance.name} (${currency})`);
-        }
-      });
-    }
-  });
-
   const getPayroll = useCallback(async () => {
     try {
       setApiCalls((c) => c + 1);
@@ -236,6 +207,35 @@ const PayDetails: NextPage = () => {
         });
     };
   };
+
+  employees?.data?.forEach((employee) => {
+    totals['Total Salary Amount'] += employee.salary;
+    totals['Total Net Salary'] += employee.netSalary;
+    if (employee.deductions && employee.deductions.length) {
+      totals['Total Deductions'] = totals['Total Deductions'] || 0;
+      totals['Total Deductions'] += Util.sum(
+        employee.deductions.map((d) => d.amount),
+      );
+      headerRow.add('deductions');
+    }
+    if (employee.bonuses && employee.bonuses.length) {
+      totals['Total Bonuses'] = totals['Total Bonuses'] || 0;
+      totals['Total Bonuses'] += Util.sum(
+        employee.bonuses.map((d) => d.amount),
+      );
+      headerRow.add('bonuses');
+    }
+    if (employee.remittances && employee.remittances.length) {
+      employee.remittances.forEach((remittance) => {
+        const name = `Total ${remittance.name}`;
+        totals[name] = totals[name] || 0;
+        totals[name] += remittance.amount;
+        if (!remittanceRows.includes(`${remittance.name} (${currency})`)) {
+          remittanceRows.push(`${remittance.name} (${currency})`);
+        }
+      });
+    }
+  });
 
   return (
     <DashboardLayoutV2
