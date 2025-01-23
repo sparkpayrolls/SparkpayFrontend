@@ -24,6 +24,7 @@ import {
 import { Dropdown, Menu } from 'antd';
 import Link from 'next/link';
 import { useSelectedTab } from 'src/helpers/hooks/use-selected-tab';
+import CountryDropdown from '@/components/Organization/organization-country-dropdown';
 
 const EmployeePage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
@@ -113,40 +114,51 @@ const EmployeePage: NextPage = () => {
     <DashboardLayout pageTitle="Employees">
       <div className="employee-section">
         <div className=" employee-section__details">
-          <div className="employee-section__head">
-            <h1 className="employee-section__title">Employee Settings</h1>
-            <div className="employee-section__employee-button">
-              <Button
-                label="Create Employee Group"
-                onClick={onCreateGroup}
-                className="employee-section__employee-button1"
-                type="submit"
-              />
-              <Button
-                element="a"
-                href="/employees/employee-list"
-                label={
-                  <>
-                    <PlusSvg />
-                    &nbsp;{'Add\xa0Employee'}
-                  </>
-                }
-                // onClick={onAddEmployee}
-                className="employee-section__submit-btn"
-                primary
-                type="submit"
-              />
+          <div>
+            <div className="employee-section__head">
+              <h1 className="employee-section__title">Employee Settings</h1>
+
+              <div className="employee-section__country-dropdown">
+                <CountryDropdown />
+              </div>
+
+              <div className="employee-section__employee-button">
+                <Button
+                  label="Create Employee Group"
+                  onClick={onCreateGroup}
+                  className="employee-section__employee-button1"
+                  type="submit"
+                />
+                <Button
+                  element="a"
+                  href="/employees/employee-list"
+                  label={
+                    <>
+                      <PlusSvg />
+                      &nbsp;{'Add\xa0Employee'}
+                    </>
+                  }
+                  // onClick={onAddEmployee}
+                  className="employee-section__submit-btn"
+                  primary
+                  type="submit"
+                />
+              </div>
+
+              <Dropdown
+                overlay={menu}
+                trigger={['click']}
+                overlayClassName="employee-dropdown"
+              >
+                <button className="employee-section__employee-menu">
+                  <MoreMenuHorizontalSVG />
+                </button>
+              </Dropdown>
             </div>
 
-            <Dropdown
-              overlay={menu}
-              trigger={['click']}
-              overlayClassName="employee-dropdown"
-            >
-              <button className="employee-section__employee-menu">
-                <MoreMenuHorizontalSVG />
-              </button>
-            </Dropdown>
+            <div className="employee-section__country-dropdown-mobile">
+              <CountryDropdown />
+            </div>
           </div>
 
           <Tab
