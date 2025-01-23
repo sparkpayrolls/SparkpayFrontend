@@ -243,7 +243,34 @@ export const useEmployeeListContext = () => {
               [+columnIndex === 5 ? 'bankId' : 'accountNumber']: value,
             };
             const { accountNumber, bankId } = payoutMeta[rowIndex];
+
             if (accountNumber && bankId) {
+              const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(
+                bankId as string,
+              );
+              if (!isValidObjectId) {
+                $api.payout
+                  .getSupportedBanks(country?.id, { limit: 1, search: bankId })
+                  .then(({ data }) => {
+                    if (data.length) {
+                      tableRef.current?.setValueFromCoords(
+                        5,
+                        +rowIndex,
+                        data[0].id,
+                        true,
+                      );
+                    }
+                  })
+                  .catch(() => {
+                    tableRef.current?.setValueFromCoords(
+                      5,
+                      +rowIndex,
+                      '',
+                      true,
+                    );
+                  });
+                return;
+              }
               validateAccountDetails(bankId as string, accountNumber as string)
                 .then((res) => {
                   if (res) {
@@ -278,7 +305,14 @@ export const useEmployeeListContext = () => {
         return jspreadsheet.destroy(ref);
       };
     }
-  }, [loading, banks, getColumnIndex, setCellError, validateAccountDetails]);
+  }, [
+    loading,
+    banks,
+    getColumnIndex,
+    setCellError,
+    validateAccountDetails,
+    country,
+  ]);
 
   useEffect(() => {
     const id = toast.info(
