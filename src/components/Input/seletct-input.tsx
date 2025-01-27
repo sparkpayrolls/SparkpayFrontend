@@ -49,9 +49,12 @@ export const MultiSelectInput = (props: IMultiSelect) => {
 
 const Option = (props: PropsWithChildren<ISelectOption>) => {
   const { children, isSelected, onClick } = props;
-  const className = classNames('select-input__option', {
-    'select-input__option--selected': isSelected,
-  });
+  const className = classNames(
+    'select-input__option text-sm font-normal leading-4',
+    {
+      'select-input__option--selected': isSelected,
+    },
+  );
 
   return (
     <span className={className} onClick={onClick}>
@@ -197,9 +200,9 @@ export const SelectInput = (props: ISelectInput) => {
           {(selectedValue &&
             (typeof selectedValue === 'string'
               ? selectedValue
-              : typeof props.displayValue === 'string'
-              ? (selectedValue[props.displayValue || 'name'] as string)
-              : props.displayValue?.(selectedValue))) ||
+              : typeof props.displayValue === 'function'
+              ? props.displayValue?.(selectedValue)
+              : (selectedValue[props.displayValue || 'name'] as string))) ||
             props.placeholder ||
             'Select'}
         </span>
@@ -260,9 +263,9 @@ export const SelectInput = (props: ISelectInput) => {
             const name =
               typeof _value === 'string'
                 ? _value
-                : typeof props.displayValue === 'string'
-                ? (_value[props.displayValue || 'name'] as string)
-                : (props.displayValue?.(_value) as string);
+                : typeof props.displayValue === 'function'
+                ? (props.displayValue?.(_value) as string)
+                : (_value[props.displayValue || 'name'] as string);
 
             if (
               search.length &&
