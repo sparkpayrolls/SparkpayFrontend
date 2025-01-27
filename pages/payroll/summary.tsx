@@ -12,7 +12,6 @@ import { savePayrollValidationSchema } from 'src/helpers/validation';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { useCreatePayrollFormContext } from 'src/helpers/hooks/use-payroll-create-form-context';
 import { usePayrollSummaryPageLogic } from 'src/helpers/hooks/use-payroll-summary-page-logic.hook';
-import pick from 'lodash.pick';
 
 const PayrollSummaryPage: NextPage = () => {
   const {
@@ -24,11 +23,12 @@ const PayrollSummaryPage: NextPage = () => {
     currency,
     payroll,
     params,
+    initialValues,
     getCreatePayrollFormHandler,
     getSaveClickHandler,
     setParams,
   } = usePayrollSummaryPageLogic();
-  const getFormContext = useCreatePayrollFormContext();
+  const getFormContext = useCreatePayrollFormContext<typeof initialValues>();
   const thisMoment = moment();
 
   return (
@@ -123,11 +123,7 @@ const PayrollSummaryPage: NextPage = () => {
           </div>
           <Formik
             key={JSON.stringify(params)}
-            initialValues={{
-              ...pick(params, ['year', 'proRateMonth']),
-              employeeIds: params.checked,
-              payDate: '',
-            }}
+            initialValues={initialValues}
             validationSchema={savePayrollValidationSchema}
             onSubmit={getCreatePayrollFormHandler()}
           >
