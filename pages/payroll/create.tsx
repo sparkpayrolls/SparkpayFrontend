@@ -8,12 +8,14 @@ import { TableLayout } from '@/components/Table/table-layout.component';
 import { TableV2 } from '@/components/Table/Table.component';
 import { WalletBalanceChip } from '@/components/WalletBalanceChip/wallet-balance-chip.component';
 import { NextPage } from 'next';
+import { useRef } from 'react';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { useCreatePayrollPageLogic } from 'src/helpers/hooks/use-create-payroll-page-logic.hook';
 import { Util } from 'src/helpers/util';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 
 const CreatePayroll: NextPage = () => {
+  const ref = useRef<HTMLDivElement>(null);
   const {
     currency,
     payroll,
@@ -35,90 +37,101 @@ const CreatePayroll: NextPage = () => {
   } = useCreatePayrollPageLogic();
 
   const table = (
-    <TableV2 className="payroll-create-table" loading={loadingPayroll}>
-      <thead>
-        <tr>
-          <CheckboxTableColumn
-            checked={allChecked}
-            onChange={handleCheckAll}
-            element="th"
-          >
-            Name
-          </CheckboxTableColumn>
-          <th>Salary</th>
-          <th>Net Salary</th>
-          <th>Bonus</th>
-          <th>Deduction</th>
-          <th>Tax</th>
-          <th>Employer Pension</th>
-          <th>Employee Pension</th>
-          <th>Voluntary Pension</th>
-          <th>NHF</th>
-        </tr>
-      </thead>
-      <tbody>
-        {payroll?.employees
-          .filter(({ firstname, lastname }) => {
-            const name = `${firstname} ${lastname}`;
+    <div
+      className="min-h-[calc(100% + 128px)]"
+      style={{
+        minHeight: ref.current
+          ? `${ref.current.offsetHeight + 148}px`
+          : 'calc(100% + 128px)',
+      }}
+    >
+      <div ref={ref}>
+        <TableV2 className="payroll-create-table" loading={loadingPayroll}>
+          <thead>
+            <tr>
+              <CheckboxTableColumn
+                checked={allChecked}
+                onChange={handleCheckAll}
+                element="th"
+              >
+                Name
+              </CheckboxTableColumn>
+              <th>Salary</th>
+              <th>Net Salary</th>
+              <th>Bonus</th>
+              <th>Deduction</th>
+              <th>Tax</th>
+              <th>Employer Pension</th>
+              <th>Employee Pension</th>
+              <th>Voluntary Pension</th>
+              <th>NHF</th>
+            </tr>
+          </thead>
+          <tbody>
+            {payroll?.employees
+              .filter(({ firstname, lastname }) => {
+                const name = `${firstname} ${lastname}`;
 
-            return !search || name.toLowerCase().includes(search);
-          })
-          .map((e) => {
-            return (
-              <tr key={e.id}>
-                <CheckboxTableColumn
-                  checked={params.checked.includes(e.id)}
-                  onChange={handleCheck(e.id)}
-                  element="td"
-                >
-                  <button
-                    className="create-payroll-page__employee-name"
-                    onClick={handleEmployeeClick(e)}
-                  >
-                    {e.firstname} {e.lastname}
-                  </button>
-                </CheckboxTableColumn>
-                <td>
-                  {currency} {Util.formatMoneyNumber(e.salary)}
-                </td>
-                <td>
-                  {currency} {Util.formatMoneyNumber(e.netSalary)}
-                </td>
-                <td>
-                  {currency} {Util.formatMoneyNumber(e.totalBonus)}
-                </td>
-                <td>
-                  {currency} {Util.formatMoneyNumber(e.totalDeductions)}
-                </td>
-                <td>
-                  {currency} {Util.formatMoneyNumber(e.tax?.amount || 0)}
-                </td>
-                <td>
-                  {currency}{' '}
-                  {Util.formatMoneyNumber(
-                    e.pension?.employerContribution as number,
-                  )}
-                </td>
-                <td>
-                  {currency}{' '}
-                  {Util.formatMoneyNumber(
-                    e.pension?.employeeContribution as number,
-                  )}
-                </td>
-                <td>
-                  {currency}{' '}
-                  {Util.formatMoneyNumber(
-                    e.pension?.voluntaryPension as number,
-                  )}
-                </td>
-                <td>
-                  {currency} {Util.formatMoneyNumber(e.nhf?.amount || 0)}
-                </td>
-              </tr>
-            );
-          })}
-      </tbody>
-    </TableV2>
+                return !search || name.toLowerCase().includes(search);
+              })
+              .map((e) => {
+                return (
+                  <tr key={e.id}>
+                    <CheckboxTableColumn
+                      checked={params.checked.includes(e.id)}
+                      onChange={handleCheck(e.id)}
+                      element="td"
+                    >
+                      <button
+                        className="create-payroll-page__employee-name"
+                        onClick={handleEmployeeClick(e)}
+                      >
+                        {e.firstname} {e.lastname}
+                      </button>
+                    </CheckboxTableColumn>
+                    <td>
+                      {currency} {Util.formatMoneyNumber(e.salary)}
+                    </td>
+                    <td>
+                      {currency} {Util.formatMoneyNumber(e.netSalary)}
+                    </td>
+                    <td>
+                      {currency} {Util.formatMoneyNumber(e.totalBonus)}
+                    </td>
+                    <td>
+                      {currency} {Util.formatMoneyNumber(e.totalDeductions)}
+                    </td>
+                    <td>
+                      {currency} {Util.formatMoneyNumber(e.tax?.amount || 0)}
+                    </td>
+                    <td>
+                      {currency}{' '}
+                      {Util.formatMoneyNumber(
+                        e.pension?.employerContribution as number,
+                      )}
+                    </td>
+                    <td>
+                      {currency}{' '}
+                      {Util.formatMoneyNumber(
+                        e.pension?.employeeContribution as number,
+                      )}
+                    </td>
+                    <td>
+                      {currency}{' '}
+                      {Util.formatMoneyNumber(
+                        e.pension?.voluntaryPension as number,
+                      )}
+                    </td>
+                    <td>
+                      {currency} {Util.formatMoneyNumber(e.nhf?.amount || 0)}
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </TableV2>
+      </div>
+    </div>
   );
 
   return (
