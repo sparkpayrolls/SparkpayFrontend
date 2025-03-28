@@ -196,7 +196,11 @@ export class PayrollProcessor {
     } = payload;
     const _options = employee.statutoryDeductionOptions?.pension ||
       options || { enabled: false, addToCharge: false };
-    const _salaryBreakdown = employee.salaryBreakdown || salaryBreakdown;
+    const _salaryBreakdown = Object.assign(
+      {},
+      salaryBreakdown,
+      employee.salaryBreakdown,
+    );
 
     return PensionProcessor.process({
       ..._options,
