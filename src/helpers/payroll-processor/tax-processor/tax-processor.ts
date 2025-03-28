@@ -16,7 +16,7 @@ export class TaxProcessor {
       healthRelief = 0,
       addToCharge,
     } = payload;
-    if (!enabled || employee.salary <= 3e4) {
+    if (!enabled || employee.salary <= 7e4) {
       return {
         amount: 0,
         addToCharge: Boolean(addToCharge),
