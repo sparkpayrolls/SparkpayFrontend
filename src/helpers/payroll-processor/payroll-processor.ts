@@ -22,7 +22,11 @@ export class PayrollProcessor {
       salaryBreakdown,
       month,
       year,
+      payItems,
     } = payload;
+
+    const shouldSum = (items: string[]) =>
+      items.some((item) => payItems?.[item] ?? true);
 
     const payrollDate = moment().year(year).month(month);
     const workDaysInMonth = Util.calculateWorkDaysBetweenDates(
@@ -147,8 +151,10 @@ export class PayrollProcessor {
         response.totalFees = this.sum(
           precision,
           response.totalFees,
-          fees.perEmployee,
-          hasRemittance ? fees.perRemittanceEmployee : 0,
+          shouldSum(['salary', 'bonus']) ? fees.perEmployee : 0,
+          hasRemittance && shouldSum(['nhf', 'pension', 'tax'])
+            ? fees.perRemittanceEmployee
+            : 0,
         );
 
         [
@@ -172,9 +178,12 @@ export class PayrollProcessor {
 
     response.totalCharge = this.sum(
       precision,
-      response.totalNetSalary,
+      shouldSum(['salary']) ? response.totalNetSalary - response.totalBonus : 0,
+      shouldSum(['bonus']) ? response.totalBonus : 0,
       response.totalFees,
-      response.totalPension,
+      shouldSum(['pension']) ? response.totalPension : 0,
+      shouldSum(['nhf']) ? response.totalNHF : 0,
+      shouldSum(['tax']) ? response.totalTax : 0,
     );
 
     return response;

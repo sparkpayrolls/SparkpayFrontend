@@ -42,6 +42,7 @@ export type ProcessPayload = {
   salaryBreakdown?: SalaryBreakdown;
   month: string;
   year: number;
+  payItems?: Record<string, boolean>;
 };
 
 export type ProcessedEmployee = {
