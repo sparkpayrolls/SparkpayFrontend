@@ -165,7 +165,7 @@ export const SelectInput = (props: ISelectInput) => {
     setSelected(
       (typeof props.options[0] === 'string'
         ? props.value
-        : props.options.find(
+        : (props.options as ISelectInputOptionItem[]).find(
             (o) =>
               o[(props.actualValue || 'id') as keyof typeof o] === props.value,
           )) || {},
