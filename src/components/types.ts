@@ -502,6 +502,8 @@ export interface ButtonProps {
   title?: string;
 
   danger?: boolean;
+
+  style?: CSSProperties;
 }
 
 export interface IElementWrapper {

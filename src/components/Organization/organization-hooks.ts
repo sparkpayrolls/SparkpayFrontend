@@ -1,4 +1,4 @@
-import { FormikHelpers } from 'formik';
+import { FormikHelpers, FormikProps } from 'formik';
 import { omit } from 'lodash';
 import { $api } from 'src/api';
 import { HttpError } from 'src/api/repo/http.error';
@@ -8,14 +8,19 @@ import cloneDeep from 'lodash.clonedeep';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Util } from 'src/helpers/util';
-import { useAppSelector } from 'src/redux/hooks';
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import _isEmpty from 'lodash.isempty';
 import pick from 'lodash.pick';
+import { ManageTaxStatesModal } from '../Modals/ManageTaxStatesModal.component';
+import NiceModal from '@ebay/nice-modal-react';
+import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 export const useRemittanceTabContext = (
   props: RemittanceTabProps,
   remittance = 'tax',
 ) => {
+  const dispatch = useAppDispatch();
+  const administrator = useAppSelector((state) => state.administrator);
   const settings: Record<string, string> = props.organizationDetails
     .organization?.statutoryDeductions?.[remittance] as Record<string, string>;
   let initialValues: Record<string, string> = {
@@ -92,7 +97,48 @@ export const useRemittanceTabContext = (
     }
   };
 
-  return { initialValues, handleSubmit };
+  const handleManageTaxStates = (
+    formik: FormikProps<typeof initialValues>,
+  ) => () => {
+    NiceModal.show(ManageTaxStatesModal, {
+      taxStates:
+        props.organizationDetails.organization?.statutoryDeductions?.tax
+          ?.taxStates ?? [],
+      states: props.organizationDetails.states,
+    }).then((res) => {
+      if (res) {
+        formik.setFieldValue('taxStates', res);
+        formik.submitForm();
+        if (administrator) {
+          dispatch(
+            commitAministrator({
+              ...administrator,
+              company: {
+                ...administrator.company,
+                statutoryDeductions: {
+                  ...administrator.company.statutoryDeductions,
+                  tax: {
+                    enabled: false,
+                    addToCharge: false,
+                    ...(administrator.company.statutoryDeductions?.tax ?? {}),
+                    taxStates: res,
+                  },
+                },
+              },
+            }),
+          );
+        }
+      }
+    });
+  };
+
+  return {
+    initialValues,
+    taxStates: administrator?.company?.statutoryDeductions?.tax
+      ?.taxStates as Record<string, string>[],
+    handleSubmit,
+    handleManageTaxStates,
+  };
 };
 
 export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {

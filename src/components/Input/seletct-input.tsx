@@ -103,6 +103,7 @@ export const SelectInput = (props: ISelectInput) => {
   const handleOptionClick = (option: string | ISelectInputOptionItem) => {
     setSelected(option);
     setShowOptions(false);
+    triggerInputEvent('blur');
     triggerInputEvent('change', option);
   };
 
@@ -122,19 +123,16 @@ export const SelectInput = (props: ISelectInput) => {
   );
 
   useEffect(() => {
-    if (!showOptions) {
-      triggerInputEvent('blur');
-    }
-  }, [showOptions, triggerInputEvent]);
-
-  useEffect(() => {
     const element = selectRef.current;
     const inputElement = inputRef.current;
 
     const handleClickOutside = (event: MouseEvent) => {
       // @ts-ignore
       if (!event?.target?.closest(`#${element?.id}`)) {
-        setShowOptions(false);
+        if (element?.classList?.contains('select-input--open')) {
+          triggerInputEvent('blur');
+          setShowOptions(false);
+        }
       }
     };
     const handleBlur = (event: any) => {
@@ -157,11 +155,22 @@ export const SelectInput = (props: ISelectInput) => {
       inputElement?.removeEventListener('blur', handleBlur);
       inputElement?.removeEventListener('change', handleChange);
     };
-  }, [selectRef, inputRef, onBlur, onChange]);
+  }, [selectRef, inputRef, onBlur, onChange, triggerInputEvent]);
 
   useEffect(() => {
     onSearch?.(search);
   }, [onSearch, search]);
+
+  useEffect(() => {
+    setSelected(
+      (typeof props.options[0] === 'string'
+        ? props.value
+        : props.options.find(
+            (o) =>
+              o[(props.actualValue || 'id') as keyof typeof o] === props.value,
+          )) || {},
+    );
+  }, [props.value, props.options, props.actualValue]);
 
   return (
     <span ref={selectRef} className={className} id={inputId}>
@@ -171,6 +180,9 @@ export const SelectInput = (props: ISelectInput) => {
         className="select-input__selector"
         onClick={() => {
           if (!loading) {
+            if (showOptions) {
+              triggerInputEvent('blur');
+            }
             setShowOptions(!showOptions);
             setTimeout(() => {
               searchInputRef.current?.focus();

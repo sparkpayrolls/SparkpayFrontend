@@ -19,6 +19,7 @@ export const Button = ({
   element,
   href,
   danger,
+  style,
   ...props
 }: PropsWithChildren<ButtonProps>) => {
   const mode = primary ? 'button--primary' : 'button--secondary';
@@ -50,7 +51,7 @@ export const Button = ({
     <button
       type={type}
       className={buttonClassName}
-      style={{ backgroundColor }}
+      style={{ backgroundColor, ...style }}
       {...props}
     >
       {showLabel && (label || props.children)}

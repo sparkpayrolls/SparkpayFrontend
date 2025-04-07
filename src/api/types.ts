@@ -242,7 +242,7 @@ export type Administrator = Document & {
   role?: string | Role;
   isRoot: boolean;
   selected: boolean;
-  company: string | Company;
+  company: Company;
   payrollApproverIndex?: number;
 };
 
