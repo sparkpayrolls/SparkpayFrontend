@@ -162,14 +162,17 @@ export const SelectInput = (props: ISelectInput) => {
   }, [onSearch, search]);
 
   useEffect(() => {
-    setSelected(
-      (typeof props.options[0] === 'string'
-        ? props.value
-        : (props.options as ISelectInputOptionItem[]).find(
-            (o) =>
-              o[(props.actualValue || 'id') as keyof typeof o] === props.value,
-          )) || {},
-    );
+    if (props.value !== undefined && typeof props.value !== 'undefined') {
+      setSelected(
+        (typeof props.options[0] === 'string'
+          ? props.value
+          : (props.options as ISelectInputOptionItem[]).find(
+              (o) =>
+                o[(props.actualValue || 'id') as keyof typeof o] ===
+                props.value,
+            )) || {},
+      );
+    }
   }, [props.value, props.options, props.actualValue]);
 
   return (

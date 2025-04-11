@@ -127,7 +127,7 @@ export const EmployeesNHFViewTab = () => {
                       defaultValue={employee.nhfId}
                       loading={employeeLoading[`${employee.id}_nhfId`]}
                       disabled={employeeLoading[`${employee.id}_nhfId`]}
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                       name="nhfId"
                     />
                   </td>
@@ -140,7 +140,7 @@ export const EmployeesNHFViewTab = () => {
                       loading={employeeLoading[`${employee.id}_bvn`]}
                       disabled={employeeLoading[`${employee.id}_bvn`]}
                       name="bvn"
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                     />
                   </td>
 

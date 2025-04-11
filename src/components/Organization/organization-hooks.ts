@@ -285,7 +285,6 @@ export const useRemittanceEmployeesTabContext = () => {
     skipIfEmpty = false,
   ) => {
     return (ev: any) => {
-      console.log({ skipIfEmpty, value: ev.target.values });
       if (
         ev.target.value === employee[ev.target.name as 'taxId'] ||
         (skipIfEmpty && _isEmpty(ev.target.value))

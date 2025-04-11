@@ -131,7 +131,7 @@ export const EmployeesTaxViewTab = () => {
                       defaultValue={employee.taxId}
                       loading={employeeLoading[`${employee.id}_taxId`]}
                       disabled={employeeLoading[`${employee.id}_taxId`]}
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                       name="taxId"
                     />
                   </td>
@@ -147,7 +147,7 @@ export const EmployeesTaxViewTab = () => {
                       selectorStyle={{ background: 'none', borderRadius: 0 }}
                       loading={employeeLoading[`${employee.id}_taxState`]}
                       name="taxState"
-                      onBlur={updateEmployee(employee)}
+                      onChange={updateEmployee(employee, true, true)}
                     />
                   </td>
 
@@ -159,7 +159,7 @@ export const EmployeesTaxViewTab = () => {
                       loading={employeeLoading[`${employee.id}_bvn`]}
                       disabled={employeeLoading[`${employee.id}_bvn`]}
                       name="bvn"
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                     />
                   </td>
 

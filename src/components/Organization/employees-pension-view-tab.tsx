@@ -163,7 +163,7 @@ export const EmployeesPensionViewTab = () => {
                       defaultValue={employee.pensionId}
                       loading={employeeLoading[`${employee.id}_pensionId`]}
                       disabled={employeeLoading[`${employee.id}_pensionId`]}
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                       name="pensionId"
                     />
                   </td>
@@ -179,7 +179,7 @@ export const EmployeesPensionViewTab = () => {
                       selectorStyle={{ background: 'none', borderRadius: 0 }}
                       loading={employeeLoading[`${employee.id}_pfa`]}
                       name="pfa"
-                      onBlur={updateEmployee(employee, false, true)}
+                      onChange={updateEmployee(employee, true, true)}
                     />
                   </td>
 
