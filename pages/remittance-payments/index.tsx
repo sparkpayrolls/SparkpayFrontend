@@ -32,6 +32,8 @@ type RemittancePaymentTableChildrenProps = {
 };
 
 const getPaymentMenu = (payment: Payment) => {
+  if (!payment.receipts.length) return [];
+
   return [
     {
       action: () => {
