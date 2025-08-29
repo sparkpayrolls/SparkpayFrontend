@@ -281,6 +281,10 @@ export type IDashboardNavigationListItem = {
   // eslint-disable-next-line no-undef
   Icon(): JSX.Element;
   title: string;
+  badge?: {
+    text: string;
+    color?: 'red' | 'blue' | 'green' | 'yellow' | 'purple';
+  };
 };
 
 /** Allowed Permissions */

@@ -48,7 +48,7 @@
       color: #0b2253;
       padding: 0.75rem 1rem;
       transition: all 500ms;
-      > svg {
+      > div > svg {
         color: #b9c8d4;
         transition: all 500ms;
       }
@@ -58,7 +58,7 @@
         color: $primary;
         background: #eff6ff;
         border-radius: 0.25rem;
-        > svg {
+        > div > svg {
           color: $primary;
         }
       }
@@ -174,7 +174,7 @@
       color: #0b2253;
       padding: 0.75rem 1rem;
       transition: all 500ms;
-      > svg {
+      > div > svg {
         color: #b9c8d4;
         transition: all 500ms;
       }
@@ -184,7 +184,7 @@
         color: $primary;
         background: #eff6ff;
         border-radius: 0.25rem;
-        > svg {
+        > div > svg {
           color: $primary;
         }
       }
