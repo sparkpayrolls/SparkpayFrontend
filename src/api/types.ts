@@ -736,3 +736,12 @@ export type EmployeePayrollHistory = {
   payroll: Pick<Payroll, 'id' | 'payDate' | 'proRateMonth'>;
   salary: number;
 };
+
+export type RemittancePayment = {
+  id: string;
+  totalAmount: number;
+  createdAt: string;
+  status: string;
+  receipts: string[];
+  payrolls: { year: string; proRateMonth: string }[];
+};
