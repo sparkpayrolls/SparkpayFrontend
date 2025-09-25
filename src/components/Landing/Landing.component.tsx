@@ -7,28 +7,30 @@ import Link from 'next/link';
 // import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 // import { $api } from 'src/api';
-import herosectionimg from '../../../public/svgs/hero-img.svg';
+import herosectionimg from '../../../public/images/test.png';
+import TeamMemberOne from "../../../public/images/emmanuel.jpg";
+import TeamMemberTwo from "../../../public/images/Opeyemi.jpg";
+import TeamMemberThree from "../../../public/images/Daniel.jpg"
+
 // import airbnb from '../../../public/svgs/clients/airbnb.svg';
 // import amazon from '../../../public/svgs/clients/amazon.svg';
 // import facebook from '../../../public/svgs/clients/facebook.svg';
 // import google from '../../../public/svgs/clients/google.svg';
 // import netflix from '../../../public/svgs/clients/netflix.svg';
 // import uber from '../../../public/svgs/clients/uber.svg';
-import working_woman from '../../../public/images/working-woman.png';
+// import working_woman from '../../../public/images/working-woman.png';
 // import photo from '../../../public/images/photo.png';
-import coin from '../../../public/images/coin.png';
-import coin_mobile from '../../../public/images/coin-mobile.png';
+// import coin from '../../../public/images/coin.png';
+// import coin_mobile from '../../../public/images/coin-mobile.png';
 import DefaultLayout, { Title } from 'src/layouts/default-layout/DefaultLayout';
 // import { JoinWaitListModal } from '../Modals/JoinWaitListModal.component';
 import { WalkThroughModal } from '../Modals/WalkThroughModal.component';
 import {
+  DollarSVG,
+  SalarySVG,
   // ServicePointSVG,
-  ServicePointSVG2,
-  ServicePointSVG3,
-  ServicePointSVG4,
-  ServicePointSVG5,
   // ServicePointSVG6,
-  VideoSVG,
+  WalletSVG,
   // CheckMarkSVG,
   // QuoteSVG,
   // FiveStarSVG,
@@ -70,37 +72,39 @@ export const Landing = () => {
       <Title title="SparkPay | Payroll with ease" />
       <main className="home">
         <section className="hero-section">
-          <div className="hero-section__text-column">
-            <h1 className="hero-section__text">
-              We have made Payroll simple for your business.
-            </h1>
+          <div className="hero-section__overlay">
+            <div className="hero-section__content">
+              <h1 className="hero-section__text">
+                Payroll automation built for Africa’s workforce.
+              </h1>
 
-            <p className="hero-section__subtext">
-              Complete payroll operations in a few clicks; We offer
-              user-friendly tools and services that make payroll processing
-              easier, faster, and less expensive for your company.
-            </p>
+              <p className="hero-section__subtext">
+                Sparkpay helps businesses pay employees faster, smarter, and without
+                errors—while giving workers access to salary advances, financial tools,
+                and cross-border payments.
+              </p>
 
-            <div className="hero-section__cta">
-              <Link href="/book-a-demo">
-                <a className="hero-section__link hero-section__link--onboard">
-                  Book a demo
-                </a>
-              </Link>
+              <div className="hero-section__cta">
+                <Link href="/login">
+                  <a className="hero-section__link hero-section__link--login">Login</a>
+                </Link>
 
-              <Link href="#">
-                <a
-                  onClick={() => NiceModal.show(WalkThroughModal)}
-                  className="hero-section__link hero-section__link--demo"
-                >
-                  <VideoSVG /> See how SparkPay works (4mins)
-                </a>
-              </Link>
+                <div className="hero-section__cta">
+
+                  <Link href="#">
+                    <a
+                      onClick={() => NiceModal.show(WalkThroughModal)}
+                      className="hero-section__link hero-section__link--demo"
+                    >
+                      Request a demo
+                    </a>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
-
-          <Image src={herosectionimg} alt="dashboard preview" />
         </section>
+
 
         {/* <section className="clients">
           <h2 className="clients__sub-header sub-header">
@@ -122,191 +126,189 @@ export const Landing = () => {
           </div>
         </section> */}
 
-        <section className="services" id="services">
-          <div className="services__text-group">
-            <h2 className="sub-header">Our services</h2>
-            <p className="services__subtext ">
-              Services engineered to make your payroll experience seamless.
+        <section className="about" id="about">
+          <div className="about__container">
+            <h2 className="about__heading">About Us</h2>
+            <p className="about__intro">
+              Sparkpay is a payroll automation platform designed for businesses across Africa.
+              We are on a mission to simplify payroll, improve employee financial wellness,
+              and connect African workforces with the global economy.
             </p>
-          </div>
 
-          <div className="services__features">
-            <div className="services__card">
-              <ServicePointSVG3 />
-
-              <h3 className="services__feature-title">Disbursement</h3>
-              <p className="services__feature-subtext">
-                Set up automated payments and basic salary deductions to ensure
-                that your employees are paid on time.
+            <h3 className="about__subheading">The Problem We Solve</h3>
+            <div className="about__list">
+              <p>Businesses spend too much time and money on manual payroll processes.</p>
+              <p>Employees often face delays, errors, or lack of access to their earned income.</p>
+              <p>
+                Financial inclusion is limited, especially for workers who don’t have access to
+                modern financial tools.
               </p>
             </div>
-            <div className="services__card">
-              <ServicePointSVG2 />
 
-              <h3 className="services__feature-title">Taxes</h3>
-              <p className="services__feature-subtext">
-                Stay in compliance with local laws by using the tax, benefits,
-                and compliance solutions we provide for your employees.
+            <h3 className="about__subheading">Our Solution</h3>
+            <div className="about__list">
+              <p>Automate salary disbursement.</p>
+              <p>Manage comppance and payroll reconciliation.</p>
+              <p>
+                Offer employees AI-powered financial wellness tools like salary advances,
+                virtual wallets, and cross-border payment options.
               </p>
             </div>
-            <div className="services__card">
-              <ServicePointSVG5 />
-
-              <h3 className="services__feature-title">Pension</h3>
-              <p className="services__feature-subtext">
-                Deduct your pension from your employee&apos;s income and remit
-                it to the right channels if required. (coming soon)
-              </p>
-            </div>
-            <div className="services__card">
-              <ServicePointSVG4 />
-
-              <h3 className="services__feature-title">
-                24/7 Assistance customer service
-              </h3>
-              <p className="services__feature-subtext">
-                Contact our technical support assistants, accessible 24 hours a
-                day, 7 days a week to help and support you.
-              </p>
-            </div>
-            {/* <div className="services__card">
-              <ServicePointSVG5 />
-
-              <h3 className="services__feature-title">Disbursement</h3>
-              <p className="services__feature-subtext">
-                Lorem ipsum dolor sit amert plerusa consectetur vred adipiscing
-                tortor donec deauteir accumsan nibh turpis treu massa, donec
-                deaut consectetu adipiscing tortor benelit.
-              </p>
-            </div>
-            <div className="services__card">
-              <ServicePointSVG6 />
-
-              <h3 className="services__feature-title">Disbursement</h3>
-              <p className="services__feature-subtext">
-                Lorem ipsum dolor sit amert plerusa consectetur vred adipiscing
-                tortor donec deauteir accumsan nibh turpis treu massa, donec
-                deaut consectetu adipiscing tortor benelit.
-              </p>
-            </div> */}
           </div>
         </section>
 
-        <section className="join-us">
-          <div className="join-us__card">
-            <h3 className="join-us__text">
-              We are changing the narratives for businesses
-            </h3>
-            <p className="join-us__subtext">
-              Your business is about to take a seat with the most efficient
-              businesses on the globe with SparkPay
-            </p>
+        <section className="product">
+          <h2 className="product__title">Product</h2>
+          <h3 className="product__subtitle">How It Works</h3>
 
-            {/* <ul className="join-us__list">
-              <li className="join-us__list-item">
-                <CheckMarkSVG />
-                <div>
-                  2,400 <br />
-                  <span>Transactions</span>
-                </div>
-              </li>
-
-              <li className="join-us__list-item">
-                <CheckMarkSVG />
-                <div>
-                  190 <br />
-                  <span>Partners</span>
-                </div>
-              </li>
-
-              <li className="join-us__list-item">
-                <CheckMarkSVG />
-                <div>
-                  600 <br />
-                  <span>Partners</span>
-                </div>
-              </li>
-
-              <li className="join-us__list-item">
-                <CheckMarkSVG />
-                <div>
-                  1,500 <br />
-                  <span>Transactions</span>
-                </div>
-              </li>
-
-              <li className="join-us__list-item">
-                <CheckMarkSVG />
-                <div>
-                  92 <br />
-                  <span>Partners</span>
-                </div>
-              </li>
-            </ul> */}
-          </div>
-
-          <div className="join-us__image">
-            <Image src={working_woman} alt="working woman" />
-          </div>
-        </section>
-
-        <section className="focus-content">
-          <div className="focus-content__image">
-            <Image src={coin} alt="coin" />
-          </div>
-
-          <div className="focus-content__text">
-            <h3 className="focus-content__text-title sub-header">
-              Focus on your business while we handle your Payroll.
-            </h3>
-
-            <div className="focus-content__image-mobile">
-              <Image src={coin_mobile} alt="coin" />
+          <div className="product__features">
+            <div className="feature-card">
+              <div className="feature-icon"><DollarSVG/></div>
+              <h4 className="feature-title">Payroll Automation</h4>
+              <p className="feature-desc">Automate salary disbursement.</p>
             </div>
 
-            <p className="focus-content__text-paragraph">
-              Payroll management is an integral part of every business. SparkPay
-              relieves your HR and financial teams of the strain of manual
-              payroll management.
-              <br />
-              <br />
-              With our automated payroll system, you can handle all aspects of
-              employee payment in a few clicks, including pensions, health
-              insurance, taxes, commissions, bonuses, and incentives. You can
-              also set up automatic payments, and our system will handle your
-              payroll while you focus on other things.
-              <br />
-              <br />
-              You don&apos;t require any prior payroll management experience.
-              Our system is simple to use, and we offer 24/7 support if you ever
-              need it.
-              <br />
-              <br />
-              SparkPay can handle all of your payroll needs.
-            </p>
+            <div className="feature-card">
+              <div className="feature-icon"><WalletSVG/></div>
+              <h4 className="feature-title">Employee Wallet</h4>
+              <p className="feature-desc">Virtual wallets for employees.</p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-icon"><SalarySVG/></div>
+              <h4 className="feature-title">Salary Advances</h4>
+              <p className="feature-desc">Access to salary advances.</p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-icon">🌍</div>
+              <h4 className="feature-title">Cross-Border Payments</h4>
+              <p className="feature-desc">Facilitate international payments.</p>
+            </div>
+          </div>
+
+          <p className="product__mvp">
+            We are currently in MVP stage with early pilots across select African businesses.
+          </p>
+
+          <div className="product__mockup">
+            <Image src={herosectionimg} alt="dashboard preview" />
+          </div>
+
+          <div className="product__traction">
+            <h3 className="traction-title">Traction</h3>
+            <p className="traction-desc">Currently serving 25+ businesses and 1,000+ employees across Africa.</p>
+          </div>
+        </section>
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-8">
+              Team
+            </h2>
+
+            <div className="space-y-3">
+              <div className="flex items-start space-x-6  rounded-lg p-6  transition">
+                <Image
+                  src={TeamMemberTwo}
+                  alt="Opeyemi Peter"
+                  width={100}
+                  height={100}
+                  className="rounded-full border border-gray-200 shadow-sm"
+                />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Opeyemi Peter
+                  </h3>
+                  <p className="text-[16px] text-gray-600 font-medium">CEO</p>
+                  <p className="text-[16px] text-gray-600 leading-relaxed">
+                    Fortune 500 experience.{" "}
+                    <Link
+                      href="https://www.linkedin.com/in/opeyemi-peter-okunola/"
+                    >
+                      <a className="text-gray-400 font-medium no-underline hover:text-gray-900">
+                        LinkedIn Profile
+                      </a>
+                    </Link>
+                  </p>
+                </div>
+              </div>
+
+              {/* Member 2 */}
+              <div className="flex items-start space-x-6  rounded-lg p-6  transition">
+                <Image
+                  src={TeamMemberOne}
+                  alt="Emmanuel Menyaga"
+                  width={100}
+                  height={100}
+                  className="rounded-full border border-gray-200 shadow-sm"
+                />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Emmanuel Menyaga
+                  </h3>
+                  <p className="text-[16px] text-gray-600 font-medium">CTO</p>
+                  <p className="text-[16px] text-gray-600 leading-relaxed">
+                    Fintech, AI, and Web3 expert.{" "}
+                    <Link
+                      href="https://www.linkedin.com/in/emmanuelmenyaga/"
+                    >
+                     <a className="text-gray-400 font-medium no-underline hover:text-gray-900">
+                        LinkedIn Profile
+                      </a>
+                    </Link>
+                  </p>
+                </div>
+              </div>
+
+              {/* Member 3 */}
+              <div className="flex items-start space-x-6  rounded-lg p-6  transition">
+                <div className="flex-shrink-0">
+                  <Image
+                    src={TeamMemberThree}
+                    alt="Daniel Olaniyan"
+                    width={100}
+                    height={100}
+                    className="rounded-full border border-gray-200 shadow-sm"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900">Daniel Olaniyan</h3>
+                  <p className="text-[16px] text-gray-600 font-medium">
+                    Co-Founder & Product Lead
+                  </p>
+                  <p className="text-[16px] text-gray-600 leading-relaxed">
+                    Award-winning entrepreneur recognized by the U.S. Department of State and
+                    Merck KGaA. 6+ years of experience leading product and operations across
+                    fintech, Web3, and AI-driven platforms. 2025 Mandela Washington Fellow and
+                    INSEAD AI Venture Lab Fellow.{" "}
+                    <Link href="https://www.linkedin.com/in/daniel-olaniyan">
+                      <a className="text-gray-400 font-medium no-underline hover:text-gray-900">
+                        LinkedIn Profile
+                      </a>
+                    </Link>
+
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+        <section className="py-14 bg-white text-center">
+          <div className="max-w-3xl mx-auto px-6">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-8">
+              Ready to simplify your payroll?
+            </h2>
+
+            <a
+              href="#"
+              className="inline-block px-8 py-3 text-white bg-blue-700 hover:bg-blue-700 rounded-lg font-semibold transition"
+            >
+              Join Our Beta
+            </a>
           </div>
         </section>
 
-        <section className="demo-section">
-          <div className="demo-section__content">
-            <h3 className="demo-section__title">
-              Watch how we run Payroll in few minutes
-            </h3>
-            <p className="demo-section__text">
-              To learn how simple payroll with SparkPay can be, watch our quick
-              video tour.
-            </p>
-
-            <Link href="#">
-              <a
-                onClick={() => NiceModal.show(WalkThroughModal)}
-                className="hero-section__link hero-section__link--demo"
-              >
-                <VideoSVG /> See how SparkPay works (4mins)
-              </a>
-            </Link>
-          </div>
-        </section>
 
         {/* <section className="testimonial">
           <div className="testimonial__column1">
@@ -408,7 +410,7 @@ export const Landing = () => {
             </Carousel>
           </div>
         </section> */}
-
+        {/* 
         <section className="newsletter">
           <div className="newsletter__text-content">
             <h3 className="newsletter__title">Join Our Newsletter</h3>
@@ -428,7 +430,7 @@ export const Landing = () => {
               SUBCSRIBE
             </button>
           </form>
-        </section>
+        </section> */}
       </main>
     </DefaultLayout>
   );

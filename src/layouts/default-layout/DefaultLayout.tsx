@@ -164,23 +164,18 @@ const DefaultLayout: React.FC = ({ children }) => {
             </button>
             <div className="navigation__list-section">
               <li className="navigation__list-item">
-                <Link href="/#services">
-                  <a className="navigation__link">Services</a>
+                <Link href="">
+                  <a className="navigation__link">About</a>
                 </Link>
               </li>
-              {/* <li className="navigation__list-item">
-                <Link href="/pricing">
-                  <a className="navigation__link">Pricing</a>
-                </Link>
-              </li> */}
-              <li className="navigation__list-item navigation__hide">
+              <li className="navigation__list-item navigation__show">
                 <Link href="#">
-                  <a className="navigation__link">FAQ</a>
+                  <a className="navigation__link">Product</a>
                 </Link>
               </li>
-              <li className="navigation__list-item navigation__hide">
+              <li className="navigation__list-item navigation__show">
                 <Link href="#">
-                  <a className="navigation__link">Contact Us</a>
+                  <a className="navigation__link">Team</a>
                 </Link>
               </li>
             </div>
@@ -188,19 +183,19 @@ const DefaultLayout: React.FC = ({ children }) => {
             <div className="navigation__list-section">
               <li className="navigation__list-item">
                 <Link href="/login">
-                  <a className="navigation__link navigation__button">Log In</a>
+                  <a className="navigation__link navigation__button  navigation__button--primary">Log In</a>
                 </Link>
               </li>
               <li className="navigation__list-item">
                 <Link href="/book-a-demo">
                   <a
-                    // onClick={() => NiceModal.show(RequestAccessModal)}
-                    className="navigation__link navigation__button navigation__button--primary"
+                    className="navigation__link navigation__button bg-gray-200 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition"
                   >
                     Book a demo
                   </a>
                 </Link>
               </li>
+
             </div>
           </ul>
         </nav>
