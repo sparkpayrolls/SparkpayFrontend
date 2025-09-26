@@ -1,4 +1,4 @@
-import { Landing } from '@/components/Landing/Landing.component';
+import { Landing } from '@/components/Landing/Landing.component'
 
 const Index = () => {
   return <Landing />;
