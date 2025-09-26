@@ -164,17 +164,17 @@ const DefaultLayout: React.FC = ({ children }) => {
             </button>
             <div className="navigation__list-section">
               <li className="navigation__list-item">
-                <Link href="">
+                <Link href="#about">
                   <a className="navigation__link">About</a>
                 </Link>
               </li>
               <li className="navigation__list-item navigation__show">
-                <Link href="#">
+                <Link href="#product">
                   <a className="navigation__link">Product</a>
                 </Link>
               </li>
               <li className="navigation__list-item navigation__show">
-                <Link href="#">
+                <Link href="#team">
                   <a className="navigation__link">Team</a>
                 </Link>
               </li>

@@ -157,7 +157,7 @@ export const Landing = () => {
           </div>
         </section>
 
-        <section className="product">
+        <section id="product" className="product">
           <h2 className="product__title">Product</h2>
           <h3 className="product__subtitle">How It Works</h3>
 
@@ -200,7 +200,7 @@ export const Landing = () => {
             <p className="traction-desc">Currently serving 25+ businesses and 1,000+ employees across Africa.</p>
           </div>
         </section>
-        <section className="py-20 bg-gray-50">
+        <section id="team" className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-6">
             <h2 className="text-3xl font-extrabold text-gray-900 mb-8">
               Team
