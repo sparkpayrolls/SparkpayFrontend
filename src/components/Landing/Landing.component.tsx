@@ -299,9 +299,12 @@ export const Landing = () => {
                       Account settings
                     </li>
                   </ul>
-                  <div className="btn-wrap">
-                    <button>Learn More</button>
-                  </div>
+                <div className="btn-wrap">
+  <Link href="/about-us">
+    <span className="btn">Learn More</span>
+  </Link>
+</div>
+
                 </div>
 
                 <div className="dashboard-image">

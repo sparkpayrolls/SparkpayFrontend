@@ -80,6 +80,7 @@ background: #0c1421;
     font-weight: 600;
     border-radius: 0.5rem;
     transition: 0.3s ease;
+    cursor: pointer;
 
     &:hover {
       background-color: #0b33a0;
@@ -392,23 +393,29 @@ background: #0c1421;
       }
     }
 
-    .btn-wrap {
-      margin-top: 2rem;
+.btn-wrap {
+  margin-top: 2rem;
+}
 
-      button {
-        background: #2563eb;
-        color: #fff;
-        font-weight: 600;
-        padding: 0.75rem 2rem;
-        border-radius: 0.5rem;
-        font-size: 1.125rem;
-        transition: background 0.3s ease;
+/* Style the button itself */
+.btn {
+  display: inline-block;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1.125rem;
+  text-align: center;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  text-decoration: none; /* removes underline */
+}
 
-        &:hover {
-          background: #1e40af;
-        }
-      }
-    }
+.btn:hover {
+  background: #1e40af;
+}
+
   }
 
   // ✅ Image side is clean (no background overlay)
