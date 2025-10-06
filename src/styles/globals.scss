@@ -18,6 +18,7 @@
 @import './components/spinner';
 @import './components/toast';
 @import './components/defaultLayout';
+@import './components/aboutLayout';
 @import './components/employee-details';
 @import './components/dashboardLayout';
 @import './components/payroll-table';
@@ -49,6 +50,7 @@
 
 // PAGES
 @import './pages/home';
+@import './pages/about-us';
 @import './pages/create-account';
 @import './pages/login';
 @import './pages/forgot-password';
