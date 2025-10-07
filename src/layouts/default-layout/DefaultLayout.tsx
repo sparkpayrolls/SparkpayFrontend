@@ -173,7 +173,7 @@ const DefaultLayout: React.FC = ({ children }) => {
                                 </li>
                                 <li className="navigation__list-item">
                                     <Link href="/book-a-demo">
-                                        <a className="navigation__link navigation__button--primary bg-gray-200 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition">
+                                        <a className="navigation__link navigation__button navigation__button--primary">
                                             Book a demo
                                         </a>
                                     </Link>
@@ -198,7 +198,7 @@ const DefaultLayout: React.FC = ({ children }) => {
                                     {width < 800 ? (
                                         <Image src={logo_white} alt="logo" />
                                     ) : (
-                                     <Image src={logo_white} alt="logo" />
+                                        <Image src={logo_white} alt="logo" />
                                     )}
                                 </a>
                             </Link>

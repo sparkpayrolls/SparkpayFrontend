@@ -8,7 +8,7 @@ import {
   InstagramSVG,
   TwitterSVG,
 } from '../../src/components/svg';
-import AboutLayout from "src/layouts/default-layout/AboutLayout";
+import DefaultLayout from "../../src/layouts/default-layout/DefaultLayout"
 
 // Import team images
 import DanielImg from '../../public/images/Daniel.jpg';
@@ -39,7 +39,7 @@ const AboutUs = () => {
   ];
 
   return (
-    <AboutLayout>
+    <DefaultLayout>
       <div className="about-us">
         {/* ABOUT US SECTION */}
         <main className="page-content">
@@ -201,9 +201,14 @@ const AboutUs = () => {
             </p>
 
             <div className="buttons">
-              <a href="#" className="btn-primary">
+              {/* <a href="#" className="btn-primary">
                 Book a Demo
-              </a>
+              </a> */}
+               <Link href="/book-a-demo">
+                                <a className="btn-primary">
+                                  Book a demo
+                                </a>
+                              </Link>
               <a href="mailto:admin@sparkpayhq.com" className="btn-secondary">
                 Contact Us: admin@sparkpayhq.com
               </a>
@@ -229,7 +234,7 @@ const AboutUs = () => {
           </section>
         </main>
       </div>
-    </AboutLayout>
+    </DefaultLayout>
   );
 };
 

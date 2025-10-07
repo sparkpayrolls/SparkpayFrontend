@@ -18,9 +18,9 @@ background: #0c1421;
   position: relative;
  background: linear-gradient(
   to bottom right,
-  #000000,        /* from-black */
-  #0c1930,        /* via-background-dark */
-  rgba(3, 1, 6, 1) /* to-[#0D39B6]/60 */
+  #000000,        
+  #0c1930,        
+  rgba(3, 1, 6, 1) 
 );
 
   &__overlay {
@@ -145,7 +145,7 @@ background: #0c1421;
         object-fit: contain;
         opacity: 0.85;
         filter: grayscale(100%);
-        transition: opacity 0.3s ease, filter 0.3s ease;
+        transition: opacity 1s ease, filter 1s ease;
 
         &:hover {
           opacity: 1;
@@ -155,6 +155,10 @@ background: #0c1421;
         @media (min-width: 640px) {
           max-height: 15rem; // ✅ same bounding height for all
         max-width: 25rem;
+        }
+          @media (max-width: 640px) {
+          max-height: 6rem; // ✅ same bounding height for all
+        max-width: 6rem;
         }
       }
     }

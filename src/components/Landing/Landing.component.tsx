@@ -179,7 +179,6 @@ export const Landing = () => {
               </div>
 
               <div className="hero_section__logos-group" aria-hidden="true">
-                <div className="hero_section__logos-group">
                   <Image
                     src="/images/afrimash.jpeg"
                     alt="Transistor"
@@ -211,7 +210,6 @@ export const Landing = () => {
                     height={200}
                   />
                 </div>
-              </div>
             </div>
           </div>
         </section>
