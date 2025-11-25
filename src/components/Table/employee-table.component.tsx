@@ -185,9 +185,10 @@ export const EmployeeTable = (props: IEmployeeTable) => {
                     </td>
                     <td>
                       {employee.groups
+                        .filter((eg) => eg.group)
                         .map(
                           (employeeGroup) =>
-                            (employeeGroup.group as Group).name,
+                            (employeeGroup.group as Group)?.name,
                         )
                         .join(', ')}
                     </td>
