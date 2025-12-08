@@ -441,6 +441,8 @@ export type SalaryAddonDate = {
   month: string;
   year?: number;
   days?: string[];
+  startDate?: Date;
+  endDate?: Date;
 };
 
 export type SalaryAddOn = Document & {
