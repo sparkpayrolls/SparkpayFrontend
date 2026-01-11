@@ -26,6 +26,7 @@ export type Employee = {
     endDate: string;
   };
   voluntaryPensionContribution?: number;
+  yearlyRentAmount?: number;
 };
 
 export type Fees = {

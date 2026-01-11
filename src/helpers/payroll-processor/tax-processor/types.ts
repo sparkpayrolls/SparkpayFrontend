@@ -12,4 +12,5 @@ export type ProcessPayload = {
   pension?: number;
   nhf?: number;
   healthRelief?: number;
+  year: number;
 };
