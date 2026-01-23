@@ -540,7 +540,7 @@ export class Util {
   }
 
   static getPreciseNumber(val: number, precision: number) {
-    return Number(val.toFixed(precision));
+    return Math.round(val * Math.pow(10, precision)) / Math.pow(10, precision);
   }
 
   static readonly WORK_DAYS = new Set([

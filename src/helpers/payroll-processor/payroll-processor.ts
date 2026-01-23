@@ -11,6 +11,11 @@ import {
 } from './types';
 import { TaxProcessor } from './tax-processor/tax-processor';
 import { Util } from '../util';
+import { GrossSalaryProcessor } from './gross-salary-processor/gross-salary-processor';
+import {
+  PercentageStatutoryProcessor,
+  STATUTORY_PERCENTAGES,
+} from './percentage-statutory-processor/percentage-statutory-processor';
 
 export class PayrollProcessor {
   static process(payload: ProcessPayload) {
@@ -50,7 +55,24 @@ export class PayrollProcessor {
     };
 
     employees.forEach((employee) => {
-      const { salary, excludeFromTotals, prorate } = employee;
+      const { excludeFromTotals, prorate } = employee;
+      let salary = employee.salary;
+      const totalBonus = this.sumAddons(employee.bonus, precision);
+      const totalTaxableBonus = this.sumAddons(employee.bonus.filter((b) => !b.isNotTaxable), precision);
+      const totalDeductions = this.sumAddons(employee.deductions, precision);
+      if (employee.netSalary && employee.netSalary > 0) {
+        const grossSalary = this.processGrossSalary({
+          employee,
+          netSalary: employee.netSalary,
+          precision,
+          salaryBreakdown,
+          totalBonus: totalTaxableBonus,
+          year,
+          statutoryDeductionOptions,
+        });
+
+        salary = grossSalary.proratedSalary;
+      }
       let proratedSalary = salary;
       let prorateDays = 0;
       if (prorate) {
@@ -64,8 +86,6 @@ export class PayrollProcessor {
           precision,
         );
       }
-      const totalBonus = this.sumAddons(employee.bonus, precision);
-      const totalDeductions = this.sumAddons(employee.deductions, precision);
       const pension = this.processPension({
         employee,
         options: statutoryDeductionOptions?.pension,
@@ -73,21 +93,18 @@ export class PayrollProcessor {
         precision,
         proratedSalary,
       });
-      const nhf = this.processNHF({
+      const nhf = PercentageStatutoryProcessor.process({
         proratedSalary,
         precision,
-        options: statutoryDeductionOptions?.nhf,
-        employee,
+        percentage: STATUTORY_PERCENTAGES.NHF,
+        options: employee.statutoryDeductionOptions?.nhf || statutoryDeductionOptions?.nhf,
       });
       const tax = this.processTax({
         employee,
         options: statutoryDeductionOptions?.pension,
         precision,
         proratedSalary,
-        totalBonus: this.sumAddons(
-          employee.bonus.filter((b) => !b.isNotTaxable),
-          precision,
-        ),
+        totalBonus: totalTaxableBonus,
         pension:
           (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
         nhf: nhf.amount,
@@ -95,12 +112,12 @@ export class PayrollProcessor {
       });
       const netSalary = Util.getPreciseNumber(
         proratedSalary +
-          totalBonus -
-          ((pension.employeeContribution || 0) +
-            (pension.voluntaryPension || 0)) -
-          nhf.amount -
-          tax.amount -
-          totalDeductions,
+        totalBonus -
+        ((pension.employeeContribution || 0) +
+          (pension.voluntaryPension || 0)) -
+        nhf.amount -
+        tax.amount -
+        totalDeductions,
         precision,
       );
 
@@ -190,6 +207,37 @@ export class PayrollProcessor {
     return response;
   }
 
+  private static processGrossSalary(payload: {
+    employee: Employee;
+    netSalary: number;
+    precision: number;
+    salaryBreakdown?: SalaryBreakdown;
+    totalBonus: number;
+    year: number;
+    statutoryDeductionOptions?: Record<string, StatutoryDeductionOptions | undefined>;
+  }) {
+    const { employee, netSalary, precision, statutoryDeductionOptions, salaryBreakdown, totalBonus, year } = payload;
+    const _salaryBreakdown = Object.assign(
+      {},
+      salaryBreakdown,
+      employee.salaryBreakdown,
+    );
+
+    return GrossSalaryProcessor.process({
+      netSalary,
+      pensionProcessorPayload: {
+        ...(employee.statutoryDeductionOptions?.pension || statutoryDeductionOptions?.pension || { enabled: false, addToCharge: false }),
+        salaryBreakdown: _salaryBreakdown,
+        precision,
+        voluntaryPension: employee.voluntaryPensionContribution,
+      },
+      employee,
+      statutoryDeductionOptions,
+      precision,
+      taxProcessorPayload: { ...(employee.statutoryDeductionOptions?.tax || statutoryDeductionOptions?.tax || { enabled: false, addToCharge: false }), precision, totalBonus, employee, year }
+    })
+  }
+
   private static processPension(payload: {
     employee: Employee;
     options?: StatutoryDeductionOptions;
@@ -254,28 +302,6 @@ export class PayrollProcessor {
       nhf,
       year,
     });
-  }
-
-  private static processNHF(payload: {
-    employee: Employee;
-    proratedSalary: number;
-    precision: number;
-    options?: StatutoryDeductionOptions;
-  }) {
-    const { proratedSalary, precision, options, employee } = payload;
-    const { enabled, addToCharge } =
-      employee.statutoryDeductionOptions?.nhf || options || {};
-    if (!enabled) {
-      return {
-        amount: 0,
-        addToCharge: Boolean(addToCharge),
-      };
-    }
-
-    return {
-      amount: Util.getPreciseNumber(proratedSalary * 0.025, precision),
-      addToCharge: Boolean(addToCharge),
-    };
   }
 
   private static sumAddons(addons: Addon[], precision: number) {

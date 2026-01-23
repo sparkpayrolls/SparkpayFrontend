@@ -106,6 +106,7 @@ export const useCreatePayrollPageLogic = () => {
         ...e,
         excludeFromTotals: !params.checked.includes(e.id),
         salary: updates[e.id]?.salary || e.salary,
+        ...(updates[e.id]?.netSalary ? { netSalary: updates[e.id].netSalary } : {}),
         bonus: e.bonus
           .concat(updates[e.id]?.bonus || [])
           .filter(
@@ -182,6 +183,16 @@ export const useCreatePayrollPageLogic = () => {
                 [employee.id]: {
                   ...(updates[employee.id] || {}),
                   salary: update.payload,
+                },
+              }));
+              break;
+            }
+            case 'netSalary': {
+              setUpdates((updates) => ({
+                ...updates,
+                [employee.id]: {
+                  ...(updates[employee.id] || {}),
+                  netSalary: update.payload,
                 },
               }));
               break;

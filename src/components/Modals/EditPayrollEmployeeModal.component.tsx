@@ -1,4 +1,4 @@
-import NiceModal from '@ebay/nice-modal-react';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { Formik } from 'formik';
 import { Util } from 'src/helpers/util';
 import {
@@ -26,6 +26,7 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
     year,
     month,
   } = props;
+  const modal = useModal();
 
   return (
     <ModalLayout
@@ -66,10 +67,20 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
               </h3>
 
               <Formik
-                initialValues={{ salary: employee.salary }}
+                initialValues={{
+                  salary: employee.salary,
+                  netSalary: employee.netSalary,
+                }}
                 onSubmit={(values, helpers) => {
-                  handleUpdates({ type: 'salary', payload: values.salary });
+                  if (values.salary !== employee.salary)
+                    handleUpdates({ type: 'salary', payload: values.salary });
+                  if (values.netSalary !== employee.netSalary)
+                    handleUpdates({
+                      type: 'netSalary',
+                      payload: values.netSalary,
+                    });
                   helpers.setSubmitting(false);
+                  modal.hide();
                 }}
                 validationSchema={UpdateSalaryValidation}
               >
@@ -98,6 +109,20 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                         transformValue={Util.formatMoneyString(currency)}
                         disabled={isSubmitting}
                         error={touched.salary && (errors.salary as string)}
+                      />
+
+                      <InputV2
+                        type="number"
+                        label={`Net Salary Amount (${currency})`}
+                        placeholder={`Net Salary Amount (${currency})`}
+                        name="netSalary"
+                        value={values.netSalary}
+                        onChange={handleChange}
+                        transformValue={Util.formatMoneyString(currency)}
+                        disabled={isSubmitting}
+                        error={
+                          touched.netSalary && (errors.netSalary as string)
+                        }
                       />
 
                       <Button

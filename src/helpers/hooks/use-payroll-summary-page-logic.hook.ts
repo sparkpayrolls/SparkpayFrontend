@@ -71,6 +71,7 @@ export const usePayrollSummaryPageLogic = () => {
         ...e,
         excludeFromTotals: !params.checked.includes(e.id),
         salary: updates[e.id]?.salary || e.salary,
+        ...(updates[e.id]?.netSalary ? { netSalary: updates[e.id].netSalary } : {}),
         bonus: e.bonus
           .concat(updates[e.id]?.bonus || [])
           .filter(
@@ -94,6 +95,7 @@ export const usePayrollSummaryPageLogic = () => {
     employeeIds: params.checked,
     payDate: '',
   };
+  const hack = { payroll }; // This is a hack to get the payroll object in the create payroll form handler
 
   const getCreatePayrollFormHandler = () => {
     return async (
@@ -108,11 +110,15 @@ export const usePayrollSummaryPageLogic = () => {
           const emp = processorData.employees.find(
             (e: any) => e.id === employee,
           );
+          const payrollEmployee: any = hack.payroll?.employees?.find((e: any) => e.id === employee);
           const _update: Record<string, any> = { employee };
           const deletedAddons: any = [];
           const newAddons: any = [];
           if (update.salary) {
             _update.salary = update.salary;
+          }
+          if (update.netSalary && payrollEmployee) {
+            _update.salary = payrollEmployee.salary;
           }
           if ('prorate' in update) {
             _update.prorate = update.prorate;
