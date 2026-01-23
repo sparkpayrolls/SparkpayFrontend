@@ -278,4 +278,5 @@ export const RequestAccessValidation = Yup.object().shape({
 
 export const UpdateSalaryValidation = Yup.object().shape({
   salary: Yup.number().min(10).required('a salary is required'),
+  netSalary: Yup.number().min(10).required('a net salary is required'),
 });

@@ -16,6 +16,7 @@ export type Employee = {
   firstname: string;
   lastname: string;
   salary: number;
+  netSalary?: number;
   bonus: Addon[];
   deductions: Addon[];
   excludeFromTotals?: boolean;
