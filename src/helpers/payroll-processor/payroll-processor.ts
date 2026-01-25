@@ -101,7 +101,7 @@ export class PayrollProcessor {
       });
       const tax = this.processTax({
         employee,
-        options: statutoryDeductionOptions?.pension,
+        options: statutoryDeductionOptions?.tax,
         precision,
         proratedSalary,
         totalBonus: totalTaxableBonus,
@@ -289,8 +289,12 @@ export class PayrollProcessor {
       nhf,
       year,
     } = payload;
-    const _options = employee.statutoryDeductionOptions?.tax ||
-      options || { enabled: false, addToCharge: false };
+    const _options = {
+      enabled: false,
+      addToCharge: false,
+      ...options,
+      ...employee.statutoryDeductionOptions?.tax
+    };
 
     return TaxProcessor.process({
       ..._options,
