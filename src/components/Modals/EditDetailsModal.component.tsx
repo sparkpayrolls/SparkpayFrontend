@@ -17,6 +17,7 @@ export const EditEmployeeDetailsModal = NiceModal.create(
                 initialValues={{
                   ...props.employee,
                   salary: String(props.employee.salary),
+                  yearlyRentAmount: String(props.employee.yearlyRentAmount || ''),
                 }}
                 currency={Util.getCurrencySymbolFromAdministrator(
                   props.administrator,

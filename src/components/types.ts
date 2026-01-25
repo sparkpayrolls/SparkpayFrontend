@@ -164,6 +164,7 @@ export type AddEmployee = {
   email: string;
   salary: string;
   phoneNumber?: string;
+  yearlyRentAmount?: string;
 };
 
 /** Kebab Menus */

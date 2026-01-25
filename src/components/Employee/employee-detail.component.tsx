@@ -117,6 +117,15 @@ export const EmployeeDetail = (props: IEmployeeDetails) => {
             </div>
             <div>
               <SingleDetail
+                title="Yearly Rent Amount"
+                details={eph?.yearlyRentAmount 
+                  ? `${currency} ${Util.formatMoneyNumber(eph.yearlyRentAmount)}`
+                  : 'Not set'}
+                loading={loading}
+              />
+            </div>
+            <div>
+              <SingleDetail
                 title="Country"
                 details={(eph?.country as Country)?.name}
                 loading={loading}

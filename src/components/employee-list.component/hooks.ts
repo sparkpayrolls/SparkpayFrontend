@@ -48,13 +48,16 @@ export const useEmployeeListContext = () => {
       case 'salary':
         return 2;
 
-      case 'email':
+      case 'yearlyRentAmount':
         return 3;
 
-      case 'phoneNumber':
+      case 'email':
         return 4;
+
+      case 'phoneNumber':
+        return 5;
       case 'accountNumber':
-        return 6;
+        return 7;
       default:
         return 0;
     }
@@ -96,6 +99,7 @@ export const useEmployeeListContext = () => {
           firstname,
           lastname,
           salary,
+          yearlyRentAmount,
           email,
           phoneNumber,
           bankId,
@@ -106,6 +110,7 @@ export const useEmployeeListContext = () => {
             firstname,
             lastname,
             salary: salary.replace(/[^\d.]/g, ''),
+            yearlyRentAmount: yearlyRentAmount ? yearlyRentAmount.replace(/[^\d.]/g, '') : undefined,
             email,
             phoneNumber,
             payoutMethod: payoutMethod.id,
@@ -212,6 +217,13 @@ export const useEmployeeListContext = () => {
             mask: 'N #,##.00',
             decimal: '.',
           },
+          {
+            type: 'numeric',
+            title: 'Yearly Rent Amount',
+            width: 135,
+            mask: 'N #,##.00',
+            decimal: '.',
+          },
           { type: 'text', title: 'Email (optioinal)', width: 165 },
           {
             type: 'text',
@@ -236,11 +248,11 @@ export const useEmployeeListContext = () => {
           cell.classList.remove('error-cell');
           cell.removeAttribute('title');
 
-          if ([5, 6].includes(+columnIndex)) {
+          if ([6, 7].includes(+columnIndex)) {
             payoutMeta[rowIndex] = {
               ...(payoutMeta[rowIndex] || {}),
               rowIndex,
-              [+columnIndex === 5 ? 'bankId' : 'accountNumber']: value,
+              [+columnIndex === 6 ? 'bankId' : 'accountNumber']: value,
             };
             const { accountNumber, bankId } = payoutMeta[rowIndex];
 
@@ -254,7 +266,7 @@ export const useEmployeeListContext = () => {
                   .then(({ data }) => {
                     if (data.length) {
                       tableRef.current?.setValueFromCoords(
-                        5,
+                        6,
                         +rowIndex,
                         data[0].id,
                         true,
@@ -263,7 +275,7 @@ export const useEmployeeListContext = () => {
                   })
                   .catch(() => {
                     tableRef.current?.setValueFromCoords(
-                      5,
+                      6,
                       +rowIndex,
                       '',
                       true,
@@ -275,7 +287,7 @@ export const useEmployeeListContext = () => {
                 .then((res) => {
                   if (res) {
                     tableRef.current?.setValueFromCoords(
-                      7,
+                      8,
                       +rowIndex,
                       (res as { accountName: string }).accountName,
                       true,
@@ -284,16 +296,16 @@ export const useEmployeeListContext = () => {
                 })
                 .catch(() => {
                   setCellError(
-                    6,
+                    7,
                     +rowIndex,
                     'unable to resolve account details',
                   );
-                  setCellError(7, +rowIndex, 'invalid account details');
+                  setCellError(8, +rowIndex, 'invalid account details');
                 });
             }
           }
         },
-        minDimensions: [7, 10] as [number, number],
+        minDimensions: [9, 10] as [number, number],
         showIndex: () => false,
       };
 
