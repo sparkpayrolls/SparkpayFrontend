@@ -116,26 +116,40 @@ const EmployeePage: NextPage = () => {
           <div className="employee-section__head">
             <h1 className="employee-section__title">Employee Settings</h1>
             <div className="employee-section__employee-button">
-              <Button
-                label="Create Employee Group"
-                onClick={onCreateGroup}
-                className="employee-section__employee-button1"
-                type="submit"
-              />
-              <Button
-                element="a"
-                href="/employees/employee-list"
-                label={
-                  <>
-                    <PlusSvg />
-                    &nbsp;{'Add\xa0Employee'}
-                  </>
-                }
-                // onClick={onAddEmployee}
-                className="employee-section__submit-btn"
-                primary
-                type="submit"
-              />
+              {selectedTab === 'groups' && (
+                <Button
+                  label="Create Employee Group"
+                  onClick={onCreateGroup}
+                  className="employee-section__submit-btn"
+                  primary
+                  type="submit"
+                />
+              )}
+              {selectedTab === 'employees' && (
+                <>
+                  <Button
+                    element="a"
+                    href="/employees/bulk-update"
+                    label="Update Employees"
+                    className="employee-section__employee-button1"
+                    type="submit"
+                  />
+                  <Button
+                    element="a"
+                    href="/employees/employee-list"
+                    label={
+                      <>
+                        <PlusSvg />
+                        &nbsp;{'Add\xa0Employee'}
+                      </>
+                    }
+                    // onClick={onAddEmployee}
+                    className="employee-section__submit-btn"
+                    primary
+                    type="submit"
+                  />
+                </>
+              )}
             </div>
 
             <Dropdown

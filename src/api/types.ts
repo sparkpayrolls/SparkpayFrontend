@@ -147,6 +147,7 @@ export type Employee = Document & {
   voluntaryPensionContribution?: number;
   pensionId?: string;
   pfa?: string;
+  yearlyRentAmount?: number;
 };
 
 export enum GroupTypeEnum {

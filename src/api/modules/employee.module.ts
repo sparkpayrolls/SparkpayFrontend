@@ -44,10 +44,19 @@ export class EmployeeModule extends HttpRepository {
         | 'taxState'
         | 'bvn'
         | 'statutoryDeductions'
+        | 'yearlyRentAmount'
       >
     >,
   ) {
     const { data } = await this.put<Employee>(`/employees/${id}`, employee);
+
+    return data;
+  }
+
+  async updateBulkEmployees(payload: {
+    employees: Array<{ id: string } & Partial<Employee>>;
+  }) {
+    const { data } = await this.put<Employee[]>('/employees/bulk', payload);
 
     return data;
   }

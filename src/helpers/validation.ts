@@ -50,6 +50,7 @@ export const singleEmployeeUploadValidationSchema = Yup.object().shape({
   lastname: format.lastname,
   salary: Yup.string().required('Salary is Required'),
   phoneNumber: Yup.string(),
+  yearlyRentAmount: Yup.string().optional(),
 });
 
 export const bulkEmployeeFileUploadValidationSchema = Yup.object().shape({
@@ -128,6 +129,7 @@ export const BulkEmployeeAddValidation = Yup.array().of(
       email: Yup.string().email('enter a valid email').optional(),
       phoneNumber: Yup.string().optional(),
       salary: Yup.string().required('Salary is required'),
+      yearlyRentAmount: Yup.string().optional(),
     })
     .required(),
 );

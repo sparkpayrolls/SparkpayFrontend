@@ -255,12 +255,19 @@ export const useRemittanceEmployeesTabContext = () => {
   >({});
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const isEmpty = (data?.meta?.total || 0) <= 0;
+  const [yearlyRentAmounts, setYearlyRentAmounts] = useState<Record<string, number>>({});
 
   const getEmployees = useCallback(() => {
     setLoading(true);
     return $api.payroll
       .getRemittanceEmployees(params)
-      .then(setData)
+      .then((data) => {
+        setData(data);
+        setYearlyRentAmounts(data.data.employees.reduce((acc, employee) => {
+          acc[employee.id] = employee.yearlyRentAmount || 0;
+          return acc;
+        }, {} as Record<string, number>));
+      })
       .catch((error) => {
         Util.onNonAuthError(error, (httpError) => {
           toast.error(httpError.message);
@@ -287,7 +294,7 @@ export const useRemittanceEmployeesTabContext = () => {
     return (ev: any) => {
       if (
         ev.target.value === employee[ev.target.name as 'taxId'] ||
-        (skipIfEmpty && _isEmpty(ev.target.value))
+        (skipIfEmpty && typeof ev.target.value !== 'number' && _isEmpty(ev.target.value))
       ) {
         return;
       }
@@ -347,6 +354,10 @@ export const useRemittanceEmployeesTabContext = () => {
     employeeLoading,
     loading,
     data,
+    yearlyRentAmounts,
+    setYearlyRentAmounts: (id: string) => (ev: any) => {
+      setYearlyRentAmounts((prev) => ({ ...prev, [id]: ev.target.value }));
+    },
     setParams,
   };
 };

@@ -131,6 +131,25 @@ export const EmployeeAddForm = (props: IEmployeeAddForm) => {
               )}
             </div>
 
+            <div className="single-employee-upload-form__section">
+              <InputV2
+                type="number"
+                label={`Yearly Rent Amount (${currency})`}
+                placeholder={`Yearly Rent Amount (${currency})`}
+                name="yearlyRentAmount"
+                value={values.yearlyRentAmount}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.yearlyRentAmount && errors.yearlyRentAmount}
+                transformValue={(val) => {
+                  const valTransformed = +`${val}`.replace(/[^0-9.]/gi, '');
+                  if (isNaN(valTransformed) || val === '') return '';
+
+                  return `${currency} ${valTransformed.toLocaleString()}`;
+                }}
+              />
+            </div>
+
             {showPayoutDetails && (
               <div className="single-employee-upload-form__payout-details">
                 <PayoutDetails

@@ -24,6 +24,8 @@ export const EmployeesTaxViewTab = () => {
     loading,
     data,
     setParams,
+    yearlyRentAmounts,
+    setYearlyRentAmounts,
   } = useRemittanceEmployeesTabContext();
 
   return (
@@ -102,6 +104,7 @@ export const EmployeesTaxViewTab = () => {
             <tr>
               <th>Name</th>
               <th>Salary</th>
+              <th>Yearly Rent Amount</th>
               <th>Tax</th>
               <th>Tax ID</th>
               <th>Tax State</th>
@@ -119,6 +122,43 @@ export const EmployeesTaxViewTab = () => {
                   </td>
 
                   <td>{Util.formatMoneyString(currency)(employee.salary)}</td>
+
+                  <td style={{ padding: 0 }}>
+                    <InputV2
+                      type="number"
+                      style={{ borderRadius: 0, background: 'transparent' }}
+                      placeholder="Enter Yearly Rent"
+                      value={yearlyRentAmounts[employee.id]}
+                      onChange={setYearlyRentAmounts(employee.id)}
+                      loading={
+                        employeeLoading[`${employee.id}_yearlyRentAmount`]
+                      }
+                      disabled={
+                        employeeLoading[`${employee.id}_yearlyRentAmount`]
+                      }
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        updateEmployee(
+                          employee,
+                          true,
+                          true,
+                        )({
+                          target: {
+                            name: 'yearlyRentAmount',
+                            value: value
+                              ? +`${value}`.replace(/[^0-9.]/gi, '')
+                              : undefined,
+                          },
+                        });
+                      }}
+                      name="yearlyRentAmount"
+                      transformValue={(val) => {
+                        const num = +`${val}`.replace(/[^0-9.]/gi, '');
+                        if (isNaN(num) || val === '') return '';
+                        return `${currency} ${num.toLocaleString()}`;
+                      }}
+                    />
+                  </td>
 
                   <td>
                     {Util.formatMoneyString(currency)(employee.tax?.amount)}
