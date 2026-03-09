@@ -44,7 +44,7 @@ export class TaxProcessor {
       };
     }
 
-    const reliefs: number[] = [nhf, pension, healthRelief];
+    const reliefs: number[] = [nhf, pension, healthRelief].map(Number).filter(Boolean);
 
     if (year < 2026) {
       const firstConsolidatedRelief = Math.max(
