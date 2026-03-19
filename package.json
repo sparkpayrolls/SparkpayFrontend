@@ -54,6 +54,7 @@
     "socket.io-client": "^4.5.1",
     "tailwindcss": "^3.4.7",
     "tawkto-react": "^3.0.1",
+    "xlsx": "^0.18.5",
     "yup": "^0.32.9"
   },
   "devDependencies": {
