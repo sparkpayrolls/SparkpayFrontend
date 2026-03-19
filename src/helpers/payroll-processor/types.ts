@@ -45,6 +45,8 @@ export type ProcessPayload = {
   month: string;
   year: number;
   payItems?: Record<string, boolean>;
+  cycles?: number;
+  currentCycle?: number;
 };
 
 export type ProcessedEmployee = {

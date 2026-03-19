@@ -16,10 +16,28 @@ export class GrossSalaryProcessor {
       precision,
       taxProcessorPayload,
       employee,
+      cycles = 1,
+      currentCycle = 1,
     } = payload;
 
-    // Use binary search to find proratedSalary that produces the target netSalary
-    // netSalary = proratedSalary - pension - nhf - nhis - tax (nsitf is employer-paid)
+    const isFinalCycle = currentCycle >= cycles;
+
+    // On non-final cycles no remittances are deducted, so gross = net
+    if (!isFinalCycle) {
+      const disabledRemittance = { amount: 0, addToCharge: false };
+      return {
+        tax: disabledRemittance,
+        pension: disabledRemittance,
+        nhf: disabledRemittance,
+        nsitf: disabledRemittance,
+        nhis: disabledRemittance,
+        proratedSalary: netSalary,
+      };
+    }
+
+    // Binary search: find proratedSalary where
+    // netSalary = proratedSalary - pension(gross) - nhf(gross) - nhis(gross) - tax(gross)
+    // where gross = proratedSalary * cycles (nsitf is employer-paid)
 
     let minProratedSalary = netSalary; // Lower bound: netSalary (no deductions case)
     let maxProratedSalary = netSalary * 3; // Upper bound: reasonable guess
@@ -44,14 +62,19 @@ export class GrossSalaryProcessor {
         precision,
       );
 
+      const remittanceGross = Util.getPreciseNumber(
+        proratedSalary * cycles,
+        precision,
+      );
+
       // Calculate all deductions using forward process methods
       const pension = PensionProcessor.process({
         ...pensionProcessorPayload,
-        proratedSalary,
+        proratedSalary: remittanceGross,
       });
 
       const nhf = PercentageStatutoryProcessor.process({
-        proratedSalary,
+        proratedSalary: remittanceGross,
         precision,
         percentage: STATUTORY_PERCENTAGES.NHF,
         options:
@@ -59,7 +82,7 @@ export class GrossSalaryProcessor {
           statutoryDeductionOptions?.nhf,
       });
       const nsitf = PercentageStatutoryProcessor.process({
-        proratedSalary,
+        proratedSalary: remittanceGross,
         precision,
         percentage: STATUTORY_PERCENTAGES.NSITF,
         options:
@@ -67,7 +90,7 @@ export class GrossSalaryProcessor {
           statutoryDeductionOptions?.nsitf,
       });
       const nhis = PercentageStatutoryProcessor.process({
-        proratedSalary,
+        proratedSalary: remittanceGross,
         precision,
         percentage: STATUTORY_PERCENTAGES.NHIS,
         options:
@@ -77,7 +100,7 @@ export class GrossSalaryProcessor {
 
       const tax = TaxProcessor.process({
         ...taxProcessorPayload,
-        proratedSalary,
+        proratedSalary: remittanceGross,
         pension:
           (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
         nhf: nhf.amount,
@@ -144,13 +167,18 @@ export class GrossSalaryProcessor {
           precision,
         );
 
+        const remittanceGross = Util.getPreciseNumber(
+          proratedSalary * cycles,
+          precision,
+        );
+
         const pension = PensionProcessor.process({
           ...pensionProcessorPayload,
-          proratedSalary,
+          proratedSalary: remittanceGross,
         });
 
         const nhf = PercentageStatutoryProcessor.process({
-          proratedSalary,
+          proratedSalary: remittanceGross,
           precision,
           percentage: STATUTORY_PERCENTAGES.NHF,
           options:
@@ -158,7 +186,7 @@ export class GrossSalaryProcessor {
             statutoryDeductionOptions?.nhf,
         });
         const nsitf = PercentageStatutoryProcessor.process({
-          proratedSalary,
+          proratedSalary: remittanceGross,
           precision,
           percentage: STATUTORY_PERCENTAGES.NSITF,
           options:
@@ -166,7 +194,7 @@ export class GrossSalaryProcessor {
             statutoryDeductionOptions?.nsitf,
         });
         const nhis = PercentageStatutoryProcessor.process({
-          proratedSalary,
+          proratedSalary: remittanceGross,
           precision,
           percentage: STATUTORY_PERCENTAGES.NHIS,
           options:
@@ -176,7 +204,7 @@ export class GrossSalaryProcessor {
 
         const tax = TaxProcessor.process({
           ...taxProcessorPayload,
-          proratedSalary,
+          proratedSalary: remittanceGross,
           pension:
             (pension.employeeContribution || 0) +
             (pension.voluntaryPension || 0),
@@ -242,12 +270,16 @@ export class GrossSalaryProcessor {
     }
 
     // Ultimate fallback: return with netSalary as proratedSalary
+    const fallbackRemittanceGross = Util.getPreciseNumber(
+      netSalary * cycles,
+      precision,
+    );
     const pension = PensionProcessor.process({
       ...pensionProcessorPayload,
-      proratedSalary: netSalary,
+      proratedSalary: fallbackRemittanceGross,
     });
     const nhf = PercentageStatutoryProcessor.process({
-      proratedSalary: netSalary,
+      proratedSalary: fallbackRemittanceGross,
       precision,
       percentage: STATUTORY_PERCENTAGES.NHF,
       options:
@@ -255,7 +287,7 @@ export class GrossSalaryProcessor {
         statutoryDeductionOptions?.nhf,
     });
     const nsitf = PercentageStatutoryProcessor.process({
-      proratedSalary: netSalary,
+      proratedSalary: fallbackRemittanceGross,
       precision,
       percentage: STATUTORY_PERCENTAGES.NSITF,
       options:
@@ -263,7 +295,7 @@ export class GrossSalaryProcessor {
         statutoryDeductionOptions?.nsitf,
     });
     const nhis = PercentageStatutoryProcessor.process({
-      proratedSalary: netSalary,
+      proratedSalary: fallbackRemittanceGross,
       precision,
       percentage: STATUTORY_PERCENTAGES.NHIS,
       options:
@@ -272,7 +304,7 @@ export class GrossSalaryProcessor {
     });
     const tax = TaxProcessor.process({
       ...taxProcessorPayload,
-      proratedSalary: netSalary,
+      proratedSalary: fallbackRemittanceGross,
       pension:
         (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
       nhf: nhf.amount,

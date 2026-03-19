@@ -42,7 +42,11 @@ export class PayrollProcessor {
       month,
       year,
       payItems,
+      cycles = 1,
+      currentCycle = 1,
     } = payload;
+
+    const isFinalCycle = currentCycle >= cycles;
 
     const shouldSum = (items: string[]) =>
       items.some((item) => payItems?.[item] ?? true);
@@ -90,6 +94,8 @@ export class PayrollProcessor {
           totalBonus: totalTaxableBonus,
           year,
           statutoryDeductionOptions,
+          cycles,
+          currentCycle,
         });
 
         salary = grossSalary.proratedSalary;
@@ -107,55 +113,76 @@ export class PayrollProcessor {
           precision,
         );
       }
-      const pension = this.processPension({
-        employee,
-        options: statutoryDeductionOptions?.pension,
-        salaryBreakdown,
+      const remittanceGross = Util.getPreciseNumber(
+        proratedSalary * cycles,
         precision,
-        proratedSalary,
-      });
-      const nhf = PercentageStatutoryProcessor.process({
-        proratedSalary,
-        precision,
-        percentage: STATUTORY_PERCENTAGES.NHF,
-        options: merge(
-          { enabled: false, addToCharge: false },
-          statutoryDeductionOptions?.nhf,
-          employee.statutoryDeductionOptions?.nhf,
-        ),
-      });
-      const nsitf = PercentageStatutoryProcessor.process({
-        proratedSalary,
-        precision,
-        percentage: STATUTORY_PERCENTAGES.NSITF,
-        options: merge(
-          { enabled: false, addToCharge: false },
-          statutoryDeductionOptions?.nsitf,
-          employee.statutoryDeductionOptions?.nsitf,
-        ),
-      });
-      const nhis = PercentageStatutoryProcessor.process({
-        proratedSalary,
-        precision,
-        percentage: STATUTORY_PERCENTAGES.NHIS,
-        options: merge(
-          { enabled: false, addToCharge: false },
-          statutoryDeductionOptions?.nhis,
-          employee.statutoryDeductionOptions?.nhis,
-        ),
-      });
-      const tax = this.processTax({
-        employee,
-        options: statutoryDeductionOptions?.tax,
-        precision,
-        proratedSalary,
-        totalBonus: totalTaxableBonus,
-        pension:
-          (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
-        nhf: nhf.amount,
-        nhis: nhis.amount,
-        year,
-      });
+      );
+      const disabledRemittance = { amount: 0, addToCharge: false };
+
+      const pension = isFinalCycle
+        ? this.processPension({
+            employee,
+            options: statutoryDeductionOptions?.pension,
+            salaryBreakdown,
+            precision,
+            proratedSalary: remittanceGross,
+          })
+        : {
+            ...disabledRemittance,
+            employeeContribution: 0,
+            voluntaryPension: 0,
+          };
+      const nhf = isFinalCycle
+        ? PercentageStatutoryProcessor.process({
+            proratedSalary: remittanceGross,
+            precision,
+            percentage: STATUTORY_PERCENTAGES.NHF,
+            options: merge(
+              { enabled: false, addToCharge: false },
+              statutoryDeductionOptions?.nhf,
+              employee.statutoryDeductionOptions?.nhf,
+            ),
+          })
+        : disabledRemittance;
+      const nsitf = isFinalCycle
+        ? PercentageStatutoryProcessor.process({
+            proratedSalary: remittanceGross,
+            precision,
+            percentage: STATUTORY_PERCENTAGES.NSITF,
+            options: merge(
+              { enabled: false, addToCharge: false },
+              statutoryDeductionOptions?.nsitf,
+              employee.statutoryDeductionOptions?.nsitf,
+            ),
+          })
+        : disabledRemittance;
+      const nhis = isFinalCycle
+        ? PercentageStatutoryProcessor.process({
+            proratedSalary: remittanceGross,
+            precision,
+            percentage: STATUTORY_PERCENTAGES.NHIS,
+            options: merge(
+              { enabled: false, addToCharge: false },
+              statutoryDeductionOptions?.nhis,
+              employee.statutoryDeductionOptions?.nhis,
+            ),
+          })
+        : disabledRemittance;
+      const tax = isFinalCycle
+        ? this.processTax({
+            employee,
+            options: statutoryDeductionOptions?.tax,
+            precision,
+            proratedSalary: remittanceGross,
+            totalBonus: totalTaxableBonus,
+            pension:
+              (pension.employeeContribution || 0) +
+              (pension.voluntaryPension || 0),
+            nhf: nhf.amount,
+            nhis: nhis.amount,
+            year,
+          })
+        : disabledRemittance;
       const netSalary = Util.getPreciseNumber(
         proratedSalary +
           totalBonus -
@@ -279,6 +306,8 @@ export class PayrollProcessor {
       string,
       StatutoryDeductionOptions | undefined
     >;
+    cycles?: number;
+    currentCycle?: number;
   }) {
     const {
       employee,
@@ -288,6 +317,8 @@ export class PayrollProcessor {
       salaryBreakdown,
       totalBonus,
       year,
+      cycles = 1,
+      currentCycle = 1,
     } = payload;
     const _salaryBreakdown = {
       ...salaryBreakdown,
@@ -320,6 +351,8 @@ export class PayrollProcessor {
         employee,
         year,
       },
+      cycles,
+      currentCycle,
     });
   }
 

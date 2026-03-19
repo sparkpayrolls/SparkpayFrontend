@@ -525,7 +525,8 @@ export type ProcessPayrollPayload = {
   excludedEmployeeIds?: string[] | null;
   proRateMonth: string;
   year?: number;
-  cycle?: number;
+  cycles?: number;
+  currentCycle?: number;
 };
 
 export type PayrollSummary = {

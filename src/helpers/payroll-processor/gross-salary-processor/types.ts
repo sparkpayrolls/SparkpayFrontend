@@ -15,4 +15,6 @@ export type ProcessPayload = {
     TaxProcessorPayload,
     'proratedSalary' | 'nhf' | 'nhis' | 'pension'
   >;
+  cycles?: number;
+  currentCycle?: number;
 };

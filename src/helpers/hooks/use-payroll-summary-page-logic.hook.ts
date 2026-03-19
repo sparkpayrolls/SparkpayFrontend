@@ -19,6 +19,8 @@ export const usePayrollSummaryPageLogic = () => {
   const [params, setParams] = useState({
     proRateMonth: moment().format('MMMM'),
     year: moment().year(),
+    cycles: 1,
+    currentCycle: 1,
     checked: [] as string[],
     isReady: false,
   });
@@ -67,6 +69,8 @@ export const usePayrollSummaryPageLogic = () => {
     processorData &&
     PayrollProcessor.process({
       ...processorData,
+      cycles: params.cycles || 1,
+      currentCycle: params.currentCycle || 1,
       employees: processorData.employees.map((e: any) => ({
         ...e,
         excludeFromTotals: !params.checked.includes(e.id),
@@ -91,7 +95,7 @@ export const usePayrollSummaryPageLogic = () => {
       payItems,
     });
   const initialValues = {
-    ...pick(params, ['year', 'proRateMonth']),
+    ...pick(params, ['year', 'proRateMonth', 'cycles', 'currentCycle']),
     employeeIds: params.checked,
     payDate: '',
   };

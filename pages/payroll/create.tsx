@@ -214,6 +214,39 @@ const CreatePayroll: NextPage = () => {
                   }}
                 />
                 <InputV2
+                  label="Cycles"
+                  type="number"
+                  placeholder="Cycles"
+                  value={String(params.cycles || 1)}
+                  style={{ maxWidth: '100px' }}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value, 10);
+                    const cycles = Number.isFinite(val) && val >= 1 ? val : 1;
+                    setParams({
+                      ...params,
+                      cycles,
+                      currentCycle: Math.min(params.currentCycle, cycles),
+                    });
+                  }}
+                />
+                <InputV2
+                  label="Current Cycle"
+                  type="number"
+                  placeholder="Current"
+                  value={String(params.currentCycle || 1)}
+                  style={{ maxWidth: '100px' }}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value, 10);
+                    setParams({
+                      ...params,
+                      currentCycle:
+                        Number.isFinite(val) && val >= 1
+                          ? Math.min(val, params.cycles)
+                          : 1,
+                    });
+                  }}
+                />
+                <InputV2
                   label="Search"
                   className="inputs__search"
                   type="search"
