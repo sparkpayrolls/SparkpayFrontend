@@ -241,6 +241,21 @@ export const usePayrollSummaryPageLogic = () => {
       shouldSum: payItems['nhf'] ?? true,
       toggle: () => setPayItems((p) => ({ ...p, nhf: !(p['nhf'] ?? true) })),
     },
+    {
+      name: 'Total NSITF',
+      value: payroll?.totalPayrollNSITF,
+      sumsTotal: true,
+      shouldSum: payItems['nsitf'] ?? true,
+      toggle: () =>
+        setPayItems((p) => ({ ...p, nsitf: !(p['nsitf'] ?? true) })),
+    },
+    {
+      name: 'Total NHIS',
+      value: payroll?.totalPayrollNHIS,
+      sumsTotal: true,
+      shouldSum: payItems['nhis'] ?? true,
+      toggle: () => setPayItems((p) => ({ ...p, nhis: !(p['nhis'] ?? true) })),
+    },
     { name: 'Total Fee', value: payroll?.totalFees },
   ];
 

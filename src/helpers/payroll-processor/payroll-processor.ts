@@ -16,8 +16,22 @@ import {
   PercentageStatutoryProcessor,
   STATUTORY_PERCENTAGES,
 } from './percentage-statutory-processor/percentage-statutory-processor';
+import { merge } from 'lodash';
 
 export class PayrollProcessor {
+  private static readonly statutoryTotalKeys = [
+    'totalPension',
+    'totalNHF',
+    'totalNSITF',
+    'totalNHIS',
+    'totalTax',
+    'totalPayrollPension',
+    'totalPayrollNHF',
+    'totalPayrollNSITF',
+    'totalPayrollNHIS',
+    'totalPayrollTax',
+  ] as const;
+
   static process(payload: ProcessPayload) {
     const {
       employees,
@@ -46,9 +60,13 @@ export class PayrollProcessor {
       totalFees: Util.getPreciseNumber(fees.baseFee, precision),
       totalPension: 0,
       totalNHF: 0,
+      totalNSITF: 0,
+      totalNHIS: 0,
       totalTax: 0,
       totalPayrollPension: 0,
       totalPayrollNHF: 0,
+      totalPayrollNSITF: 0,
+      totalPayrollNHIS: 0,
       totalPayrollTax: 0,
       totalCharge: 0,
       employees: [],
@@ -56,9 +74,12 @@ export class PayrollProcessor {
 
     employees.forEach((employee) => {
       const { excludeFromTotals, prorate } = employee;
-      let salary = employee.salary;
+      let { salary } = employee;
       const totalBonus = this.sumAddons(employee.bonus, precision);
-      const totalTaxableBonus = this.sumAddons(employee.bonus.filter((b) => !b.isNotTaxable), precision);
+      const totalTaxableBonus = this.sumAddons(
+        employee.bonus.filter((b) => !b.isNotTaxable),
+        precision,
+      );
       const totalDeductions = this.sumAddons(employee.deductions, precision);
       if (employee.netSalary && employee.netSalary > 0) {
         const grossSalary = this.processGrossSalary({
@@ -97,7 +118,31 @@ export class PayrollProcessor {
         proratedSalary,
         precision,
         percentage: STATUTORY_PERCENTAGES.NHF,
-        options: employee.statutoryDeductionOptions?.nhf || statutoryDeductionOptions?.nhf,
+        options: merge(
+          { enabled: false, addToCharge: false },
+          statutoryDeductionOptions?.nhf,
+          employee.statutoryDeductionOptions?.nhf,
+        ),
+      });
+      const nsitf = PercentageStatutoryProcessor.process({
+        proratedSalary,
+        precision,
+        percentage: STATUTORY_PERCENTAGES.NSITF,
+        options: merge(
+          { enabled: false, addToCharge: false },
+          statutoryDeductionOptions?.nsitf,
+          employee.statutoryDeductionOptions?.nsitf,
+        ),
+      });
+      const nhis = PercentageStatutoryProcessor.process({
+        proratedSalary,
+        precision,
+        percentage: STATUTORY_PERCENTAGES.NHIS,
+        options: merge(
+          { enabled: false, addToCharge: false },
+          statutoryDeductionOptions?.nhis,
+          employee.statutoryDeductionOptions?.nhis,
+        ),
       });
       const tax = this.processTax({
         employee,
@@ -108,16 +153,18 @@ export class PayrollProcessor {
         pension:
           (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
         nhf: nhf.amount,
+        nhis: nhis.amount,
         year,
       });
       const netSalary = Util.getPreciseNumber(
         proratedSalary +
-        totalBonus -
-        ((pension.employeeContribution || 0) +
-          (pension.voluntaryPension || 0)) -
-        nhf.amount -
-        tax.amount -
-        totalDeductions,
+          totalBonus -
+          ((pension.employeeContribution || 0) +
+            (pension.voluntaryPension || 0)) -
+          nhf.amount -
+          nhis.amount -
+          tax.amount -
+          totalDeductions,
         precision,
       );
 
@@ -132,6 +179,8 @@ export class PayrollProcessor {
         prorateDays,
         tax,
         nhf,
+        nsitf,
+        nhis,
         excludeFromTotals: Boolean(excludeFromTotals),
         salaryBreakdown: Object.entries(
           employee.salaryBreakdown || salaryBreakdown || {},
@@ -142,7 +191,7 @@ export class PayrollProcessor {
       });
 
       if (!excludeFromTotals) {
-        const hasRemittance = [nhf, pension, tax].some(
+        const hasRemittance = [nhf, nsitf, nhis, pension, tax].some(
           (r) => r.addToCharge && r.amount > 0,
         );
 
@@ -170,23 +219,33 @@ export class PayrollProcessor {
           precision,
           response.totalFees,
           shouldSum(['salary', 'bonus']) ? fees.perEmployee : 0,
-          hasRemittance && shouldSum(['nhf', 'pension', 'tax'])
+          hasRemittance && shouldSum(['nhf', 'nsitf', 'nhis', 'pension', 'tax'])
             ? fees.perRemittanceEmployee
             : 0,
         );
 
-        [
+        const statutoryTotals: {
+          statutory: { amount: number; addToCharge: boolean };
+          key: typeof PayrollProcessor.statutoryTotalKeys[number];
+          skipCheck?: boolean;
+        }[] = [
           { statutory: pension, key: 'totalPension' },
           { statutory: nhf, key: 'totalNHF' },
+          { statutory: nsitf, key: 'totalNSITF' },
+          { statutory: nhis, key: 'totalNHIS' },
           { statutory: tax, key: 'totalTax' },
           { statutory: pension, key: 'totalPayrollPension', skipCheck: true },
           { statutory: nhf, key: 'totalPayrollNHF', skipCheck: true },
+          { statutory: nsitf, key: 'totalPayrollNSITF', skipCheck: true },
+          { statutory: nhis, key: 'totalPayrollNHIS', skipCheck: true },
           { statutory: tax, key: 'totalPayrollTax', skipCheck: true },
-        ].forEach(({ statutory, key, skipCheck }) => {
+        ];
+
+        statutoryTotals.forEach(({ statutory, key, skipCheck }) => {
           if (skipCheck || statutory.addToCharge) {
-            response[key as 'totalNHF'] = this.sum(
+            response[key] = this.sum(
               precision,
-              response[key as 'totalNHF'],
+              response[key],
               statutory.amount,
             );
           }
@@ -201,6 +260,8 @@ export class PayrollProcessor {
       response.totalFees,
       shouldSum(['pension']) ? response.totalPension : 0,
       shouldSum(['nhf']) ? response.totalNHF : 0,
+      shouldSum(['nsitf']) ? response.totalNSITF : 0,
+      shouldSum(['nhis']) ? response.totalNHIS : 0,
       shouldSum(['tax']) ? response.totalTax : 0,
     );
 
@@ -214,19 +275,33 @@ export class PayrollProcessor {
     salaryBreakdown?: SalaryBreakdown;
     totalBonus: number;
     year: number;
-    statutoryDeductionOptions?: Record<string, StatutoryDeductionOptions | undefined>;
+    statutoryDeductionOptions?: Record<
+      string,
+      StatutoryDeductionOptions | undefined
+    >;
   }) {
-    const { employee, netSalary, precision, statutoryDeductionOptions, salaryBreakdown, totalBonus, year } = payload;
-    const _salaryBreakdown = Object.assign(
-      {},
+    const {
+      employee,
+      netSalary,
+      precision,
+      statutoryDeductionOptions,
       salaryBreakdown,
-      employee.salaryBreakdown,
-    );
+      totalBonus,
+      year,
+    } = payload;
+    const _salaryBreakdown = {
+      ...salaryBreakdown,
+      ...employee.salaryBreakdown,
+    };
 
     return GrossSalaryProcessor.process({
       netSalary,
       pensionProcessorPayload: {
-        ...(employee.statutoryDeductionOptions?.pension || statutoryDeductionOptions?.pension || { enabled: false, addToCharge: false }),
+        ...(employee.statutoryDeductionOptions?.pension ||
+          statutoryDeductionOptions?.pension || {
+            enabled: false,
+            addToCharge: false,
+          }),
         salaryBreakdown: _salaryBreakdown,
         precision,
         voluntaryPension: employee.voluntaryPensionContribution,
@@ -234,8 +309,18 @@ export class PayrollProcessor {
       employee,
       statutoryDeductionOptions,
       precision,
-      taxProcessorPayload: { ...(employee.statutoryDeductionOptions?.tax || statutoryDeductionOptions?.tax || { enabled: false, addToCharge: false }), precision, totalBonus, employee, year }
-    })
+      taxProcessorPayload: {
+        ...(employee.statutoryDeductionOptions?.tax ||
+          statutoryDeductionOptions?.tax || {
+            enabled: false,
+            addToCharge: false,
+          }),
+        precision,
+        totalBonus,
+        employee,
+        year,
+      },
+    });
   }
 
   private static processPension(payload: {
@@ -245,20 +330,17 @@ export class PayrollProcessor {
     precision: number;
     proratedSalary: number;
   }) {
-    const {
-      employee,
+    const { employee, options, salaryBreakdown, precision, proratedSalary } =
+      payload;
+    const _options = merge(
+      { enabled: false, addToCharge: false },
       options,
-      salaryBreakdown,
-      precision,
-      proratedSalary,
-    } = payload;
-    const _options = employee.statutoryDeductionOptions?.pension ||
-      options || { enabled: false, addToCharge: false };
-    const _salaryBreakdown = Object.assign(
-      {},
-      salaryBreakdown,
-      employee.salaryBreakdown,
+      employee.statutoryDeductionOptions?.pension,
     );
+    const _salaryBreakdown = {
+      ...salaryBreakdown,
+      ...employee.salaryBreakdown,
+    };
 
     return PensionProcessor.process({
       ..._options,
@@ -277,6 +359,7 @@ export class PayrollProcessor {
     totalBonus: number;
     pension: number;
     nhf: number;
+    nhis: number;
     year: number;
   }) {
     const {
@@ -287,14 +370,14 @@ export class PayrollProcessor {
       totalBonus,
       pension,
       nhf,
+      nhis,
       year,
     } = payload;
-    const _options = {
-      enabled: false,
-      addToCharge: false,
-      ...options,
-      ...employee.statutoryDeductionOptions?.tax
-    };
+    const _options = merge(
+      { enabled: false, addToCharge: false },
+      options,
+      employee.statutoryDeductionOptions?.tax,
+    );
 
     return TaxProcessor.process({
       ..._options,
@@ -304,6 +387,7 @@ export class PayrollProcessor {
       totalBonus,
       pension,
       nhf,
+      nhis,
       year,
     });
   }

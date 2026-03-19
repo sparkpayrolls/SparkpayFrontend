@@ -141,6 +141,8 @@ export type Employee = Document & {
   phoneNumber?: string;
   taxId?: string;
   nhfId?: string;
+  nsitfId?: string;
+  nhisId?: string;
   taxState?: string;
   bvn?: string;
   statutoryDeductions?: Record<string, StatutoryDeduction>;
@@ -155,6 +157,8 @@ export enum GroupTypeEnum {
   tax = 'tax',
   pension = 'pension',
   NHF = 'NHF',
+  NSITF = 'NSITF',
+  NHIS = 'NHIS',
 }
 
 export type GroupType = keyof typeof GroupTypeEnum;
@@ -358,9 +362,13 @@ export type Payroll = Document & {
   totalDeductions?: number;
   totalPension?: number;
   totalNHF?: number;
+  totalNSITF?: number;
+  totalNHIS?: number;
   totalTax?: number;
   totalPayrollPension?: number;
   totalPayrollNHF?: number;
+  totalPayrollNSITF?: number;
+  totalPayrollNHIS?: number;
   totalPayrollTax?: number;
   approvers?: {
     firstname: string;
@@ -507,6 +515,8 @@ export type PayrollEmployee = Document & {
   prorateDays?: number;
   pension?: PayrollEmployeeRemittance;
   nhf?: PayrollEmployeeRemittance;
+  nsitf?: PayrollEmployeeRemittance;
+  nhis?: PayrollEmployeeRemittance;
   tax?: PayrollEmployeeRemittance;
 };
 

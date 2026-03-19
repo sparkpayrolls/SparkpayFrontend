@@ -44,6 +44,20 @@ export const useRemittanceTabContext = (
     };
   }
 
+  if (remittance === 'nsitf') {
+    initialValues = {
+      ...initialValues,
+      nsitfId: (settings?.nsitfId || '').toString(),
+    };
+  }
+
+  if (remittance === 'nhis') {
+    initialValues = {
+      ...initialValues,
+      nhisId: (settings?.nhisId || '').toString(),
+    };
+  }
+
   if (remittance === 'pension') {
     initialValues = {
       ...initialValues,

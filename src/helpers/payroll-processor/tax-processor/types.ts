@@ -11,6 +11,7 @@ export type ProcessPayload = {
   withholdingTaxRate?: number;
   pension?: number;
   nhf?: number;
+  nhis?: number;
   healthRelief?: number;
   year: number;
 };

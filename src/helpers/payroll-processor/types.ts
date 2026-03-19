@@ -64,6 +64,12 @@ export type ProcessedEmployee = {
   nhf?: {
     amount: number;
   } & Record<string, unknown>;
+  nsitf?: {
+    amount: number;
+  } & Record<string, unknown>;
+  nhis?: {
+    amount: number;
+  } & Record<string, unknown>;
   proratedSalary: number;
   prorateDays: number;
   excludeFromTotals: boolean;
@@ -78,9 +84,13 @@ export type ProcessedPayroll = {
   totalFees: number;
   totalPension: number;
   totalNHF: number;
+  totalNSITF: number;
+  totalNHIS: number;
   totalTax: number;
   totalPayrollPension: number;
   totalPayrollNHF: number;
+  totalPayrollNSITF: number;
+  totalPayrollNHIS: number;
   totalPayrollTax: number;
   totalCharge: number;
   employees: ProcessedEmployee[];

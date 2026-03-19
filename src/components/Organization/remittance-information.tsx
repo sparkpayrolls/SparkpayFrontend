@@ -3,6 +3,8 @@ import { Tab } from '../Tab/tab.component';
 import { TabPane } from '../Tab/tabpane.component';
 import TaxTab from './tax-tab';
 import { NhfTab } from './nhf-tab';
+import { NsitfTab } from './nsitf-tab';
+import { NhisTab } from './nhis-tab';
 import { PensionTab } from './pension-tab';
 import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
 import Skeleton from 'react-loading-skeleton';
@@ -35,6 +37,14 @@ function RemittanceInformation(props: RemittanceInformationProps) {
 
             <TabPane key="nhf" tab="NHF">
               <NhfTab organizationDetails={props.organizationDetails} />
+            </TabPane>
+
+            <TabPane key="nsitf" tab="NSITF">
+              <NsitfTab organizationDetails={props.organizationDetails} />
+            </TabPane>
+
+            <TabPane key="nhis" tab="NHIS">
+              <NhisTab organizationDetails={props.organizationDetails} />
             </TabPane>
 
             <TabPane key="pension" tab="Pension">

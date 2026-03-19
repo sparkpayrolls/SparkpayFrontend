@@ -6,9 +6,8 @@ import { ProcessPayload, ProcessResult } from './types';
  */
 export const STATUTORY_PERCENTAGES = {
   NHF: 0.025, // 2.5% - National Housing Fund
-  // Future additions:
-  // ITF: 0.01, // 1% - Industrial Training Fund
-  // NSITF: 0.01, // 1% - Nigeria Social Insurance Trust Fund
+  NSITF: 0.01, // 1% - Nigeria Social Insurance Trust Fund
+  NHIS: 0.05, // 5% - National Health Insurance Scheme
 } as const;
 
 export class PercentageStatutoryProcessor {

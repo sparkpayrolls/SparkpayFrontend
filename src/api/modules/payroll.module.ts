@@ -202,6 +202,8 @@ export class PayrollModule extends HttpRepository {
         employees: (Employee & ProcessedEmployee)[];
         taxEmployees: number;
         nhfEmployees: number;
+        nsitfEmployees: number;
+        nhisEmployees: number;
         pensionEmployees: number;
       }
     >('/payrolls/remittance-employees', {

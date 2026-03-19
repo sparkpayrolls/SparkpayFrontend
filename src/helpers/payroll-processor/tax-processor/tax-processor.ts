@@ -13,6 +13,7 @@ export class TaxProcessor {
       withholdingTaxRate = 0.05,
       pension = 0,
       nhf = 0,
+      nhis = 0,
       healthRelief = 0,
       addToCharge,
       year,
@@ -44,7 +45,9 @@ export class TaxProcessor {
       };
     }
 
-    const reliefs: number[] = [nhf, pension, healthRelief].map(Number).filter(Boolean);
+    const reliefs: number[] = [nhf, nhis, pension, healthRelief]
+      .map(Number)
+      .filter(Boolean);
 
     if (year < 2026) {
       const firstConsolidatedRelief = Math.max(
@@ -52,7 +55,7 @@ export class TaxProcessor {
         Util.getPreciseNumber(2e5 / 12, precision),
       );
       const secondConsolidatedRelief = Util.getPreciseNumber(
-        (grossSalary - pension - nhf) * 0.2,
+        (grossSalary - pension - nhf - nhis) * 0.2,
         precision,
       );
       reliefs.push(firstConsolidatedRelief, secondConsolidatedRelief);

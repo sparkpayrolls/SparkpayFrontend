@@ -427,6 +427,36 @@ const PayDetails: NextPage = () => {
                     }
                   />
                   <SinglePayrollDetail
+                    title="Total NSITF"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalPayrollNSITF || 0,
+                            2,
+                          )}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
+                    title="Total NHIS"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalPayrollNHIS || 0,
+                            2,
+                          )}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
                     title="Fee"
                     loading={loading && !payroll}
                     details={
@@ -578,6 +608,8 @@ const PayDetails: NextPage = () => {
                     <th>Tax</th>
                     <th>Pension</th>
                     <th>NHF</th>
+                    <th>NSITF</th>
+                    <th>NHIS</th>
                     <th>Payout Status</th>
                   </tr>
                 </thead>
@@ -639,6 +671,14 @@ const PayDetails: NextPage = () => {
                           <td>
                             {currency}{' '}
                             {Util.formatMoneyNumber(e.nhf?.amount || 0)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.nsitf?.amount || 0)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.nhis?.amount || 0)}
                           </td>
                           <td>
                             <div className="d-flex align-items-center justify-content-space-between">

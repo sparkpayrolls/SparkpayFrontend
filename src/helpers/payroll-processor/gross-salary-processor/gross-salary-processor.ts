@@ -9,14 +9,21 @@ import {
 
 export class GrossSalaryProcessor {
   static process(payload: ProcessPayload) {
-    const { netSalary, pensionProcessorPayload, statutoryDeductionOptions, precision, taxProcessorPayload, employee } = payload;
+    const {
+      netSalary,
+      pensionProcessorPayload,
+      statutoryDeductionOptions,
+      precision,
+      taxProcessorPayload,
+      employee,
+    } = payload;
 
     // Use binary search to find proratedSalary that produces the target netSalary
-    // netSalary = proratedSalary - pension(proratedSalary) - nhf(proratedSalary) - tax(proratedSalary, pension, nhf)
+    // netSalary = proratedSalary - pension - nhf - nhis - tax (nsitf is employer-paid)
 
     let minProratedSalary = netSalary; // Lower bound: netSalary (no deductions case)
     let maxProratedSalary = netSalary * 3; // Upper bound: reasonable guess
-    const tolerance = Math.pow(10, -precision);
+    const tolerance = 10 ** -precision;
     const maxIterations = 100;
 
     let proratedSalary = minProratedSalary;
@@ -25,6 +32,8 @@ export class GrossSalaryProcessor {
       proratedSalary: number;
       pension: ReturnType<typeof PensionProcessor.process>;
       nhf: ReturnType<typeof PercentageStatutoryProcessor.process>;
+      nsitf: ReturnType<typeof PercentageStatutoryProcessor.process>;
+      nhis: ReturnType<typeof PercentageStatutoryProcessor.process>;
       tax: ReturnType<typeof TaxProcessor.process>;
     } | null = null;
     let bestDifference = Infinity;
@@ -45,21 +54,43 @@ export class GrossSalaryProcessor {
         proratedSalary,
         precision,
         percentage: STATUTORY_PERCENTAGES.NHF,
-        options: employee.statutoryDeductionOptions?.nhf || statutoryDeductionOptions?.nhf,
+        options:
+          employee.statutoryDeductionOptions?.nhf ||
+          statutoryDeductionOptions?.nhf,
+      });
+      const nsitf = PercentageStatutoryProcessor.process({
+        proratedSalary,
+        precision,
+        percentage: STATUTORY_PERCENTAGES.NSITF,
+        options:
+          employee.statutoryDeductionOptions?.nsitf ||
+          statutoryDeductionOptions?.nsitf,
+      });
+      const nhis = PercentageStatutoryProcessor.process({
+        proratedSalary,
+        precision,
+        percentage: STATUTORY_PERCENTAGES.NHIS,
+        options:
+          employee.statutoryDeductionOptions?.nhis ||
+          statutoryDeductionOptions?.nhis,
       });
 
       const tax = TaxProcessor.process({
         ...taxProcessorPayload,
         proratedSalary,
-        pension: (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
+        pension:
+          (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
         nhf: nhf.amount,
+        nhis: nhis.amount,
       });
 
       const calculatedNetSalary = Util.getPreciseNumber(
         proratedSalary -
-        ((pension.employeeContribution || 0) + (pension.voluntaryPension || 0)) -
-        nhf.amount -
-        tax.amount,
+          ((pension.employeeContribution || 0) +
+            (pension.voluntaryPension || 0)) -
+          nhf.amount -
+          nhis.amount -
+          tax.amount,
         precision,
       );
 
@@ -72,6 +103,8 @@ export class GrossSalaryProcessor {
           proratedSalary,
           pension,
           nhf,
+          nsitf,
+          nhis,
           tax,
         };
       }
@@ -82,6 +115,8 @@ export class GrossSalaryProcessor {
           tax,
           pension,
           nhf,
+          nsitf,
+          nhis,
           proratedSalary,
         };
       }
@@ -118,21 +153,44 @@ export class GrossSalaryProcessor {
           proratedSalary,
           precision,
           percentage: STATUTORY_PERCENTAGES.NHF,
-          options: employee.statutoryDeductionOptions?.nhf || statutoryDeductionOptions?.nhf,
+          options:
+            employee.statutoryDeductionOptions?.nhf ||
+            statutoryDeductionOptions?.nhf,
+        });
+        const nsitf = PercentageStatutoryProcessor.process({
+          proratedSalary,
+          precision,
+          percentage: STATUTORY_PERCENTAGES.NSITF,
+          options:
+            employee.statutoryDeductionOptions?.nsitf ||
+            statutoryDeductionOptions?.nsitf,
+        });
+        const nhis = PercentageStatutoryProcessor.process({
+          proratedSalary,
+          precision,
+          percentage: STATUTORY_PERCENTAGES.NHIS,
+          options:
+            employee.statutoryDeductionOptions?.nhis ||
+            statutoryDeductionOptions?.nhis,
         });
 
         const tax = TaxProcessor.process({
           ...taxProcessorPayload,
           proratedSalary,
-          pension: (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
+          pension:
+            (pension.employeeContribution || 0) +
+            (pension.voluntaryPension || 0),
           nhf: nhf.amount,
+          nhis: nhis.amount,
         });
 
         const calculatedNetSalary = Util.getPreciseNumber(
           proratedSalary -
-          ((pension.employeeContribution || 0) + (pension.voluntaryPension || 0)) -
-          nhf.amount -
-          tax.amount,
+            ((pension.employeeContribution || 0) +
+              (pension.voluntaryPension || 0)) -
+            nhf.amount -
+            nhis.amount -
+            tax.amount,
           precision,
         );
 
@@ -144,6 +202,8 @@ export class GrossSalaryProcessor {
             proratedSalary,
             pension,
             nhf,
+            nsitf,
+            nhis,
             tax,
           };
         }
@@ -153,6 +213,8 @@ export class GrossSalaryProcessor {
             tax,
             pension,
             nhf,
+            nsitf,
+            nhis,
             proratedSalary,
           };
         }
@@ -173,6 +235,8 @@ export class GrossSalaryProcessor {
         tax: bestResult.tax,
         pension: bestResult.pension,
         nhf: bestResult.nhf,
+        nsitf: bestResult.nsitf,
+        nhis: bestResult.nhis,
         proratedSalary: bestResult.proratedSalary,
       };
     }
@@ -186,21 +250,42 @@ export class GrossSalaryProcessor {
       proratedSalary: netSalary,
       precision,
       percentage: STATUTORY_PERCENTAGES.NHF,
-      options: employee.statutoryDeductionOptions?.nhf || statutoryDeductionOptions?.nhf,
+      options:
+        employee.statutoryDeductionOptions?.nhf ||
+        statutoryDeductionOptions?.nhf,
+    });
+    const nsitf = PercentageStatutoryProcessor.process({
+      proratedSalary: netSalary,
+      precision,
+      percentage: STATUTORY_PERCENTAGES.NSITF,
+      options:
+        employee.statutoryDeductionOptions?.nsitf ||
+        statutoryDeductionOptions?.nsitf,
+    });
+    const nhis = PercentageStatutoryProcessor.process({
+      proratedSalary: netSalary,
+      precision,
+      percentage: STATUTORY_PERCENTAGES.NHIS,
+      options:
+        employee.statutoryDeductionOptions?.nhis ||
+        statutoryDeductionOptions?.nhis,
     });
     const tax = TaxProcessor.process({
       ...taxProcessorPayload,
       proratedSalary: netSalary,
-      pension: (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
+      pension:
+        (pension.employeeContribution || 0) + (pension.voluntaryPension || 0),
       nhf: nhf.amount,
+      nhis: nhis.amount,
     });
 
     return {
       tax,
       pension,
       nhf,
+      nsitf,
+      nhis,
       proratedSalary,
     };
   }
-
 }

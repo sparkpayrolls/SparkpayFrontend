@@ -25,7 +25,7 @@ type Payment = {
   dateCreated: string;
 };
 
-type RemittanceType = 'tax' | 'pension' | 'nhf';
+type RemittanceType = 'tax' | 'pension' | 'nhf' | 'nsitf' | 'nhis';
 
 type RemittancePaymentTableChildrenProps = {
   payments: Payment[];
@@ -118,6 +118,8 @@ const RemittancePayments = () => {
     { label: 'Tax', value: 'tax' },
     { label: 'Pension', value: 'pension' },
     { label: 'NHF', value: 'nhf' },
+    { label: 'NSITF', value: 'nsitf' },
+    { label: 'NHIS', value: 'nhis' },
   ];
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('Remittance Payments');
@@ -188,7 +190,7 @@ const RemittancePayments = () => {
   // Initialize remittance type from URL query parameter
   useEffect(() => {
     const { type } = router.query;
-    if (type && ['tax', 'pension', 'nhf'].includes(type as string)) {
+    if (type && ['tax', 'pension', 'nhf', 'nsitf', 'nhis'].includes(type as string)) {
       setSelectedRemittanceType(type as RemittanceType);
     } else if (router.isReady && !type) {
       // Redirect to default type if none specified
@@ -225,10 +227,12 @@ const RemittancePayments = () => {
 
   // Get display title based on selected type
   const getDisplayTitle = () => {
-    const typeLabels = {
+    const typeLabels: Record<RemittanceType, string> = {
       tax: 'Tax',
       pension: 'Pension',
       nhf: 'NHF',
+      nsitf: 'NSITF',
+      nhis: 'NHIS',
     };
     return `${typeLabels[selectedRemittanceType]} Remittance Payments`;
   };

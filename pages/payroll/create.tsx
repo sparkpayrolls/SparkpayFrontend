@@ -65,6 +65,8 @@ const CreatePayroll: NextPage = () => {
               <th>Employee Pension</th>
               <th>Voluntary Pension</th>
               <th>NHF</th>
+              <th>NSITF</th>
+              <th>NHIS</th>
             </tr>
           </thead>
           <tbody>
@@ -124,6 +126,12 @@ const CreatePayroll: NextPage = () => {
                     </td>
                     <td>
                       {currency} {Util.formatMoneyNumber(e.nhf?.amount || 0)}
+                    </td>
+                    <td>
+                      {currency} {Util.formatMoneyNumber(e.nsitf?.amount || 0)}
+                    </td>
+                    <td>
+                      {currency} {Util.formatMoneyNumber(e.nhis?.amount || 0)}
                     </td>
                   </tr>
                 );
@@ -308,6 +316,22 @@ const CreatePayroll: NextPage = () => {
                 title={'Total NHF'}
                 value={`${currency} ${Util.formatMoneyNumber(
                   payroll?.totalPayrollNHF,
+                )}`}
+              />
+
+              <TotalCard
+                loading={loadingPayroll}
+                title={'Total NSITF'}
+                value={`${currency} ${Util.formatMoneyNumber(
+                  payroll?.totalPayrollNSITF,
+                )}`}
+              />
+
+              <TotalCard
+                loading={loadingPayroll}
+                title={'Total NHIS'}
+                value={`${currency} ${Util.formatMoneyNumber(
+                  payroll?.totalPayrollNHIS,
                 )}`}
               />
             </div>

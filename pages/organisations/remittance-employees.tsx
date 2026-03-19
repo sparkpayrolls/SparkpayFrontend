@@ -5,6 +5,8 @@ import { TabPane } from '@/components/Tab/tabpane.component';
 import Link from 'next/link';
 import { EmployeesTaxViewTab } from '@/components/Organization/employees-tax-view-tab';
 import { EmployeesNHFViewTab } from '@/components/Organization/employees-nhf-view-tab';
+import { EmployeesNSITFViewTab } from '@/components/Organization/employees-nsitf-view-tab';
+import { EmployeesNHISViewTab } from '@/components/Organization/employees-nhis-view-tab';
 import { EmployeesPensionViewTab } from '@/components/Organization/employees-pension-view-tab';
 import { useSelectedTab } from 'src/helpers/hooks/use-selected-tab';
 
@@ -34,6 +36,12 @@ const Employees = () => {
           </TabPane>
           <TabPane key="nhf" tab="NHF Employees">
             <EmployeesNHFViewTab />
+          </TabPane>
+          <TabPane key="nsitf" tab="NSITF Employees">
+            <EmployeesNSITFViewTab />
+          </TabPane>
+          <TabPane key="nhis" tab="NHIS Employees">
+            <EmployeesNHISViewTab />
           </TabPane>
           <TabPane key="pension" tab="Pension Employees">
             <EmployeesPensionViewTab />
