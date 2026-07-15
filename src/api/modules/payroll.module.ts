@@ -56,8 +56,8 @@ export class PayrollModule extends HttpRepository {
   }
 
   async processPayroll(
-    payload: Omit<ProcessPayrollPayload, 'cycle' | 'year'> &
-      Partial<Pick<ProcessPayrollPayload, 'cycle' | 'year'>>,
+    payload: Omit<ProcessPayrollPayload, 'cycles' | 'year'> &
+      Partial<Pick<ProcessPayrollPayload, 'cycles' | 'year'>>,
   ) {
     const { data } = await this.post<ProcessPayrollResponse>(
       '/payrolls/process',
