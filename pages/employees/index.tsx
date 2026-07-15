@@ -1,11 +1,10 @@
 import NiceModal from '@ebay/nice-modal-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from '../../src/components/Button/Button.component';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { Employee } from 'src/api/types';
 import { $api } from 'src/api';
-import { AddEmployeeModal } from '@/components/Modals/AddEmployeeModal.component';
 import { CreateEmployeeGroupModal } from '@/components/Modals/CreateEmployeeGroupModal.component';
 import { useAppSelector } from 'src/redux/hooks';
 import { EmployeeTab } from '@/components/Employee/employee-tab.component';
@@ -15,7 +14,6 @@ import { NextPage } from 'next';
 import { PlusSvg } from '@/components/svg';
 import { Tab } from '@/components/Tab/tab.component';
 import { TabPane } from '@/components/Tab/tabpane.component';
-import { useRouter } from 'next/router';
 import {
   MoreMenuHorizontalSVG,
   EditSquareSVG,
@@ -33,8 +31,6 @@ const EmployeePage: NextPage = () => {
   const [paginationMeta, setPaginationMeta] = useState(
     Util.getDefaultPaginationMeta({}),
   );
-  const [employeeQuery, setEmployeeQuery] = useState<Record<string, any>>({});
-  const router = useRouter();
   const { onTabChange, selectedTab } = useSelectedTab('employees');
 
   const getEmployees = useCallback(
@@ -47,7 +43,6 @@ const EmployeePage: NextPage = () => {
     ) => {
       try {
         setLoading(true);
-        setEmployeeQuery({ page, perPage, search, all, filter });
         const res = await $api.employee.getEmployees({
           page,
           perPage,
@@ -69,22 +64,6 @@ const EmployeePage: NextPage = () => {
     [setEmployees],
   );
 
-  const onAddEmployee = useCallback(() => {
-    NiceModal.show(AddEmployeeModal, {
-      administrator,
-      gotoPayrollCreation: !employees.length,
-    }).then(() => {
-      const { page, perPage, search, all, filter } = employeeQuery;
-      getEmployees(page, perPage, search, all, filter);
-    });
-  }, [administrator, employeeQuery, employees, getEmployees]);
-
-  useEffect(() => {
-    if (!loading && !employees.length) {
-      router.push('/employees/employee-list');
-    }
-  }, [loading, employees, onAddEmployee, router]);
-
   const onCreateGroup = () => {
     NiceModal.show(CreateEmployeeGroupModal).then(() => {
       setGroupTabControl(!groupTabControl);
@@ -94,7 +73,7 @@ const EmployeePage: NextPage = () => {
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <Link href="/employees/employee-list" /* onClick={onAddEmployee} */>
+        <Link href="/employees/employee-list">
           <a className="employee-menu-list">
             <Plus2Svg /> Add employee
           </a>
@@ -143,7 +122,6 @@ const EmployeePage: NextPage = () => {
                         &nbsp;{'Add\xa0Employee'}
                       </>
                     }
-                    // onClick={onAddEmployee}
                     className="employee-section__submit-btn"
                     primary
                     type="submit"
