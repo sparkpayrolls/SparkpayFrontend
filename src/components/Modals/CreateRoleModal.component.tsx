@@ -7,6 +7,7 @@ type ICreateRoleModal = {
   initialValues?: {
     name: string;
     permissions: string[];
+    description?: string;
   };
 };
 

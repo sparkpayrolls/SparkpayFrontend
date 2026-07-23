@@ -26,24 +26,29 @@ export const useAppLogic = () => {
 
   useEffect(() => {
     startLoading();
+
     const loadAuth = () => {
-      if (config().apiUrl)
-        Promise.all([
-          $api.user.getProfile(),
-          $api.company.getCompanies(),
-          $api.company.getCurrentCompany(),
-        ])
-          .then(([user, companies, administrator]) => {
-            dispatch(commitUser(user));
-            dispatch(commitCompanies(companies));
-            dispatch(commitAministrator(administrator));
-          })
-          .catch(() => {
-            /** */
-          })
-          .finally(stopLoading);
-      else setTimeout(loadAuth, 500);
+      if (!config().apiUrl) {
+        stopLoading();
+        return;
+      }
+
+      Promise.all([
+        $api.user.getProfile(),
+        $api.company.getCompanies(),
+        $api.company.getCurrentCompany(),
+      ])
+        .then(([user, companies, administrator]) => {
+          dispatch(commitUser(user));
+          dispatch(commitCompanies(companies));
+          dispatch(commitAministrator(administrator));
+        })
+        .catch(() => {
+          /** */
+        })
+        .finally(stopLoading);
     };
+
     loadAuth();
   }, [dispatch, startLoading, stopLoading]);
 

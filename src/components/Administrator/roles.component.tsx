@@ -35,7 +35,8 @@ export const Roles = (props: IRoles) => {
     try {
       setLoading(true);
       const { data, meta } = await $api.role.getCompanyRoles(params);
-      setRoles(data);
+      // the api envelope omits `data` when empty/nil; avoid an undefined list
+      setRoles(data ?? []);
       setMeta(meta);
     } catch (error) {
       const httpError = error as HttpError;
@@ -79,6 +80,9 @@ export const Roles = (props: IRoles) => {
         id: role.id,
         initialValues: {
           name: role.name,
+          // '' rather than undefined, so an untouched form still matches these
+          // and leaves the save button disabled
+          description: role.description || '',
           permissions: role.permissions.map((p) => (p as Permission).id),
         },
       }).then(() => {

@@ -96,6 +96,133 @@
     min-height: 56px;
     margin-top: 2rem;
   }
+
+}
+
+.create-administrator-form__no-roles {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.375rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.create-administrator-form__no-roles-text {
+  color: $gray;
+}
+
+// `.create-administrator-form button` would stretch this to full width; equal
+// specificity and a later source position keep it looking like a link
+button.create-administrator-form__no-roles-link {
+  width: auto;
+  min-height: 0;
+  margin-top: 0;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: inherit;
+  line-height: inherit;
+  color: $blue-800;
+  transition: color 0.2s ease-in;
+
+  &:hover {
+    color: $blue-900;
+  }
+}
+
+// the select's dropdown, rendered in a portal outside the form
+.role-dropdown {
+  padding: 0.375rem;
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(11, 34, 83, 0.14),
+    0 2px 8px rgba(11, 34, 83, 0.06);
+
+  .ant-select-item {
+    border-radius: 8px;
+    padding: 0.625rem 0.75rem;
+    transition: background-color 0.15s ease-in;
+  }
+
+  // antd truncates options to a single line; these carry a description
+  .ant-select-item-option-content {
+    white-space: normal;
+  }
+
+  .ant-select-item-option-active:not(.ant-select-item-option-disabled),
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: $blue-100;
+  }
+
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    .role-dropdown__name {
+      color: $blue-800;
+    }
+  }
+
+  &__name {
+    display: block;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: $black;
+  }
+
+  &__description {
+    display: block;
+    margin-top: 0.125rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: $gray;
+  }
+
+  &__empty {
+    margin: 0;
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: $gray;
+  }
+
+  // always available: roles may exist without any of them being the one wanted
+  &__create {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.375rem;
+    padding: 0.75rem;
+    border: none;
+    border-top: 1px solid $gray-800;
+    background-color: transparent;
+    color: $blue-800;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in, color 0.15s ease-in;
+
+    svg {
+      width: 12px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      background-color: $blue-100;
+      color: $blue-900;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $blue-800;
+      outline-offset: -2px;
+    }
+  }
 }
 
 .create-role-modal {
@@ -104,12 +231,19 @@
   }
 }
 
+// this drawer can be opened from on top of the invite-administrator drawer.
+// both default to z-index 1000, which would leave the stacking down to dom
+// order, so pin it above
+.ant-drawer.create-role-modal {
+  z-index: 1001;
+}
+
 .create-role-form {
   > *:not(:last-child) {
     margin-bottom: 2rem;
   }
 
-  button {
+  button[type='submit'] {
     margin-left: auto;
     min-height: 56px;
     margin-top: 2.5rem;
@@ -117,29 +251,151 @@
   }
 
   &__permissions {
-    p {
-      font-weight: 600;
-      font-size: 1.125rem;
-      line-height: 1.25rem;
-      color: #0e347e;
-      margin-bottom: 1.25rem;
+    // fieldset carries a default border/padding
+    border: none;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+
+  // legend ignores `display` in some browsers, so it carries text only and the
+  // row below handles layout
+  &__permissions-title {
+    padding: 0;
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.25rem;
+    color: $black-800;
+  }
+
+  &__permissions-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: 0.375rem 0 1rem;
+  }
+
+  &__permissions-count {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: $gray;
+    white-space: nowrap;
+  }
+
+  &__permissions-help {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1rem;
+    color: $gray;
+  }
+
+  &__permissions-loading {
+    margin: 0 0 1rem;
+    font-size: 0.8125rem;
+    line-height: 1rem;
+    color: $gray;
+  }
+}
+
+.permission-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid $gray-800;
+  border-radius: 12px;
+  overflow: hidden;
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    transition: background-color 0.15s ease-in;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $gray-800;
     }
 
-    table {
-      th,
-      td {
-        padding: 1.5rem 1rem;
-        font-weight: 400;
-        font-size: 0.875rem;
-        line-height: 1rem;
-        color: #0b2253;
+    &:hover {
+      background-color: $gray-filled;
+    }
 
-        input[type='checkbox'] {
-          border: 1px solid #dde5ee;
-          background: #ffffff;
-          border-radius: 4px;
-        }
-      }
+    @media screen and (min-width: 560px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+  }
+
+  &__text {
+    min-width: 0;
+  }
+
+  &__label {
+    margin: 0;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: $black;
+  }
+
+  &__description {
+    margin: 0.125rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: $gray;
+  }
+
+  // segmented control: none | view | manage
+  &__levels {
+    display: flex;
+    flex-shrink: 0;
+    padding: 2px;
+    border-radius: 8px;
+    background-color: $gray-100;
+  }
+
+  &__level {
+    position: relative;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    color: $gray-600;
+    white-space: nowrap;
+    transition: background-color 0.15s ease-in, color 0.15s ease-in,
+      box-shadow 0.15s ease-in;
+
+    // the radio drives state; the label is the control
+    input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    &:hover:not(&--active) {
+      color: $black;
+    }
+
+    &--active {
+      background-color: $white;
+      color: $blue-800;
+      box-shadow: 0 1px 3px rgba(11, 34, 83, 0.16);
+    }
+
+    &:focus-within {
+      outline: 2px solid $blue-800;
+      outline-offset: 1px;
+    }
+
+    &--disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
   }
 }

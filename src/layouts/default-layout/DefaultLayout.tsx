@@ -71,15 +71,32 @@ export const Title = (props: { title: string }) => {
     );
 };
 
-const DefaultHead = () => {
-    const { url } = useUrl();
+export type DefaultLayoutSeo = {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+};
 
+const DEFAULT_SEO = {
+    title: 'SparkPay | Payroll with ease',
+    description:
+        'SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls.',
+    ogImage:
+        'https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png',
+};
+
+const DefaultHead = ({ seo }: { seo?: DefaultLayoutSeo }) => {
+    const { url } = useUrl();
+    const title = seo?.title ?? DEFAULT_SEO.title;
+    const description = seo?.description ?? DEFAULT_SEO.description;
+    const ogImage = seo?.ogImage ?? DEFAULT_SEO.ogImage;
+
+    // keys let per-page values dedupe these against any set deeper in the tree
     return (
         <Head>
-            <meta
-                name="description"
-                content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
-            />
+            <title key="title">{title}</title>
+            <meta key="name-title" name="title" content={title} />
+            <meta key="description" name="description" content={description} />
             <meta
                 name="keywords"
                 content="sparkpay, payroll online, online payroll, payroll, payroll processor, payroll saas, process payroll online, payroll software as a service"
@@ -88,31 +105,32 @@ const DefaultHead = () => {
 
             <meta property="og:type" content="website" />
             <meta property="og:url" content={url} />
+            <meta key="og-title" property="og:title" content={title} />
             <meta
+                key="og-description"
                 property="og:description"
-                content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
+                content={description}
             />
-            <meta
-                property="og:image"
-                content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
-            />
+            <meta key="og-image" property="og:image" content={ogImage} />
 
             <meta property="twitter:card" content="summary_large_image" />
             <meta property="twitter:url" content={url} />
+            <meta key="tw-title" property="twitter:title" content={title} />
             <meta
+                key="tw-description"
                 property="twitter:description"
-                content="SparkPay is a payroll software as a service solution geared towards bringing ease to the process of processing, creating and running payrolls."
+                content={description}
             />
-            <meta
-                property="twitter:image"
-                content="https://res.cloudinary.com/djhmpr0bv/image/upload/v1658836812/Frame_34099_pyt6ha.png"
-            />
+            <meta key="tw-image" property="twitter:image" content={ogImage} />
         </Head>
     );
 };
 
 // eslint-disable-next-line no-undef
-const DefaultLayout: React.FC = ({ children }) => {
+const DefaultLayout: React.FC<{ seo?: DefaultLayoutSeo }> = ({
+    children,
+    seo,
+}) => {
     const [navigation, setNavigation] = useState({
         'navigation--attach': false,
         'navigation--show': false,
@@ -140,13 +158,13 @@ const DefaultLayout: React.FC = ({ children }) => {
     };
 
     if (typeof window === 'undefined') {
-        return <DefaultHead />;
+        return <DefaultHead seo={seo} />;
     }
 
     return (
         <>
             <div className='default_layout'>
-                <DefaultHead />
+                <DefaultHead seo={seo} />
                 <header className="default-layout__header" id="top">
                     <Link href="/">
                         <a className="default-layout__header-brand">

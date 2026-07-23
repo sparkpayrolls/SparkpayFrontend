@@ -1,0 +1,618 @@
+// Home page sections (guide §8). One wow (the hero); everything after is quiet.
+
+// ── 1 · HERO ──────────────────────────────────────────────────────────
+.mkt-hero {
+  position: relative;
+  padding-top: 128px; // clears the fixed nav
+  padding-bottom: 4rem;
+  background: var(--bg-canvas);
+  overflow: hidden;
+
+  @media (min-width: 960px) {
+    padding-top: 140px;
+    padding-bottom: 6rem;
+  }
+
+  &__mesh {
+    position: absolute;
+    inset: -20% -10% auto -10%;
+    height: 620px;
+    pointer-events: none;
+    background:
+      radial-gradient(620px 340px at 82% 12%, rgba(77, 121, 255, 0.22), transparent 60%),
+      radial-gradient(560px 320px at 18% 0%, rgba(122, 92, 255, 0.16), transparent 62%);
+    // ambient drift — the only looping motion allowed, very slow (guide §7)
+    animation: mkt-mesh-drift 72s ease-in-out infinite alternate;
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+
+    @media (min-width: 960px) {
+      grid-template-columns: 1.02fr 1fr;
+      gap: 3.5rem;
+    }
+  }
+
+  &__eyebrow {
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.25rem, 5.6vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+
+    span {
+      display: inline;
+    }
+  }
+
+  &__subhead {
+    margin: 1.25rem 0 0;
+    max-width: 34rem;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+    margin-top: 2rem;
+  }
+
+  &__micro {
+    margin: 1.15rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  &__visual {
+    position: relative;
+  }
+}
+
+// hero orchestration (guide §7): headline → subhead/CTAs → mockup, < 1s, once
+.mkt-hero__title span,
+.mkt-hero__subhead,
+.mkt-hero__actions,
+.mkt-hero__micro,
+.mkt-hero__visual {
+  animation: mkt-hero-in 0.6s var(--ease-out) both;
+}
+.mkt-hero__title span:nth-child(1) {
+  animation-delay: 0.02s;
+}
+.mkt-hero__title span:nth-child(2) {
+  animation-delay: 0.08s;
+}
+.mkt-hero__subhead {
+  animation-delay: 0.18s;
+}
+.mkt-hero__actions {
+  animation-delay: 0.26s;
+}
+.mkt-hero__micro {
+  animation-delay: 0.32s;
+}
+.mkt-hero__visual {
+  animation: mkt-hero-mock-in 0.7s var(--ease-out) 0.24s both;
+}
+
+@keyframes mkt-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes mkt-hero-mock-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes mkt-mesh-drift {
+  from {
+    transform: translate3d(-2%, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.06);
+  }
+}
+
+// ── 2 · PROBLEM STRIP (ink) ───────────────────────────────────────────
+.mkt-problem {
+  padding: 4rem 0;
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+
+  @media (min-width: 768px) {
+    padding: 6rem 0;
+  }
+
+  .mkt-h2 {
+    color: var(--text-on-ink);
+  }
+
+  &__grid {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2.5rem;
+
+    @media (min-width: 860px) {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 3rem;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__item {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--text-on-ink);
+  }
+
+  &__x {
+    flex-shrink: 0;
+    color: var(--error);
+    font-weight: 700;
+  }
+
+  &__artifact {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__pivot {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-on-ink);
+
+    p {
+      margin: 0;
+      max-width: 40rem;
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: clamp(1.25rem, 2.6vw, 1.6rem);
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      color: var(--text-on-ink);
+    }
+  }
+}
+
+// spreadsheet fragment
+.mkt-sheet {
+  width: min(340px, 100%);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-on-ink);
+  background: var(--bg-ink-soft);
+  overflow: hidden;
+
+  &__bar {
+    height: 28px;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0 32%,
+      var(--border-on-ink) 32% 33%
+    );
+    border-bottom: 1px solid var(--border-on-ink);
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 0.6fr 1fr 1fr;
+  }
+
+  &__cell {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--text-on-ink-soft);
+    border-bottom: 1px solid var(--border-on-ink);
+    border-right: 1px solid var(--border-on-ink);
+
+    &:last-child {
+      border-right: none;
+      color: var(--error);
+    }
+  }
+}
+
+// ── 3 · HOW IT WORKS ──────────────────────────────────────────────────
+.mkt-steps {
+  position: relative;
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 3rem;
+
+  @media (min-width: 800px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  &__line {
+    display: none;
+
+    @media (min-width: 800px) {
+      display: block;
+      position: absolute;
+      top: 26px;
+      left: 14%;
+      right: 14%;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        var(--brand-100),
+        var(--brand-400),
+        var(--brand-100)
+      );
+    }
+  }
+}
+
+.mkt-step {
+  position: relative;
+
+  &__num {
+    display: inline-grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 1.15rem;
+    border-radius: 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--brand-100);
+    box-shadow: 0 6px 18px rgba(29, 78, 216, 0.1);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--brand-600);
+  }
+
+  &__title {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+  }
+
+  &__body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+}
+
+// ── 4 · BENTO (ink) ───────────────────────────────────────────────────
+.mkt-bento-section {
+  padding: 4rem 0;
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+
+  @media (min-width: 768px) {
+    padding: 6rem 0;
+  }
+
+  .mkt-h2 {
+    color: var(--text-on-ink);
+  }
+}
+
+.mkt-bento {
+  display: grid;
+  gap: 1rem;
+  margin-top: 3rem;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'paye'
+    'remit'
+    'bulk'
+    'slips'
+    'audit'
+    'multi';
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'paye paye'
+      'remit remit'
+      'bulk slips'
+      'audit multi';
+  }
+
+  @media (min-width: 1000px) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+      'paye paye remit remit'
+      'bulk slips audit multi';
+  }
+}
+
+.mkt-bento-cell--large {
+  .mkt-bento-cell__title {
+    font-size: 1.5rem;
+  }
+
+  @media (min-width: 1000px) {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+    align-items: center;
+
+    .mkt-bento-cell__link {
+      grid-column: 1;
+      padding-top: 0.75rem;
+    }
+
+    .mkt-bento-cell__media {
+      grid-row: 1 / span 3;
+      grid-column: 2;
+      margin-top: 0;
+    }
+  }
+}
+
+// mini visuals inside the large bento cells
+.mkt-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--text-on-ink-soft);
+  }
+
+  &__tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+
+    &--filed {
+      color: var(--success);
+    }
+
+    &--scheduled {
+      color: var(--brand-400);
+    }
+  }
+}
+
+// ── 5 · PROOF BAND ────────────────────────────────────────────────────
+.mkt-proof {
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 3rem;
+    padding: 2rem;
+    border-radius: var(--radius-media);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-canvas);
+    text-align: center;
+  }
+
+  &__head {
+    margin-top: 3.5rem;
+  }
+}
+
+// scrolling "trusted by" logo strip
+.mkt-logos {
+  &__label {
+    margin: 0 0 1.25rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  &__viewport {
+    position: relative;
+    overflow: hidden;
+    // fade the edges so wordmarks slide in/out softly
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+  }
+
+  &__track {
+    display: inline-flex;
+    align-items: center;
+    gap: 3rem;
+    padding-right: 3rem;
+    white-space: nowrap;
+    will-change: transform;
+    animation: mkt-logo-scroll 34s linear infinite;
+  }
+
+  &__viewport:hover &__track {
+    animation-play-state: paused;
+  }
+
+  &__item {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    transition: opacity 0.15s var(--ease-out), color 0.15s var(--ease-out);
+
+    &:hover {
+      opacity: 1;
+      color: var(--text-primary);
+    }
+  }
+}
+
+@keyframes mkt-logo-scroll {
+  from {
+    transform: translateX(0);
+  }
+  // the track holds two copies of the list, so -50% is one seamless loop
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+// testimonial cards (real quotes)
+.mkt-testimonials {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  @media (min-width: 720px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+.mkt-testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  border-radius: var(--radius-media);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+
+  &__quote {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+
+  &__client {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: auto;
+  }
+
+  &__avatar {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--brand-100);
+    color: var(--brand-700);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  &__name {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+  }
+
+  &__role {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+}
+
+// ── 6 · FINAL CTA (gradient mesh) ─────────────────────────────────────
+.mkt-final {
+  position: relative;
+  margin: 0 1.25rem 4rem;
+  border-radius: 28px;
+  overflow: hidden;
+  background: var(--bg-ink);
+
+  &__mesh {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(560px 300px at 10% 0%, rgba(77, 121, 255, 0.5), transparent 60%),
+      radial-gradient(600px 320px at 100% 100%, rgba(122, 92, 255, 0.42), transparent 60%),
+      linear-gradient(135deg, var(--mesh-1), transparent 60%);
+    opacity: 0.9;
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    padding: 4.5rem 1.5rem;
+    text-align: center;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  &__sub {
+    margin: 1rem auto 2rem;
+    max-width: 34rem;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: rgba(237, 241, 249, 0.82);
+  }
+
+  &__micro {
+    margin: 1.15rem 0 0;
+    font-size: 0.8125rem;
+    color: rgba(237, 241, 249, 0.7);
+  }
+}

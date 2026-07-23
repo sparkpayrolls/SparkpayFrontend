@@ -1,0 +1,71 @@
+// Dark theme. Driven by `data-mkt-theme="dark"` on <html> (set pre-paint by an
+// inline script in _document, toggled from the nav). All overrides scoped so
+// the default light theme and the authenticated app are untouched.
+
+:root[data-mkt-theme='dark'] {
+  .mkt {
+    --bg-canvas: #0c1220;
+    --bg-surface: #141d33;
+    --bg-ink: #070b16;
+    --bg-ink-soft: #101830;
+    --border-subtle: #253052;
+    --text-primary: #edf1f9;
+    --text-secondary: #9aa6c0;
+    // ink-section tokens stay light-on-dark; brand stays brand
+    --shadow-mockup: 0 40px 80px -24px rgba(0, 0, 0, 0.65);
+    --shadow-nav: 0 1px 0 rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  // nav: dark glass instead of white glass
+  .mkt-nav--scrolled {
+    background: rgba(12, 18, 32, 0.9);
+    border-bottom-color: var(--border-subtle);
+  }
+
+  @supports not (
+    (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+  ) {
+    .mkt-nav--scrolled {
+      background: #0c1220;
+    }
+  }
+
+  .mkt-nav__burger {
+    background: rgba(255, 255, 255, 0.06);
+
+    span {
+      background: var(--text-primary);
+    }
+  }
+
+  // showcase cards: dark tints instead of pale blue
+  .mkt-showcase__card--a {
+    background: linear-gradient(180deg, #111c38, #0d1730);
+  }
+  .mkt-showcase__card--b {
+    background: linear-gradient(180deg, #141a2b, #0e1425);
+  }
+
+  // skeleton shimmer mid-tone
+  .mkt-skel {
+    background: linear-gradient(
+      90deg,
+      #141d33 25%,
+      #1f2a4a 37%,
+      #141d33 63%
+    );
+    background-size: 400% 100%;
+  }
+
+  // recreations use tokens, so they follow; fix the one hardcoded light pill
+  .mkt-dash__pill--queued {
+    background: #1b2540;
+    color: var(--text-on-ink-soft);
+  }
+
+  // problem "before/after" tints if present
+  .mkt-problem__card--before {
+    background: #1a1220;
+    border-color: #3a2331;
+  }
+}
