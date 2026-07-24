@@ -1,0 +1,209 @@
+// Marketing primitives: Button, Eyebrow, StatFigure, MockupFrame, BentoCell.
+
+// ── Button (guide §5) ─────────────────────────────────────────────────
+.mkt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 52px;
+  padding: 0 1.5rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s var(--ease-out), background-color 0.15s var(--ease-out),
+    border-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
+
+  &--sm {
+    height: 44px;
+    padding: 0 1.15rem;
+    font-size: 0.9375rem;
+  }
+
+  &--primary {
+    background: var(--brand-600);
+    color: #fff;
+
+    &:hover {
+      background: var(--brand-700);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &--secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border-color: var(--border-subtle);
+
+    &:hover {
+      border-color: var(--brand-600);
+      color: var(--brand-600);
+      transform: translateY(-1px);
+    }
+  }
+
+  // ghost sits on ink or canvas; arrow nudges on hover
+  &--ghost {
+    height: auto;
+    padding: 0;
+    background: transparent;
+    color: var(--brand-600);
+
+    .mkt-btn__arrow {
+      transition: transform 0.15s var(--ease-out);
+    }
+
+    &:hover .mkt-btn__arrow {
+      transform: translateX(3px);
+    }
+  }
+
+  // on ink backgrounds
+  &--on-ink#{&}--secondary {
+    color: var(--text-on-ink);
+    border-color: var(--border-on-ink);
+
+    &:hover {
+      border-color: var(--brand-400);
+      color: var(--brand-400);
+    }
+  }
+
+  &--on-ink#{&}--ghost {
+    color: var(--brand-400);
+  }
+}
+
+// ── Eyebrow ───────────────────────────────────────────────────────────
+.mkt-eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-600);
+
+  &--on-ink {
+    color: var(--brand-400);
+  }
+}
+
+// ── StatFigure ────────────────────────────────────────────────────────
+.mkt-stat {
+  &__value {
+    display: block;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--brand-600);
+  }
+
+  &__label {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+  }
+
+  &--on-ink &__value {
+    color: var(--text-on-ink);
+  }
+
+  &--on-ink &__label {
+    color: var(--text-on-ink-soft);
+  }
+
+  // TODO markers on placeholder figures
+  &__todo {
+    color: var(--warning);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0;
+  }
+}
+
+// ── MockupFrame (guide §9) ────────────────────────────────────────────
+.mkt-mockup {
+  position: relative;
+  border-radius: var(--radius-media);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-mockup);
+  overflow: hidden;
+
+  &--tilt {
+    @media (min-width: 960px) {
+      transform: perspective(1800px) rotateY(-4deg) rotateX(1.5deg);
+    }
+  }
+
+  &--on-ink {
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+}
+
+// ── BentoCell (guide §5) ──────────────────────────────────────────────
+.mkt-bento-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.75rem;
+  border-radius: var(--radius-media);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-on-ink);
+  text-decoration: none;
+  transition: transform 0.18s var(--ease-out), border-color 0.18s var(--ease-out),
+    background-color 0.18s var(--ease-out);
+
+  &[href]:hover {
+    transform: translateY(-2px);
+    border-color: rgba(96, 165, 250, 0.55);
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.1875rem;
+    letter-spacing: -0.01em;
+    color: var(--text-on-ink);
+  }
+
+  &__body {
+    margin: 0.5rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--text-on-ink-soft);
+  }
+
+  &__link {
+    margin-top: auto;
+    padding-top: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--brand-400);
+  }
+
+  &__media {
+    margin-top: 1.25rem;
+  }
+}

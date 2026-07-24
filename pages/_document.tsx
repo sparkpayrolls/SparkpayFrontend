@@ -14,7 +14,7 @@ class MyDocument extends Document {
             crossOrigin="anonymous"
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@600&family=Karla:wght@400;500&family=Rubik:wght@400;500&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Karla:wght@400;500&family=Rubik:wght@400;500&display=swap"
             rel="stylesheet"
           />
           <link
@@ -25,6 +25,13 @@ class MyDocument extends Document {
           />
         </Head>
         <body>
+          {/* set the marketing theme before paint to avoid a flash */}
+          <script
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{
+              __html: `(function(){try{var t=localStorage.getItem('mkt-theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-mkt-theme',t);}catch(e){}})();`,
+            }}
+          />
           <Main />
           <NextScript />
         </body>

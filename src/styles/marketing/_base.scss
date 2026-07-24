@@ -1,0 +1,140 @@
+// Marketing base: layout scaffolding, the mono figure signature, reveal
+// utility, focus ring, skip link. All under `.mkt`.
+
+.mkt {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+// content column (guide §4: 1200px, 24px gutters)
+.mkt-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+
+  @media (min-width: 768px) {
+    padding: 0 1.5rem;
+  }
+}
+
+// section rhythm (96–128 desktop / 56–64 mobile)
+.mkt-section {
+  padding: 3.5rem 0;
+
+  @media (min-width: 768px) {
+    padding: 6rem 0;
+  }
+
+  @media (min-width: 1200px) {
+    padding: 7.5rem 0;
+  }
+}
+
+// the ledger signature — every ₦ amount, %, date
+.mkt-figure {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+  letter-spacing: -0.01em;
+}
+
+// section header block (eyebrow → headline → support)
+.mkt-head {
+  max-width: 720px;
+
+  &--center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+}
+
+.mkt-h2 {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: inherit;
+}
+
+.mkt-lead {
+  margin: 1rem 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+// ── reveal on scroll (opacity + 16px rise, once) ──────────────────────
+.mkt-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  will-change: opacity, transform;
+
+  &.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// screen-reader-only (e.g. the non-animated logo list)
+.mkt-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ── focus + skip link (a11y) ──────────────────────────────────────────
+.mkt :focus-visible {
+  outline: 2px solid var(--brand-600);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.mkt-skip {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 200;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  background: var(--brand-600);
+  color: #fff;
+  font-weight: 600;
+  transition: top 0.15s var(--ease-out);
+
+  &:focus {
+    top: 1rem;
+  }
+}
+
+// ── global reduced-motion opt-out ─────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .mkt-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .mkt *,
+  .mkt *::before,
+  .mkt *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

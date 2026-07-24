@@ -1,0 +1,135 @@
+// Marketing footer (guide §5): ink background, 4 columns + newsletter stub.
+
+.mkt-footer {
+  background: var(--bg-ink);
+  color: var(--text-on-ink-soft);
+
+  &__inner {
+    display: grid;
+    gap: 3rem;
+    padding-top: 4rem;
+    padding-bottom: 2.5rem;
+
+    @media (min-width: 900px) {
+      grid-template-columns: 1.2fr 2fr;
+      gap: 4rem;
+    }
+  }
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__logo {
+    display: block;
+    height: 26px;
+    width: auto;
+  }
+
+  &__tagline {
+    margin: 1rem 0 1.5rem;
+    max-width: 22rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  &__news-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--text-on-ink-soft);
+  }
+
+  &__news-row {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 22rem;
+  }
+
+  &__news-input {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 0.85rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-on-ink);
+    background: var(--bg-ink-soft);
+    color: var(--text-on-ink);
+    font: inherit;
+    font-size: 0.875rem;
+
+    &::placeholder {
+      color: var(--text-on-ink-soft);
+    }
+  }
+
+  &__news-btn {
+    height: 44px;
+    padding: 0 1.1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--brand-600);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--brand-700);
+    }
+  }
+
+  &__cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  &__col-title {
+    margin: 0 0 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-on-ink);
+  }
+
+  &__col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  &__link {
+    font-size: 0.9375rem;
+    color: var(--text-on-ink-soft);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--text-on-ink);
+    }
+  }
+
+  &__base {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+    border-top: 1px solid var(--border-on-ink);
+    font-size: 0.8125rem;
+  }
+
+  &__rc {
+    color: var(--text-on-ink-soft);
+  }
+}

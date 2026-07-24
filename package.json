@@ -8,12 +8,12 @@
     "yarn": ">=1.0.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start-dep": "next start -p $PORT",
-    "start": "node server.js",
+    "dev": "node ./node_modules/next/dist/bin/next dev",
+    "build": "node ./node_modules/next/dist/bin/next build",
+    "start-dep": "node ./node_modules/next/dist/bin/next start -p 3000",
+    "start": "node ./node_modules/next/dist/bin/next start",
     "test": "jest",
-    "lint": "next lint",
+    "lint": "node ./node_modules/next/dist/bin/next lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "prepare": "husky install",

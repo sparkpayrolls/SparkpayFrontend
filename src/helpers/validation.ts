@@ -255,7 +255,9 @@ export const PayrollEmployeeAddonValidation = Yup.object().shape({
 });
 
 export const CreateAdministratorValidation = Yup.object().shape({
-  role: Yup.string(),
+  // an administrator with no role is locked out of every route by the
+  // permission guard, so the api rejects this anyway
+  role: Yup.string().required('Role is required'),
   user: Yup.string(),
   email: Yup.string().email().required('Email is required'),
   name: Yup.string().required('Name is required'),
@@ -268,9 +270,10 @@ export const CreatePayrollApproverValidation = Yup.object().shape({
 
 export const CreateRoleValidation = Yup.object().shape({
   name: Yup.string().required('Name is required'),
+  description: Yup.string().max(160, 'Keep the description under 160 characters'),
   permissions: Yup.array()
     .of(Yup.string())
-    .min(1, 'Select at least one permission'),
+    .min(1, 'Give this role access to at least one area'),
 });
 
 export const RequestAccessValidation = Yup.object().shape({

@@ -1,322 +1,176 @@
-// import { Text } from '@/components/Typography/Text';
-// import { ChangeEvent, useEffect, useState } from 'react';
-// import { Util } from 'src/helpers/util';
-// import DefaultLayout, { Title } from 'src/layouts/default-layout/DefaultLayout';
+import { FinalCtaBand } from '@/components/marketing/final-cta.component';
+import { MarketingLayout } from '@/components/marketing/marketing-layout.component';
+import { PageHero } from '@/components/marketing/page-hero.component';
+import { MockupPayslip } from '@/components/marketing/mockups/showcase-mockups.component';
+import { SectionHeading } from '@/components/marketing/section-heading.component';
+import { FaqAccordion } from '@/components/ui/faq-accordion.component';
+import { PricingCard, PricingTier } from '@/components/ui/pricing-card.component';
+import { NextPage } from 'next';
+import Head from 'next/head';
 
-// export default function PricingPage() {
-//   // const [variables, setVariables] = useState({ amount: 1000000, size: 20 });
-//   // const [results, setResults] = useState({ payroll: 0, transfer: 0, total: 0 });
-//   // const [focused, setFocused] = useState({ amount: false, size: false });
-//   // const [priceComponent, setPriceComponent] = useState({
-//   //   payroll: '',
-//   //   transfer: '',
-//   // });
+const tiers: PricingTier[] = [
+  {
+    name: 'Starter',
+    price: '₦0',
+    unit: '/ month',
+    blurb: 'Run your first payroll free. For small teams finding their feet.',
+    features: [
+      'Up to 5 employees',
+      'Salary disbursement',
+      'PAYE calculation',
+      'Payslips by email',
+    ],
+    cta: 'Start free',
+    href: '/create-account',
+  },
+  {
+    name: 'Growth',
+    price: '₦300',
+    unit: '/ employee / month',
+    blurb: 'For growing businesses that run payroll every month.',
+    features: [
+      'Unlimited employees',
+      'PAYE per state',
+      'Pension, NHF, NSITF, ITF remittances',
+      'Approval workflow',
+      'Full audit trail',
+    ],
+    cta: 'Run your first payroll free',
+    href: '/create-account',
+    recommended: true,
+  },
+  {
+    name: 'Scale',
+    price: 'Custom',
+    blurb: 'For multi-entity groups with dedicated support needs.',
+    features: [
+      'Everything in Growth',
+      'Multi-company management',
+      'Priority support',
+      'Custom onboarding',
+    ],
+    cta: 'Talk to us',
+    href: '/contact',
+  },
+];
 
-//   // const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-//   //   let { name, value } = event.target;
-//   //   if (+value) {
-//   //     value = +value as any;
-//   //   }
+const comparison: { label: string; spark: boolean; manual: boolean }[] = [
+  { label: 'Pay the whole team in one approval', spark: true, manual: false },
+  { label: 'PAYE calculated per state', spark: true, manual: false },
+  { label: 'Statutory remittances filed on time', spark: true, manual: false },
+  { label: 'Payslips sent automatically', spark: true, manual: false },
+  { label: 'Exportable audit trail', spark: true, manual: false },
+  { label: 'Hours of spreadsheet work each month', spark: false, manual: true },
+];
 
-//   //   setVariables({ ...variables, [name]: value });
-//   // };
+const faq = [
+  {
+    q: 'What counts as an employee?',
+    a: 'Anyone you pay through SparkPay in a given month. People you do not pay that month are not billed.',
+  },
+  {
+    q: 'Is my first payroll really free?',
+    a: 'Yes. You can run your first payroll on the Starter plan without a card, so you can see the whole flow before paying anything.',
+  },
+  {
+    q: 'How does billing work?',
+    a: 'Growth is billed per employee paid, per month. You are only charged for the people you actually pay.',
+  },
+  {
+    q: 'Can I switch plans or leave?',
+    a: 'You can move between plans at any time, and export your data whenever you like. There is no lock-in.',
+  },
+  {
+    q: 'Is my payroll data secure?',
+    a: 'Data is encrypted in transit and at rest, with role-based access for every administrator. See our security page for detail.',
+  },
+];
 
-//   // const handleBlur = (event: ChangeEvent<HTMLInputElement>) => {
-//   //   const { name } = event.target;
+const PricingPage: NextPage = () => {
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
 
-//   //   setFocused({ ...focused, [name]: !focused[name as 'amount'] });
-//   // };
+  return (
+    <MarketingLayout
+      seo={{
+        title: 'Pricing — pay for the people you pay | SparkPay',
+        description:
+          'Simple per-employee pricing for Nigerian payroll. Run your first payroll free, then pay only for the employees you actually pay each month.',
+        path: '/pricing',
+      }}
+    >
+      <Head>
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      </Head>
 
-//   // useEffect(() => {
-//   //   const amount = Math.max(+variables.amount || 0, 0);
-//   //   const size = Math.max(+variables.size || 0, 0);
-//   //   let addition = 1000;
-//   //   let capp = 3000;
-//   //   let transferFee = 75;
-//   //   if (size < 50) {
-//   //     addition = 200;
-//   //     capp = 2200;
-//   //     transferFee = 55;
-//   //   } else if (size < 500) {
-//   //     addition = 500;
-//   //     capp = 2500;
-//   //     transferFee = 65;
-//   //   }
+      <PageHero
+        eyebrow="PRICING"
+        title="Pay for the people you pay."
+        lead="Start free, then simple per-employee pricing — no setup fees, no lock-in."
+        visual={<MockupPayslip />}
+        visualLabel="SparkPay payslip summary"
+      />
 
-//   //   const fee = Math.min((amount * 2.5) / 100 + addition, capp);
-//   //   const totalTransferFee = transferFee * size;
-//   //   setResults({
-//   //     payroll: fee,
-//   //     transfer: totalTransferFee,
-//   //     total: amount + totalTransferFee + fee,
-//   //   });
+      <section className="mkt-section" style={{ paddingTop: 0 }}>
+        <div className="mkt-container">
+          <div className="mkt-pricing-grid">
+            {tiers.map((t) => (
+              <PricingCard tier={t} key={t.name} />
+            ))}
+          </div>
+        </div>
+      </section>
 
-//   //   setPriceComponent({
-//   //     payroll:
-//   //       fee === capp
-//   //         ? `NGN ${Util.formatMoneyNumber(capp, 2)} capp`
-//   //         : `2.5% + NGN ${Util.formatMoneyNumber(addition, 2)}`,
-//   //     transfer: `NGN ${transferFee}/transfer`,
-//   //   });
-//   // }, [variables]);
+      <section className="mkt-section" style={{ background: 'var(--bg-canvas)' }}>
+        <div className="mkt-container">
+          <SectionHeading
+            eyebrow="VS THE OLD WAY"
+            title="SparkPay against a spreadsheet and a banking app"
+          />
+          <div style={{ overflowX: 'auto' }}>
+            <table className="mkt-compare">
+              <thead>
+                <tr>
+                  <th>&nbsp;</th>
+                  <th>SparkPay</th>
+                  <th>Manual</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparison.map((row) => (
+                  <tr key={row.label}>
+                    <td>{row.label}</td>
+                    <td className="mkt-compare__spark">{row.spark ? '✓' : '—'}</td>
+                    <td className="mkt-compare__miss">{row.manual ? '✓' : '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
-//   return (
-//     <DefaultLayout>
-//       <Title title="SparkPay | Pricing" />
+      <section className="mkt-section">
+        <div className="mkt-container">
+          <SectionHeading center eyebrow="PRICING FAQ" title="Common questions" />
+          <FaqAccordion items={faq} />
+        </div>
+      </section>
 
-//       <main className="pricing__main">
-//         <Text
-//           component="h2"
-//           className="pricing__page-title text-center"
-//           variant="heading-1"
-//         >
-//           Reasonable Pricing for your Business
-//         </Text>
-//         <Text component="h3" className="text-center" variant="body-text-1">
-//           You only pay when you execute a payroll.
-//         </Text>
+      <FinalCtaBand />
+    </MarketingLayout>
+  );
+};
 
-//         <section className="pricing__tiers">
-//           <section style={{ width: '100%' }}>
-//             <header className="pricing__tier-header">
-//               <Text
-//                 className="pricing__input-label"
-//                 component="h3"
-//                 variant="heading-3"
-//               >
-//                 Transfers
-//               </Text>
-//             </header>
-
-//             <div className="grid gap-2">
-//               <div>
-//                 <div className="d-flex justify-content-space-between">
-//                   <div>
-//                     <Text component="p" variant="body-text-1">
-//                       Transfers of NGN 5,000 and below
-//                     </Text>
-//                   </div>
-
-//                   <div>
-//                     <Text component="p" variant="body-text-1">
-//                       NGN 10 per Transfer
-//                     </Text>
-//                   </div>
-//                 </div>
-//               </div>
-
-//               <div>
-//                 <div className="d-flex justify-content-space-between">
-//                   <div>
-//                     <Text component="p" variant="body-text-1">
-//                       Transfers between NGN 5,001 and NGN 50,000
-//                     </Text>
-//                   </div>
-
-//                   <div>
-//                     <Text component="p" variant="body-text-1">
-//                       NGN 25 per Transfer
-//                     </Text>
-//                   </div>
-//                 </div>
-//               </div>
-
-//               <div>
-//                 <div className="d-flex justify-content-space-between">
-//                   <div>
-//                     <Text component="p" variant="body-text-1">
-//                       Transfers above NGN 50,000
-//                     </Text>
-//                   </div>
-
-//                   <div>
-//                     <Text component="p" variant="body-text-1">
-//                       NGN 50 per Transfer
-//                     </Text>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </section>
-
-//           {/* <section className="pricing__tier">
-//             <header className="pricing__tier-header">
-//               <Text component="p" variant="body-text-1">
-//                 if payroll size is less than 50
-//               </Text>
-
-//               <Text
-//                 component="p"
-//                 className="pricing__tier-title"
-//                 variant="heading-2"
-//               >
-//                 1.5% + NGN 200
-//               </Text>
-//             </header>
-
-//             <Text component="p" variant="body-text-1">
-//               capped at ₦ 2,200
-//             </Text>
-//             <Text component="p" variant="body-text-1">
-//               and a transfer fee of ₦ 55
-//             </Text>
-//           </section>
-
-//           <section className="pricing__tier">
-//             <header className="pricing__tier-header">
-//               <Text component="p" variant="body-text-1">
-//                 if payroll size is greater than 499
-//               </Text>
-
-//               <Text
-//                 component="p"
-//                 className="pricing__tier-title"
-//                 variant="heading-2"
-//               >
-//                 1.5% + NGN 1,000
-//               </Text>
-//             </header>
-
-//             <Text component="p" variant="body-text-1">
-//               capped at ₦ 3,000
-//             </Text>
-//             <Text component="p" variant="body-text-1">
-//               and a transfer fee of ₦ 75
-//             </Text>
-//           </section>
-
-//           <section className="pricing__tier">
-//             <header className="pricing__tier-header">
-//               <Text component="p" variant="body-text-1">
-//                 if payroll size is less than 500
-//               </Text>
-
-//               <Text
-//                 component="p"
-//                 className="pricing__tier-title"
-//                 variant="heading-2"
-//               >
-//                 1.5% + NGN 500
-//               </Text>
-//             </header>
-
-//             <Text component="p" variant="body-text-1">
-//               capped at ₦ 2,500
-//             </Text>
-//             <Text component="p" variant="body-text-1">
-//               and a transfer fee of ₦ 65
-//             </Text>
-//           </section> */}
-//         </section>
-
-//         {/* <section className="pricing__calculator">
-//           <div className="pricing__calculator-container">
-//             <section className="pricing__calculator-titles">
-//               <Text
-//                 variant="heading-1"
-//                 className="pricing__calculator-title"
-//                 component="p"
-//               >
-//                 Make an accurate calculation of our fees.
-//               </Text>
-//               <Text component="p" variant="body-text-1">
-//                 You can view our costs by entering values into the calculator.
-//               </Text>
-//             </section>
-//             <section className="pricing__calculator-box">
-//               <div className="pricing__input pricing__input--prefixed">
-//                 <Text className="pricing__sub-label" variant="body-text-1">
-//                   If the sum of your payroll is
-//                 </Text>
-
-//                 <div className="pricing__input-container">
-//                   <input
-//                     type={focused.amount ? 'number' : 'text'}
-//                     min={100}
-//                     name="amount"
-//                     className="pricing__input-input"
-//                     value={
-//                       focused.amount
-//                         ? variables.amount
-//                         : Util.formatMoneyNumber(+variables.amount || 0, 2)
-//                     }
-//                     onChange={handleChange}
-//                     onBlur={handleBlur}
-//                     onFocus={handleBlur}
-//                     autoComplete="off"
-//                   />
-//                   <Text className="pricing__input-prefix">NGN</Text>
-//                 </div>
-//               </div>
-
-//               <div className="pricing__input mt-2">
-//                 <Text className="pricing__sub-label" variant="body-text-1">
-//                   and your payroll size is
-//                 </Text>
-
-//                 <div className="pricing__input-container">
-//                   <input
-//                     type={focused.size ? 'number' : 'text'}
-//                     min={1}
-//                     name="size"
-//                     className="pricing__input-input"
-//                     value={
-//                       focused.size
-//                         ? variables.size
-//                         : Util.formatNumber(+variables.size || 0)
-//                     }
-//                     onChange={handleChange}
-//                     onFocus={handleBlur}
-//                     onBlur={handleBlur}
-//                     autoComplete="off"
-//                   />
-//                 </div>
-//               </div>
-
-//               <div className="mt-3 d-flex flex-column r-gap">
-//                 <div>
-//                   <Text className="pricing__sub-label" variant="body-text-1">
-//                     Payroll fee ({priceComponent.payroll})
-//                   </Text>
-//                   <Text className="pricing__input-label" variant="heading-3">
-//                     NGN {Util.formatMoneyNumber(results.payroll, 2)}
-//                   </Text>
-//                 </div>
-
-//                 <div>
-//                   <Text
-//                     className="pricing__sub-label mt-1"
-//                     component="p"
-//                     variant="body-text-1"
-//                   >
-//                     Transfer fee ({priceComponent.transfer})
-//                   </Text>
-//                   <Text className="pricing__input-label" variant="heading-3">
-//                     NGN {Util.formatMoneyNumber(results.transfer, 2)}
-//                   </Text>
-//                 </div>
-
-//                 <div>
-//                   <Text
-//                     className="pricing__sub-label mt-1"
-//                     component="p"
-//                     variant="body-text-1"
-//                   >
-//                     Total charge
-//                   </Text>
-//                   <Text className="pricing__input-label" variant="heading-3">
-//                     NGN {Util.formatMoneyNumber(results.total, 2)}
-//                   </Text>
-//                 </div>
-//               </div>
-//             </section>
-//           </div>
-//         </section> */}
-//       </main>
-//     </DefaultLayout>
-//   );
-// }
-
-export default function PricingPage() {
-  return null;
-}
+export default PricingPage;
