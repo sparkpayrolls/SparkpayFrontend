@@ -16,10 +16,15 @@ export class HttpError extends Error {
 
   static parse(error: AxiosError) {
     if (error.isAxiosError) {
+      // axios 0.28 types response.data as unknown
+      const data = error?.response?.data as
+        | { message?: string; errors?: Record<string, string> }
+        | undefined;
+
       return new HttpError(
-        error?.response?.data?.message || error.message,
+        data?.message || error.message,
         error?.response?.status || 0,
-        error?.response?.data?.errors || {},
+        data?.errors || {},
       );
     }
 
