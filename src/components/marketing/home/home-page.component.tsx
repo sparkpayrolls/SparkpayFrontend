@@ -2,7 +2,6 @@ import { MarketingButton } from '../../ui/marketing-button.component';
 import { BentoCell } from '../../ui/bento-cell.component';
 import { Eyebrow } from '../../ui/eyebrow.component';
 import { MockupFrame } from '../../ui/mockup-frame.component';
-import { StatFigure } from '../../ui/stat-figure.component';
 import { FinalCtaBand } from '../final-cta.component';
 import { MarketingLayout } from '../marketing-layout.component';
 import { MockupDashboard } from '../mockup-dashboard.component';
@@ -143,16 +142,13 @@ export const HomePage = () => (
             month.
           </p>
           <div className="mkt-hero__actions">
-            <MarketingButton href="/create-account">
+            <MarketingButton href="/book-a-demo">
               Run your first payroll free
             </MarketingButton>
             <MarketingButton href="#how-it-works" variant="secondary">
               See how it works
             </MarketingButton>
           </div>
-          <p className="mkt-hero__micro mkt-figure">
-            Free for your first payroll run · No card required
-          </p>
         </div>
 
         <div className="mkt-hero__visual">
@@ -301,12 +297,6 @@ export const HomePage = () => (
         <Reveal>
           <CustomerLogos />
         </Reveal>
-
-        <div className="mkt-proof__stats">
-          <StatFigure label="Salaries disbursed" prefix="₦" value={2.4} suffix="bn+" decimals={1} />
-          <StatFigure label="Payrolls run" value={12000} suffix="+" />
-          <StatFigure label="Hours saved per run" value={40} suffix="+" />
-        </div>
 
         <Reveal className="mkt-head mkt-head--center mkt-proof__head">
           <Eyebrow>WHAT OUR CLIENTS SAY</Eyebrow>

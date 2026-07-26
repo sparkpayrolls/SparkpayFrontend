@@ -53,7 +53,7 @@ export const FeatureLander = (props: FeatureLanderProps) => {
         visual={props.heroVisual}
         actions={
           <>
-            <MarketingButton href="/create-account">
+            <MarketingButton href="/book-a-demo">
               Run your first payroll free
             </MarketingButton>
             <MarketingButton href="/product" variant="secondary">

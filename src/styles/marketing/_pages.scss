@@ -28,6 +28,26 @@
     max-width: 760px;
   }
 
+  // centered, image-free hero (e.g. pricing)
+  &--center {
+    text-align: center;
+
+    .mkt-page-hero__inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .mkt-page-hero__lead {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 40rem;
+    }
+
+    .mkt-page-hero__actions {
+      justify-content: center;
+    }
+  }
+
   // split layout when a visual is present
   &--split &__inner {
     max-width: 1200px;
@@ -421,6 +441,12 @@
   &__unit {
     font-size: 0.8125rem;
     color: var(--text-secondary);
+  }
+
+  &__note {
+    margin: 0.4rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--brand-600);
   }
 
   &__blurb {

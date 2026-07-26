@@ -14,10 +14,12 @@ export const PageHero = (props: {
   actions?: ReactNode;
   visual?: ReactNode;
   visualLabel?: string;
+  center?: boolean;
 }) => (
   <section
     className={classNames('mkt-page-hero', {
       'mkt-page-hero--split': props.visual,
+      'mkt-page-hero--center': props.center && !props.visual,
     })}
   >
     <div className="mkt-page-hero__mesh" aria-hidden="true" />

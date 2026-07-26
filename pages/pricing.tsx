@@ -1,7 +1,6 @@
 import { FinalCtaBand } from '@/components/marketing/final-cta.component';
 import { MarketingLayout } from '@/components/marketing/marketing-layout.component';
 import { PageHero } from '@/components/marketing/page-hero.component';
-import { MockupPayslip } from '@/components/marketing/mockups/showcase-mockups.component';
 import { SectionHeading } from '@/components/marketing/section-heading.component';
 import { FaqAccordion } from '@/components/ui/faq-accordion.component';
 import { PricingCard, PricingTier } from '@/components/ui/pricing-card.component';
@@ -21,12 +20,13 @@ const tiers: PricingTier[] = [
       'Payslips by email',
     ],
     cta: 'Start free',
-    href: '/create-account',
+    href: '/book-a-demo',
   },
   {
     name: 'Growth',
-    price: '₦300',
+    price: '₦150',
     unit: '/ employee / month',
+    note: '+ ₦5,000 base fee / month',
     blurb: 'For growing businesses that run payroll every month.',
     features: [
       'Unlimited employees',
@@ -36,7 +36,7 @@ const tiers: PricingTier[] = [
       'Full audit trail',
     ],
     cta: 'Run your first payroll free',
-    href: '/create-account',
+    href: '/book-a-demo',
     recommended: true,
   },
   {
@@ -74,7 +74,7 @@ const faq = [
   },
   {
     q: 'How does billing work?',
-    a: 'Growth is billed per employee paid, per month. You are only charged for the people you actually pay.',
+    a: 'Growth is a ₦5,000 monthly base fee plus ₦150 per employee paid that month. You are only charged for the people you actually pay.',
   },
   {
     q: 'Can I switch plans or leave?',
@@ -115,11 +115,10 @@ const PricingPage: NextPage = () => {
       </Head>
 
       <PageHero
+        center
         eyebrow="PRICING"
         title="Pay for the people you pay."
         lead="Start free, then simple per-employee pricing — no setup fees, no lock-in."
-        visual={<MockupPayslip />}
-        visualLabel="SparkPay payslip summary"
       />
 
       <section className="mkt-section" style={{ paddingTop: 0 }}>

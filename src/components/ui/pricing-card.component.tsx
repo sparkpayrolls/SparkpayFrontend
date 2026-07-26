@@ -3,8 +3,9 @@ import { MarketingButton } from './marketing-button.component';
 
 export type PricingTier = {
   name: string;
-  price: string; // mono figure, e.g. "₦0" or "₦300"
+  price: string; // mono figure, e.g. "₦0" or "₦150"
   unit?: string; // e.g. "/ employee / month"
+  note?: string; // e.g. a base-fee line under the price
   blurb: string;
   features: string[];
   cta: string;
@@ -28,6 +29,7 @@ export const PricingCard = (props: { tier: PricingTier }) => {
         <span className="mkt-figure">{tier.price}</span>
         {tier.unit && <span className="mkt-price__unit">{tier.unit}</span>}
       </p>
+      {tier.note && <p className="mkt-price__note mkt-figure">{tier.note}</p>}
       <p className="mkt-price__blurb">{tier.blurb}</p>
       <MarketingButton
         href={tier.href}

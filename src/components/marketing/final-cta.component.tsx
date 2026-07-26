@@ -14,7 +14,7 @@ export const FinalCtaBand = (props: {
     title = 'Give your team back the three days payroll steals.',
     sub = 'Salaries, PAYE, and statutory remittances — handled correctly, every month.',
     cta = 'Run your first payroll free',
-    href = '/create-account',
+    href = '/book-a-demo',
   } = props;
 
   return (
@@ -26,9 +26,6 @@ export const FinalCtaBand = (props: {
         <MarketingButton href={href} onInk>
           {cta}
         </MarketingButton>
-        <p className="mkt-final__micro mkt-figure">
-          Free for your first payroll run · No card required
-        </p>
       </div>
     </section>
   );
