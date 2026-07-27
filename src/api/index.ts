@@ -24,6 +24,7 @@ import { AuthDetails } from './types';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 import { RemittanceModule } from './modules/remittance.module';
+import { DemoBookingModule } from './modules/demo-booking.module';
 
 let authToken: string;
 let authDetails: AuthDetails;
@@ -125,6 +126,8 @@ export class $api {
   static role = new RolesModule(this.$axios);
 
   static remittance = new RemittanceModule(this.$axios);
+
+  static demoBooking = new DemoBookingModule(this.$axios);
 
   static async joinWaitList(email: string, name: string) {
     await $api.$axios().post('/join-wait-list', { email, name });

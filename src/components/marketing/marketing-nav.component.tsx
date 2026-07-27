@@ -155,7 +155,7 @@ export const MarketingNav = () => {
           <Link href="/login">
             <a className="mkt-nav__signin">Sign in</a>
           </Link>
-          <MarketingButton href="/create-account" size="sm">
+          <MarketingButton href="/book-a-demo" size="sm">
             Run your first payroll free
           </MarketingButton>
         </div>
@@ -185,7 +185,7 @@ export const MarketingNav = () => {
         <div className="mkt-drawer__panel" role="dialog" aria-label="Menu">
           <div className="mkt-drawer__head">
             <MarketingButton
-              href="/create-account"
+              href="/book-a-demo"
               size="sm"
               onClick={() => setDrawerOpen(false)}
             >
