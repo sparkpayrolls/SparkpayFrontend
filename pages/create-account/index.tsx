@@ -15,7 +15,8 @@ const CreateAccount: NextPage = () => {
     return null;
   }
 
-  const { countries, initialValues, onSubmit, validateEmail } = context;
+  const { countries, initialValues, onSubmit, validateEmail, emailChecking } =
+    context;
 
   if (countries.length === 1) {
     const [country] = countries;
@@ -46,7 +47,6 @@ const CreateAccount: NextPage = () => {
             handleSubmit,
             isSubmitting,
             setErrors,
-            setSubmitting,
             setTouched,
             setValues,
           } = props;
@@ -81,13 +81,13 @@ const CreateAccount: NextPage = () => {
                   label="Email Address"
                   name="email"
                   value={values.email}
-                  loading={isSubmitting}
+                  loading={emailChecking}
                   onChange={(event: any) => {
-                    validateEmail(event.target.value, setErrors, setSubmitting);
+                    validateEmail(event.target.value, setErrors);
                     handleChange(event);
                   }}
                   onBlur={(event: any) => {
-                    validateEmail(event.target.value, setErrors, setSubmitting);
+                    validateEmail(event.target.value, setErrors);
                     handleBlur(event);
                   }}
                   error={touched.email && errors.email}
@@ -154,8 +154,8 @@ const CreateAccount: NextPage = () => {
                 label="Create Account"
                 className="create-account__submit-btn"
                 primary
-                disabled={isSubmitting || !countries.length}
-                showSpinner={isSubmitting || !countries.length}
+                disabled={isSubmitting || !countries.length || emailChecking}
+                showSpinner={isSubmitting}
               />
             </form>
           );
