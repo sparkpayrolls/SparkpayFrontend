@@ -24,6 +24,8 @@ export const EmployeesTaxViewTab = () => {
     loading,
     data,
     setParams,
+    yearlyRentAmounts,
+    setYearlyRentAmounts,
   } = useRemittanceEmployeesTabContext();
 
   return (
@@ -37,14 +39,10 @@ export const EmployeesTaxViewTab = () => {
             <InfoPopUp>Total amount of Tax Remittance</InfoPopUp>
           </div>
           <p className="view-employees__tax__top-cont__info-md">
-            {!Number.isFinite(
-              data?.data?.payrollTotalsByCountry?.NG?.totalPayrollTax,
-            ) ? (
+            {!Number.isFinite(data?.data?.totalPayrollTax) ? (
               <Skeleton width={150} />
             ) : (
-              Util.formatMoneyString(currency)(
-                data?.data?.payrollTotalsByCountry?.NG?.totalPayrollTax,
-              )
+              Util.formatMoneyString(currency)(data?.data?.totalPayrollTax)
             )}
           </p>
         </div>
@@ -106,6 +104,7 @@ export const EmployeesTaxViewTab = () => {
             <tr>
               <th>Name</th>
               <th>Salary</th>
+              <th>Yearly Rent Amount</th>
               <th>Tax</th>
               <th>Tax ID</th>
               <th>Tax State</th>
@@ -124,6 +123,43 @@ export const EmployeesTaxViewTab = () => {
 
                   <td>{Util.formatMoneyString(currency)(employee.salary)}</td>
 
+                  <td style={{ padding: 0 }}>
+                    <InputV2
+                      type="number"
+                      style={{ borderRadius: 0, background: 'transparent' }}
+                      placeholder="Enter Yearly Rent"
+                      value={yearlyRentAmounts[employee.id]}
+                      onChange={setYearlyRentAmounts(employee.id)}
+                      loading={
+                        employeeLoading[`${employee.id}_yearlyRentAmount`]
+                      }
+                      disabled={
+                        employeeLoading[`${employee.id}_yearlyRentAmount`]
+                      }
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        updateEmployee(
+                          employee,
+                          true,
+                          true,
+                        )({
+                          target: {
+                            name: 'yearlyRentAmount',
+                            value: value
+                              ? +`${value}`.replace(/[^0-9.]/gi, '')
+                              : undefined,
+                          },
+                        });
+                      }}
+                      name="yearlyRentAmount"
+                      transformValue={(val) => {
+                        const num = +`${val}`.replace(/[^0-9.]/gi, '');
+                        if (isNaN(num) || val === '') return '';
+                        return `${currency} ${num.toLocaleString()}`;
+                      }}
+                    />
+                  </td>
+
                   <td>
                     {Util.formatMoneyString(currency)(employee.tax?.amount)}
                   </td>
@@ -135,7 +171,7 @@ export const EmployeesTaxViewTab = () => {
                       defaultValue={employee.taxId}
                       loading={employeeLoading[`${employee.id}_taxId`]}
                       disabled={employeeLoading[`${employee.id}_taxId`]}
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                       name="taxId"
                     />
                   </td>
@@ -151,7 +187,7 @@ export const EmployeesTaxViewTab = () => {
                       selectorStyle={{ background: 'none', borderRadius: 0 }}
                       loading={employeeLoading[`${employee.id}_taxState`]}
                       name="taxState"
-                      onBlur={updateEmployee(employee)}
+                      onChange={updateEmployee(employee, true, true)}
                     />
                   </td>
 
@@ -163,7 +199,7 @@ export const EmployeesTaxViewTab = () => {
                       loading={employeeLoading[`${employee.id}_bvn`]}
                       disabled={employeeLoading[`${employee.id}_bvn`]}
                       name="bvn"
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                     />
                   </td>
 

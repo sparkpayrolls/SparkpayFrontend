@@ -50,6 +50,7 @@ export const singleEmployeeUploadValidationSchema = Yup.object().shape({
   lastname: format.lastname,
   salary: Yup.string().required('Salary is Required'),
   phoneNumber: Yup.string(),
+  yearlyRentAmount: Yup.string().optional(),
 });
 
 export const bulkEmployeeFileUploadValidationSchema = Yup.object().shape({
@@ -128,6 +129,7 @@ export const BulkEmployeeAddValidation = Yup.array().of(
       email: Yup.string().email('enter a valid email').optional(),
       phoneNumber: Yup.string().optional(),
       salary: Yup.string().required('Salary is required'),
+      yearlyRentAmount: Yup.string().optional(),
     })
     .required(),
 );
@@ -253,17 +255,25 @@ export const PayrollEmployeeAddonValidation = Yup.object().shape({
 });
 
 export const CreateAdministratorValidation = Yup.object().shape({
-  role: Yup.string(),
+  // an administrator with no role is locked out of every route by the
+  // permission guard, so the api rejects this anyway
+  role: Yup.string().required('Role is required'),
   user: Yup.string(),
   email: Yup.string().email().required('Email is required'),
   name: Yup.string().required('Name is required'),
 });
 
+export const CreatePayrollApproverValidation = Yup.object().shape({
+  id: Yup.string().required('Select an administrator'),
+  payrollApproverIndex: Yup.string().required('Select an index'),
+});
+
 export const CreateRoleValidation = Yup.object().shape({
   name: Yup.string().required('Name is required'),
+  description: Yup.string().max(160, 'Keep the description under 160 characters'),
   permissions: Yup.array()
     .of(Yup.string())
-    .min(1, 'Select at least one permission'),
+    .min(1, 'Give this role access to at least one area'),
 });
 
 export const RequestAccessValidation = Yup.object().shape({
@@ -273,4 +283,5 @@ export const RequestAccessValidation = Yup.object().shape({
 
 export const UpdateSalaryValidation = Yup.object().shape({
   salary: Yup.number().min(10).required('a salary is required'),
+  netSalary: Yup.number().min(10).required('a net salary is required'),
 });

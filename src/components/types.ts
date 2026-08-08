@@ -30,6 +30,7 @@ import {
   OrganisationDashboardData,
   PaginationMeta,
   PayoutMethod,
+  PayrollApprovalAction,
   PayrollStatus,
   PermissionGroup,
   PermissionLevel,
@@ -38,6 +39,7 @@ import {
   WalletTransactionStatus,
 } from 'src/api/types';
 import { IKebabItem } from './KebabMenu/KebabMenu.component';
+import { TableV2 } from './Table/Table.component';
 
 export interface ITable {
   children: () => ReactElement;
@@ -140,7 +142,7 @@ export type ISelectInput = {
   label?: string;
   options: ISelectInputOptionItem[] | string[];
   error?: string | false;
-  displayValue?: string;
+  displayValue?: string | ((option: ISelectInputOptionItem) => string);
   actualValue?: string;
   name?: string;
   value?: string;
@@ -152,7 +154,7 @@ export type ISelectInput = {
   applyTableStyle?: boolean;
   customIcon?: ReactNode;
   selectorStyle?: CSSProperties;
-  className?:string;
+  onSearch?(query: string): unknown;
 };
 
 /** AddEmployee */
@@ -162,6 +164,7 @@ export type AddEmployee = {
   email: string;
   salary: string;
   phoneNumber?: string;
+  yearlyRentAmount?: string;
 };
 
 /** Kebab Menus */
@@ -279,6 +282,10 @@ export type IDashboardNavigationListItem = {
   // eslint-disable-next-line no-undef
   Icon(): JSX.Element;
   title: string;
+  badge?: {
+    text: string;
+    color?: 'red' | 'blue' | 'green' | 'yellow' | 'purple';
+  };
 };
 
 /** Allowed Permissions */
@@ -307,6 +314,7 @@ export type IIdentity = {
   type?: 'reverse';
   initial?: string;
   className?: string;
+  status?: IStatusChip['status'];
 };
 
 /** Statuschip */
@@ -319,9 +327,9 @@ export type IStatusChip = {
     | InviteTypeStatus
     | GroupStatus
     | SalaryAddOnStatus
-    | InviteTypeStatus
     | 'Enabled'
-    | 'Disabled';
+    | 'Disabled'
+    | PayrollApprovalAction;
 };
 
 /** TransactionMethod */
@@ -378,8 +386,9 @@ export type ITableLayout = {
   menuItems?: IKebabItem[];
   searchPlaceholder?: string;
   searchDelay?: number;
-  fixedHeader?: boolean;
+  fixedHeader?: boolean | ReturnType<typeof TableV2>;
   filterButtonClassName?: string;
+  fixedTitle?: boolean;
 };
 
 export type ICheckboxTableColumn = {
@@ -414,8 +423,6 @@ export type IPagination = {
 export type IWalletBillingForm = {
   modal: NiceModalHandler;
   switchForm(value: 'NGMoreInfo'): void;
-  callBack?(): void;
-  loading?: boolean;
   wallet?: CompanyWallet;
 };
 
@@ -500,6 +507,8 @@ export interface ButtonProps {
   title?: string;
 
   danger?: boolean;
+
+  style?: CSSProperties;
 }
 
 export interface IElementWrapper {

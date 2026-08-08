@@ -2,6 +2,7 @@ import {
   Administrators,
   IAdministratorsRef,
 } from '@/components/Administrator/administrators.component';
+import { Approvers } from '@/components/Administrator/approvers.componet';
 import {
   Invitations,
   IInvitationsRef,
@@ -9,6 +10,7 @@ import {
 import { IRolesRef, Roles } from '@/components/Administrator/roles.component';
 import { Button } from '@/components/Button/Button.component';
 import { CreateAdminModal } from '@/components/Modals/CreateAdminModal.component';
+import { CreatePayrollApproverModal } from '@/components/Modals/CreatePayrollApproverModal.component';
 import { CreateRoleModal } from '@/components/Modals/CreateRoleModal.component';
 import { PlusSvg } from '@/components/svg';
 import { Tab } from '@/components/Tab/tab.component';
@@ -20,7 +22,7 @@ import { useRef } from 'react';
 import withAuth from 'src/helpers/HOC/withAuth';
 import DashboardLayout from 'src/layouts/dashboard-layout/DashBoardLayout';
 
-const validTabs = ['admins', 'roles', 'invitations'];
+const validTabs = ['admins', 'roles', 'invitations', 'payroll-approvers'];
 const AdministratorsPage: NextPage = () => {
   const router = useRouter();
   const adminsRef = useRef<IAdministratorsRef>();
@@ -45,17 +47,29 @@ const AdministratorsPage: NextPage = () => {
   }
 
   const onCreateClick = () => {
-    if (selectedTab === 'roles') {
-      NiceModal.show(CreateRoleModal).then(() => {
-        rolesRef.current?.refreshRoles();
+    const inviteAdmin = () =>
+      NiceModal.show(CreateAdminModal).then(() => {
+        adminsRef.current?.refreshAdministrators();
+        invitationsRef.current?.refreshInvitations();
       });
-      return;
-    }
+    const actions = {
+      roles: () =>
+        NiceModal.show(CreateRoleModal).then(() => {
+          rolesRef.current?.refreshRoles();
+        }),
+      invitations: inviteAdmin,
+      admins: inviteAdmin,
+      'payroll-approvers': () => NiceModal.show(CreatePayrollApproverModal),
+    };
 
-    NiceModal.show(CreateAdminModal).then(() => {
-      adminsRef.current?.refreshAdministrators();
-      invitationsRef.current?.refreshInvitations();
-    });
+    actions[selectedTab as keyof typeof actions]?.();
+  };
+
+  const buttonText = {
+    admins: 'Invite Administrator',
+    roles: 'Create Role',
+    invitations: 'Invite Administrator',
+    'payroll-approvers': 'Add Approver',
   };
 
   return (
@@ -69,9 +83,7 @@ const AdministratorsPage: NextPage = () => {
                 <>
                   <PlusSvg />{' '}
                   <span>
-                    {selectedTab === 'roles'
-                      ? 'Create Role'
-                      : 'Invite Administrator'}
+                    {buttonText[selectedTab as keyof typeof buttonText]}
                   </span>
                 </>
               }
@@ -92,6 +104,13 @@ const AdministratorsPage: NextPage = () => {
                 }}
               />
             </Tab.TabPane>
+            <Tab.TabPane key="roles" tab="Roles">
+              <Roles
+                getRef={(ref) => {
+                  rolesRef.current = ref;
+                }}
+              />
+            </Tab.TabPane>
             <Tab.TabPane key="invitations" tab="Invitations">
               <Invitations
                 getRef={(ref) => {
@@ -99,12 +118,8 @@ const AdministratorsPage: NextPage = () => {
                 }}
               />
             </Tab.TabPane>
-            <Tab.TabPane key="roles" tab="Roles">
-              <Roles
-                getRef={(ref) => {
-                  rolesRef.current = ref;
-                }}
-              />
+            <Tab.TabPane key="payroll-approvers" tab="Payroll Approvers">
+              <Approvers />
             </Tab.TabPane>
           </Tab>
         </div>
@@ -113,4 +128,4 @@ const AdministratorsPage: NextPage = () => {
   );
 };
 
-export default withAuth(AdministratorsPage, ['Admin', 'read']);
+export default withAuth(AdministratorsPage, ['Administrator', 'read']);

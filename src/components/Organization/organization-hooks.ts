@@ -1,9 +1,9 @@
-import { FormikHelpers } from 'formik';
+import { FormikHelpers, FormikProps } from 'formik';
 import { omit } from 'lodash';
 import { $api } from 'src/api';
 import { HttpError } from 'src/api/repo/http.error';
 import { RemittanceTabProps } from './types';
-import { Company, PaginateParams, SalaryBreakdown } from 'src/api/types';
+import { PaginateParams, SalaryBreakdown } from 'src/api/types';
 import cloneDeep from 'lodash.clonedeep';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -11,21 +11,18 @@ import { Util } from 'src/helpers/util';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import _isEmpty from 'lodash.isempty';
 import pick from 'lodash.pick';
+import { ManageTaxStatesModal } from '../Modals/ManageTaxStatesModal.component';
+import NiceModal from '@ebay/nice-modal-react';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';
 
 export const useRemittanceTabContext = (
   props: RemittanceTabProps,
   remittance = 'tax',
 ) => {
-  const { selectedCountry, administrator } = useAppSelector((state) =>
-    pick(state, ['selectedCountry', 'administrator']),
-  );
   const dispatch = useAppDispatch();
-  const iso2 = selectedCountry?.iso2 || '';
+  const administrator = useAppSelector((state) => state.administrator);
   const settings: Record<string, string> = props.organizationDetails
-    .organization?.statutoryDeductionsKeyedByCountry?.[iso2]?.[
-    remittance
-  ] as Record<string, string>;
+    .organization?.statutoryDeductions?.[remittance] as Record<string, string>;
   let initialValues: Record<string, string> = {
     status: settings?.enabled ? 'Enabled' : 'Disabled',
   };
@@ -44,6 +41,20 @@ export const useRemittanceTabContext = (
     initialValues = {
       ...initialValues,
       nhfId: (settings?.nhfId || '').toString(),
+    };
+  }
+
+  if (remittance === 'nsitf') {
+    initialValues = {
+      ...initialValues,
+      nsitfId: (settings?.nsitfId || '').toString(),
+    };
+  }
+
+  if (remittance === 'nhis') {
+    initialValues = {
+      ...initialValues,
+      nhisId: (settings?.nhisId || '').toString(),
     };
   }
 
@@ -70,38 +81,23 @@ export const useRemittanceTabContext = (
       if (!props.organizationDetails.canEdit) {
         return;
       }
-      const company = administrator?.company as Company;
       const update = {
-        statutoryDeductionsKeyedByCountry: {
-          ...(company?.statutoryDeductionsKeyedByCountry || {}),
-          [iso2]: {
-            ...(company?.statutoryDeductionsKeyedByCountry?.[iso2] || {}),
-            [remittance]: {
-              ...omit(values, ['status']),
-              enabled: ['Enabled', 'Remit'].includes(values.status),
-              addToCharge: values.status === 'Remit',
-            },
+        statutoryDeductions: {
+          ...(props.organizationDetails.organization?.statutoryDeductions ||
+            {}),
+          [remittance]: {
+            ...omit(values, ['status']),
+            enabled: ['Enabled', 'Remit'].includes(values.status),
+            addToCharge: values.status === 'Remit',
           },
         },
       };
 
-      const res = await $api.company.updateCompanyById(
+      await $api.company.updateCompanyById(
         props.organizationDetails.organization?.id || '',
         update,
       );
       toast.success('Remittance details updated successfully.');
-      if (administrator) {
-        dispatch(
-          commitAministrator({
-            ...administrator,
-            company: {
-              ...(administrator.company as typeof company),
-              statutoryDeductionsKeyedByCountry:
-                res.statutoryDeductionsKeyedByCountry,
-            },
-          }),
-        );
-      }
     } catch (error) {
       const httpError = error as HttpError;
       if (httpError.status === 422) {
@@ -115,13 +111,53 @@ export const useRemittanceTabContext = (
     }
   };
 
-  return { initialValues, handleSubmit };
+  const handleManageTaxStates = (
+    formik: FormikProps<typeof initialValues>,
+  ) => () => {
+    NiceModal.show(ManageTaxStatesModal, {
+      taxStates:
+        props.organizationDetails.organization?.statutoryDeductions?.tax
+          ?.taxStates ?? [],
+      states: props.organizationDetails.states,
+    }).then((res) => {
+      if (res) {
+        formik.setFieldValue('taxStates', res);
+        formik.submitForm();
+        if (administrator) {
+          dispatch(
+            commitAministrator({
+              ...administrator,
+              company: {
+                ...administrator.company,
+                statutoryDeductions: {
+                  ...administrator.company.statutoryDeductions,
+                  tax: {
+                    enabled: false,
+                    addToCharge: false,
+                    ...(administrator.company.statutoryDeductions?.tax ?? {}),
+                    taxStates: res,
+                  },
+                },
+              },
+            }),
+          );
+        }
+      }
+    });
+  };
+
+  return {
+    initialValues,
+    taxStates: administrator?.company?.statutoryDeductions?.tax
+      ?.taxStates as Record<string, string>[],
+    handleSubmit,
+    handleManageTaxStates,
+  };
 };
 
 export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
   const { organization, loading, canEdit } = props.organizationDetails;
   const [breakdown, setBreakdown] = useState<SalaryBreakdown[]>([]);
-  const selectedCountry = useAppSelector((state) => state.selectedCountry);
   const [saving, setSaving] = useState(false);
   const [edit, setEdit] = useState(false);
   const colors = ['#0B2253', '#6D7A98', '#42D0C8'];
@@ -140,10 +176,9 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
         .reverse()
         .some((b) => {
           return (
-            organization?.salaryBreakdownKeyedByCountry?.[
-              selectedCountry?.iso2 || ''
-            ]?.findIndex((_b) => b.name === _b.name && b.value === _b.value) ===
-            -1
+            organization?.salaryBreakdown?.findIndex(
+              (_b) => b.name === _b.name && b.value === _b.value,
+            ) === -1
           );
         }));
 
@@ -184,14 +219,7 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
     try {
       await $api.company.updateCompanyById(
         props.organizationDetails.organization?.id || '',
-        {
-          salaryBreakdownKeyedByCountry: {
-            ...(organization?.salaryBreakdownKeyedByCountry || {}),
-            [selectedCountry?.iso2 || '']: _breakdown.map((b) =>
-              pick(b, ['name', 'value']),
-            ),
-          },
-        },
+        { salaryBreakdown: _breakdown.map((b) => pick(b, ['name', 'value'])) },
       );
       toast.success('Salary Breakdown updated successfully.');
     } catch (error) {
@@ -204,35 +232,8 @@ export const useSalaryBreakdownContext = (props: RemittanceTabProps) => {
   };
 
   useEffect(() => {
-    const breakdown = organization?.salaryBreakdownKeyedByCountry?.[
-      selectedCountry?.iso2 || ''
-    ]?.length
-      ? organization?.salaryBreakdownKeyedByCountry?.[
-          selectedCountry?.iso2 || ''
-        ]
-      : [
-          {
-            name: 'Basic Allowance',
-            value: 100,
-            deleted: false,
-          },
-          {
-            name: 'Transport Allowance',
-            value: 0,
-            deleted: false,
-          },
-          {
-            name: 'Housing Allowance',
-            value: 0,
-            deleted: false,
-          },
-        ];
-    setBreakdown(breakdown);
-  }, [
-    selectedCountry,
-    organization?.salaryBreakdown,
-    organization?.salaryBreakdownKeyedByCountry,
-  ]);
+    setBreakdown(organization?.salaryBreakdown || []);
+  }, [organization?.salaryBreakdown]);
 
   return {
     loading,
@@ -268,12 +269,19 @@ export const useRemittanceEmployeesTabContext = () => {
   >({});
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const isEmpty = (data?.meta?.total || 0) <= 0;
+  const [yearlyRentAmounts, setYearlyRentAmounts] = useState<Record<string, number>>({});
 
   const getEmployees = useCallback(() => {
     setLoading(true);
     return $api.payroll
       .getRemittanceEmployees(params)
-      .then(setData)
+      .then((data) => {
+        setData(data);
+        setYearlyRentAmounts(data.data.employees.reduce((acc, employee) => {
+          acc[employee.id] = employee.yearlyRentAmount || 0;
+          return acc;
+        }, {} as Record<string, number>));
+      })
       .catch((error) => {
         Util.onNonAuthError(error, (httpError) => {
           toast.error(httpError.message);
@@ -298,10 +306,9 @@ export const useRemittanceEmployeesTabContext = () => {
     skipIfEmpty = false,
   ) => {
     return (ev: any) => {
-      console.log({ skipIfEmpty, value: ev.target.values });
       if (
         ev.target.value === employee[ev.target.name as 'taxId'] ||
-        (skipIfEmpty && _isEmpty(ev.target.value))
+        (skipIfEmpty && typeof ev.target.value !== 'number' && _isEmpty(ev.target.value))
       ) {
         return;
       }
@@ -361,6 +368,10 @@ export const useRemittanceEmployeesTabContext = () => {
     employeeLoading,
     loading,
     data,
+    yearlyRentAmounts,
+    setYearlyRentAmounts: (id: string) => (ev: any) => {
+      setYearlyRentAmounts((prev) => ({ ...prev, [id]: ev.target.value }));
+    },
     setParams,
   };
 };

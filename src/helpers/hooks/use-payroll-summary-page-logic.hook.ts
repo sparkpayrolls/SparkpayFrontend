@@ -19,9 +19,12 @@ export const usePayrollSummaryPageLogic = () => {
   const [params, setParams] = useState({
     proRateMonth: moment().format('MMMM'),
     year: moment().year(),
+    cycles: 1,
+    currentCycle: 1,
     checked: [] as string[],
     isReady: false,
   });
+  const [payItems, setPayItems] = useState<Record<string, boolean>>({});
   const { processorData, loading: loadingPayroll } = useProcessorData(params);
   const [updates, setUpdates] = useState<Record<string, any>>({});
 
@@ -66,10 +69,13 @@ export const usePayrollSummaryPageLogic = () => {
     processorData &&
     PayrollProcessor.process({
       ...processorData,
+      cycles: params.cycles || 1,
+      currentCycle: params.currentCycle || 1,
       employees: processorData.employees.map((e: any) => ({
         ...e,
         excludeFromTotals: !params.checked.includes(e.id),
         salary: updates[e.id]?.salary || e.salary,
+        ...(updates[e.id]?.netSalary ? { netSalary: updates[e.id].netSalary } : {}),
         bonus: e.bonus
           .concat(updates[e.id]?.bonus || [])
           .filter(
@@ -86,12 +92,14 @@ export const usePayrollSummaryPageLogic = () => {
             ? updates[e.id].prorate
             : e.prorate,
       })),
+      payItems,
     });
   const initialValues = {
-    ...pick(params, ['year', 'proRateMonth']),
+    ...pick(params, ['year', 'proRateMonth', 'cycles', 'currentCycle']),
     employeeIds: params.checked,
     payDate: '',
   };
+  const hack = { payroll }; // This is a hack to get the payroll object in the create payroll form handler
 
   const getCreatePayrollFormHandler = () => {
     return async (
@@ -106,11 +114,15 @@ export const usePayrollSummaryPageLogic = () => {
           const emp = processorData.employees.find(
             (e: any) => e.id === employee,
           );
+          const payrollEmployee: any = hack.payroll?.employees?.find((e: any) => e.id === employee);
           const _update: Record<string, any> = { employee };
           const deletedAddons: any = [];
           const newAddons: any = [];
           if (update.salary) {
             _update.salary = update.salary;
+          }
+          if (update.netSalary && payrollEmployee) {
+            _update.salary = payrollEmployee.salary;
           }
           if ('prorate' in update) {
             _update.prorate = update.prorate;
@@ -159,6 +171,7 @@ export const usePayrollSummaryPageLogic = () => {
         const payroll = await $api.payroll.createPayroll({
           ...values,
           updates: _updates,
+          payItems,
         });
         toast.success('payroll created');
         if (walletBalance < (payroll.totalAmount || 0)) {
@@ -188,6 +201,68 @@ export const usePayrollSummaryPageLogic = () => {
     };
   };
 
+  const summaryItems = [
+    {
+      name: 'Total Salary',
+      value: payroll?.totalSalary,
+      sumsTotal: true,
+      shouldSum: payItems['salary'] ?? true,
+      toggle: () =>
+        setPayItems((p) => ({ ...p, salary: !(p['salary'] ?? true) })),
+    },
+    { name: 'Total Net Salary', value: payroll?.totalNetSalary },
+    {
+      name: 'Total Bonus',
+      value: payroll?.totalBonus,
+      sumsTotal: true,
+      shouldSum: payItems['bonus'] ?? true,
+      toggle: () =>
+        setPayItems((p) => ({ ...p, bonus: !(p['bonus'] ?? true) })),
+    },
+    {
+      name: 'Total Deductions',
+      value: payroll?.totalDeductions,
+    },
+    {
+      name: 'Total Tax',
+      value: payroll?.totalPayrollTax,
+      sumsTotal: true,
+      shouldSum: payItems['tax'] ?? true,
+      toggle: () => setPayItems((p) => ({ ...p, tax: !(p['tax'] ?? true) })),
+    },
+    {
+      name: 'Total Pension',
+      value: payroll?.totalPayrollPension,
+      sumsTotal: true,
+      shouldSum: payItems['pension'] ?? true,
+      toggle: () =>
+        setPayItems((p) => ({ ...p, pension: !(p['pension'] ?? true) })),
+    },
+    {
+      name: 'Total NHF',
+      value: payroll?.totalPayrollNHF,
+      sumsTotal: true,
+      shouldSum: payItems['nhf'] ?? true,
+      toggle: () => setPayItems((p) => ({ ...p, nhf: !(p['nhf'] ?? true) })),
+    },
+    {
+      name: 'Total NSITF',
+      value: payroll?.totalPayrollNSITF,
+      sumsTotal: true,
+      shouldSum: payItems['nsitf'] ?? true,
+      toggle: () =>
+        setPayItems((p) => ({ ...p, nsitf: !(p['nsitf'] ?? true) })),
+    },
+    {
+      name: 'Total NHIS',
+      value: payroll?.totalPayrollNHIS,
+      sumsTotal: true,
+      shouldSum: payItems['nhis'] ?? true,
+      toggle: () => setPayItems((p) => ({ ...p, nhis: !(p['nhis'] ?? true) })),
+    },
+    { name: 'Total Fee', value: payroll?.totalFees },
+  ];
+
   return {
     walletBalance,
     loadingWalletBalance,
@@ -197,10 +272,11 @@ export const usePayrollSummaryPageLogic = () => {
     loadingPayroll,
     formRef,
     params,
+    initialValues,
+    summaryItems,
     setParams: (vals: Record<string, unknown>) =>
       setParams((p) => ({ ...p, ...vals })),
     getCreatePayrollFormHandler,
     getSaveClickHandler,
-    initialValues,
   };
 };

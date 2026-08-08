@@ -113,7 +113,7 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
           }
 
           let [start, end] = value;
-          if (+start.format('DD') > +end.format('DD')) {
+          if (start.isAfter(end)) {
             [start, end] = [end, start];
           }
           const period = start;
@@ -125,6 +125,8 @@ export const CreateAddonForm = (props: ICreateAddonForm) => {
                 month: period.format('MMMM'),
                 year: +period.format('YYYY'),
                 days: [start.format('DD'), end.format('DD')],
+                startDate: start.toDate(),
+                endDate: end.toDate(),
               },
             ],
           });

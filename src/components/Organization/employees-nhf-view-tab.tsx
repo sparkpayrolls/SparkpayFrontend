@@ -34,14 +34,10 @@ export const EmployeesNHFViewTab = () => {
             <InfoPopUp>Total amount of NHF Remittance</InfoPopUp>
           </div>
           <p className="view-employees__tax__top-cont__info-md">
-            {!Number.isFinite(
-              data?.data?.payrollTotalsByCountry?.NG?.totalPayrollNhf,
-            ) ? (
+            {!Number.isFinite(data?.data?.totalPayrollNHF) ? (
               <Skeleton width={150} />
             ) : (
-              Util.formatMoneyString(currency)(
-                data?.data?.payrollTotalsByCountry?.NG?.totalPayrollNhf,
-              )
+              Util.formatMoneyString(currency)(data?.data?.totalPayrollNHF)
             )}
           </p>
         </div>
@@ -131,7 +127,7 @@ export const EmployeesNHFViewTab = () => {
                       defaultValue={employee.nhfId}
                       loading={employeeLoading[`${employee.id}_nhfId`]}
                       disabled={employeeLoading[`${employee.id}_nhfId`]}
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                       name="nhfId"
                     />
                   </td>
@@ -144,7 +140,7 @@ export const EmployeesNHFViewTab = () => {
                       loading={employeeLoading[`${employee.id}_bvn`]}
                       disabled={employeeLoading[`${employee.id}_bvn`]}
                       name="bvn"
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                     />
                   </td>
 

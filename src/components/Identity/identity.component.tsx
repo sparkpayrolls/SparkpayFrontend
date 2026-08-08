@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { IIdentity } from '../types';
+import { StatusChip } from '../StatusChip/status-chip.component';
 
 export const Identity = (props: IIdentity) => {
   const className = classNames('identity', props.className, {
@@ -26,7 +27,11 @@ export const Identity = (props: IIdentity) => {
         <span className="identity__initial">{props.initial}</span>
       )}
 
-      <span className="identity__name">{props.name}</span>
+      <span style={{ display: 'flex', flexDirection: 'column' }}>
+        <span className="identity__name">{props.name}</span>
+
+        {props.status && <StatusChip status={props.status} />}
+      </span>
     </span>
   );
 };

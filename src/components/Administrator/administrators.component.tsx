@@ -36,7 +36,9 @@ export const Administrators = (props: IAdministrators) => {
     try {
       setLoading(true);
       const { data, meta } = await $api.admin.getAdministrators(params);
-      setAdministrators(data);
+      // the api envelope omits `data` entirely when it is empty/nil, so guard
+      // against setting the list to undefined and crashing the render
+      setAdministrators(data ?? []);
       setMeta(meta);
     } catch (error) {
       const err = error as HttpError;
@@ -55,7 +57,8 @@ export const Administrators = (props: IAdministrators) => {
         NiceModal.show(CreateAdminModal, {
           id: admin.id,
           initialValues: {
-            role: role.id,
+            // role may be absent if it was deleted; the form handles empty
+            role: role?.id ?? '',
             user: user.id,
             email: user.email,
             name: `${user.firstname} ${user.lastname}`,

@@ -37,14 +37,10 @@ export const EmployeesPensionViewTab = () => {
             <InfoPopUp>Total amount of Pension Remittance</InfoPopUp>
           </div>
           <p className="view-employees__tax__top-cont__info-md">
-            {!Number.isFinite(
-              data?.data?.payrollTotalsByCountry?.NG?.totalPayrollPension,
-            ) ? (
+            {!Number.isFinite(data?.data?.totalPayrollPension) ? (
               <Skeleton width={150} />
             ) : (
-              Util.formatMoneyString(currency)(
-                data?.data?.payrollTotalsByCountry?.NG?.totalPayrollPension,
-              )
+              Util.formatMoneyString(currency)(data?.data?.totalPayrollPension)
             )}
           </p>
         </div>
@@ -167,7 +163,7 @@ export const EmployeesPensionViewTab = () => {
                       defaultValue={employee.pensionId}
                       loading={employeeLoading[`${employee.id}_pensionId`]}
                       disabled={employeeLoading[`${employee.id}_pensionId`]}
-                      onBlur={updateEmployee(employee)}
+                      onBlur={updateEmployee(employee, true, true)}
                       name="pensionId"
                     />
                   </td>
@@ -183,7 +179,7 @@ export const EmployeesPensionViewTab = () => {
                       selectorStyle={{ background: 'none', borderRadius: 0 }}
                       loading={employeeLoading[`${employee.id}_pfa`]}
                       name="pfa"
-                      onBlur={updateEmployee(employee, false, true)}
+                      onChange={updateEmployee(employee, true, true)}
                     />
                   </td>
 

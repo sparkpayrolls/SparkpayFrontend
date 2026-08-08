@@ -9,6 +9,7 @@ import {
   Employee,
   ICreatePayrollPayload,
   Payroll,
+  PayrollApprovalAction,
   PayrollEmployee,
   PayrollSummary,
   PayrollUpdateResponse,
@@ -55,8 +56,8 @@ export class PayrollModule extends HttpRepository {
   }
 
   async processPayroll(
-    payload: Omit<ProcessPayrollPayload, 'cycle' | 'year'> &
-      Partial<Pick<ProcessPayrollPayload, 'cycle' | 'year'>>,
+    payload: Omit<ProcessPayrollPayload, 'cycles' | 'year'> &
+      Partial<Pick<ProcessPayrollPayload, 'cycles' | 'year'>>,
   ) {
     const { data } = await this.post<ProcessPayrollResponse>(
       '/payrolls/process',
@@ -201,10 +202,16 @@ export class PayrollModule extends HttpRepository {
         employees: (Employee & ProcessedEmployee)[];
         taxEmployees: number;
         nhfEmployees: number;
+        nsitfEmployees: number;
+        nhisEmployees: number;
         pensionEmployees: number;
       }
     >('/payrolls/remittance-employees', {
       params,
     });
+  }
+
+  async approveOrReject(id: string, action: PayrollApprovalAction) {
+    return this.put<Payroll>(`/payrolls/${id}/approve-or-reject`, { action });
   }
 }

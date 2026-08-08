@@ -1,0 +1,209 @@
+// Hero dashboard recreation styles (guide §9). Re-skinned to the token system
+// so it reads as the same brand as the live product.
+
+.mkt-dash {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  font-family: var(--font-body);
+  color: var(--text-primary);
+
+  &__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-canvas);
+  }
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  &__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    background: var(--brand-600);
+    transform: rotate(45deg);
+  }
+
+  &__crumb {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  &__hero-strip {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.25rem 1.25rem 1rem;
+  }
+
+  &__eyebrow {
+    margin: 0;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+  }
+
+  &__figure {
+    margin: 0.35rem 0 0.25rem;
+    font-size: clamp(1.5rem, 3.4vw, 2rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  &__delta {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  &__delta-up {
+    color: var(--success);
+    font-weight: 600;
+  }
+
+  &__chart-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    width: 150px;
+  }
+
+  &__chart {
+    width: 150px;
+    height: 44px;
+  }
+
+  &__chart-caption {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+  }
+
+  &__table {
+    padding: 0.25rem 0.5rem 0.75rem;
+  }
+
+  &__table-head,
+  &__row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 0.9fr;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  &__table-head {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+  }
+
+  &__row {
+    border-top: 1px solid var(--border-subtle);
+    font-size: 0.8125rem;
+  }
+
+  &__person {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    min-width: 0;
+  }
+
+  &__avatar {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--brand-100);
+    color: var(--brand-700);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  &__muted {
+    color: var(--text-secondary);
+  }
+
+  &__amount {
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  &__pill {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.7rem;
+    font-weight: 600;
+
+    &--paid {
+      background: var(--success-tint);
+      color: var(--success);
+    }
+
+    &--processing {
+      background: var(--brand-100);
+      color: var(--brand-700);
+    }
+
+    &--queued {
+      background: #eef0f4;
+      color: var(--text-secondary);
+    }
+  }
+}
+
+// floating glass badges over the hero mockup (max two, guide §9)
+.mkt-hero__badge {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--radius-pill);
+  background: rgba(12, 18, 32, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  box-shadow: 0 12px 28px rgba(12, 18, 32, 0.28);
+
+  &--amount {
+    top: 1.25rem;
+    left: -0.75rem;
+  }
+
+  &--paye {
+    bottom: 1.5rem;
+    right: -0.75rem;
+  }
+
+  .mkt-figure {
+    font-size: 0.8125rem;
+  }
+
+  &__check {
+    color: var(--brand-400);
+  }
+}

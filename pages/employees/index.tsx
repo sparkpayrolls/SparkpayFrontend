@@ -1,11 +1,10 @@
 import NiceModal from '@ebay/nice-modal-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from '../../src/components/Button/Button.component';
 import DashboardLayout from '../../src/layouts/dashboard-layout/DashBoardLayout';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { Employee } from 'src/api/types';
 import { $api } from 'src/api';
-import { AddEmployeeModal } from '@/components/Modals/AddEmployeeModal.component';
 import { CreateEmployeeGroupModal } from '@/components/Modals/CreateEmployeeGroupModal.component';
 import { useAppSelector } from 'src/redux/hooks';
 import { EmployeeTab } from '@/components/Employee/employee-tab.component';
@@ -15,7 +14,6 @@ import { NextPage } from 'next';
 import { PlusSvg } from '@/components/svg';
 import { Tab } from '@/components/Tab/tab.component';
 import { TabPane } from '@/components/Tab/tabpane.component';
-import { useRouter } from 'next/router';
 import {
   MoreMenuHorizontalSVG,
   EditSquareSVG,
@@ -24,7 +22,6 @@ import {
 import { Dropdown, Menu } from 'antd';
 import Link from 'next/link';
 import { useSelectedTab } from 'src/helpers/hooks/use-selected-tab';
-import CountryDropdown from '@/components/Organization/organization-country-dropdown';
 
 const EmployeePage: NextPage = () => {
   const administrator = useAppSelector((state) => state.administrator);
@@ -34,8 +31,6 @@ const EmployeePage: NextPage = () => {
   const [paginationMeta, setPaginationMeta] = useState(
     Util.getDefaultPaginationMeta({}),
   );
-  const [employeeQuery, setEmployeeQuery] = useState<Record<string, any>>({});
-  const router = useRouter();
   const { onTabChange, selectedTab } = useSelectedTab('employees');
 
   const getEmployees = useCallback(
@@ -48,7 +43,6 @@ const EmployeePage: NextPage = () => {
     ) => {
       try {
         setLoading(true);
-        setEmployeeQuery({ page, perPage, search, all, filter });
         const res = await $api.employee.getEmployees({
           page,
           perPage,
@@ -70,22 +64,6 @@ const EmployeePage: NextPage = () => {
     [setEmployees],
   );
 
-  const onAddEmployee = useCallback(() => {
-    NiceModal.show(AddEmployeeModal, {
-      administrator,
-      gotoPayrollCreation: !employees.length,
-    }).then(() => {
-      const { page, perPage, search, all, filter } = employeeQuery;
-      getEmployees(page, perPage, search, all, filter);
-    });
-  }, [administrator, employeeQuery, employees, getEmployees]);
-
-  useEffect(() => {
-    if (!loading && !employees.length) {
-      router.push('/employees/employee-list');
-    }
-  }, [loading, employees, onAddEmployee, router]);
-
   const onCreateGroup = () => {
     NiceModal.show(CreateEmployeeGroupModal).then(() => {
       setGroupTabControl(!groupTabControl);
@@ -95,7 +73,7 @@ const EmployeePage: NextPage = () => {
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <Link href="/employees/employee-list" /* onClick={onAddEmployee} */>
+        <Link href="/employees/employee-list">
           <a className="employee-menu-list">
             <Plus2Svg /> Add employee
           </a>
@@ -114,51 +92,53 @@ const EmployeePage: NextPage = () => {
     <DashboardLayout pageTitle="Employees">
       <div className="employee-section">
         <div className=" employee-section__details">
-          <div>
-            <div className="employee-section__head">
-              <h1 className="employee-section__title">Employee Settings</h1>
-
-              <div className="employee-section__country-dropdown">
-                <CountryDropdown />
-              </div>
-
-              <div className="employee-section__employee-button">
+          <div className="employee-section__head">
+            <h1 className="employee-section__title">Employee Settings</h1>
+            <div className="employee-section__employee-button">
+              {selectedTab === 'groups' && (
                 <Button
                   label="Create Employee Group"
                   onClick={onCreateGroup}
-                  className="employee-section__employee-button1"
-                  type="submit"
-                />
-                <Button
-                  element="a"
-                  href="/employees/employee-list"
-                  label={
-                    <>
-                      <PlusSvg />
-                      &nbsp;{'Add\xa0Employee'}
-                    </>
-                  }
-                  // onClick={onAddEmployee}
                   className="employee-section__submit-btn"
                   primary
                   type="submit"
                 />
-              </div>
-
-              <Dropdown
-                overlay={menu}
-                trigger={['click']}
-                overlayClassName="employee-dropdown"
-              >
-                <button className="employee-section__employee-menu">
-                  <MoreMenuHorizontalSVG />
-                </button>
-              </Dropdown>
+              )}
+              {selectedTab === 'employees' && (
+                <>
+                  <Button
+                    element="a"
+                    href="/employees/bulk-update"
+                    label="Update Employees"
+                    className="employee-section__employee-button1"
+                    type="submit"
+                  />
+                  <Button
+                    element="a"
+                    href="/employees/employee-list"
+                    label={
+                      <>
+                        <PlusSvg />
+                        &nbsp;{'Add\xa0Employee'}
+                      </>
+                    }
+                    className="employee-section__submit-btn"
+                    primary
+                    type="submit"
+                  />
+                </>
+              )}
             </div>
 
-            <div className="employee-section__country-dropdown-mobile">
-              <CountryDropdown />
-            </div>
+            <Dropdown
+              overlay={menu}
+              trigger={['click']}
+              overlayClassName="employee-dropdown"
+            >
+              <button className="employee-section__employee-menu">
+                <MoreMenuHorizontalSVG />
+              </button>
+            </Dropdown>
           </div>
 
           <Tab

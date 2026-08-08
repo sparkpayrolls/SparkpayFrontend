@@ -2,14 +2,18 @@ import { Radio } from 'antd';
 import { Formik } from 'formik';
 import { useRemittanceTabContext } from './organization-hooks';
 import { InputV2 } from '../Input/Input.component';
-import { SelectInput } from '../Input/seletct-input';
 import { IF } from '../Misc/if.component';
 import { Util } from 'src/helpers/util';
 import { Button } from '../Button/Button.component';
 import { RemittanceTabProps } from './types';
 
 function TaxTab(props: RemittanceTabProps) {
-  const { initialValues, handleSubmit } = useRemittanceTabContext(props);
+  const {
+    initialValues,
+    taxStates,
+    handleSubmit,
+    handleManageTaxStates,
+  } = useRemittanceTabContext(props);
 
   return (
     <>
@@ -17,8 +21,6 @@ function TaxTab(props: RemittanceTabProps) {
         {(_props) => {
           const {
             values,
-            touched,
-            errors,
             handleBlur,
             handleChange,
             handleSubmit,
@@ -65,20 +67,36 @@ function TaxTab(props: RemittanceTabProps) {
                   </div>
                 </div>
 
-                <div className="info__remittance__input-cont">
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '1rem',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
                   <div>
-                    <InputV2
-                      label="Tax Id"
-                      name="taxId"
-                      placeholder="Enter Tax ID"
-                      error={errors.taxId}
-                      value={values.taxId}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                    />
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: '.5rem',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <p>{taxStates?.length ?? 0} tax states added</p>
+
+                      <button
+                        type="button"
+                        style={{ color: '#1d4ed8' }}
+                        className="text-[#1d4ed8]"
+                        onClick={handleManageTaxStates(_props)}
+                      >
+                        manage
+                      </button>
+                    </div>
                   </div>
 
-                  <div>
+                  <div style={{ width: '100%', maxWidth: '312px' }}>
                     <IF condition={values.taxType === 'withholding'}>
                       <InputV2
                         placeholder="Enter Withholding Tax Rate"
@@ -103,22 +121,6 @@ function TaxTab(props: RemittanceTabProps) {
                         label="Health Relief"
                       />
                     </IF>
-                  </div>
-
-                  <div>
-                    <SelectInput
-                      label="Tax state"
-                      name="taxState"
-                      placeholder="Select Tax State"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.taxState}
-                      error={touched.taxState && errors.taxState}
-                      options={props.organizationDetails.states}
-                      displayValue="name"
-                      actualValue="id"
-                      showSearch="Search State"
-                    />
                   </div>
                 </div>
               </div>

@@ -58,6 +58,7 @@ export const getEmployeeEditSubmitHandler = (
           'phoneNumber',
         ]),
         salary: +values.salary,
+        yearlyRentAmount: values.yearlyRentAmount ? +values.yearlyRentAmount : undefined,
       });
       await getEmployee();
       toast.success('Employee details updated');

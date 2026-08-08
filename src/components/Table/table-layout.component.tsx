@@ -7,6 +7,7 @@ import { SearchForm } from '../Form/search.form';
 import { IKebabItem, KebabMenu } from '../KebabMenu/KebabMenu.component';
 import { IF } from '../Misc/if.component';
 import { ITableLayout } from '../types';
+import { TableV2 } from './Table.component';
 
 export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
   const showTopBar =
@@ -20,6 +21,7 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
     'table-layout--fixed-header': props.fixedHeader,
   });
   const containerRef = useRef<HTMLDivElement>(null);
+  const dupTableRef = useRef<HTMLDivElement>(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onSearch = useCallback(
@@ -30,40 +32,69 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
     }, props.searchDelay || 500),
     [props.onSearch, props.searchDelay],
   );
+
   useEffect(() => {
     const container = containerRef.current;
     if (container && props.fixedHeader) {
-      const clonedContainer = container.cloneNode(true) as any;
-      clonedContainer.classList.add('table-layout--fixed-header__dup-table');
-      container.appendChild(clonedContainer);
-      const headerHeight = clonedContainer.querySelector('thead')?.clientHeight;
+      let headerHeight = 0;
+      let clonedContainer: HTMLDivElement;
+      let shouldRemove = false;
+
+      if (typeof props.fixedHeader !== 'boolean') {
+        clonedContainer = dupTableRef.current as HTMLDivElement;
+        headerHeight =
+          clonedContainer?.querySelector('thead')?.clientHeight || 0;
+      } else {
+        clonedContainer = container.cloneNode(true) as HTMLDivElement;
+
+        clonedContainer.classList.add('table-layout--fixed-header__dup-table');
+        container.appendChild(clonedContainer);
+
+        headerHeight = clonedContainer.querySelector('thead')
+          ?.clientHeight as number;
+        shouldRemove = true;
+      }
 
       const tableContainer = container.querySelector(
         '.table-layout__table-container',
-      );
+      ) as HTMLTableElement;
       const clonedTableContainer = clonedContainer.querySelector(
         '.table-layout__table-container',
-      );
+      ) as HTMLDivElement;
 
       const syncScroll = () => {
-        clonedTableContainer.scrollLeft = tableContainer?.scrollLeft;
+        clonedTableContainer.scrollLeft = tableContainer?.scrollLeft as number;
       };
       tableContainer?.addEventListener('scroll', syncScroll, { passive: true });
       clonedTableContainer.style.height = `${headerHeight}px`;
 
       return () => {
-        container.removeChild(clonedContainer);
+        if (shouldRemove && container?.contains(clonedContainer)) {
+          container?.removeChild(clonedContainer);
+        }
         tableContainer?.removeEventListener('scroll', syncScroll);
       };
     }
-  }, [containerRef, props.children, props.fixedHeader]);
+  }, [containerRef, dupTableRef, props.children, props.fixedHeader]);
 
   return (
     <div className={className}>
       <IF condition={showTopBar}>
-        <div className="table-layout__top-bar">
+        <div
+          className="table-layout__top-bar"
+          style={
+            props.fixedTitle
+              ? { position: 'sticky', top: 0, zIndex: 1, background: 'white' }
+              : {}
+          }
+        >
           <IF condition={!!props.title}>
-            <p className="table-layout__top-bar__title">{props.title}</p>
+            <div
+              className="table-layout__top-bar__title"
+              style={props.fixedTitle ? { width: '100%' } : {}}
+            >
+              {props.title}
+            </div>
           </IF>
 
           <div className="table-layout__top-bar__actions">
@@ -106,6 +137,17 @@ export const TableLayout = (props: PropsWithChildren<ITableLayout>) => {
 
       <div ref={containerRef} className="table-layout__container">
         <div className="table-layout__table-container">{props.children}</div>
+
+        {typeof props.fixedHeader === 'object' && (
+          <div
+            className="table-layout__container table-layout--fixed-header__dup-table"
+            ref={dupTableRef}
+          >
+            <div className="table-layout__table-container">
+              <TableV2 {...props.fixedHeader.props} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

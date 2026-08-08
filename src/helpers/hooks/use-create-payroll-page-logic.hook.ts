@@ -47,46 +47,55 @@ export const useCreatePayrollPageLogic = () => {
   const [params, setParams] = useState({
     proRateMonth: moment().format('MMMM'),
     year: moment().year(),
+    cycles: 1,
+    currentCycle: 1,
     checked: [] as string[],
-    isReady: router.isReady,
+    isReady: false,
   });
   const { processorData, loading: loadingPayroll } = useProcessorData(params);
   const [search, setSearch] = useState('');
   const [updates, setUpdates] = useState<Record<string, any>>({});
 
-  const { isReady, query } = router;
+  useEffect(() => {
+    if (router.isReady && !params.isReady) {
+      try {
+        const inflated = Util.inflate(
+          (Util.decodePayload(
+            router.query.params?.toString() || '',
+          ) as unknown) as string,
+        );
+
+        if (inflated.params) {
+          setParams({ ...params, ...inflated.params, isReady: true });
+        }
+
+        if (inflated.updates) {
+          setUpdates(inflated.updates);
+        }
+      } catch (error) {
+        setParams({ ...params, isReady: true });
+      }
+    }
+  }, [router, params]);
 
   useEffect(() => {
-    try {
-      const inflated = Util.inflate(
-        (Util.decodePayload(
-          query.params?.toString() || '',
-        ) as unknown) as string,
-      );
-
-      if (inflated.params) {
-        setParams((p) => ({ ...p, ...inflated.params, isReady: true }));
-      }
-
-      if (inflated.updates) {
-        setUpdates(inflated.updates);
-      }
-    } catch (error) {
-      //...
+    const deflated = Util.signPayload(Util.deflate({ params, updates }));
+    if (
+      (router.query.params || params.checked.length) &&
+      router.query.params !== deflated
+    ) {
+      router.replace(`${router.pathname}?params=${deflated}`);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady]);
-
-  useEffect(() => {
-    router.replace(
-      `${router.pathname}?params=${Util.signPayload(
-        Util.deflate({ params, updates }),
-      )}`,
-    );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params, updates]);
+    if (!router.query.params && processorData?.employees?.length) {
+      setParams({
+        ...params,
+        checked: processorData.employees.map(
+          (e: typeof processorData.employees[0]) => e.id,
+        ),
+      });
+    }
+  }, [params, updates, router, processorData]);
 
   const deflated = Util.signPayload(Util.deflate({ params, updates }));
   const summaryUrl = `/payroll/summary?params=${deflated}`;
@@ -95,10 +104,13 @@ export const useCreatePayrollPageLogic = () => {
     processorData &&
     PayrollProcessor.process({
       ...processorData,
+      cycles: params.cycles || 1,
+      currentCycle: params.currentCycle || 1,
       employees: processorData.employees.map((e: any) => ({
         ...e,
         excludeFromTotals: !params.checked.includes(e.id),
         salary: updates[e.id]?.salary || e.salary,
+        ...(updates[e.id]?.netSalary ? { netSalary: updates[e.id].netSalary } : {}),
         bonus: e.bonus
           .concat(updates[e.id]?.bonus || [])
           .filter(
@@ -117,12 +129,6 @@ export const useCreatePayrollPageLogic = () => {
       })),
     });
   const { employees } = processorData || {};
-
-  useEffect(() => {
-    if (Array.isArray(employees)) {
-      setParams((p) => ({ ...p, checked: employees.map((e) => e.id) }));
-    }
-  }, [employees]);
 
   const handleCheck = (id: string) => {
     return () => {
@@ -181,6 +187,16 @@ export const useCreatePayrollPageLogic = () => {
                 [employee.id]: {
                   ...(updates[employee.id] || {}),
                   salary: update.payload,
+                },
+              }));
+              break;
+            }
+            case 'netSalary': {
+              setUpdates((updates) => ({
+                ...updates,
+                [employee.id]: {
+                  ...(updates[employee.id] || {}),
+                  netSalary: update.payload,
                 },
               }));
               break;
@@ -283,12 +299,11 @@ export const useCreatePayrollPageLogic = () => {
     search,
     setSearch,
     summaryUrl,
-    hasEmployees: Boolean(payroll?.employeesByCountry?.NG?.length),
+    hasEmployees: Boolean(payroll?.employees?.length),
     params,
     setParams,
     thisMoment: moment().year(params.year).month(params.proRateMonth),
-    allChecked:
-      params.checked.length === payroll?.employeesByCountry?.NG?.length,
+    allChecked: params.checked.length === payroll?.employees?.length,
     handleCheck,
     handleCheckAll,
     allUnchecked: !params.checked.length,

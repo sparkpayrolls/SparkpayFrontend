@@ -12,14 +12,11 @@ export type StatutoryDeductionOptions = {
 } & Record<string, unknown>;
 
 export type Employee = {
-  country?: {
-    iso2: string;
-    currency: string;
-  };
   id: string;
   firstname: string;
   lastname: string;
   salary: number;
+  netSalary?: number;
   bonus: Addon[];
   deductions: Addon[];
   excludeFromTotals?: boolean;
@@ -30,33 +27,26 @@ export type Employee = {
     endDate: string;
   };
   voluntaryPensionContribution?: number;
+  yearlyRentAmount?: number;
 };
 
-export type Fees = Record<
-  string,
-  {
-    baseFee: number;
-    perEmployee: number;
-    perRemittanceEmployee: number;
-  }
->;
+export type Fees = {
+  baseFee: number;
+  perEmployee: number;
+  perRemittanceEmployee: number;
+};
 
 export type ProcessPayload = {
-  precision: number;
+  precision?: number;
   employees: Employee[];
-  feesByCountry: Fees;
+  fees: Fees;
+  statutoryDeductionOptions?: Record<string, StatutoryDeductionOptions>;
+  salaryBreakdown?: SalaryBreakdown;
   month: string;
   year: number;
-  salaryBreakdownByCountry?: Record<string, SalaryBreakdown>;
-  statutoryDeductionsByCountry?: Record<
-    string,
-    Record<string, StatutoryDeductionOptions>
-  >;
-  country: {
-    iso2: string;
-    currency: string;
-  };
-  conversionRates: Record<string, number>;
+  payItems?: Record<string, boolean>;
+  cycles?: number;
+  currentCycle?: number;
 };
 
 export type ProcessedEmployee = {
@@ -76,11 +66,16 @@ export type ProcessedEmployee = {
   nhf?: {
     amount: number;
   } & Record<string, unknown>;
+  nsitf?: {
+    amount: number;
+  } & Record<string, unknown>;
+  nhis?: {
+    amount: number;
+  } & Record<string, unknown>;
   proratedSalary: number;
   prorateDays: number;
   excludeFromTotals: boolean;
-  salaryBreakdown?: { name: string; value: number }[];
-  remittances?: Record<string, { amount: number } & Record<string, unknown>>;
+  salaryBreakdown: { name: string; value: number }[];
 };
 
 export type ProcessedPayroll = {
@@ -89,18 +84,16 @@ export type ProcessedPayroll = {
   totalBonus: number;
   totalDeductions: number;
   totalFees: number;
+  totalPension: number;
+  totalNHF: number;
+  totalNSITF: number;
+  totalNHIS: number;
+  totalTax: number;
+  totalPayrollPension: number;
+  totalPayrollNHF: number;
+  totalPayrollNSITF: number;
+  totalPayrollNHIS: number;
+  totalPayrollTax: number;
   totalCharge: number;
-  employeesByCountry: Record<string, ProcessedEmployee[]>;
-  payrollSize: number;
-  currencyCount: number;
-  payrollTotalsByCountry: Record<
-    string,
-    Record<string, number> & {
-      payrollSize: number;
-      totalSalary: number;
-      totalNetSalary: number;
-      totalBonus: number;
-      totalDeductions: number;
-    }
-  >;
+  employees: ProcessedEmployee[];
 };

@@ -15,7 +15,7 @@ export class HttpRepository {
     try {
       const { data } = await axios(config);
 
-      return data as Response<T>;
+      return data as unknown as Response<T>;
     } catch (error) {
       throw HttpError.parse(error as AxiosError);
     }

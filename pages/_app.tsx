@@ -3,6 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
 import '../src/styles/globals.scss';
 import { AppProps } from 'next/app';
+import Router from 'next/router';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '../src/redux/store';
@@ -55,6 +56,31 @@ function MyApp({ Component, pageProps }: AppProps) {
       .catch(() => {
         //...
       });
+  }, []);
+
+  // land at the top of every new page (footer, nav, any link); animated unless
+  // reduced motion is preferred. In-page anchor links (#…) keep their jump.
+  useEffect(() => {
+    const onRouteDone = (url: string) => {
+      if (url.includes('#')) return;
+      const reduce =
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // run after the new page has laid out so the scroll actually takes
+      requestAnimationFrame(() => {
+        try {
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: reduce ? 'auto' : 'smooth',
+          });
+        } catch (e) {
+          window.scrollTo(0, 0);
+        }
+      });
+    };
+    Router.events.on('routeChangeComplete', onRouteDone);
+    return () => Router.events.off('routeChangeComplete', onRouteDone);
   }, []);
 
   return (

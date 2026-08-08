@@ -1,3 +1,8 @@
+// TAILWINDCSS
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 // CORE
 @import './core/overwrite';
 @import './core/variables';
@@ -13,6 +18,7 @@
 @import './components/spinner';
 @import './components/toast';
 @import './components/defaultLayout';
+@import './components/aboutLayout';
 @import './components/employee-details';
 @import './components/dashboardLayout';
 @import './components/payroll-table';
@@ -44,6 +50,9 @@
 
 // PAGES
 @import './pages/home';
+@import './pages/book-a-demo';
+@import './marketing/index';
+@import './pages/about-us';
 @import './pages/create-account';
 @import './pages/login';
 @import './pages/forgot-password';
@@ -67,7 +76,3 @@
 @import './pages/tax-group-details';
 @import './pages/pricing';
 
-// TAILWINDCSS
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';

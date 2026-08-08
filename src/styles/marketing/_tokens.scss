@@ -1,0 +1,53 @@
+// SparkPay marketing — design tokens (guide §3).
+// Scoped to `.mkt` so nothing leaks into the authenticated app. No raw hex in
+// components; everything reads from these custom properties.
+
+.mkt {
+  // ── neutrals (cool ink) ──────────────────────────────────────────────
+  --bg-canvas: #f8f9fb;
+  --bg-surface: #ffffff;
+  --bg-ink: #0c1220;
+  --bg-ink-soft: #131a2c;
+  --border-subtle: #e6e9ee;
+  --border-on-ink: #232b41;
+  --text-primary: #0e1421;
+  --text-secondary: #5a6478;
+  --text-on-ink: #edf1f9;
+  --text-on-ink-soft: #9aa6c0;
+
+  // ── brand (matches the app primary exactly) ─────────────────────────
+  --brand-600: #1d4ed8;
+  --brand-700: #1e40af;
+  --brand-400: #60a5fa;
+  --brand-100: #dbeafe;
+
+  // gradient-mesh stops (hero + final CTA only)
+  --mesh-1: #1e4fe0;
+  --mesh-2: #4d79ff;
+  --mesh-3: #7a5cff;
+
+  // ── semantic (status meaning only, never decoration) ────────────────
+  --success: #0e9f6e;
+  --success-tint: #e7f7f0;
+  --warning: #b45309;
+  --error: #d92d20;
+
+  // ── type ────────────────────────────────────────────────────────────
+  // next/font is unavailable on Next 12; loaded via <link> in _document,
+  // with tuned fallbacks to limit CLS.
+  --font-display: 'Schibsted Grotesk', 'Instrument Sans', 'Segoe UI',
+    system-ui, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', 'IBM Plex Mono', ui-monospace, 'SFMono-Regular',
+    'Menlo', monospace;
+
+  // ── radius / elevation ──────────────────────────────────────────────
+  --radius-card: 12px;
+  --radius-media: 16px;
+  --radius-pill: 999px;
+  --shadow-nav: 0 1px 0 rgba(14, 20, 33, 0.06), 0 8px 24px rgba(14, 20, 33, 0.06);
+  --shadow-mockup: 0 40px 80px -24px rgba(12, 18, 32, 0.45);
+
+  // ── motion ──────────────────────────────────────────────────────────
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}

@@ -41,7 +41,8 @@ export const Invitations = (props: IInvitations) => {
     try {
       setLoading(true);
       const { data, meta } = await $api.admin.getInvitations(params);
-      setInvitations(data);
+      // the api envelope omits `data` when empty/nil; avoid an undefined list
+      setInvitations(data ?? []);
       setMeta(meta);
     } catch (error) {
       const httpError = error as HttpError;

@@ -2,7 +2,10 @@ import { FormikProps } from 'formik';
 import moment from 'moment';
 
 export const useCreatePayrollFormContext = <
-  T extends { proRateMonth: string; year: number; payDate: string }
+  T extends { proRateMonth: string; year?: number } & Record<
+    string,
+    unknown
+  > = { proRateMonth: string; year?: number }
 >() => {
   return (
     props: FormikProps<T>,

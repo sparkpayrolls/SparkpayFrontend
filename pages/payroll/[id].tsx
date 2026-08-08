@@ -16,9 +16,11 @@ import { NotFound } from '@/components/Misc/not-found.component';
 import {
   Employee,
   Payroll,
+  PayrollApprovalAction,
   PayrollEmployee,
   PayrollEmployeePayoutStatus,
   PayrollStatus,
+  PayrollStatusEnum,
   Response,
 } from 'src/api/types';
 import { HttpError } from 'src/api/repo/http.error';
@@ -29,6 +31,8 @@ import { useWalletBalance } from 'src/helpers/hooks/use-wallet-balance.hook';
 import { SearchForm } from '@/components/Form/search.form';
 import { KebabMenu } from '@/components/KebabMenu/KebabMenu.component';
 import { toast } from 'react-toastify';
+import { Identity } from '@/components/Identity/identity.component';
+import { Button } from '@/components/Button/Button.component';
 
 const PayDetails: NextPage = () => {
   const router = useRouter();
@@ -52,35 +56,6 @@ const PayDetails: NextPage = () => {
   const loading = apiCalls > 0;
   const hasEmployees = !!employees?.data?.length;
   const payrollId = router.query.id as string;
-
-  employees?.data?.forEach((employee) => {
-    totals['Total Salary Amount'] += employee.salary;
-    totals['Total Net Salary'] += employee.netSalary;
-    if (employee.deductions && employee.deductions.length) {
-      totals['Total Deductions'] = totals['Total Deductions'] || 0;
-      totals['Total Deductions'] += Util.sum(
-        employee.deductions.map((d) => d.amount),
-      );
-      headerRow.add('deductions');
-    }
-    if (employee.bonuses && employee.bonuses.length) {
-      totals['Total Bonuses'] = totals['Total Bonuses'] || 0;
-      totals['Total Bonuses'] += Util.sum(
-        employee.bonuses.map((d) => d.amount),
-      );
-      headerRow.add('bonuses');
-    }
-    if (employee.remittances && employee.remittances.length) {
-      employee.remittances.forEach((remittance) => {
-        const name = `Total ${remittance.name}`;
-        totals[name] = totals[name] || 0;
-        totals[name] += remittance.amount;
-        if (!remittanceRows.includes(`${remittance.name} (${currency})`)) {
-          remittanceRows.push(`${remittance.name} (${currency})`);
-        }
-      });
-    }
-  });
 
   const getPayroll = useCallback(async () => {
     try {
@@ -209,8 +184,111 @@ const PayDetails: NextPage = () => {
     }
   }, [payroll, socket]);
 
+  const canApprove =
+    payroll?.status === PayrollStatusEnum.PendingApproval &&
+    payroll?.approvers?.some(
+      (app) => app.adminId === administrator?.id && !app.action,
+    );
+
+  const approveOrRejectPayroll = (action: PayrollApprovalAction) => {
+    return () => {
+      setApiCalls((c) => c + 1);
+      $api.payroll
+        .approveOrReject(payroll?.id as string, action)
+        .then((res) => {
+          setPayroll({ ...payroll, ...res.data });
+          toast.success(`Payroll ${action} action successful.`);
+        })
+        .catch((error) => {
+          toast.error(`Payroll ${action} action failed - ${error.message}`);
+        })
+        .finally(() => {
+          setApiCalls((c) => c - 1);
+        });
+    };
+  };
+
+  employees?.data?.forEach((employee) => {
+    totals['Total Salary Amount'] += employee.salary;
+    totals['Total Net Salary'] += employee.netSalary;
+    if (employee.deductions && employee.deductions.length) {
+      totals['Total Deductions'] = totals['Total Deductions'] || 0;
+      totals['Total Deductions'] += Util.sum(
+        employee.deductions.map((d) => d.amount),
+      );
+      headerRow.add('deductions');
+    }
+    if (employee.bonuses && employee.bonuses.length) {
+      totals['Total Bonuses'] = totals['Total Bonuses'] || 0;
+      totals['Total Bonuses'] += Util.sum(
+        employee.bonuses.map((d) => d.amount),
+      );
+      headerRow.add('bonuses');
+    }
+    if (employee.remittances && employee.remittances.length) {
+      employee.remittances.forEach((remittance) => {
+        const name = `Total ${remittance.name}`;
+        totals[name] = totals[name] || 0;
+        totals[name] += remittance.amount;
+        if (!remittanceRows.includes(`${remittance.name} (${currency})`)) {
+          remittanceRows.push(`${remittance.name} (${currency})`);
+        }
+      });
+    }
+  });
+
   return (
-    <DashboardLayoutV2 title="Payroll details" href="/payroll">
+    <DashboardLayoutV2
+      title="Payroll details"
+      href="/payroll"
+      rightTitleContent={
+        canApprove && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              width: '100%',
+              alignItems: 'center',
+              gap: '1rem',
+            }}
+          >
+            <div
+              style={{
+                minWidth: '157px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+              }}
+            >
+              <Button
+                showSpinner={loading}
+                onClick={approveOrRejectPayroll(PayrollApprovalAction.Approve)}
+                primary
+              >
+                Approve
+              </Button>
+            </div>
+
+            <div
+              style={{
+                minWidth: '157px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'stretch',
+              }}
+            >
+              <Button
+                showSpinner={loading}
+                onClick={approveOrRejectPayroll(PayrollApprovalAction.Reject)}
+                danger
+              >
+                Reject
+              </Button>
+            </div>
+          </div>
+        )
+      }
+    >
       {payrollNotFound && <NotFound message={`Payroll not found`} />}
       {!payrollNotFound && (
         <>
@@ -262,7 +340,7 @@ const PayDetails: NextPage = () => {
                         <>
                           {currency}{' '}
                           {Util.formatMoneyNumber(
-                            payroll?.totalSalary ||
+                            payroll?.totalNetSalary ||
                               totals['Total Net Salary'] ||
                               0,
                             2,
@@ -311,7 +389,7 @@ const PayDetails: NextPage = () => {
                         <>
                           {currency}{' '}
                           {Util.formatMoneyNumber(
-                            payroll?.totalPayrollTax || 0,
+                            payroll?.totalPayrollTax ?? 0,
                             2,
                           )}
                         </>
@@ -342,6 +420,36 @@ const PayDetails: NextPage = () => {
                           {currency}{' '}
                           {Util.formatMoneyNumber(
                             payroll?.totalPayrollNHF || 0,
+                            2,
+                          )}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
+                    title="Total NSITF"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalPayrollNSITF || 0,
+                            2,
+                          )}
+                        </>
+                      )
+                    }
+                  />
+                  <SinglePayrollDetail
+                    title="Total NHIS"
+                    loading={loading && !payroll}
+                    details={
+                      payroll && (
+                        <>
+                          {currency}{' '}
+                          {Util.formatMoneyNumber(
+                            payroll?.totalPayrollNHIS || 0,
                             2,
                           )}
                         </>
@@ -398,6 +506,28 @@ const PayDetails: NextPage = () => {
                       )
                     }
                   />
+                </div>
+                <div
+                  style={{
+                    marginTop: '1.25rem',
+                    display: 'flex',
+                    gap: '2rem',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {payroll?.approvers?.map((approver) => {
+                    return (
+                      <Identity
+                        key={approver.userId}
+                        image={approver.avatar}
+                        name={`${approver.firstname} ${approver.lastname} ${
+                          approver.adminId === administrator?.id ? '(you)' : ''
+                        }`}
+                        initial={approver.firstname.slice(0, 1)}
+                        status={approver.action ?? 'pending'}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -478,6 +608,8 @@ const PayDetails: NextPage = () => {
                     <th>Tax</th>
                     <th>Pension</th>
                     <th>NHF</th>
+                    <th>NSITF</th>
+                    <th>NHIS</th>
                     <th>Payout Status</th>
                   </tr>
                 </thead>
@@ -539,6 +671,14 @@ const PayDetails: NextPage = () => {
                           <td>
                             {currency}{' '}
                             {Util.formatMoneyNumber(e.nhf?.amount || 0)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.nsitf?.amount || 0)}
+                          </td>
+                          <td>
+                            {currency}{' '}
+                            {Util.formatMoneyNumber(e.nhis?.amount || 0)}
                           </td>
                           <td>
                             <div className="d-flex align-items-center justify-content-space-between">

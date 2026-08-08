@@ -49,9 +49,12 @@ export const MultiSelectInput = (props: IMultiSelect) => {
 
 const Option = (props: PropsWithChildren<ISelectOption>) => {
   const { children, isSelected, onClick } = props;
-  const className = classNames('select-input__option', {
-    'select-input__option--selected': isSelected,
-  });
+  const className = classNames(
+    'select-input__option text-sm font-normal leading-4',
+    {
+      'select-input__option--selected': isSelected,
+    },
+  );
 
   return (
     <span className={className} onClick={onClick}>
@@ -62,6 +65,7 @@ const Option = (props: PropsWithChildren<ISelectOption>) => {
 
 export const SelectInput = (props: ISelectInput) => {
   const selectRef = useRef<HTMLSpanElement>(null);
+  const selectorRef = useRef<HTMLSpanElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const optionsRef = useRef<HTMLSpanElement>(null);
@@ -73,7 +77,7 @@ export const SelectInput = (props: ISelectInput) => {
   const [inputId] = useState(
     `select-input-${Math.random().toString().substr(2, 5)}`,
   );
-  const { onBlur, actualValue, onChange, loading } = props;
+  const { onBlur, actualValue, onChange, loading, onSearch } = props;
 
   const className = classNames('select-input', {
     'select-input--open': showOptions,
@@ -99,6 +103,7 @@ export const SelectInput = (props: ISelectInput) => {
   const handleOptionClick = (option: string | ISelectInputOptionItem) => {
     setSelected(option);
     setShowOptions(false);
+    triggerInputEvent('blur');
     triggerInputEvent('change', option);
   };
 
@@ -118,19 +123,16 @@ export const SelectInput = (props: ISelectInput) => {
   );
 
   useEffect(() => {
-    if (!showOptions) {
-      triggerInputEvent('blur');
-    }
-  }, [showOptions, triggerInputEvent]);
-
-  useEffect(() => {
     const element = selectRef.current;
     const inputElement = inputRef.current;
 
     const handleClickOutside = (event: MouseEvent) => {
       // @ts-ignore
       if (!event?.target?.closest(`#${element?.id}`)) {
-        setShowOptions(false);
+        if (element?.classList?.contains('select-input--open')) {
+          triggerInputEvent('blur');
+          setShowOptions(false);
+        }
       }
     };
     const handleBlur = (event: any) => {
@@ -153,7 +155,25 @@ export const SelectInput = (props: ISelectInput) => {
       inputElement?.removeEventListener('blur', handleBlur);
       inputElement?.removeEventListener('change', handleChange);
     };
-  }, [selectRef, inputRef, onBlur, onChange]);
+  }, [selectRef, inputRef, onBlur, onChange, triggerInputEvent]);
+
+  useEffect(() => {
+    onSearch?.(search);
+  }, [onSearch, search]);
+
+  useEffect(() => {
+    if (props.value !== undefined && typeof props.value !== 'undefined') {
+      setSelected(
+        (typeof props.options[0] === 'string'
+          ? props.value
+          : (props.options as ISelectInputOptionItem[]).find(
+              (o) =>
+                o[(props.actualValue || 'id') as keyof typeof o] ===
+                props.value,
+            )) || {},
+      );
+    }
+  }, [props.value, props.options, props.actualValue]);
 
   return (
     <span ref={selectRef} className={className} id={inputId}>
@@ -163,6 +183,9 @@ export const SelectInput = (props: ISelectInput) => {
         className="select-input__selector"
         onClick={() => {
           if (!loading) {
+            if (showOptions) {
+              triggerInputEvent('blur');
+            }
             setShowOptions(!showOptions);
             setTimeout(() => {
               searchInputRef.current?.focus();
@@ -188,10 +211,12 @@ export const SelectInput = (props: ISelectInput) => {
             ref={inputRef}
           />
         </span>
-        <span className={placeholderClassName}>
+        <span className={placeholderClassName} ref={selectorRef}>
           {(selectedValue &&
             (typeof selectedValue === 'string'
               ? selectedValue
+              : typeof props.displayValue === 'function'
+              ? props.displayValue?.(selectedValue)
               : (selectedValue[props.displayValue || 'name'] as string))) ||
             props.placeholder ||
             'Select'}
@@ -219,12 +244,16 @@ export const SelectInput = (props: ISelectInput) => {
           props.dropTop
             ? {}
             : {
+                overflowY: 'auto',
                 position: 'fixed',
                 width: selectRef.current?.getBoundingClientRect()?.width,
-                left: selectRef.current?.getBoundingClientRect()?.x,
+                left:
+                  (selectRef.current?.getBoundingClientRect()?.left || 0) +
+                  window.scrollX,
                 top:
-                  (selectRef.current?.getBoundingClientRect()?.y || 0) +
-                  (selectRef.current?.getBoundingClientRect()?.y || 0) * 0.05,
+                  (selectorRef.current?.getBoundingClientRect()?.bottom || 0) -
+                  6 +
+                  window.scrollY,
               }
         }
       >
@@ -249,6 +278,8 @@ export const SelectInput = (props: ISelectInput) => {
             const name =
               typeof _value === 'string'
                 ? _value
+                : typeof props.displayValue === 'function'
+                ? (props.displayValue?.(_value) as string)
                 : (_value[props.displayValue || 'name'] as string);
 
             if (

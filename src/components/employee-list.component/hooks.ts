@@ -2,6 +2,7 @@ import { Options as JOptions } from 'jspreadsheet-ce';
 import { useRouter } from 'next/router';
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import NiceModal from '@ebay/nice-modal-react';
 import { $api } from 'src/api';
 import { useBanks } from 'src/helpers/hooks/use-banks.hook';
 import { usePayoutMethods } from 'src/helpers/hooks/use-payout-methods.hook';
@@ -9,6 +10,10 @@ import { Util } from 'src/helpers/util';
 import { BulkEmployeeAddValidation } from 'src/helpers/validation';
 import { useAppSelector } from 'src/redux/hooks';
 import { ValidationError } from 'yup';
+import {
+  UploadEmployeesModal,
+  UploadedEmployeeRow,
+} from '../Modals/UploadEmployeesModal.component';
 
 export const useEmployeeListContext = () => {
   const router = useRouter();
@@ -48,13 +53,16 @@ export const useEmployeeListContext = () => {
       case 'salary':
         return 2;
 
-      case 'email':
+      case 'yearlyRentAmount':
         return 3;
 
-      case 'phoneNumber':
+      case 'email':
         return 4;
+
+      case 'phoneNumber':
+        return 5;
       case 'accountNumber':
-        return 6;
+        return 7;
       default:
         return 0;
     }
@@ -69,6 +77,116 @@ export const useEmployeeListContext = () => {
     },
     [],
   );
+  const clearErrorCells = useCallback(() => {
+    Array.prototype.forEach.call(
+      document.getElementsByClassName('error-cell'),
+      (el) => {
+        el.classList.remove('error-cell');
+        el.removeAttribute('title');
+      },
+    );
+  }, []);
+  const resolveBankId = useCallback(
+    async (bank: string) => {
+      const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(bank);
+
+      if (isValidObjectId) {
+        return bank;
+      }
+
+      const foundBank = banks.find((b) => b.name.toLowerCase() === bank.toLowerCase());
+      if (foundBank) {
+        return foundBank.id;
+      }
+
+      if (!country?.id || !bank.trim()) {
+        return '';
+      }
+
+      try {
+        const { data } = await $api.payout.getSupportedBanks(country.id, {
+          limit: 1,
+          search: bank,
+        });
+        return data[0]?.id || '';
+      } catch {
+        return '';
+      }
+    },
+    [banks, country?.id],
+  );
+
+  const handleUploadEmployeesClick = useCallback(() => {
+    if (isSubmitting) {
+      return;
+    }
+
+    NiceModal.show(UploadEmployeesModal).then(async (rows) => {
+      if (!Array.isArray(rows) || !tableRef.current) {
+        return;
+      }
+
+      clearErrorCells();
+      const employeeRows = rows as UploadedEmployeeRow[];
+      const tableRows = employeeRows.map((employee) => [
+        employee.firstname,
+        employee.lastname,
+        employee.salary,
+        employee.yearlyRentAmount,
+        employee.email,
+        employee.phoneNumber,
+        employee.bank,
+        employee.accountNumber,
+        '',
+      ]);
+
+      tableRef.current.setData(tableRows);
+
+      await Promise.all(
+        employeeRows.map(async (employee, rowIndex) => {
+          const accountNumber = employee.accountNumber?.trim();
+          const bank = employee.bank?.trim();
+
+          if (!accountNumber) {
+            return;
+          }
+
+          const bankId = await resolveBankId(bank);
+          if (!bankId) {
+            if (bank) {
+              setCellError(6, rowIndex, 'bank not found');
+            }
+            return;
+          }
+
+          tableRef.current?.setValueFromCoords(6, rowIndex, bankId, true);
+
+          try {
+            const res = await validateAccountDetails(bankId, accountNumber);
+            if (res) {
+              tableRef.current?.setValueFromCoords(
+                8,
+                rowIndex,
+                (res as { accountName: string }).accountName,
+                true,
+              );
+            }
+          } catch {
+            setCellError(7, rowIndex, 'unable to resolve account details');
+            setCellError(8, rowIndex, 'invalid account details');
+          }
+        }),
+      );
+
+      toast.success('Employee sheet loaded. Review data and continue.');
+    });
+  }, [
+    clearErrorCells,
+    isSubmitting,
+    resolveBankId,
+    setCellError,
+    validateAccountDetails,
+  ]);
 
   const handleAddRowClick = useCallback(() => {
     tableRef.current?.insertRow(10);
@@ -77,14 +195,7 @@ export const useEmployeeListContext = () => {
   const handleSubmitClick = useCallback(() => {
     const [payoutMethod] = payoutMethods;
     if (payoutMethod) {
-      // clear all error cells
-      Array.prototype.forEach.call(
-        document.getElementsByClassName('error-cell'),
-        (el) => {
-          el.classList.remove('error-cell');
-          el.removeAttribute('title');
-        },
-      );
+      clearErrorCells();
 
       // get data from jspreadsheet
       const data = tableRef.current?.getData() || [];
@@ -96,6 +207,7 @@ export const useEmployeeListContext = () => {
           firstname,
           lastname,
           salary,
+          yearlyRentAmount,
           email,
           phoneNumber,
           bankId,
@@ -106,8 +218,12 @@ export const useEmployeeListContext = () => {
             firstname,
             lastname,
             salary: salary.replace(/[^\d.]/g, ''),
+            yearlyRentAmount: yearlyRentAmount ? yearlyRentAmount.replace(/[^\d.]/g, '') : undefined,
             email,
-            phoneNumber,
+            phoneNumber:
+              phoneNumber === undefined || phoneNumber === null
+                ? ''
+                : String(phoneNumber),
             payoutMethod: payoutMethod.id,
             payoutMethodMeta: { bankId, accountNumber },
           };
@@ -181,6 +297,7 @@ export const useEmployeeListContext = () => {
       }
     }
   }, [
+    clearErrorCells,
     getColumnIndex,
     gotoPayrollCreation,
     payoutMethods,
@@ -212,6 +329,13 @@ export const useEmployeeListContext = () => {
             mask: 'N #,##.00',
             decimal: '.',
           },
+          {
+            type: 'numeric',
+            title: 'Yearly Rent Amount',
+            width: 135,
+            mask: 'N #,##.00',
+            decimal: '.',
+          },
           { type: 'text', title: 'Email (optioinal)', width: 165 },
           {
             type: 'text',
@@ -236,19 +360,46 @@ export const useEmployeeListContext = () => {
           cell.classList.remove('error-cell');
           cell.removeAttribute('title');
 
-          if ([5, 6].includes(+columnIndex)) {
+          if ([6, 7].includes(+columnIndex)) {
             payoutMeta[rowIndex] = {
               ...(payoutMeta[rowIndex] || {}),
               rowIndex,
-              [+columnIndex === 5 ? 'bankId' : 'accountNumber']: value,
+              [+columnIndex === 6 ? 'bankId' : 'accountNumber']: value,
             };
             const { accountNumber, bankId } = payoutMeta[rowIndex];
+
             if (accountNumber && bankId) {
+              const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(
+                bankId as string,
+              );
+              if (!isValidObjectId) {
+                $api.payout
+                  .getSupportedBanks(country?.id, { limit: 1, search: bankId })
+                  .then(({ data }) => {
+                    if (data.length) {
+                      tableRef.current?.setValueFromCoords(
+                        6,
+                        +rowIndex,
+                        data[0].id,
+                        true,
+                      );
+                    }
+                  })
+                  .catch(() => {
+                    tableRef.current?.setValueFromCoords(
+                      6,
+                      +rowIndex,
+                      '',
+                      true,
+                    );
+                  });
+                return;
+              }
               validateAccountDetails(bankId as string, accountNumber as string)
                 .then((res) => {
                   if (res) {
                     tableRef.current?.setValueFromCoords(
-                      7,
+                      8,
                       +rowIndex,
                       (res as { accountName: string }).accountName,
                       true,
@@ -257,16 +408,16 @@ export const useEmployeeListContext = () => {
                 })
                 .catch(() => {
                   setCellError(
-                    6,
+                    7,
                     +rowIndex,
                     'unable to resolve account details',
                   );
-                  setCellError(7, +rowIndex, 'invalid account details');
+                  setCellError(8, +rowIndex, 'invalid account details');
                 });
             }
           }
         },
-        minDimensions: [7, 10] as [number, number],
+        minDimensions: [9, 10] as [number, number],
         showIndex: () => false,
       };
 
@@ -278,7 +429,14 @@ export const useEmployeeListContext = () => {
         return jspreadsheet.destroy(ref);
       };
     }
-  }, [loading, banks, getColumnIndex, setCellError, validateAccountDetails]);
+  }, [
+    loading,
+    banks,
+    getColumnIndex,
+    setCellError,
+    validateAccountDetails,
+    country,
+  ]);
 
   useEffect(() => {
     const id = toast.info(
@@ -293,6 +451,7 @@ export const useEmployeeListContext = () => {
 
   return {
     handleAddRowClick,
+    handleUploadEmployeesClick,
     handleSubmitClick,
     isSubmitting,
     loading,

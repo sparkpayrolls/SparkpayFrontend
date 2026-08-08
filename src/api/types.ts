@@ -145,12 +145,15 @@ export type Employee = Document & {
   phoneNumber?: string;
   taxId?: string;
   nhfId?: string;
+  nsitfId?: string;
+  nhisId?: string;
   taxState?: string;
   bvn?: string;
   statutoryDeductions?: Record<string, StatutoryDeduction>;
   voluntaryPensionContribution?: number;
   pensionId?: string;
   pfa?: string;
+  yearlyRentAmount?: number;
 };
 
 export enum GroupTypeEnum {
@@ -158,6 +161,8 @@ export enum GroupTypeEnum {
   tax = 'tax',
   pension = 'pension',
   NHF = 'NHF',
+  NSITF = 'NSITF',
+  NHIS = 'NHIS',
 }
 
 export type GroupType = keyof typeof GroupTypeEnum;
@@ -216,7 +221,7 @@ export enum PermissionGroupEnum {
   Payroll = 'Payroll',
   AuditTrail = 'AuditTrail',
   Remittance = 'Remittance',
-  Admin = 'Admin',
+  Administrator = 'Administrator',
   Overview = 'Overview',
 }
 
@@ -251,7 +256,8 @@ export type Administrator = Document & {
   role?: string | Role;
   isRoot: boolean;
   selected: boolean;
-  company: string | Company;
+  company: Company;
+  payrollApproverIndex?: number;
 };
 
 export enum PayrollStatusEnum {
@@ -259,6 +265,7 @@ export enum PayrollStatusEnum {
   processing = 'processing',
   completed = 'completed',
   paused = 'paused',
+  PendingApproval = 'pending-approval',
 }
 
 export type PayrollStatus = PayrollStatusEnum | keyof typeof PayrollStatusEnum;
@@ -340,6 +347,11 @@ export enum ProRateMonthEnum {
   December = 'December',
 }
 
+export enum PayrollApprovalAction {
+  Approve = 'approve',
+  Reject = 'reject',
+}
+
 export const ProRateMonths = Object.values(ProRateMonthEnum);
 
 export type ProRateMonth = ProRateMonthEnum | keyof typeof ProRateMonthEnum;
@@ -359,10 +371,23 @@ export type Payroll = Document & {
   totalDeductions?: number;
   totalPension?: number;
   totalNHF?: number;
+  totalNSITF?: number;
+  totalNHIS?: number;
   totalTax?: number;
   totalPayrollPension?: number;
   totalPayrollNHF?: number;
+  totalPayrollNSITF?: number;
+  totalPayrollNHIS?: number;
   totalPayrollTax?: number;
+  approvers?: {
+    firstname: string;
+    lastname: string;
+    userId: string;
+    adminId: string;
+    action: PayrollApprovalAction;
+    date: string;
+    avatar: string;
+  }[];
 };
 
 export type PaymentMethodName = 'Bank Transfer' | 'Card';
@@ -434,6 +459,8 @@ export type SalaryAddonDate = {
   month: string;
   year?: number;
   days?: string[];
+  startDate?: Date;
+  endDate?: Date;
 };
 
 export type SalaryAddOn = Document & {
@@ -497,6 +524,8 @@ export type PayrollEmployee = Document & {
   prorateDays?: number;
   pension?: PayrollEmployeeRemittance;
   nhf?: PayrollEmployeeRemittance;
+  nsitf?: PayrollEmployeeRemittance;
+  nhis?: PayrollEmployeeRemittance;
   tax?: PayrollEmployeeRemittance;
 };
 
@@ -505,7 +534,8 @@ export type ProcessPayrollPayload = {
   excludedEmployeeIds?: string[] | null;
   proRateMonth: string;
   year?: number;
-  cycle?: number;
+  cycles?: number;
+  currentCycle?: number;
 };
 
 export type PayrollSummary = {
@@ -729,4 +759,13 @@ export type EmployeePayrollHistory = {
     | keyof typeof PayrollEmployeePayoutStatusEnum;
   payroll: Pick<Payroll, 'id' | 'payDate' | 'proRateMonth'>;
   salary: number;
+};
+
+export type RemittancePayment = {
+  id: string;
+  totalAmount: number;
+  createdAt: string;
+  status: string;
+  receipts: string[];
+  payrolls: { year: string; proRateMonth: string }[];
 };

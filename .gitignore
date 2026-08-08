@@ -33,3 +33,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# TS incremental build cache
+tsconfig.tsbuildinfo
+
+# yarn project — no npm lockfile
+package-lock.json

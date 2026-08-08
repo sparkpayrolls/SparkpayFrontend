@@ -7,6 +7,7 @@ import { useEmployeeListContext } from './hooks';
 export const EmployeeList = () => {
   const {
     handleAddRowClick,
+    handleUploadEmployeesClick,
     handleSubmitClick,
     isSubmitting,
     loading,
@@ -31,6 +32,12 @@ export const EmployeeList = () => {
           >
             <PlusSvg /> Add Rows
           </button>
+          <Button
+            type="button"
+            disabled={isSubmitting}
+            onClick={handleUploadEmployeesClick}
+            label="Upload Employees"
+          />
           <Button
             type="button"
             disabled={isSubmitting}

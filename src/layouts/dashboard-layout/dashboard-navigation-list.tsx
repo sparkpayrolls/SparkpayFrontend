@@ -30,8 +30,30 @@ export const DashboardNavigationListItem = (
     <li className="dashboard-navigation__list-item">
       <Link href={props.href}>
         <a className={className}>
-          <props.Icon />
-          {props.title}
+          <div className="flex items-center">
+            <props.Icon />
+          </div>
+
+          <div className="relative w-full">
+            <span>{props.title}</span>
+            {props.badge && (
+              <span
+                className={classNames(
+                  'absolute -top-[50%] -right-2 p-0.5 text-[10px] font-bold text-white rounded-[2px] shadow-sm animate-pulse leading-none',
+                  {
+                    'bg-red-500':
+                      props.badge.color === 'red' || !props.badge.color,
+                    'bg-blue-500': props.badge.color === 'blue',
+                    'bg-green-500': props.badge.color === 'green',
+                    'bg-yellow-500': props.badge.color === 'yellow',
+                    'bg-purple-500': props.badge.color === 'purple',
+                  },
+                )}
+              >
+                {props.badge.text}
+              </span>
+            )}
+          </div>
         </a>
       </Link>
     </li>
@@ -75,6 +97,18 @@ export const navListItems = (
     permissions: [['Payroll', 'read']],
   },
   {
+    Icon: PayrollSvg,
+    href: '/remittance-payments',
+    match: '/remittance-payment',
+    router,
+    title: 'Remittance\xa0Payments',
+    permissions: [['Company', 'read']],
+    badge: {
+      text: 'NEW',
+      color: 'red',
+    },
+  },
+  {
     Icon: WalletBillingsSvg,
     href: '/transactions',
     match: '/transactions',
@@ -88,7 +122,7 @@ export const navListItems = (
     match: '/administrators',
     router,
     title: 'Admin\xa0Management',
-    permissions: [['Admin', 'read']],
+    permissions: [['Administrator', 'read']],
   },
   // {
   //   Icon: RemittancesSvg,

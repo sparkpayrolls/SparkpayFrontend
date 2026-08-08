@@ -6,7 +6,10 @@ export class RolesModule extends HttpRepository {
     return this.get<Role[]>('/roles', { params });
   }
 
-  async updateRole(id: string, payload: Pick<Role, 'name' | 'permissions'>) {
+  async updateRole(
+    id: string,
+    payload: Pick<Role, 'name' | 'permissions' | 'description'>,
+  ) {
     const { data } = await this.put<Role>(`/roles/${id}`, payload);
 
     return data;
@@ -22,7 +25,7 @@ export class RolesModule extends HttpRepository {
     return this.get<Permission[]>('roles/permissions', { params });
   }
 
-  async createRole(payload: Pick<Role, 'name' | 'permissions'>) {
+  async createRole(payload: Pick<Role, 'name' | 'permissions' | 'description'>) {
     const { data } = await this.post<Role>(`/roles`, payload);
 
     return data;

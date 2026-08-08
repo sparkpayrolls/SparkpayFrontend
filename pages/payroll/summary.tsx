@@ -12,6 +12,7 @@ import { savePayrollValidationSchema } from 'src/helpers/validation';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { useCreatePayrollFormContext } from 'src/helpers/hooks/use-payroll-create-form-context';
 import { usePayrollSummaryPageLogic } from 'src/helpers/hooks/use-payroll-summary-page-logic.hook';
+import { Checkbox } from 'antd';
 
 const PayrollSummaryPage: NextPage = () => {
   const {
@@ -23,10 +24,11 @@ const PayrollSummaryPage: NextPage = () => {
     currency,
     payroll,
     params,
+    initialValues,
+    summaryItems,
     getCreatePayrollFormHandler,
     getSaveClickHandler,
     setParams,
-    initialValues,
   } = usePayrollSummaryPageLogic();
   const getFormContext = useCreatePayrollFormContext<typeof initialValues>();
   const thisMoment = moment();
@@ -67,43 +69,31 @@ const PayrollSummaryPage: NextPage = () => {
                   </IF>
                   <IF condition={!loadingPayroll}>
                     {Util.formatNumber(
-                      payroll?.employeesByCountry?.NG?.filter(
-                        (e) => !e.excludeFromTotals,
-                      )?.length || 0,
+                      payroll?.employees?.filter((e) => !e.excludeFromTotals)
+                        ?.length || 0,
                     )}
                   </IF>
                 </span>
               </div>
             </div>
 
-            {[
-              { name: 'Total Salary', value: payroll?.totalSalary },
-              { name: 'Total Net Salary', value: payroll?.totalNetSalary },
-              { name: 'Total Bonus', value: payroll?.totalBonus },
-              { name: 'Total Deductions', value: payroll?.totalDeductions },
-              {
-                name: 'Total Tax',
-                value: payroll?.payrollTotalsByCountry?.NG?.totalPayrollTax,
-              },
-              {
-                name: 'Total Pension',
-                value: payroll?.payrollTotalsByCountry?.NG?.totalPayrollPension,
-              },
-              {
-                name: 'Total NHF',
-                value: payroll?.payrollTotalsByCountry?.NG?.totalPayrollNhf,
-              },
-              {
-                name: 'Total Fee',
-                value: payroll?.payrollTotalsByCountry?.NG?.totalFees,
-              },
-            ].map((item) => {
+            {summaryItems.map((item) => {
               return (
                 <div key={item.name} className="summary-table__row">
                   <div className="summary-table__row__item">
-                    <span className="summary-table__row__item__title">
-                      {item.name}
-                    </span>
+                    <div className="flex gap-2 items-center">
+                      <IF condition={item.sumsTotal}>
+                        <Checkbox
+                          checked={item.shouldSum}
+                          onChange={item.toggle}
+                        />
+                      </IF>
+
+                      <span className="summary-table__row__item__title">
+                        {item.name}
+                      </span>
+                    </div>
+
                     <span className="summary-table__row__item__value">
                       <IF condition={loadingPayroll}>
                         <Spinner size={16} color="--green" />

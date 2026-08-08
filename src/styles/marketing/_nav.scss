@@ -1,0 +1,344 @@
+// Marketing nav (guide §5): transparent over hero, glass + hairline on scroll.
+
+.mkt-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  transition: background-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out),
+    backdrop-filter 0.2s var(--ease-out);
+
+  // near-solid so dark nav text stays readable over the dark problem/bento
+  // sections that scroll underneath the fixed bar
+  &--scrolled {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: var(--shadow-nav);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  // no backdrop-filter support → fall back to a solid bar, never see-through
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    &--scrolled {
+      background: #ffffff;
+    }
+  }
+
+  // dark section behind the nav: light text, white logo, and (if scrolled) a
+  // dark glass bar so the light text keeps contrast
+  &--on-dark {
+    .mkt-nav__link,
+    .mkt-nav__caret,
+    .mkt-nav__signin {
+      color: #ffffff;
+    }
+
+    .mkt-nav__link::after {
+      background: #ffffff;
+    }
+
+    .mkt-nav__signin:hover {
+      color: var(--brand-400);
+    }
+
+    .mkt-nav__theme {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .mkt-nav__burger {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.28);
+
+      span {
+        background: #ffffff;
+      }
+    }
+  }
+
+  &--on-dark#{&}--scrolled {
+    background: rgba(12, 18, 32, 0.88);
+    border-bottom-color: var(--border-on-ink);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    &--on-dark#{&}--scrolled {
+      background: #0c1220;
+    }
+  }
+
+  &__theme {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
+
+    &:hover {
+      border-color: var(--brand-600);
+      color: var(--brand-600);
+    }
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 72px;
+  }
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  &__logo {
+    display: block;
+    height: 26px;
+    width: auto;
+  }
+
+  &__links {
+    display: none;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0 auto;
+
+    @media (min-width: 1024px) {
+      display: flex;
+    }
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    background: transparent;
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.25rem;
+      height: 1.5px;
+      background: var(--brand-600);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.15s var(--ease-out);
+    }
+
+    &:hover::after {
+      transform: scaleX(1);
+    }
+  }
+
+  &__caret {
+    font-size: 0.7rem;
+  }
+
+  &__has-menu {
+    position: relative;
+  }
+
+  &__mega {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    width: 460px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: var(--radius-card);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-nav);
+  }
+
+  &__mega-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.15s var(--ease-out);
+
+    &:hover {
+      background: var(--bg-canvas);
+    }
+  }
+
+  &__mega-title {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+  }
+
+  &__mega-desc {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+  }
+
+  &__actions {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+
+    @media (min-width: 1024px) {
+      display: flex;
+    }
+  }
+
+  &__signin {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--brand-600);
+    }
+  }
+
+  &__burger {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 40px;
+    height: 40px;
+    margin-left: auto;
+    padding: 0 9px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+
+    span {
+      height: 2px;
+      border-radius: 2px;
+      background: var(--text-primary);
+    }
+
+    @media (min-width: 1024px) {
+      display: none;
+    }
+  }
+}
+
+// ── mobile drawer ─────────────────────────────────────────────────────
+.mkt-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  visibility: hidden;
+  pointer-events: none;
+
+  &--open {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  &__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(12, 18, 32, 0.4);
+    opacity: 0;
+    transition: opacity 0.2s var(--ease-out);
+  }
+
+  &--open &__scrim {
+    opacity: 1;
+  }
+
+  &__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: min(88vw, 360px);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.25rem 2rem;
+    background: var(--bg-surface);
+    border-left: 1px solid var(--border-subtle);
+    transform: translateX(100%);
+    transition: transform 0.24s var(--ease-out);
+  }
+
+  &--open &__panel {
+    transform: none;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  &__close {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background: transparent;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-primary);
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+  }
+
+  &__link {
+    padding: 0.9rem 0.25rem;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--brand-600);
+    }
+  }
+
+  &__theme {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
+    cursor: pointer;
+    font-family: inherit;
+  }
+}

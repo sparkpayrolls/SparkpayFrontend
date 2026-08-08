@@ -5,7 +5,7 @@ import OrganizationInfo from './organization-info';
 import SalaryBreakdown from './salary-breakdown';
 import { useOrganizationDetails } from 'src/helpers/hooks/use-org-details';
 import RemittanceInformation from './remittance-information';
-import CountryDropdown from './organization-country-dropdown';
+import { IF } from '../Misc/if.component';
 
 const OrganisationDetailsUnsecured = () => {
   const organizationDetails = useOrganizationDetails();
@@ -19,16 +19,14 @@ const OrganisationDetailsUnsecured = () => {
             <h5 className="organisation-details__organisation-header">
               Organisation Details
             </h5>
-
-            <CountryDropdown />
           </div>
         </div>
-        {organization === null && (
+        <IF condition={organization === null}>
           <div className="employee-details__not-found">
             <NotFound message="Organization not found" />
           </div>
-        )}
-        {!!organization && (
+        </IF>
+        <IF condition={!!organization}>
           <div className="organization-settings">
             <div className="organization-settings__flex">
               <OrganizationInfo organizationDetails={organizationDetails} />
@@ -36,7 +34,7 @@ const OrganisationDetailsUnsecured = () => {
             </div>
             <RemittanceInformation organizationDetails={organizationDetails} />
           </div>
-        )}
+        </IF>
       </div>
     </DashboardLayout>
   );
