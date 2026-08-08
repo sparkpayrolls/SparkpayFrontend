@@ -10,11 +10,21 @@ import { store } from '../src/redux/store';
 import NiceModal from '@ebay/nice-modal-react';
 import { PersistGate, PersistGateProps } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useAppLogic } from 'src/helpers/hooks/use-app-logic.hook';
 import { config } from 'src/helpers/config';
 
 let persistor = persistStore(store);
+
+const AppLoader = () => (
+  <div className="app-loader">
+    {
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src="/logo-icon.svg" alt="logo-loader" />
+    }
+  </div>
+);
+
 const AuthManager = (props: PropsWithChildren<unknown>) => {
   const { loading } = useAppLogic();
 
@@ -22,20 +32,7 @@ const AuthManager = (props: PropsWithChildren<unknown>) => {
     return <>{props.children}</>;
   }
 
-  return (
-    <>
-      {loading ? (
-        <div className="app-loader">
-          {
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src="/logo-icon.svg" alt="logo-loader" />
-          }
-        </div>
-      ) : (
-        props.children
-      )}
-    </>
-  );
+  return <>{loading ? <AppLoader /> : props.children}</>;
 };
 
 const PersistGateWrapper = (props: PersistGateProps) => {
@@ -47,14 +44,23 @@ const PersistGateWrapper = (props: PersistGateProps) => {
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [configReady, setConfigReady] = useState(false);
+
   useEffect(() => {
+    if (config().apiUrl) {
+      setConfigReady(true);
+      return;
+    }
+
     fetch('/api/config')
       .then((res) => res.json())
       .then((data) => {
         config.setEnv(data);
+        setConfigReady(true);
       })
       .catch(() => {
-        //...
+        // still unblock the UI if config fails; callers that need apiUrl will no-op
+        setConfigReady(true);
       });
   }, []);
 
@@ -93,9 +99,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <PersistGateWrapper loading={null} persistor={persistor}>
           <NiceModal.Provider>
-            <AuthManager>
-              <Component {...pageProps} />
-            </AuthManager>
+            {!configReady ? (
+              <AppLoader />
+            ) : (
+              <AuthManager>
+                <Component {...pageProps} />
+              </AuthManager>
+            )}
             {typeof window !== 'undefined' && (
               <ToastContainer hideProgressBar={true} autoClose={3000} />
             )}
