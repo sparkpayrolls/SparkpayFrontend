@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { Util } from 'src/helpers/util';
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks';
 import _isEmpty from 'lodash.isempty';
-import pick from 'lodash.pick';
+import pick from 'lodash/pick';
 import { ManageTaxStatesModal } from '../Modals/ManageTaxStatesModal.component';
 import NiceModal from '@ebay/nice-modal-react';
 import { commitAministrator } from 'src/redux/slices/administrator/administrator.slice';

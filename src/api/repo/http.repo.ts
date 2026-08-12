@@ -106,10 +106,14 @@ export class HttpRepository {
   parseQueryObject(
     query: Record<string, Stringifiable | Stringifiable[]>,
   ): string {
-    /** convert perPage to limit */
-    query.limit = query.perPage;
-    delete query.perPage;
+    const normalized = { ...query };
 
-    return stringifyUrl({ url: '', query });
+    /** convert perPage to limit */
+    if (normalized.perPage !== undefined) {
+      normalized.limit = normalized.perPage;
+      delete normalized.perPage;
+    }
+
+    return stringifyUrl({ url: '', query: normalized });
   }
 }

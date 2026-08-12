@@ -1,5 +1,5 @@
 import { FormikHelpers } from 'formik';
-import pick from 'lodash.pick';
+import pick from 'lodash/pick';
 import { useRouter } from 'next/router';
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';

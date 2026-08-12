@@ -1,7 +1,7 @@
 import { confirmation } from '@/components/Modals/ConfirmationModal.component';
-import moment from 'antd/node_modules/moment';
+import moment from 'moment';
 import { FormikHelpers } from 'formik';
-import pick from 'lodash.pick';
+import pick from 'lodash/pick';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';

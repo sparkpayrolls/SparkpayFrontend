@@ -7,7 +7,7 @@ import { PayrollProcessor } from '../payroll-processor/payroll-processor';
 import { useWalletBalance } from './use-wallet-balance.hook';
 import { useAppSelector } from 'src/redux/hooks';
 import { Util } from '../util';
-import pick from 'lodash.pick';
+import pick from 'lodash/pick';
 import { useRouter } from 'next/router';
 
 export const useProcessorData = (payload: {

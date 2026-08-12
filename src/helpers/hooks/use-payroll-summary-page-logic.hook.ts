@@ -9,7 +9,7 @@ import { useWalletBalance } from './use-wallet-balance.hook';
 import moment from 'moment';
 import { PayrollProcessor } from '../payroll-processor/payroll-processor';
 import { useProcessorData } from './use-create-payroll-page-logic.hook';
-import pick from 'lodash.pick';
+import pick from 'lodash/pick';
 
 export const usePayrollSummaryPageLogic = () => {
   const administrator = useAppSelector((state) => state.administrator);
