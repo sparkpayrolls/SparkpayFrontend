@@ -8,6 +8,7 @@
     "yarn": ">=1.0.0"
   },
   "resolutions": {
+    "serialize-javascript": "7.1.0",
     "axios": "1.19.0",
     "postcss": "8.5.23",
     "loader-utils": "2.0.4",
