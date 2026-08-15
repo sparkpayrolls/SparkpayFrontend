@@ -221,6 +221,6 @@ export function verifyHs256<T = unknown>(token: string, secret: string): T {
     return JSON.parse(raw) as T;
   } catch {
     // Non-JSON payloads (e.g. deflated base64 strings) are returned as-is.
-    return raw as T;
+    return raw as unknown as T;
   }
 }
