@@ -8,7 +8,7 @@
     "yarn": ">=1.0.0"
   },
   "resolutions": {
-    "serialize-javascript": "7.1.0",
+    "serialize-javascript": "7.0.5",
     "axios": "1.19.0",
     "postcss": "8.5.23",
     "loader-utils": "2.0.4",
@@ -36,7 +36,6 @@
     "path-to-regexp": "0.1.13",
     "decode-uri-component": "0.2.2",
     "shell-quote": "1.9.0",
-    "serialize-javascript": "7.0.5",
     "markdown-to-jsx": "7.7.4",
     "minimist": "1.2.8",
     "min-document": "2.19.1",
@@ -97,7 +96,6 @@
     "classnames": "^2.3.1",
     "formik": "^2.2.9",
     "js-cookie": "^3.0.7",
-    "jsonwebtoken": "^9.0.3",
     "jspreadsheet-ce": "^4.10.2",
     "lodash": "^4.18.1",
     "lodash.clonedeep": "^4.5.0",
