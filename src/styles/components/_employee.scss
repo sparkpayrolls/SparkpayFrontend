@@ -21,10 +21,26 @@
 
   &__head {
     display: flex;
-    justify-content: space-between;
-    // align-items: center;
+    align-items: center;
+    gap: 27px;
     margin-bottom: 2.25rem;
     margin-top: 2rem;
+  }
+
+  &__country-dropdown-mobile {
+    max-width: 300px;
+
+    @media screen and (min-width: 1440px) {
+      display: none;
+    }
+  }
+
+  &__country-dropdown {
+    display: none;
+
+    @media screen and (min-width: 1440px) {
+      display: unset;
+    }
   }
 
   &__title {
@@ -37,6 +53,7 @@
   }
 
   &__employee-button {
+    margin-left: auto;
     display: none;
 
     @media screen and(min-width: 992px) {
@@ -48,6 +65,7 @@
   &__employee-menu {
     background: unset;
     border: unset;
+    margin-left: auto;
 
     @media screen and(min-width: 992px) {
       display: none;

@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { IAllowedPermissions } from '@/components/types';
-import { sign, verify } from 'jsonwebtoken';
 import type momentNamespace from 'moment';
 import { NextRouter } from 'next/router';
 import pako from 'pako';
@@ -15,6 +14,7 @@ import {
   SalaryAddOn,
 } from 'src/api/types';
 import { config } from './config';
+import { signHs256, verifyHs256 } from './jwt-hs256';
 import {
   DebouncedFunc,
   IgetCustomBlurHandler,
@@ -353,20 +353,23 @@ export class Util {
   static signPayload(payload: any) {
     const { jwtSecretKey } = config();
 
-    return sign(payload, jwtSecretKey);
+    return signHs256(payload, jwtSecretKey);
   }
 
   static decodePayload<T extends Record<string, unknown>>(payload: string) {
     const { jwtSecretKey } = config();
 
     try {
-      const decoded = verify(payload, jwtSecretKey) as T & {
-        iat?: string;
-      };
+      const decoded = verifyHs256<T | (T & { iat?: number }) | string>(
+        payload,
+        jwtSecretKey,
+      );
 
-      delete decoded.iat;
+      if (decoded && typeof decoded === 'object') {
+        delete (decoded as T & { iat?: number }).iat;
+      }
 
-      return decoded;
+      return decoded as T;
     } catch (error) {
       return null;
     }

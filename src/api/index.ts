@@ -1,4 +1,5 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosHeaders, InternalAxiosRequestConfig } from 'axios';
+import { stringify } from 'query-string';
 
 import { config } from '../helpers/config';
 import { AuthModule } from './modules/auth.module';
@@ -28,13 +29,19 @@ import { DemoBookingModule } from './modules/demo-booking.module';
 
 let authToken: string;
 let authDetails: AuthDetails;
-let tokenInterceptor: (_cfg: AxiosRequestConfig) => unknown;
-let authInterceptor: (_error: AxiosError) => unknown;
+let tokenInterceptor: (
+  _cfg: InternalAxiosRequestConfig,
+) =>
+  | InternalAxiosRequestConfig
+  | Promise<InternalAxiosRequestConfig>;
+let authInterceptor: (_error: AxiosError) => Promise<never>;
 export class $api {
   static $axios = () => {
     const { apiUrl: baseURL } = config();
     const _$axios = axios.create({
       baseURL,
+      paramsSerializer: (params) =>
+        stringify(params, { arrayFormat: 'none', skipNull: true }),
     });
 
     _$axios.interceptors.request.use(tokenInterceptor);
@@ -50,7 +57,7 @@ export class $api {
     authToken = _authToken;
     authDetails = JSON.parse(Cookies.get('auth_details') || '""');
 
-    tokenInterceptor = async (_config: AxiosRequestConfig) => {
+    tokenInterceptor = async (_config: InternalAxiosRequestConfig) => {
       if (
         moment(authDetails.accessTokenExpires).isBefore(moment()) &&
         moment(authDetails.refreshTokenExpires).isAfter(moment())
@@ -70,13 +77,11 @@ export class $api {
         }
       }
 
-      return {
-        ..._config,
-        headers: {
-          ...(_config?.headers || {}),
-          Authorization: `Bearer ${authToken}`,
-        },
-      };
+      const headers = AxiosHeaders.from(_config.headers);
+      headers.set('Authorization', `Bearer ${authToken}`);
+      _config.headers = headers;
+
+      return _config;
     };
 
     authInterceptor = (error: AxiosError) => {

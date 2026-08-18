@@ -6,6 +6,21 @@
   flex-direction: column;
   gap: 16px;
   &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media screen and (min-width: 1440px) {
+      gap: 0.875rem;
+      justify-content: unset;
+    }
+
     &__text {
       display: flex;
       align-items: center;

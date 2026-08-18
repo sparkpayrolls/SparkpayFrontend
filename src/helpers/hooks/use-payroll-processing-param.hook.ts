@@ -1,4 +1,4 @@
-import moment from 'antd/node_modules/moment';
+import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { Addon } from 'src/api/types';

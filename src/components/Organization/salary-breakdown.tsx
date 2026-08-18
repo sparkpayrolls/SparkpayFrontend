@@ -11,13 +11,11 @@ import { Alert, Popover } from 'antd';
 
 export const InfoPopUp = (props: PropsWithChildren<unknown>) => {
   return (
-    <>
-      <Popover placement="bottom" trigger="hover" content={props.children}>
-        <span>
-          <InfoSVG />
-        </span>
-      </Popover>
-    </>
+    <Popover placement="bottom" trigger="hover" content={props.children}>
+      <span>
+        <InfoSVG />
+      </span>
+    </Popover>
   );
 };
 
@@ -151,15 +149,17 @@ function SalaryBreakdown(props: RemittanceTabProps) {
                   message={'Total breakdown should sum up to 100%'}
                 />
               </IF>
-              {breakdown.map((_breakdown, i) => (
-                <Breakdown
-                  value={_breakdown.value}
-                  name={_breakdown.name}
-                  handler={handleBreakdown(i)}
-                  onDelete={handleBreakdownDelete(i)}
-                  key={i}
-                />
-              ))}
+              {Array.from(breakdown, (v, i) => ({ ...v, id: i })).map(
+                (_breakdown, i) => (
+                  <Breakdown
+                    value={_breakdown.value}
+                    name={_breakdown.name}
+                    handler={handleBreakdown(i)}
+                    onDelete={handleBreakdownDelete(i)}
+                    key={_breakdown.id}
+                  />
+                ),
+              )}
             </div>
             <div className="info__right-cont__breakdown__action">
               <Button
@@ -235,16 +235,18 @@ function SalaryBreakdown(props: RemittanceTabProps) {
                 marginInline: 'auto',
               }}
             >
-              {_breakdown.map((breakdown, i) => {
-                return (
-                  <BreakdownItem
-                    name={breakdown.name}
-                    value={breakdown.value}
-                    key={i}
-                    color={backgroundColors[i]}
-                  />
-                );
-              })}
+              {Array.from(_breakdown, (v, i) => ({ ...v, id: i })).map(
+                (breakdown, i) => {
+                  return (
+                    <BreakdownItem
+                      name={breakdown.name}
+                      value={breakdown.value}
+                      key={breakdown.id}
+                      color={backgroundColors[i]}
+                    />
+                  );
+                },
+              )}
             </div>
           </IF>
         </>

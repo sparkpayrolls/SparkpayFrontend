@@ -38,6 +38,10 @@ export type Country = Document & {
   currencySymbol: string;
 
   code: string;
+
+  iso2: string;
+
+  flag: string;
 };
 
 export type User = Document & {
@@ -203,6 +207,11 @@ export type Company = Document & {
   bvnName?: string;
   rcNumber: string;
   statutoryDeductions?: Record<string, StatutoryDeduction>;
+  salaryBreakdownKeyedByCountry?: Record<string, SalaryBreakdown[]>;
+  statutoryDeductionsKeyedByCountry?: Record<
+    string,
+    Record<string, StatutoryDeduction>
+  >;
 };
 
 export enum PermissionGroupEnum {
@@ -503,7 +512,7 @@ export type PayrollEmployee = Document & {
   employee: string | Employee;
   payroll: string | Payroll;
   netSalary: number;
-  transfer: string | unknown;
+  transfer?: string;
   payoutStatus?: PayrollEmployeePayoutStatus;
   deductions?: Addon[];
   bonuses?: Addon[];
@@ -623,7 +632,8 @@ export type EmployeeTaxDetail = Document & {
 export type EmployeeTaxDetailPayload = Pick<
   EmployeeTaxDetail,
   'employee' | 'taxId' | 'taxState'
-> & {};
+> &
+  Record<string, unknown>;
 
 export type AddEmployeeToNigerianTaxPayload = {
   employeeDetails: EmployeeTaxDetailPayload[];

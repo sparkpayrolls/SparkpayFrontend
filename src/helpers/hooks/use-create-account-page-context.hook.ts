@@ -25,8 +25,9 @@ export const useCreateAccountPageContext = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user, countries } = useAppSelector((state) => state);
-  const inviteCode = router.query.inviteCode as string;
+  const inviteCode = router.query.inviteCode as string | undefined;
   const goto = router.query.goto as string;
+  const [emailChecking, setEmailChecking] = React.useState(false);
 
   React.useEffect(() => {
     getCountries(dispatch);
@@ -41,9 +42,8 @@ export const useCreateAccountPageContext = () => {
     email: string,
     // eslint-disable-next-line no-unused-vars
     setErrors: (errors: FormikErrors<ISignUpForm>) => void,
-    setSubmitting: (_isSubmitting: boolean) => void,
   ) => {
-    setSubmitting(true);
+    setEmailChecking(true);
     try {
       if (email) {
         const isTaken = await $api.auth.emailTaken(email);
@@ -54,7 +54,7 @@ export const useCreateAccountPageContext = () => {
     } catch (error: any) {
       // error validating email
     } finally {
-      setSubmitting(false);
+      setEmailChecking(false);
     }
   }, 500);
 
@@ -64,7 +64,9 @@ export const useCreateAccountPageContext = () => {
   ) => {
     try {
       actions.setSubmitting(true);
-      const { user, ...authDetails } = await $api.auth.signup(values);
+      const { inviteCode: code, ...rest } = values;
+      const payload = code ? { ...rest, inviteCode: code } : rest;
+      const { user, ...authDetails } = await $api.auth.signup(payload);
       Cookies.set('auth_token', authDetails.accessToken);
       Cookies.set('auth_details', JSON.stringify(authDetails));
       $api.registerInterceptors(authDetails.accessToken, dispatch);
@@ -79,7 +81,7 @@ export const useCreateAccountPageContext = () => {
         actions.setErrors({ email: err.message });
         return;
       }
-      toast.error(`${err.message}`);
+      toast.error(err.message || 'Unable to create account');
     } finally {
       actions.setSubmitting(false);
     }
@@ -95,7 +97,7 @@ export const useCreateAccountPageContext = () => {
     email: '',
     password: '',
     subcribeToMailList: true,
-    inviteCode,
+    ...(inviteCode ? { inviteCode } : {}),
   };
 
   return {
@@ -103,6 +105,7 @@ export const useCreateAccountPageContext = () => {
     initialValues,
     onSubmit,
     validateEmail,
+    emailChecking,
     loginUrl: stringifyUrl({
       url: 'login',
       query: router.query,
