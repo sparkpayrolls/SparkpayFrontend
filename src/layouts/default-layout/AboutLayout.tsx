@@ -37,7 +37,6 @@ const AboutLayout: React.FC<LayoutProps> = ({ children, title }) => {
                     <ul>
                         <li><Link href="/product"><a>Product</a></Link></li>
                         <li><Link href="/pricing"><a>Pricing</a></Link></li>
-                        <li><Link href="/customers"><a>Customers</a></Link></li>
                         <li><Link href="/resources"><a>Resources</a></Link></li>
                     </ul>
                 </nav>
@@ -59,7 +58,6 @@ const AboutLayout: React.FC<LayoutProps> = ({ children, title }) => {
                             </button>
                             <li><Link href="/product"><a>Product</a></Link></li>
                             <li><Link href="/pricing"><a>Pricing</a></Link></li>
-                            <li><Link href="/customers"><a>Customers</a></Link></li>
                             <li><Link href="/resources"><a>Resources</a></Link></li>
                             <li>
                                 <Link href="/book-a-demo"><a className="navigation__button--primary">Book a Demo</a></Link>

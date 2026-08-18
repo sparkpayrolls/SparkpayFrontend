@@ -5,7 +5,7 @@ import { MockupFrame } from '../../ui/mockup-frame.component';
 import { FinalCtaBand } from '../final-cta.component';
 import { MarketingLayout } from '../marketing-layout.component';
 import { MockupDashboard } from '../mockup-dashboard.component';
-import { CustomerLogos } from './customer-logos.component';
+// import { CustomerLogos } from './customer-logos.component';
 import { FeatureShowcase } from './feature-showcase.component';
 import { Reveal } from './reveal.component';
 
@@ -294,9 +294,9 @@ export const HomePage = () => (
     {/* 5 · PROOF BAND ------------------------------------------------ */}
     <section className="mkt-section mkt-proof">
       <div className="mkt-container">
-        <Reveal>
+        {/* <Reveal>
           <CustomerLogos />
-        </Reveal>
+        </Reveal> */}
 
         <Reveal className="mkt-head mkt-head--center mkt-proof__head">
           <Eyebrow>WHAT OUR CLIENTS SAY</Eyebrow>
