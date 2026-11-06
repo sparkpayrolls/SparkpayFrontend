@@ -1,5 +1,10 @@
 # Marketing footer fix — plan
 
+> **Status: closed 2026-11-06.** This slice shipped. It is kept for its findings and evidence.
+> Current plan: [MARKETING_MASTERPLAN.md](MARKETING_MASTERPLAN.md). Current status:
+> [PROGRESS.md](PROGRESS.md). Finding F-3 (the newsletter stub) was later resolved by removing
+> the form outright rather than wiring it up — see decision D5 in the masterplan.
+
 Source of truth: this file is the **plan** for the marketing footer slice. Status lives in the
 tracker tables below and is ticked only in the PR that does the work. Standards applied:
 `wakanow-engineering-standards` (gates, branching, working agreement) and
