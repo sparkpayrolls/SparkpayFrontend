@@ -1,3 +1,4 @@
+/* global IntersectionObserverInit */
 import { useEffect, useRef, useState } from 'react';
 
 const prefersReducedMotion = () =>

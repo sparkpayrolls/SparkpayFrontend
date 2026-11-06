@@ -25,6 +25,20 @@ export class PayoutModule extends HttpRepository {
     return data;
   }
 
+  async validatePayoutMethodForOnboarding<K>(
+    token: string,
+    methodId: string,
+    meta?: unknown,
+  ) {
+    const { data } = await this.post<K>('/employees/onboard/validate-payout', {
+      token,
+      methodId,
+      meta,
+    });
+
+    return data;
+  }
+
   async resolveAccount<K>(payload: unknown) {
     const { data } = await this.post<K>('/payments/resolve-account', payload);
 
