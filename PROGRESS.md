@@ -75,6 +75,7 @@ Branch `fix/marketing-audit-p1`, **PR #119**, two commits:
 - [x] **P1.5** Newsletter form, styles and tests removed — `eb02fd7`
 - [x] **P3.3a** Testimonial quotes corrected for payroll sense — minimal edits, nothing invented (D7)
 - [x] **P3.1** Hero subhead rewritten, outcome first — option B (D11)
+- [x] **P3.5** Statutory acronyms removed from the marketing copy site-wide — 72 occurrences, 13 files, 0 left in the rendered HTML; `/features/paye` → `/features/income-tax` with a 308 (D12, D13)
 
 **Not yet ticked:** the phase itself. The gates below passed and the preview is green, but the PR is
 unreviewed and unmerged, so P1 is **build-complete, not closed**.
@@ -248,6 +249,44 @@ lockfile. So the 10 alerts may or may not clear. M-21 is corrected in the master
 
 The measurement can only be taken **after merge**, because Dependabot computes alerts against the
 default branch. That re-fetch is P7's exit gate and is still owed.
+
+### P7 measured result after PR #119 merged, 2026-11-06
+
+|                   | Before | After merge |
+| ----------------- | ------ | ----------- |
+| Total open        | 61     | **62**      |
+| Critical          | 5      | 5           |
+| Development-scope | 10     | 4           |
+
+**Removing Storybook closed one alert.** My projection of 10 was wrong. Only `compression` cleared;
+`qs` gained two. Worse, `proxy-addr` and `shell-quote` stayed critical and were **reclassified from
+development to runtime scope**, so on paper 2 dev criticals became 2 runtime criticals. Nothing
+actually got riskier — nothing is installed — but the list read worse than before the change.
+
+Cause, found afterwards (M-24): a `resolutions` pin keeps a lockfile entry alive with no dependent.
+25 of the 70 pins were dead. That is now fixed in `fix/deps-and-plain-language`.
+
+### P7 work on `fix/deps-and-plain-language`, 2026-11-06
+
+- [x] **P7.1** `jsonwebtoken` removed — dependency, resolution pin and `@types`. Closes **Q7**.
+- [x] **P7.2** `axios` 1.19.0 → 1.21.0, `moment` → 2.31.0, `brace-expansion` → 2.1.7, `js-yaml` →
+      4.3.2, `browserslist` → 4.28.7, `follow-redirects` pinned 1.16.2
+- [x] **P7.5a** 25 dead resolution pins removed; orphan lockfile entries 12 → **0**
+- [ ] **P7.5b** `decode-uri-component`, `glob`, `minimatch` — **tried and reverted / deferred**, see below
+- [ ] **P7.6** `elliptic`, `cipher-base`, `pbkdf2` — their pins are gone, so re-check after merge
+- [ ] **P7.7** gate 7 in `verify` — still needs P5.3
+
+**The one thing that broke, and how it was caught.** `decode-uri-component` 0.2.2 → 0.5.1 changes
+its export shape, so `query-string@7.1.3` gets a non-function from `require()` and
+`query-string.parse()` throws `TypeError: decodeComponent is not a function`. `next build`, `next
+lint` and `tsc` **all passed** with this broken. It was caught only by executing `query-string.parse`
+in node. Reverted to 0.2.2; its 2 alerts need `query-string` 7 → 10, a major.
+
+That is a concrete argument for P5: a gate suite that never runs the code cannot catch this class of
+fault, and a dependency bump is exactly where it bites.
+
+**Still not measured:** the alert count after _this_ branch. Dependabot computes against the default
+branch, so the number can only be re-read after this PR merges. Owed again.
 
 ### Blocked on
 
