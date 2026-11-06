@@ -27,10 +27,7 @@ export const MockupOrgs = () => (
             />
           </span>
         </span>
-        <span
-          className="mkt-skel mkt-skel--amount"
-          aria-hidden="true"
-        />
+        <span className="mkt-skel mkt-skel--amount" aria-hidden="true" />
       </div>
     ))}
     <span className="mkt-visually-hidden">Loading your organisations</span>
@@ -40,7 +37,11 @@ export const MockupOrgs = () => (
 // ── Audit trail ───────────────────────────────────────────────────────
 const audits = [
   { name: 'Esther Howard', act: 'Logged in', role: 'Admin' },
-  { name: 'Brooklyn Simmons', act: 'Suspended Esther Howard', role: 'Super Admin' },
+  {
+    name: 'Brooklyn Simmons',
+    act: 'Suspended Esther Howard',
+    role: 'Super Admin',
+  },
   { name: 'Ralph Edwards', act: 'Ran July payroll', role: 'Payroll Manager' },
   { name: 'Bessie Cooper', act: 'Exported audit log', role: 'Viewer' },
 ];
@@ -70,10 +71,10 @@ export const MockupAudit = () => (
 
 // ── Remittance schedule ───────────────────────────────────────────────
 const remits = [
-  { label: 'PAYE · Lagos IRS', due: 'Due 10 Aug', state: 'filed' },
-  { label: 'Pension · Stanbic PFA', due: 'Due 12 Aug', state: 'filed' },
-  { label: 'NHF · FMBN', due: 'Due 15 Aug', state: 'scheduled' },
-  { label: 'NSITF', due: 'Due 20 Aug', state: 'scheduled' },
+  { label: 'Income tax · Lagos', due: 'Due 10 Aug', state: 'filed' },
+  { label: 'Pension · Stanbic', due: 'Due 12 Aug', state: 'filed' },
+  { label: 'Housing fund', due: 'Due 15 Aug', state: 'scheduled' },
+  { label: 'Employee compensation', due: 'Due 20 Aug', state: 'scheduled' },
 ];
 
 export const MockupRemittance = () => (
@@ -88,9 +89,7 @@ export const MockupRemittance = () => (
           <span className="mkt-rec__name">{r.label}</span>
           <span className="mkt-rec__sub">{r.due}</span>
         </span>
-        <span
-          className={`mkt-rec__status mkt-rec__status--${r.state}`}
-        >
+        <span className={`mkt-rec__status mkt-rec__status--${r.state}`}>
           {r.state === 'filed' ? '✓ Filed' : 'Scheduled'}
         </span>
       </div>
@@ -98,7 +97,7 @@ export const MockupRemittance = () => (
   </div>
 );
 
-// ── PAYE per state ────────────────────────────────────────────────────
+// ── Income tax by state ────────────────────────────────────────────────────
 const payeRows = [
   { state: 'Lagos', gross: '₦850,000', paye: '₦184,500' },
   { state: 'Oyo', gross: '₦850,000', paye: '₦171,200' },
@@ -109,13 +108,13 @@ const payeRows = [
 export const MockupPaye = () => (
   <div className="mkt-rec mkt-rec--paye">
     <div className="mkt-rec__head">
-      <span className="mkt-rec__title">PAYE by state</span>
+      <span className="mkt-rec__title">Income tax by state</span>
       <span className="mkt-rec__hint">Same gross</span>
     </div>
     <div className="mkt-rec__row mkt-rec__row--header">
       <span>State</span>
       <span className="mkt-rec__amount">Gross</span>
-      <span className="mkt-rec__amount">PAYE</span>
+      <span className="mkt-rec__amount">Income tax</span>
     </div>
     {payeRows.map((r) => (
       <div className="mkt-rec__row mkt-rec__row--3" key={r.state}>

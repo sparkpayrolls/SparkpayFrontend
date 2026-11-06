@@ -3,10 +3,30 @@
 // the token system so it reads as the same brand (guide §9). All data is
 // realistic, varied, Nigerian; never four identical rows.
 
-const runs: { name: string; dept: string; amount: string; status: 'paid' | 'processing' | 'queued' }[] = [
-  { name: 'Adaeze Okafor', dept: 'Engineering', amount: '₦2,340,000', status: 'paid' },
-  { name: 'Tunde Bakare', dept: 'Operations', amount: '₦184,500', status: 'paid' },
-  { name: 'Chidinma Nwosu', dept: 'Finance', amount: '₦675,000', status: 'processing' },
+const runs: {
+  name: string;
+  dept: string;
+  amount: string;
+  status: 'paid' | 'processing' | 'queued';
+}[] = [
+  {
+    name: 'Adaeze Okafor',
+    dept: 'Engineering',
+    amount: '₦2,340,000',
+    status: 'paid',
+  },
+  {
+    name: 'Tunde Bakare',
+    dept: 'Operations',
+    amount: '₦184,500',
+    status: 'paid',
+  },
+  {
+    name: 'Chidinma Nwosu',
+    dept: 'Finance',
+    amount: '₦675,000',
+    status: 'processing',
+  },
   { name: 'Emeka Obi', dept: 'Sales', amount: '₦910,200', status: 'queued' },
 ];
 

@@ -108,10 +108,8 @@ const RemittancePaymentsTable = (props: RemittancePaymentTableProps) => {
 
 const RemittancePayments = () => {
   const router = useRouter();
-  const [
-    selectedRemittanceType,
-    setSelectedRemittanceType,
-  ] = useState<RemittanceType>('tax');
+  const [selectedRemittanceType, setSelectedRemittanceType] =
+    useState<RemittanceType>('tax');
 
   const headerRow = ['ID', 'Amount', `Periods`, 'Status', 'Date\xa0Created'];
   const remittanceTypeOptions = [
@@ -190,7 +188,10 @@ const RemittancePayments = () => {
   // Initialize remittance type from URL query parameter
   useEffect(() => {
     const { type } = router.query;
-    if (type && ['tax', 'pension', 'nhf', 'nsitf', 'nhis'].includes(type as string)) {
+    if (
+      type &&
+      ['tax', 'pension', 'nhf', 'nsitf', 'nhis'].includes(type as string)
+    ) {
       setSelectedRemittanceType(type as RemittanceType);
     } else if (router.isReady && !type) {
       // Redirect to default type if none specified

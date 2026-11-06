@@ -23,14 +23,22 @@ const stages: {
     step: 'Stage 01 · Set up',
     title: 'Bring your team in once',
     body: 'Import employees and salaries from a spreadsheet, or add them by hand. Salary structures, allowances and deductions live in one place and stay in sync.',
-    points: ['CSV or manual entry', 'Per-employee salary breakdown', 'Multiple companies from one login'],
+    points: [
+      'CSV or manual entry',
+      'Per-employee salary breakdown',
+      'Multiple companies from one login',
+    ],
     visual: <MockupOrgs />,
   },
   {
     step: 'Stage 02 · Run',
     title: 'One payroll run, every number shown',
-    body: 'SparkPay computes net pay, PAYE, pension, NHF and NSITF for the whole team. You see the full breakdown before anything moves.',
-    points: ['Net-to-gross or gross-to-net', 'Bonuses and deductions per cycle', 'Live totals as you review'],
+    body: 'SparkPay computes net pay, income tax, pension and statutory contributions for the whole team. You see the full breakdown before anything moves.',
+    points: [
+      'Net-to-gross or gross-to-net',
+      'Bonuses and deductions per cycle',
+      'Live totals as you review',
+    ],
     visual: <MockupDashboard />,
     flip: true,
   },
@@ -38,14 +46,22 @@ const stages: {
     step: 'Stage 03 · Approve & disburse',
     title: 'Approve once, pay everyone',
     body: 'A single approval sends every salary straight to employee bank accounts. Insufficient funds pause the run and notify you — no half-paid teams.',
-    points: ['Bulk bank transfers', 'Approval workflow for admins', 'Auto-pause on low balance'],
+    points: [
+      'Bulk bank transfers',
+      'Approval workflow for admins',
+      'Auto-pause on low balance',
+    ],
     visual: <MockupRemittance />,
   },
   {
     step: 'Stage 04 · Remit & record',
     title: 'Remittances filed, payslips sent, everything logged',
     body: 'Statutory deductions are remitted to the right authorities, payslips reach every employee by email, and every action lands in the audit trail.',
-    points: ['PAYE, pension, NHF, NSITF', 'Automatic payslips', 'Exportable audit trail'],
+    points: [
+      'Income tax, pension, statutory contributions',
+      'Automatic payslips',
+      'Exportable audit trail',
+    ],
     visual: <MockupAudit />,
     flip: true,
   },
@@ -56,7 +72,7 @@ const ProductPage: NextPage = () => (
     seo={{
       title: 'Product — one payroll cycle, start to finish | SparkPay',
       description:
-        'See how SparkPay runs a full Nigerian payroll cycle: set up your team, run payroll, approve and disburse salaries, then remit PAYE, pension, NHF and NSITF.',
+        'See how SparkPay runs a full Nigerian payroll cycle: set up your team, run payroll, approve and disburse salaries, then remit income tax, pension and statutory contributions.',
       path: '/product',
     }}
   >

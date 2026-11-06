@@ -23,9 +23,7 @@ const TermsPage: NextPage = () => (
       </p>
 
       <h2>2. Fees and billing</h2>
-      <p>
-        Fees are described on our pricing page and billed as set out there.
-      </p>
+      <p>Fees are described on our pricing page and billed as set out there.</p>
 
       <h2>3. Payments and remittances</h2>
       <p>

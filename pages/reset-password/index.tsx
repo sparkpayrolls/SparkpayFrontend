@@ -30,17 +30,20 @@ const ResetPassword: NextPage = () => {
     return null;
   }
 
-  const validateConfirmPassword = Util.debounce((
-    values: IResetPassword,
-    // eslint-disable-next-line no-unused-vars
-    setErrors: (errors: FormikErrors<IResetPassword>) => void,
-  ) => {
-    const doesNotMatch =
-      values.confirmPassword && values.confirmPassword !== values.password;
-    if (doesNotMatch) {
-      setErrors({ confirmPassword: 'does not match password' });
-    }
-  }, 500);
+  const validateConfirmPassword = Util.debounce(
+    (
+      values: IResetPassword,
+      // eslint-disable-next-line no-unused-vars
+      setErrors: (errors: FormikErrors<IResetPassword>) => void,
+    ) => {
+      const doesNotMatch =
+        values.confirmPassword && values.confirmPassword !== values.password;
+      if (doesNotMatch) {
+        setErrors({ confirmPassword: 'does not match password' });
+      }
+    },
+    500,
+  );
 
   const onSubmit = async (
     values: IResetPassword,

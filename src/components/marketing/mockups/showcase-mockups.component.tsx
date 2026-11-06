@@ -14,7 +14,8 @@ export const MockupPayslip = () => (
     <div className="mkt-slip__body">
       <div className="mkt-slip__intro">
         <p className="mkt-slip__lead">
-          Here&rsquo;s a detailed breakdown of your earnings for this pay period.
+          Here&rsquo;s a detailed breakdown of your earnings for this pay
+          period.
         </p>
         <div className="mkt-slip__coin">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -88,8 +89,8 @@ export const MockupCustomPayment = () => (
     </div>
 
     <label className="mkt-pay__confirm">
-      <span className="mkt-pay__check" aria-hidden="true" />
-      I confirm the payment details above
+      <span className="mkt-pay__check" aria-hidden="true" />I confirm the
+      payment details above
     </label>
 
     <div className="mkt-pay__actions">

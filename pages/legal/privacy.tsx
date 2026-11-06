@@ -28,8 +28,9 @@ const PrivacyPage: NextPage = () => (
 
       <h2>2. How we use it</h2>
       <p>
-        Data is used to calculate salaries and PAYE, disburse payments, remit
-        statutory deductions, and provide support. We do not sell your data.
+        Data is used to calculate salaries and income tax, disburse payments,
+        remit statutory deductions, and provide support. We do not sell your
+        data.
       </p>
 
       <h2>3. Data protection (NDPR)</h2>

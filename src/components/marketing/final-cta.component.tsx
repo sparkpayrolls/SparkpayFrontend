@@ -12,7 +12,7 @@ export const FinalCtaBand = (props: {
 }) => {
   const {
     title = 'Give your team back the three days payroll steals.',
-    sub = 'Salaries, PAYE, and statutory remittances — handled correctly, every month.',
+    sub = 'Salaries, income tax, and statutory remittances — handled correctly, every month.',
     cta = 'Book a demo',
     href = '/book-a-demo',
   } = props;
