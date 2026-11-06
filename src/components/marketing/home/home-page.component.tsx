@@ -146,10 +146,12 @@ export const HomePage = () => (
             <span>The payroll run that took three days</span>{' '}
             <span>now takes three minutes.</span>
           </h1>
+          {/* Outcome first (M-9, D11 = option B). The statutory acronyms were
+              moved out of the hero, not deleted: PAYE, pension, NHF and NSITF
+              still appear in the bento cells and the feature pages below. */}
           <p className="mkt-hero__subhead">
-            SparkPay disburses salaries, calculates PAYE for every state, and
-            remits pension, NHF and NSITF on time — for your whole team, every
-            month.
+            One approval pays every salary and files every statutory deduction,
+            on time, every month.
           </p>
           <div className="mkt-hero__actions">
             <MarketingButton href="/book-a-demo">Book a demo</MarketingButton>

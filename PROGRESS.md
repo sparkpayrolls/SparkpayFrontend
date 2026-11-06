@@ -18,16 +18,16 @@ Last updated: **2026-11-06**
 
 ## Phase status
 
-| Phase                             | State                            | Branch / PR                        | Closed     |
-| --------------------------------- | -------------------------------- | ---------------------------------- | ---------- |
-| P0 — Restore deployments          | ✅ **Closed**                    | `fix/pin-node-24` → PR #118        | 2026-11-06 |
-| P1 — Public pages render honestly | 🟡 **Build-complete, in review** | `fix/marketing-audit-p1` → PR #119 | —          |
-| P2 — Page weight                  | ⬜ Not started                   | —                                  | —          |
-| P3 — Positioning and copy         | 🔴 Blocked (Q2, Q3)              | —                                  | —          |
-| P4 — Accessibility completion     | ⬜ Not started                   | —                                  | —          |
-| P5 — Unblock the gates            | 🔴 Blocked (Q4)                  | —                                  | —          |
-| P6 — Get off Next 12              | ⬜ Not started                   | —                                  | —          |
-| P7 — Dependency vulnerabilities   | 🟡 Scoped, not started           | —                                  | —          |
+| Phase                             | State                                        | Branch / PR                        | Closed     |
+| --------------------------------- | -------------------------------------------- | ---------------------------------- | ---------- |
+| P0 — Restore deployments          | ✅ **Closed**                                | `fix/pin-node-24` → PR #118        | 2026-11-06 |
+| P1 — Public pages render honestly | 🟡 **Build-complete, in review**             | `fix/marketing-audit-p1` → PR #119 | —          |
+| P2 — Page weight                  | ⬜ Not started                               | —                                  | —          |
+| P3 — Positioning and copy         | 🟡 P3.1 + quote wording done; P3.2–P3.4 open | `fix/marketing-audit-p1`           | —          |
+| P4 — Accessibility completion     | ⬜ Not started                               | —                                  | —          |
+| P5 — Unblock the gates            | 🔴 Blocked (Q4)                              | —                                  | —          |
+| P6 — Get off Next 12              | ⬜ Not started                               | —                                  | —          |
+| P7 — Dependency vulnerabilities   | 🟡 Scoped, not started                       | —                                  | —          |
 
 ---
 
@@ -74,6 +74,7 @@ Branch `fix/marketing-audit-p1`, **PR #119**, two commits:
 - [x] **P1.4** Every `/book-a-demo` CTA renamed — `eb02fd7`
 - [x] **P1.5** Newsletter form, styles and tests removed — `eb02fd7`
 - [x] **P3.3a** Testimonial quotes corrected for payroll sense — minimal edits, nothing invented (D7)
+- [x] **P3.1** Hero subhead rewritten, outcome first — option B (D11)
 
 **Not yet ticked:** the phase itself. The gates below passed and the preview is green, but the PR is
 unreviewed and unmerged, so P1 is **build-complete, not closed**.
