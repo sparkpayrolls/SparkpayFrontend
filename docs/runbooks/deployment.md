@@ -41,7 +41,14 @@ and are the remains of that path. _Verified 2026-11-06._
 | `6cd86a4` (production) | `02:15:31Z` | `02:15:32Z` | **1s**  |
 
 A cold build of this app takes minutes — in `node:22-alpine`, 443s to install and 414s to build.
-Nothing is being compiled. The failure is upstream of the build.
+Most of these never compile anything.
+
+**The exception matters.** The retry of PR #116 (`3f886e9`, lockfile already fixed) ran for about
+three minutes before failing — long enough to install and begin building. So there are probably
+_two_ distinct failures here: the near-instant ones, which never start, and at least one real build
+failure further in. Treat the ~3min deployment as the informative one; its log is the one to read
+first. Whether the near-instant ones are a separate fault or just superseded/queued deployments is
+unresolved.
 
 ### Ruled out — do not spend time here again
 
@@ -64,6 +71,9 @@ Ranked. None are fixable from this repository.
 3. **Project paused**, or the Git integration's repository authorization revoked.
 4. **Node version pinned to 18.x** in project settings — no longer an available Vercel runtime.
    `package.json` declares `engines.node: ">=18.0.0"` and there is no `.nvmrc`.
+5. **Build resource limits** (memory/time) on the builder. This is the only one of the five that
+   would produce the ~3min failure rather than an instant one, and it is the least testable from
+   here — the same tree builds fine locally in a container with no imposed limit.
 
 That two independent Vercel projects fail identically on the same commits points at either the
 GitHub integration or both accounts' standing, rather than at either project's settings.
@@ -76,7 +86,8 @@ Read the log. A 10-second failure normally states its reason on the first line.
 
 ```bash
 # needs membership of the team that owns the project
-npx vercel inspect dpl_9UxPiwvHCE4xoLAe1Uqek2RpRhEJ --logs --scope payeasy-africa
+npx vercel inspect dpl_Fs9aChLpHNVGhqdCvx1MpVVhfYyx --logs --scope payeasy-africa  # the ~3min one
+npx vercel inspect dpl_9UxPiwvHCE4xoLAe1Uqek2RpRhEJ --logs --scope payeasy-africa  # a 10s one
 ```
 
 Or open the deployment in the dashboard:
