@@ -58,7 +58,7 @@ const steps = [
   {
     n: '02',
     title: 'Review the numbers',
-    body: 'See every net salary, tax deduction, and remittance before a naira moves.',
+    body: 'See every net salary, tax deduction, and remittance before anything moves.',
   },
   {
     n: '03',
@@ -71,9 +71,9 @@ const steps = [
 const PayeVisual = () => (
   <div className="mkt-mini mkt-mini--paye">
     {[
-      { state: 'Lagos', rate: '₦184,500' },
-      { state: 'Oyo', rate: '₦171,200' },
-      { state: 'Rivers', rate: '₦179,800' },
+      { state: 'Lagos', rate: '184,500' },
+      { state: 'Oyo', rate: '171,200' },
+      { state: 'Rivers', rate: '179,800' },
     ].map((r) => (
       <div className="mkt-mini__row" key={r.state}>
         <span>{r.state} tax</span>
@@ -130,10 +130,9 @@ const smallCells = [
 export const HomePage = () => (
   <MarketingLayout
     seo={{
-      title:
-        'SparkPay — Nigerian payroll, income tax and remittances on autopilot',
+      title: 'SparkPay — payroll, income tax and remittances on autopilot',
       description:
-        'SparkPay disburses salaries, calculates income tax for every state, and remits pension and statutory contributions on time for Nigerian businesses — every month.',
+        'SparkPay disburses salaries, calculates income tax for every state, and remits pension and statutory contributions on time, every month.',
       path: '/',
     }}
   >
@@ -165,12 +164,12 @@ export const HomePage = () => (
         <div className="mkt-hero__visual">
           <MockupFrame
             tilt
-            label="SparkPay dashboard showing a July payroll of ₦125,000,000 with employees marked paid, processing and queued"
+            label="SparkPay dashboard showing a July payroll of 125,000,000 with employees marked paid, processing and queued"
           >
             <MockupDashboard />
           </MockupFrame>
           <span className="mkt-hero__badge mkt-hero__badge--amount">
-            <span className="mkt-figure">₦125,000,000</span> disbursed
+            <span className="mkt-figure">125,000,000</span> disbursed
           </span>
           <span className="mkt-hero__badge mkt-hero__badge--paye">
             Income tax · Remitted{' '}
@@ -188,7 +187,7 @@ export const HomePage = () => (
         <Reveal className="mkt-head">
           <Eyebrow onInk>THE OLD WAY</Eyebrow>
           <h2 className="mkt-h2">
-            Nigerian payroll is still run on spreadsheets and prayers
+            Payroll is still run on spreadsheets and prayers
           </h2>
         </Reveal>
 
@@ -264,9 +263,7 @@ export const HomePage = () => (
       <div className="mkt-container">
         <Reveal className="mkt-head">
           <Eyebrow onInk>ONE RUN, EVERYTHING</Eyebrow>
-          <h2 className="mkt-h2">
-            Built for the way Nigerian payroll actually works
-          </h2>
+          <h2 className="mkt-h2">Built for the way payroll actually works</h2>
         </Reveal>
 
         <Reveal className="mkt-bento">

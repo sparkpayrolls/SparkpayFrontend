@@ -14,7 +14,7 @@ const ContactPage: NextPage = () => {
       seo={{
         title: 'Contact SparkPay — talk to us about payroll',
         description:
-          'Get in touch with SparkPay about payroll, income tax and statutory remittances for your Nigerian business, or request a demo.',
+          'Get in touch with SparkPay about payroll, income tax and statutory remittances for your business, or request a demo.',
         path: '/contact',
       }}
     >

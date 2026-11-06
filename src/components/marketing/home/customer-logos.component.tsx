@@ -22,7 +22,7 @@ const customers = [
 
 export const CustomerLogos = () => (
   <div className="mkt-logos">
-    <p className="mkt-logos__label">Trusted by teams across Nigeria</p>
+    <p className="mkt-logos__label">Trusted by growing teams</p>
 
     <div className="mkt-logos__viewport">
       {/* two identical tracks for a seamless loop */}

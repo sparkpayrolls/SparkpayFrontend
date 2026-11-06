@@ -19,7 +19,7 @@ const measures = [
     body: 'Every action — a payroll run, an approval, a role change — is logged with who and when, and can be exported.',
   },
   {
-    title: 'NDPR posture',
+    title: 'Data protection',
     body: 'We handle personal data in line with the Nigeria Data Protection Regulation.',
   },
   {
@@ -37,7 +37,7 @@ const SecurityPage: NextPage = () => (
     seo={{
       title: 'Security — how SparkPay protects your payroll data',
       description:
-        'How SparkPay protects Nigerian payroll data: encryption in transit and at rest, role-based access, a full audit trail, and NDPR-aware data handling.',
+        'How SparkPay protects payroll data: encryption in transit and at rest, role-based access, a full audit trail, and data-protection-aware handling.',
       path: '/security',
     }}
   >

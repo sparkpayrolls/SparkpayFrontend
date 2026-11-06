@@ -53,8 +53,7 @@ export const MarketingFooter = () => (
           </a>
         </Link>
         <p className="mkt-footer__tagline">
-          Payroll, income tax, and statutory remittances for Nigerian
-          businesses.
+          Payroll, income tax, and statutory remittances, handled properly.
         </p>
       </div>
 

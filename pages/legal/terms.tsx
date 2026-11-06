@@ -5,8 +5,7 @@ const TermsPage: NextPage = () => (
   <MarketingLayout
     seo={{
       title: 'Terms of Service | SparkPay',
-      description:
-        'The terms governing use of SparkPay payroll services for Nigerian businesses.',
+      description: 'The terms governing use of SparkPay payroll services.',
       path: '/legal/terms',
     }}
   >

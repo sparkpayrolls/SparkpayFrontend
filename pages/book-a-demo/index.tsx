@@ -146,7 +146,7 @@ const BookADemo: NextPage = () => {
       seo={{
         title: 'Book a SparkPay demo',
         description:
-          'Pick a time to see how SparkPay runs Nigerian payroll — salaries, PAYE and statutory remittances — end to end.',
+          'Pick a time to see how SparkPay runs payroll — salaries, income tax and statutory remittances — end to end.',
         path: '/book-a-demo',
       }}
     >

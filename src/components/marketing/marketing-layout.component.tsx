@@ -22,7 +22,7 @@ const organizationJsonLd = {
   name: 'SparkPay',
   url: SITE_URL,
   description:
-    'Payroll, income tax and statutory remittances for Nigerian businesses.',
+    'Payroll, income tax and statutory remittances, handled properly.',
   areaServed: 'NG',
 };
 

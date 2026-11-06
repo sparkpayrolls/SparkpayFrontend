@@ -6,7 +6,7 @@ const PrivacyPage: NextPage = () => (
     seo={{
       title: 'Privacy Policy | SparkPay',
       description:
-        'How SparkPay collects, uses and protects personal and payroll data for Nigerian businesses.',
+        'How SparkPay collects, uses and protects personal and payroll data.',
       path: '/legal/privacy',
     }}
   >
@@ -33,7 +33,7 @@ const PrivacyPage: NextPage = () => (
         data.
       </p>
 
-      <h2>3. Data protection (NDPR)</h2>
+      <h2>3. Data protection</h2>
       <p>
         We handle personal data in line with the Nigeria Data Protection
         Regulation.

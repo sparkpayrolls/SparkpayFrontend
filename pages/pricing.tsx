@@ -105,7 +105,7 @@ const PricingPage: NextPage = () => {
       seo={{
         title: 'Pricing — pay for the people you pay | SparkPay',
         description:
-          'Simple per-employee pricing for Nigerian payroll. Run your first payroll free, then pay only for the employees you actually pay each month.',
+          'Simple per-employee pricing. Run your first payroll free, then pay only for the employees you actually pay each month.',
         path: '/pricing',
       }}
     >

@@ -72,7 +72,7 @@ const ProductPage: NextPage = () => (
     seo={{
       title: 'Product — one payroll cycle, start to finish | SparkPay',
       description:
-        'See how SparkPay runs a full Nigerian payroll cycle: set up your team, run payroll, approve and disburse salaries, then remit income tax, pension and statutory contributions.',
+        'See how SparkPay runs a full payroll cycle: set up your team, run payroll, approve and disburse salaries, then remit income tax, pension and statutory contributions.',
       path: '/product',
     }}
   >
@@ -81,7 +81,7 @@ const ProductPage: NextPage = () => (
       title="One payroll cycle, from spreadsheet to remitted."
       lead="Everything between “it’s payday” and “it’s handled” — set up, run, approve, disburse, remit, record."
       visual={<MockupDashboard />}
-      visualLabel="SparkPay dashboard showing a payroll run of ₦125,000,000"
+      visualLabel="SparkPay dashboard showing a payroll run of 125,000,000"
     />
 
     <section className="mkt-section">

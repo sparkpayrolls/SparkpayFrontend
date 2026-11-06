@@ -1,6 +1,6 @@
 // MARKETING RECREATIONS — not live screenshots (guide §9). Lightweight HTML/CSS
 // rebuilds of key SparkPay screens, re-skinned to the token system, with
-// realistic Nigerian data. Reused as side-views and background decor.
+// realistic sample data. Reused as side-views and background decor.
 
 // ── Organisation list (multi-company) ─────────────────────────────────
 // Rendered as a loading skeleton: real customer names are withheld for
@@ -99,10 +99,10 @@ export const MockupRemittance = () => (
 
 // ── Income tax by state ────────────────────────────────────────────────────
 const payeRows = [
-  { state: 'Lagos', gross: '₦850,000', paye: '₦184,500' },
-  { state: 'Oyo', gross: '₦850,000', paye: '₦171,200' },
-  { state: 'Rivers', gross: '₦850,000', paye: '₦179,800' },
-  { state: 'FCT Abuja', gross: '₦850,000', paye: '₦176,400' },
+  { state: 'Lagos', gross: '850,000', paye: '184,500' },
+  { state: 'Oyo', gross: '850,000', paye: '171,200' },
+  { state: 'Rivers', gross: '850,000', paye: '179,800' },
+  { state: 'FCT Abuja', gross: '850,000', paye: '176,400' },
 ];
 
 export const MockupPaye = () => (

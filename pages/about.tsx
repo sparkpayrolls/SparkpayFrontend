@@ -9,7 +9,7 @@ const timeline = [
   {
     year: '2021',
     title: 'Where it started',
-    body: 'SparkPay started with a simple frustration: paying a small team in Nigeria meant a spreadsheet, a banking app, and a lot of praying.',
+    body: 'SparkPay started with a simple frustration: paying a small team meant a spreadsheet, a banking app, and a lot of praying.',
   },
   {
     year: '2022',
@@ -24,22 +24,22 @@ const timeline = [
   {
     year: 'Today',
     title: 'One run, every month',
-    body: 'Nigerian businesses run their whole payroll — salaries, tax, remittances — in minutes, not days.',
+    body: 'Businesses run their whole payroll — salaries, tax, remittances — in minutes, not days.',
   },
 ];
 
 const AboutPage: NextPage = () => (
   <MarketingLayout
     seo={{
-      title: 'About — why Nigerian payroll deserves better tooling | SparkPay',
+      title: 'About — why payroll deserves better tooling | SparkPay',
       description:
-        'SparkPay was built to fix Nigerian payroll: salaries, income tax per state, and statutory remittances, built for how businesses here actually operate.',
+        'SparkPay was built to fix payroll: salaries, income tax per state, and statutory remittances, built for how businesses actually operate.',
       path: '/about',
     }}
   >
     <PageHero
       eyebrow="OUR STORY"
-      title="Nigerian payroll deserved better tooling. So we built it."
+      title="Payroll deserved better tooling. So we built it."
       lead="SparkPay exists because the tools built elsewhere never understood tax that differs by state, pension administrators, or the housing fund — the things that actually matter here."
       visual={<MockupDashboard />}
       visualLabel="SparkPay dashboard showing a payroll run"
@@ -65,7 +65,7 @@ const AboutPage: NextPage = () => (
 
     <FinalCtaBand
       title="Built here, for teams here."
-      sub="Payroll, income tax and remittances that understand Nigerian business."
+      sub="Payroll, income tax and remittances, handled properly."
     />
   </MarketingLayout>
 );

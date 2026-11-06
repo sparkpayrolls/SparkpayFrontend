@@ -1,7 +1,7 @@
 // MARKETING RECREATION — not a live screenshot.
 // A lightweight HTML/CSS rebuild of the SparkPay dashboard for the hero, using
 // the token system so it reads as the same brand (guide §9). All data is
-// realistic, varied, Nigerian; never four identical rows.
+// realistic and varied; never four identical rows.
 
 const runs: {
   name: string;
@@ -12,22 +12,22 @@ const runs: {
   {
     name: 'Adaeze Okafor',
     dept: 'Engineering',
-    amount: '₦2,340,000',
+    amount: '2,340,000',
     status: 'paid',
   },
   {
     name: 'Tunde Bakare',
     dept: 'Operations',
-    amount: '₦184,500',
+    amount: '184,500',
     status: 'paid',
   },
   {
     name: 'Chidinma Nwosu',
     dept: 'Finance',
-    amount: '₦675,000',
+    amount: '675,000',
     status: 'processing',
   },
-  { name: 'Emeka Obi', dept: 'Sales', amount: '₦910,200', status: 'queued' },
+  { name: 'Emeka Obi', dept: 'Sales', amount: '910,200', status: 'queued' },
 ];
 
 const statusLabel: Record<string, string> = {
@@ -77,7 +77,7 @@ export const MockupDashboard = () => (
     <div className="mkt-dash__hero-strip">
       <div>
         <p className="mkt-dash__eyebrow">Total disbursed this run</p>
-        <p className="mkt-dash__figure mkt-figure">₦125,000,000</p>
+        <p className="mkt-dash__figure mkt-figure">125,000,000</p>
         <p className="mkt-dash__delta">
           <span className="mkt-dash__delta-up">▲ 4.2%</span> vs June
         </p>

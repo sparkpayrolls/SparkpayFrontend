@@ -7,7 +7,7 @@ const RemittancesPage: NextPage = () => (
     seo={{
       title: 'Statutory remittances: pension, housing, compensation | SparkPay',
       description:
-        'SparkPay calculates and files Nigerian statutory remittances — pension, the housing fund, employee compensation and the training levy — on schedule, so you never miss a deadline or a penalty.',
+        'SparkPay calculates and files statutory remittances — pension, the housing fund, employee compensation and the training levy — on schedule, so you never miss a deadline or a penalty.',
       path: '/features/remittances',
     }}
     eyebrow="REMITTANCES, HANDLED"
@@ -30,12 +30,12 @@ const RemittancesPage: NextPage = () => (
     ]}
     example={{
       heading: 'One run, every statutory line settled',
-      lead: 'For an ₦850,000 gross, SparkPay computes and schedules each remittance to the correct authority.',
+      lead: 'For an 850,000 gross, SparkPay computes and schedules each remittance to the correct authority.',
       rows: [
-        { label: 'Pension (8% employee)', value: '₦68,000' },
-        { label: 'Pension (10% employer)', value: '₦85,000' },
-        { label: 'Housing fund (2.5%)', value: '₦21,250' },
-        { label: 'Total remitted this line', value: '₦174,250', accent: true },
+        { label: 'Pension (8% employee)', value: '68,000' },
+        { label: 'Pension (10% employer)', value: '85,000' },
+        { label: 'Housing fund (2.5%)', value: '21,250' },
+        { label: 'Total remitted this line', value: '174,250', accent: true },
       ],
       visual: <MockupRemittance />,
     }}

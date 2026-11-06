@@ -1,5 +1,5 @@
 // MARKETING RECREATIONS — not live screenshots (guide §9). Payslip + custom
-// payment screens, re-skinned to the token system with Nigerian data.
+// payment screens, re-skinned to the token system with sample data.
 
 // ── Automated payslip summary ─────────────────────────────────────────
 export const MockupPayslip = () => (
@@ -20,7 +20,7 @@ export const MockupPayslip = () => (
         <div className="mkt-slip__coin">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/coin.png" alt="" className="mkt-slip__coin-img" />
-          <span className="mkt-slip__coin-amt mkt-figure">₦500,000</span>
+          <span className="mkt-slip__coin-amt mkt-figure">500,000</span>
           <span className="mkt-slip__coin-label">Total Earnings</span>
         </div>
       </div>
@@ -36,15 +36,15 @@ export const MockupPayslip = () => (
         </div>
         <div className="mkt-slip__row">
           <span>Earnings</span>
-          <span className="mkt-figure">₦500,000</span>
+          <span className="mkt-figure">500,000</span>
         </div>
         <div className="mkt-slip__row">
           <span>Deduction</span>
-          <span className="mkt-figure">₦0.00</span>
+          <span className="mkt-figure">0.00</span>
         </div>
         <div className="mkt-slip__row mkt-slip__row--total">
           <span>Take home</span>
-          <span className="mkt-figure">₦500,000</span>
+          <span className="mkt-figure">500,000</span>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ export const MockupCustomPayment = () => (
       </div>
       <div className="mkt-pay__field">
         <span className="mkt-pay__label">Enter amount</span>
-        <span className="mkt-pay__input mkt-figure">₦500,000</span>
+        <span className="mkt-pay__input mkt-figure">500,000</span>
       </div>
     </div>
 

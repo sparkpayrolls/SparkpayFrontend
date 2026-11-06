@@ -5,13 +5,13 @@ import { NextPage } from 'next';
 const PayePage: NextPage = () => (
   <FeatureLander
     seo={{
-      title: 'Income tax calculation per state for Nigeria | SparkPay',
+      title: 'Income tax calculation by state | SparkPay',
       description:
-        'Income tax differs by state in Nigeria. SparkPay applies the right bands and reliefs for every employee and remits to the correct state tax authority — automatically.',
+        'Income tax differs by state. SparkPay applies the right bands and reliefs for every employee and remits to the correct state tax authority — automatically.',
       path: '/features/income-tax',
     }}
     eyebrow="INCOME TAX, DONE RIGHT"
-    h1="Tax rates differ by state. Get every kobo right."
+    h1="Tax rates differ by state. Get every figure right."
     lead="SparkPay applies the correct bands and reliefs for each employee's tax state and remits to the right authority — Lagos, Oyo, Rivers, FCT and beyond."
     heroVisual={<MockupPaye />}
     beats={[
@@ -30,12 +30,12 @@ const PayePage: NextPage = () => (
     ]}
     example={{
       heading: 'Same salary, different state, different tax',
-      lead: 'An ₦850,000 monthly gross produces a different tax figure depending on the state — SparkPay handles the difference for you.',
+      lead: 'An 850,000 monthly gross produces a different tax figure depending on the state — SparkPay handles the difference for you.',
       rows: [
-        { label: 'Monthly gross', value: '₦850,000' },
-        { label: 'Lagos', value: '₦184,500' },
-        { label: 'Oyo', value: '₦171,200' },
-        { label: 'Net to employee (Lagos)', value: '₦665,500', accent: true },
+        { label: 'Monthly gross', value: '850,000' },
+        { label: 'Lagos', value: '184,500' },
+        { label: 'Oyo', value: '171,200' },
+        { label: 'Net to employee (Lagos)', value: '665,500', accent: true },
       ],
       visual: <MockupPaye />,
     }}
@@ -46,7 +46,7 @@ const PayePage: NextPage = () => (
       },
       {
         q: 'Does SparkPay handle consolidated relief allowance?',
-        a: 'Yes. The consolidated relief allowance and the graduated tax bands are applied on every payslip, so the figure reflects current Nigerian tax rules.',
+        a: 'Yes. The consolidated relief allowance and the graduated tax bands are applied on every payslip, so the figure reflects current tax rules.',
       },
       {
         q: 'What about pension and other reliefs before tax?',
