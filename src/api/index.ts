@@ -68,13 +68,26 @@ export class $api {
         moment(authDetails.accessTokenExpires).isBefore(moment()) &&
         moment(authDetails.refreshTokenExpires).isAfter(moment())
       ) {
+        const { refreshToken } = authDetails;
         refreshing =
           refreshing ||
+          // the refresh token goes in the body, keeping it out of URLs and logs
           axios({
             baseURL: config().apiUrl,
             url: '/auth/tokens',
-            params: { refreshToken: authDetails.refreshToken },
+            method: 'POST',
+            data: { refreshToken },
           })
+            .catch((error: AxiosError) =>
+              // backends from before POST /auth/tokens only have the GET
+              error.response?.status === 404
+                ? axios({
+                    baseURL: config().apiUrl,
+                    url: '/auth/tokens',
+                    params: { refreshToken },
+                  })
+                : Promise.reject(error),
+            )
             .then((res) => {
               if (res && res.data && res.data.data) {
                 authDetails = res.data.data;
