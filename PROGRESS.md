@@ -27,6 +27,7 @@ Last updated: **2026-11-06**
 | P4 — Accessibility completion     | ⬜ Not started                   | —                                  | —          |
 | P5 — Unblock the gates            | 🔴 Blocked (Q4)                  | —                                  | —          |
 | P6 — Get off Next 12              | ⬜ Not started                   | —                                  | —          |
+| P7 — Dependency vulnerabilities   | 🟡 Scoped, not started           | —                                  | —          |
 
 ---
 
@@ -180,6 +181,55 @@ P5.1 is where it becomes real.
 ## P6 — Get off Next 12 ⬜ not started
 
 Nothing built. No ADR yet. Depends on P5.
+
+---
+
+## P7 — Dependency vulnerabilities 🟡 scoped, not started
+
+Scoped 2026-11-06 from the live Dependabot API, not from the badge on the repo page. Nothing built.
+Findings M-17…M-23 in the masterplan; the phase plan is P7.1…P7.7.
+
+### Baseline, 2026-11-06, `main`
+
+**61 open alerts: 5 critical, 24 high, 24 moderate, 8 low.** 51 runtime-scope, 10 development-scope.
+
+The headline number is misleading in both directions, and that is the useful part of the scoping:
+
+| Cluster                                             | Alerts | Disposition                                                              |
+| --------------------------------------------------- | ------ | ------------------------------------------------------------------------ |
+| `next` (2 critical, 3 high, 8 med, 3 low)           | 16     | **No patch exists below Next 13.4.** Deferred to P6, not patchable here. |
+| `axios` + `follow-redirects`                        | 15     | Reachable **inside the caret already declared** — lockfile refresh only. |
+| Storybook 6.3.8 chain (all 10 dev-scope)            | 10     | Includes 2 criticals. Upgrade or delete — Q6.                            |
+| `jsonwebtoken@8.5.1`                                | 3      | **Declared but never imported.** One deleted line.                       |
+| `resolutions` tier                                  | ~9     | Overrides across majors. Risky; last.                                    |
+| Not installed (`elliptic`, `cipher-base`, `pbkdf2`) | 3      | In `yarn.lock`, absent from `node_modules`. Verdict needed (M-23).       |
+
+### Evidence
+
+| Claim                                                | How it was checked                                                                                                             |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 61 open, severity split, scope split                 | `gh api repos/sparkpayrolls/SparkpayFrontend/dependabot/alerts --paginate`, grouped by package and scope                       |
+| `axios` fix is inside the declared range             | declared `^1.19.0`, locked 1.19.0, patch floor 1.20.0; `npm view axios versions` shows 1.20.0 and 1.21.0                       |
+| `jsonwebtoken` is unused                             | `grep -rn jsonwebtoken src pages` → only two **comments** in `src/helpers/jwt-hs256.ts`, its replacement                       |
+| the `next` cluster has no low patch                  | lowest `first_patched_version` in the set is `13.4.20-canary.13`; the rest are 14.x/15.x                                       |
+| all 10 dev-scope alerts are Storybook's              | `yarn.lock` parent trace: `express` ← 3 `@storybook/*@6.3.8` packages, `react-dev-utils` ← `@storybook/builder-webpack4@6.3.8` |
+| Storybook carries 3 stories                          | `find . -name '*.stories.*' -not -path './node_modules/*'` → 3 files                                                           |
+| `decode-uri-component` can't be reached by a refresh | `query-string@7.1.3` pins `decode-uri-component: ^0.2.2`; the fix is 0.5.1                                                     |
+
+### What I have not done
+
+- **No reachability analysis.** M-23 says the real browser exposure is smaller than 61, and that is
+  tagged _Assumed_. It is inference from what each package does and whether it is installed — not proof.
+- **No lockfile touched.** The 61 → ~33 projection in the masterplan is arithmetic on the alert set, not
+  a measured result. Dependabot re-resolves after a push and transitive bumps can bring new advisories.
+- **Nothing dismissed in the GitHub UI.** Every alert is still open; this is a plan, not a cleanup.
+
+### Blocked on
+
+- **Q6** — Storybook: upgrade off 6.3.8 or delete it? Blocks P7.3, which is 10 alerts and 2 criticals.
+- **Q7** — mine to check: anything outside `src/`/`pages/` relying on `jsonwebtoken`? Before P7.1.
+
+P7.1 and P7.2 are unblocked and are one small PR: 18 alerts, one deleted line plus a lockfile refresh.
 
 ---
 
