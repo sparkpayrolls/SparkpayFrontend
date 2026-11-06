@@ -11,7 +11,6 @@ import {
     // FacebookSVG,
     InstagramSVG,
     LinkedinSVG,
-    SparkpaySVG,
     TwitterSVG,
 } from '../../components/svg/index';
 // import { useTawkto } from '../../helpers/hooks/useapicall.hook';
