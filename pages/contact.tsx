@@ -14,14 +14,14 @@ const ContactPage: NextPage = () => {
       seo={{
         title: 'Contact SparkPay — talk to us about payroll',
         description:
-          'Get in touch with SparkPay about payroll, PAYE and statutory remittances for your Nigerian business, or request a demo.',
+          'Get in touch with SparkPay about payroll, income tax and statutory remittances for your business, or request a demo.',
         path: '/contact',
       }}
     >
       <PageHero
         eyebrow="CONTACT"
         title="Talk to us."
-        lead="Questions about payroll, PAYE, or moving from your current process? We’re happy to help."
+        lead="Questions about payroll, income tax, or moving from your current process? We’re happy to help."
         visual={<MockupRemittance />}
         visualLabel="SparkPay remittance schedule"
       />
@@ -66,12 +66,18 @@ const ContactPage: NextPage = () => {
               <h3>Prefer email?</h3>
               <p>
                 Reach us at{' '}
-                <a href="mailto:support@sparkpayhq.com">support@sparkpayhq.com</a>
+                <a href="mailto:support@sparkpayhq.com">
+                  support@sparkpayhq.com
+                </a>
                 .
               </p>
               <h3>Want to see it live?</h3>
               <p>Book a walkthrough and we&rsquo;ll run a payroll with you.</p>
-              <MarketingButton href="/book-a-demo" variant="secondary" size="sm">
+              <MarketingButton
+                href="/book-a-demo"
+                variant="secondary"
+                size="sm"
+              >
                 Book a demo
               </MarketingButton>
             </aside>

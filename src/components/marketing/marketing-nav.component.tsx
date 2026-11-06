@@ -5,14 +5,14 @@ import { MarketingButton } from '../ui/marketing-button.component';
 
 const featureLinks = [
   {
-    href: '/features/paye',
-    title: 'PAYE per state',
-    desc: 'Correct tax bands and reliefs for every state.',
+    href: '/features/income-tax',
+    title: 'Income tax',
+    desc: 'Correct bands and reliefs on every payslip.',
   },
   {
     href: '/features/remittances',
     title: 'Statutory remittances',
-    desc: 'Pension, NHF, NSITF and ITF, filed on time.',
+    desc: 'Pension and statutory contributions, filed on time.',
   },
 ];
 

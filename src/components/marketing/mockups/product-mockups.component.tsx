@@ -1,6 +1,6 @@
 // MARKETING RECREATIONS — not live screenshots (guide §9). Lightweight HTML/CSS
 // rebuilds of key SparkPay screens, re-skinned to the token system, with
-// realistic Nigerian data. Reused as side-views and background decor.
+// realistic sample data. Reused as side-views and background decor.
 
 // ── Organisation list (multi-company) ─────────────────────────────────
 // Rendered as a loading skeleton: real customer names are withheld for
@@ -27,10 +27,7 @@ export const MockupOrgs = () => (
             />
           </span>
         </span>
-        <span
-          className="mkt-skel mkt-skel--amount"
-          aria-hidden="true"
-        />
+        <span className="mkt-skel mkt-skel--amount" aria-hidden="true" />
       </div>
     ))}
     <span className="mkt-visually-hidden">Loading your organisations</span>
@@ -40,7 +37,11 @@ export const MockupOrgs = () => (
 // ── Audit trail ───────────────────────────────────────────────────────
 const audits = [
   { name: 'Esther Howard', act: 'Logged in', role: 'Admin' },
-  { name: 'Brooklyn Simmons', act: 'Suspended Esther Howard', role: 'Super Admin' },
+  {
+    name: 'Brooklyn Simmons',
+    act: 'Suspended Esther Howard',
+    role: 'Super Admin',
+  },
   { name: 'Ralph Edwards', act: 'Ran July payroll', role: 'Payroll Manager' },
   { name: 'Bessie Cooper', act: 'Exported audit log', role: 'Viewer' },
 ];
@@ -70,10 +71,10 @@ export const MockupAudit = () => (
 
 // ── Remittance schedule ───────────────────────────────────────────────
 const remits = [
-  { label: 'PAYE · Lagos IRS', due: 'Due 10 Aug', state: 'filed' },
-  { label: 'Pension · Stanbic PFA', due: 'Due 12 Aug', state: 'filed' },
-  { label: 'NHF · FMBN', due: 'Due 15 Aug', state: 'scheduled' },
-  { label: 'NSITF', due: 'Due 20 Aug', state: 'scheduled' },
+  { label: 'Income tax', due: 'Due 10 Aug', state: 'filed' },
+  { label: 'Pension · Stanbic', due: 'Due 12 Aug', state: 'filed' },
+  { label: 'Housing fund', due: 'Due 15 Aug', state: 'scheduled' },
+  { label: 'Compensation', due: 'Due 20 Aug', state: 'scheduled' },
 ];
 
 export const MockupRemittance = () => (
@@ -88,9 +89,7 @@ export const MockupRemittance = () => (
           <span className="mkt-rec__name">{r.label}</span>
           <span className="mkt-rec__sub">{r.due}</span>
         </span>
-        <span
-          className={`mkt-rec__status mkt-rec__status--${r.state}`}
-        >
+        <span className={`mkt-rec__status mkt-rec__status--${r.state}`}>
           {r.state === 'filed' ? '✓ Filed' : 'Scheduled'}
         </span>
       </div>
@@ -98,28 +97,28 @@ export const MockupRemittance = () => (
   </div>
 );
 
-// ── PAYE per state ────────────────────────────────────────────────────
+// ── Income tax per payslip ────────────────────────────────────────────────────
 const payeRows = [
-  { state: 'Lagos', gross: '₦850,000', paye: '₦184,500' },
-  { state: 'Oyo', gross: '₦850,000', paye: '₦171,200' },
-  { state: 'Rivers', gross: '₦850,000', paye: '₦179,800' },
-  { state: 'FCT Abuja', gross: '₦850,000', paye: '₦176,400' },
+  { name: 'Adaeze Okafor', gross: '850,000', paye: '184,500' },
+  { name: 'Tunde Bakare', gross: '620,000', paye: '128,400' },
+  { name: 'Chidinma Nwosu', gross: '1,150,000', paye: '262,300' },
+  { name: 'Emeka Obi', gross: '450,000', paye: '86,900' },
 ];
 
 export const MockupPaye = () => (
   <div className="mkt-rec mkt-rec--paye">
     <div className="mkt-rec__head">
-      <span className="mkt-rec__title">PAYE by state</span>
-      <span className="mkt-rec__hint">Same gross</span>
+      <span className="mkt-rec__title">Income tax</span>
+      <span className="mkt-rec__hint">This month</span>
     </div>
     <div className="mkt-rec__row mkt-rec__row--header">
-      <span>State</span>
+      <span>Employee</span>
       <span className="mkt-rec__amount">Gross</span>
-      <span className="mkt-rec__amount">PAYE</span>
+      <span className="mkt-rec__amount">Income tax</span>
     </div>
     {payeRows.map((r) => (
-      <div className="mkt-rec__row mkt-rec__row--3" key={r.state}>
-        <span className="mkt-rec__name">{r.state}</span>
+      <div className="mkt-rec__row mkt-rec__row--3" key={r.name}>
+        <span className="mkt-rec__name">{r.name}</span>
         <span className="mkt-rec__amount mkt-figure">{r.gross}</span>
         <span className="mkt-rec__amount mkt-figure mkt-rec__paye">
           {r.paye}

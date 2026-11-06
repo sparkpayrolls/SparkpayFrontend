@@ -19,7 +19,7 @@ const tiers: PricingTier[] = [
     features: [
       'Up to 5 employees',
       'Salary disbursement',
-      'PAYE calculation',
+      'Income tax calculation',
       'Payslips by email',
     ],
     cta: 'Book a demo',
@@ -33,8 +33,8 @@ const tiers: PricingTier[] = [
     blurb: 'For growing businesses that run payroll every month.',
     features: [
       'Unlimited employees',
-      'PAYE per state',
-      'Pension, NHF, NSITF, ITF remittances',
+      'Income tax',
+      'Pension and statutory remittances',
       'Approval workflow',
       'Full audit trail',
     ],
@@ -59,7 +59,7 @@ const tiers: PricingTier[] = [
 
 const comparison: { label: string; spark: boolean; manual: boolean }[] = [
   { label: 'Pay the whole team in one approval', spark: true, manual: false },
-  { label: 'PAYE calculated per state', spark: true, manual: false },
+  { label: 'Income tax calculated automatically', spark: true, manual: false },
   { label: 'Statutory remittances filed on time', spark: true, manual: false },
   { label: 'Payslips sent automatically', spark: true, manual: false },
   { label: 'Exportable audit trail', spark: true, manual: false },
@@ -69,28 +69,23 @@ const comparison: { label: string; spark: boolean; manual: boolean }[] = [
 const faq = [
   {
     q: 'What counts as an employee?',
-    a:
-      'Anyone you pay through SparkPay in a given month. People you do not pay that month are not billed.',
+    a: 'Anyone you pay through SparkPay in a given month. People you do not pay that month are not billed.',
   },
   {
     q: 'Is my first payroll really free?',
-    a:
-      'Yes. You can run your first payroll on the Starter plan without a card, so you can see the whole flow before paying anything.',
+    a: 'Yes. You can run your first payroll on the Starter plan without a card, so you can see the whole flow before paying anything.',
   },
   {
     q: 'How does billing work?',
-    a:
-      'Growth is a ₦5,000 monthly base fee plus ₦150 per employee paid that month. You are only charged for the people you actually pay.',
+    a: 'Growth is a ₦5,000 monthly base fee plus ₦150 per employee paid that month. You are only charged for the people you actually pay.',
   },
   {
     q: 'Can I switch plans or leave?',
-    a:
-      'You can move between plans at any time, and export your data whenever you like. There is no lock-in.',
+    a: 'You can move between plans at any time, and export your data whenever you like. There is no lock-in.',
   },
   {
     q: 'Is my payroll data secure?',
-    a:
-      'Data is encrypted in transit and at rest, with role-based access for every administrator. See our security page for detail.',
+    a: 'Data is encrypted in transit and at rest, with role-based access for every administrator. See our security page for detail.',
   },
 ];
 
@@ -110,7 +105,7 @@ const PricingPage: NextPage = () => {
       seo={{
         title: 'Pricing — pay for the people you pay | SparkPay',
         description:
-          'Simple per-employee pricing for Nigerian payroll. Run your first payroll free, then pay only for the employees you actually pay each month.',
+          'Simple per-employee pricing. Run your first payroll free, then pay only for the employees you actually pay each month.',
         path: '/pricing',
       }}
     >

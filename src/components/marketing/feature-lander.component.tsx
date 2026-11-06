@@ -121,7 +121,7 @@ export const FeatureLander = (props: FeatureLanderProps) => {
           <SectionHeading
             center
             eyebrow="QUESTIONS"
-            title="What Nigerian businesses ask us"
+            title="What businesses ask us"
           />
           <FaqAccordion items={props.faq} />
         </div>

@@ -110,7 +110,9 @@ const BookADemo: NextPage = () => {
     if (month === 12) setYear((y) => y + 1);
   };
 
-  const submitBooking = async (payload: Parameters<typeof $api.demoBooking.createBooking>[0]) => {
+  const submitBooking = async (
+    payload: Parameters<typeof $api.demoBooking.createBooking>[0],
+  ) => {
     setSubmitting(true);
     setSubmitError('');
     try {
@@ -125,7 +127,9 @@ const BookADemo: NextPage = () => {
         setStep('pick');
         if (selectedDay) loadSlots(selectedDay);
       } else {
-        setSubmitError(err.message || 'Something went wrong. Please try again.');
+        setSubmitError(
+          err.message || 'Something went wrong. Please try again.',
+        );
       }
     } finally {
       setSubmitting(false);
@@ -142,7 +146,7 @@ const BookADemo: NextPage = () => {
       seo={{
         title: 'Book a SparkPay demo',
         description:
-          'Pick a time to see how SparkPay runs Nigerian payroll — salaries, PAYE and statutory remittances — end to end.',
+          'Pick a time to see how SparkPay runs payroll — salaries, income tax and statutory remittances — end to end.',
         path: '/book-a-demo',
       }}
     >
@@ -235,7 +239,9 @@ const BookADemo: NextPage = () => {
               )}
 
               {submitError && step === 'pick' && (
-                <p className="demo-form__error demo-book__banner">{submitError}</p>
+                <p className="demo-form__error demo-book__banner">
+                  {submitError}
+                </p>
               )}
             </>
           )}

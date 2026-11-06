@@ -5,7 +5,7 @@ const columns: { title: string; links: { label: string; href: string }[] }[] = [
     title: 'Product',
     links: [
       { label: 'Product overview', href: '/product' },
-      { label: 'PAYE per state', href: '/features/paye' },
+      { label: 'Income tax', href: '/features/income-tax' },
       { label: 'Remittances', href: '/features/remittances' },
       { label: 'Pricing', href: '/pricing' },
     ],
@@ -53,7 +53,7 @@ export const MarketingFooter = () => (
           </a>
         </Link>
         <p className="mkt-footer__tagline">
-          Payroll, PAYE, and statutory remittances for Nigerian businesses.
+          Payroll, income tax, and statutory remittances, handled properly.
         </p>
       </div>
 

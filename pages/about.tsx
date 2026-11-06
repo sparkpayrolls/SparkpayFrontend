@@ -9,38 +9,38 @@ const timeline = [
   {
     year: '2021',
     title: 'Where it started',
-    body: 'SparkPay started with a simple frustration: paying a small team in Nigeria meant a spreadsheet, a banking app, and a lot of praying.',
+    body: 'SparkPay started with a simple frustration: paying a small team meant a spreadsheet, a banking app, and a lot of praying.',
   },
   {
     year: '2022',
-    title: 'PAYE, done properly',
-    body: 'We built PAYE that respects the reality that tax differs by state — the thing generic tools get wrong.',
+    title: 'Income tax, done properly',
+    body: 'We built tax calculation that gets the bands and the reliefs right on every payslip — the thing generic tools get wrong.',
   },
   {
     year: '2023',
     title: 'Statutory remittances',
-    body: 'Pension, NHF, NSITF and ITF joined the run, so compliance stopped being a monthly scramble.',
+    body: 'Pension and the statutory contributions joined the run, so compliance stopped being a monthly scramble.',
   },
   {
     year: 'Today',
     title: 'One run, every month',
-    body: 'Nigerian businesses run their whole payroll — salaries, tax, remittances — in minutes, not days.',
+    body: 'Businesses run their whole payroll — salaries, tax, remittances — in minutes, not days.',
   },
 ];
 
 const AboutPage: NextPage = () => (
   <MarketingLayout
     seo={{
-      title: 'About — why Nigerian payroll deserves better tooling | SparkPay',
+      title: 'About — why payroll deserves better tooling | SparkPay',
       description:
-        'SparkPay was built to fix Nigerian payroll: salaries, PAYE per state, and statutory remittances, built for how businesses here actually operate.',
+        'SparkPay was built to fix payroll: salaries, income tax, and statutory remittances, built for how businesses actually operate.',
       path: '/about',
     }}
   >
     <PageHero
       eyebrow="OUR STORY"
-      title="Nigerian payroll deserved better tooling. So we built it."
-      lead="SparkPay exists because the tools built elsewhere never understood PAYE per state, PFAs, or NHF — the things that actually matter here."
+      title="Payroll deserved better tooling. So we built it."
+      lead="SparkPay exists because the tools built elsewhere never understood statutory tax, pension administrators, or the housing fund — the things that actually matter here."
       visual={<MockupDashboard />}
       visualLabel="SparkPay dashboard showing a payroll run"
     />
@@ -65,7 +65,7 @@ const AboutPage: NextPage = () => (
 
     <FinalCtaBand
       title="Built here, for teams here."
-      sub="Payroll, PAYE and remittances that understand Nigerian business."
+      sub="Payroll, income tax and remittances, handled properly."
     />
   </MarketingLayout>
 );

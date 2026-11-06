@@ -27,15 +27,13 @@ const Dashboard: NextPage = () => {
       totalNumberOfPayrolls: 0,
     },
   );
-  const [
-    organisationDashboardData,
-    setOrganisationDashboardData,
-  ] = useState<OrganisationDashboardData>({
-    recentTransactions: [],
-    totalNumberOfEmployees: 0,
-    totalNumberOfPayrolls: 0,
-    totalPayrollBurden: 0,
-  });
+  const [organisationDashboardData, setOrganisationDashboardData] =
+    useState<OrganisationDashboardData>({
+      recentTransactions: [],
+      totalNumberOfEmployees: 0,
+      totalNumberOfPayrolls: 0,
+      totalPayrollBurden: 0,
+    });
 
   const getUserDashboardData = useCallback(async () => {
     try {

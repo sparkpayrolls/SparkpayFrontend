@@ -16,6 +16,13 @@ module.exports = {
   async redirects() {
     return [
       { source: '/about-us', destination: '/about', permanent: true },
+      // The PAYE feature page was renamed when the statutory acronyms came off
+      // the marketing copy. Keep the old URL working for any inbound link.
+      {
+        source: '/features/paye',
+        destination: '/features/income-tax',
+        permanent: true,
+      },
       {
         source: '/privacy-policy',
         destination: '/legal/privacy',

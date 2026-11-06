@@ -45,8 +45,8 @@ const testimonials = [
 // ── copy lives here, once (guide §6, §10) ─────────────────────────────
 const problemLines = [
   'Salaries typed into a spreadsheet, then sent one bank transfer at a time.',
-  "PAYE worked out by hand — and it's not the same in Lagos, Oyo, and Abuja.",
-  'A pension or NHF deadline slips in the rush, and a penalty letter follows.',
+  'Income tax worked out by hand, with a mistake you only find out about later.',
+  'A pension or housing fund deadline slips in the rush, and a penalty letter follows.',
 ];
 
 const steps = [
@@ -58,7 +58,7 @@ const steps = [
   {
     n: '02',
     title: 'Review the numbers',
-    body: 'See every net salary, PAYE deduction, and remittance before a naira moves.',
+    body: 'See every net salary, tax deduction, and remittance before anything moves.',
   },
   {
     n: '03',
@@ -71,13 +71,13 @@ const steps = [
 const PayeVisual = () => (
   <div className="mkt-mini mkt-mini--paye">
     {[
-      { state: 'Lagos', rate: '₦184,500' },
-      { state: 'Oyo', rate: '₦171,200' },
-      { state: 'Rivers', rate: '₦179,800' },
+      { label: 'Taxable pay', value: '765,000' },
+      { label: 'Income tax', value: '184,500' },
+      { label: 'Net salary', value: '665,500' },
     ].map((r) => (
-      <div className="mkt-mini__row" key={r.state}>
-        <span>{r.state} IRS</span>
-        <span className="mkt-figure">{r.rate}</span>
+      <div className="mkt-mini__row" key={r.label}>
+        <span>{r.label}</span>
+        <span className="mkt-figure">{r.value}</span>
       </div>
     ))}
   </div>
@@ -86,9 +86,9 @@ const PayeVisual = () => (
 const RemittanceVisual = () => (
   <div className="mkt-mini mkt-mini--remit">
     {[
-      { label: 'Pension · PFA', state: 'filed' },
-      { label: 'NHF', state: 'filed' },
-      { label: 'NSITF', state: 'scheduled' },
+      { label: 'Pension', state: 'filed' },
+      { label: 'Housing fund', state: 'filed' },
+      { label: 'Compensation', state: 'scheduled' },
     ].map((r) => (
       <div className="mkt-mini__row" key={r.label}>
         <span>{r.label}</span>
@@ -130,9 +130,9 @@ const smallCells = [
 export const HomePage = () => (
   <MarketingLayout
     seo={{
-      title: 'SparkPay — Nigerian payroll, PAYE and remittances on autopilot',
+      title: 'SparkPay — payroll, income tax and remittances on autopilot',
       description:
-        'SparkPay disburses salaries, calculates PAYE for every state, and remits pension, NHF and NSITF on time for Nigerian businesses — every month.',
+        'SparkPay disburses salaries, calculates income tax, and remits pension and statutory contributions on time, every month.',
       path: '/',
     }}
   >
@@ -147,8 +147,8 @@ export const HomePage = () => (
             <span>now takes three minutes.</span>
           </h1>
           {/* Outcome first (M-9, D11 = option B). The statutory acronyms were
-              moved out of the hero, not deleted: PAYE, pension, NHF and NSITF
-              still appear in the bento cells and the feature pages below. */}
+              moved out of the hero, not deleted. The statutory detail still appears in
+              the bento cells and the feature pages below, in plain language. */}
           <p className="mkt-hero__subhead">
             One approval pays every salary and files every statutory deduction,
             on time, every month.
@@ -164,15 +164,15 @@ export const HomePage = () => (
         <div className="mkt-hero__visual">
           <MockupFrame
             tilt
-            label="SparkPay dashboard showing a July payroll of ₦125,000,000 with employees marked paid, processing and queued"
+            label="SparkPay dashboard showing a July payroll of 125,000,000 with employees marked paid, processing and queued"
           >
             <MockupDashboard />
           </MockupFrame>
           <span className="mkt-hero__badge mkt-hero__badge--amount">
-            <span className="mkt-figure">₦125,000,000</span> disbursed
+            <span className="mkt-figure">125,000,000</span> disbursed
           </span>
           <span className="mkt-hero__badge mkt-hero__badge--paye">
-            PAYE · Remitted{' '}
+            Income tax · Remitted{' '}
             <span className="mkt-hero__badge__check" aria-hidden="true">
               ✓
             </span>
@@ -187,7 +187,7 @@ export const HomePage = () => (
         <Reveal className="mkt-head">
           <Eyebrow onInk>THE OLD WAY</Eyebrow>
           <h2 className="mkt-h2">
-            Nigerian payroll is still run on spreadsheets and prayers
+            Payroll is still run on spreadsheets and prayers
           </h2>
         </Reveal>
 
@@ -209,7 +209,7 @@ export const HomePage = () => (
               <div className="mkt-sheet__bar" />
               {[
                 ['B12', 'Salary', '=SUM(C2:C40)'],
-                ['B13', 'PAYE', '???'],
+                ['B13', 'Tax', '???'],
                 ['B14', 'Pension', 'overdue'],
               ].map((row) => (
                 <div className="mkt-sheet__row" key={row[0]}>
@@ -263,25 +263,23 @@ export const HomePage = () => (
       <div className="mkt-container">
         <Reveal className="mkt-head">
           <Eyebrow onInk>ONE RUN, EVERYTHING</Eyebrow>
-          <h2 className="mkt-h2">
-            Built for the way Nigerian payroll actually works
-          </h2>
+          <h2 className="mkt-h2">Built for the way payroll actually works</h2>
         </Reveal>
 
         <Reveal className="mkt-bento">
           <BentoCell
             area="paye"
             className="mkt-bento-cell--large"
-            title="PAYE, correct for every state"
-            body="SparkPay applies the right bands and reliefs per state and remits to the correct IRS — Lagos, Oyo, Rivers, all of them."
-            href="/features/paye"
-            linkLabel="How PAYE works"
+            title="Income tax, correct on every payslip"
+            body="SparkPay applies the right bands and reliefs to every salary, then remits the tax to the authority on schedule."
+            href="/features/income-tax"
+            linkLabel="How income tax works"
             media={<PayeVisual />}
           />
           <BentoCell
             area="remit"
             className="mkt-bento-cell--large"
-            title="Pension, NHF, NSITF — remitted on schedule"
+            title="Statutory contributions, on schedule"
             body="Every statutory deduction calculated and filed to the right authority, ahead of the deadline."
             href="/features/remittances"
             linkLabel="See remittances"

@@ -1,14 +1,14 @@
-"use client";
-import React  from "react";
-import Link from "next/link";
-import Image from "next/image";
+'use client';
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   CheckMarkSVG,
   LinkedinSVG,
   InstagramSVG,
   TwitterSVG,
 } from '../../src/components/svg';
-import AboutLayout from "src/layouts/default-layout/AboutLayout";
+import AboutLayout from 'src/layouts/default-layout/AboutLayout';
 
 // Import team images
 import DanielImg from '../../public/images/Daniel.jpg';
@@ -16,25 +16,24 @@ import OpeyemiImg from '../../public/images/Opeyemi.jpg';
 import EmmanuelImg from '../../public/images/emmanuel.jpg';
 
 const AboutUs = () => {
-
   const TEAM_MEMBERS = [
     {
-      name: "Daniel Olaniyan",
-      role: "Co-Founder & Product Lead",
+      name: 'Daniel Olaniyan',
+      role: 'Co-Founder & Product Lead',
       image: DanielImg,
-      linkedinUrl: "https://www.linkedin.com/in/daniel-olaniyan-11225192/",
+      linkedinUrl: 'https://www.linkedin.com/in/daniel-olaniyan-11225192/',
     },
     {
-      name: "Opeyemi Peter",
-      role: "CEO",
+      name: 'Opeyemi Peter',
+      role: 'CEO',
       image: OpeyemiImg,
-      linkedinUrl: "https://www.linkedin.com/in/opeyemi-peter-okunola/",
+      linkedinUrl: 'https://www.linkedin.com/in/opeyemi-peter-okunola/',
     },
     {
-      name: "Emmanuel Menyaga",
-      role: "CTO",
+      name: 'Emmanuel Menyaga',
+      role: 'CTO',
       image: EmmanuelImg,
-      linkedinUrl: "https://www.linkedin.com/in/emmanuelmenyaga/",
+      linkedinUrl: 'https://www.linkedin.com/in/emmanuelmenyaga/',
     },
   ];
 
@@ -47,9 +46,9 @@ const AboutUs = () => {
             <h2>About Us</h2>
             <p>
               Sparkpay is a payroll automation platform designed to simplify and
-              streamline payroll processes for businesses across Africa. Our mission
-              is to empower businesses and their employees with efficient, transparent,
-              and accessible financial tools.
+              streamline payroll processes for businesses across Africa. Our
+              mission is to empower businesses and their employees with
+              efficient, transparent, and accessible financial tools.
             </p>
           </section>
 
@@ -65,8 +64,8 @@ const AboutUs = () => {
                     <CheckMarkSVG />
                   </div>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Manual payroll processes are time-consuming, error-prone, and often
-                    lead to delays in salary payments.
+                    Manual payroll processes are time-consuming, error-prone,
+                    and often lead to delays in salary payments.
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
@@ -74,8 +73,8 @@ const AboutUs = () => {
                     <CheckMarkSVG />
                   </div>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Many employees in Africa lack access to formal financial services,
-                    hindering their financial well-being.
+                    Many employees in Africa lack access to formal financial
+                    services, hindering their financial well-being.
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
@@ -83,8 +82,9 @@ const AboutUs = () => {
                     <CheckMarkSVG />
                   </div>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Traditional payroll systems often exclude contract workers and
-                    those in the informal sector, limiting financial inclusion.
+                    Traditional payroll systems often exclude contract workers
+                    and those in the informal sector, limiting financial
+                    inclusion.
                   </p>
                 </li>
               </ul>
@@ -101,8 +101,8 @@ const AboutUs = () => {
                   </div>
                   <p className="text-gray-600 dark:text-gray-300">
                     Sparkpay automates salary disbursement, ensuring timely and
-                    accurate payments to all employees, regardless of their employment
-                    status.
+                    accurate payments to all employees, regardless of their
+                    employment status.
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
@@ -110,8 +110,9 @@ const AboutUs = () => {
                     <CheckMarkSVG />
                   </div>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Our platform helps businesses manage compliance with local tax
-                    regulations and labor laws, reducing the risk of penalties.
+                    Our platform helps businesses manage compliance with local
+                    tax regulations and labor laws, reducing the risk of
+                    penalties.
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
@@ -119,8 +120,9 @@ const AboutUs = () => {
                     <CheckMarkSVG />
                   </div>
                   <p className="text-gray-600 dark:text-gray-300">
-                    We offer financial wellness tools, including employee wallets and
-                    salary advances, to improve financial access and inclusion.
+                    We offer financial wellness tools, including employee
+                    wallets and salary advances, to improve financial access and
+                    inclusion.
                   </p>
                 </li>
               </ul>
@@ -135,28 +137,37 @@ const AboutUs = () => {
                 <h3>Platform Features</h3>
                 <ul className="features">
                   <li>
-                    <div className="check-icon"><CheckMarkSVG /></div>
+                    <div className="check-icon">
+                      <CheckMarkSVG />
+                    </div>
                     <span>Payroll Automation</span>
                   </li>
                   <li>
-                    <div className="check-icon"><CheckMarkSVG /></div>
+                    <div className="check-icon">
+                      <CheckMarkSVG />
+                    </div>
                     <span>Employee Wallet</span>
                   </li>
                   <li>
-                    <div className="check-icon"><CheckMarkSVG /></div>
+                    <div className="check-icon">
+                      <CheckMarkSVG />
+                    </div>
                     <span>Salary Advances</span>
                   </li>
                   <li>
-                    <div className="check-icon"><CheckMarkSVG /></div>
+                    <div className="check-icon">
+                      <CheckMarkSVG />
+                    </div>
                     <span>Cross-Border Payments</span>
                   </li>
                 </ul>
                 <div className="development">
                   <h4>Development Stage</h4>
                   <p>
-                    Sparkpay is currently in the MVP stage, with early pilots underway.
-                    We are continuously refining our platform based on user feedback to
-                    ensure it meets the evolving needs of businesses and employees.
+                    Sparkpay is currently in the MVP stage, with early pilots
+                    underway. We are continuously refining our platform based on
+                    user feedback to ensure it meets the evolving needs of
+                    businesses and employees.
                   </p>
                 </div>
               </div>
@@ -197,7 +208,8 @@ const AboutUs = () => {
           <section className="contact-section" id="contact">
             <h2>Ready to streamline your payroll?</h2>
             <p>
-              Contact us for more information or book a demo to see Sparkpay in action.
+              Contact us for more information or book a demo to see Sparkpay in
+              action.
             </p>
 
             <div className="buttons">
