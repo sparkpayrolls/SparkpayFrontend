@@ -1,5 +1,10 @@
+import { createLimiter } from 'src/helpers/limiter';
 import { HttpRepository } from '../repo/http.repo';
 import { Bank, PayoutMethod } from '../types';
+
+// Bulk employee screens validate every row at once. Each request costs the
+// API a password-hash check, so four at a time keeps it responsive.
+const validationQueue = createLimiter(4);
 
 export class PayoutModule extends HttpRepository {
   async getSupportedPayoutMethods(country: string) {
@@ -17,12 +22,14 @@ export class PayoutModule extends HttpRepository {
   }
 
   async validatePayoutMethod<K>(methodId: string, meta?: unknown) {
-    const { data } = await this.post<K>('/payouts/validate', {
-      methodId,
-      meta,
-    });
+    return validationQueue(async () => {
+      const { data } = await this.post<K>('/payouts/validate', {
+        methodId,
+        meta,
+      });
 
-    return data;
+      return data;
+    });
   }
 
   async validatePayoutMethodForOnboarding<K>(
