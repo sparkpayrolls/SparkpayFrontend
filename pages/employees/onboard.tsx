@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { HttpError } from 'src/api/repo/http.error';
 import { Employee } from 'src/api/types';
+import { OnboardingTokenContext } from 'src/helpers/onboarding-token.context';
 import useApiCall from 'src/helpers/hooks/useapicall.hook';
 
 const EmployeeOnboard: NextPage = () => {
@@ -83,15 +84,17 @@ const EmployeeOnboard: NextPage = () => {
             Enter your details to complete your onboarding{' '}
           </p>
           <IF condition={!!employee}>
-            <EmployeeOnboardingForm
-              onSubmit={handleSugmit}
-              initialValue={{
-                country: (employee?.country || '') as string,
-                payoutMethod: (employee?.payoutMethod || '') as string,
-                payoutMethodMeta: employee?.payoutMethodMeta as any,
-              }}
-              loading={loading}
-            />
+            <OnboardingTokenContext.Provider value={token.trim() || undefined}>
+              <EmployeeOnboardingForm
+                onSubmit={handleSugmit}
+                initialValue={{
+                  country: (employee?.country || '') as string,
+                  payoutMethod: (employee?.payoutMethod || '') as string,
+                  payoutMethodMeta: employee?.payoutMethodMeta as any,
+                }}
+                loading={loading}
+              />
+            </OnboardingTokenContext.Provider>
             <div className="employee-onboard__sign-up">
               <p className="employee-onboard__sign-up-text">
                 Please ensure your details are correct before submitting.
