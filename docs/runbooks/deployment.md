@@ -60,6 +60,30 @@ unresolved.
 | Lockfile drift                | **Real, but not this.** A correct lockfile still failed in 10s        | PR #116                                                                                                   |
 | Missing build-time env vars   | No. The container build has none and succeeds                         | Same container build                                                                                      |
 
+### Checked on 2026-11-06, with results
+
+| Check                                                                          | Result                                                                                                                                                               |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Is the Vercel GitHub App still installed on the org?                           | **Yes** — installed, not suspended, scoped to selected repositories                                                                                                  |
+| Can Vercel still reach this repo?                                              | **Yes** — it is still creating GitHub Deployment records and posting commit statuses, which it cannot do without repo access. **The GitHub side is not the problem** |
+| Repo pathologies (submodules, oversized tree, archived, disabled)              | **None.** ~10.8MB, public, org-owned, no `.gitmodules`                                                                                                               |
+| Do either of the failing projects belong to an account we can authenticate to? | **No.** Both are out of reach, so their plan, billing status and build settings cannot be inspected from here                                                        |
+
+### A refinement worth checking first
+
+Every push to this repo fans out to **two** Vercel projects, and today's pushes landed close
+together. On Vercel, a deployment superseded by a newer one on the same branch is failed
+immediately — which is what a 1-second "failure" usually is. Low concurrent-build allowances make
+this more likely.
+
+So the near-instant failures are plausibly superseded or queued-out deployments rather than a
+separate fault. If that holds, there is only **one** real failure to explain: the ~3min build. Do
+not spend time on the 1-second ones until that log has been read.
+
+**Note for anyone working in this repo: a `git push` of any branch triggers a build on both Vercel
+projects.** There is no way to push without deploying unless a project is disconnected or its
+Ignored Build Step is configured.
+
 ### Most likely causes — all account-side
 
 Ranked. None are fixable from this repository.
