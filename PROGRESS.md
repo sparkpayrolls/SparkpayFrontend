@@ -12,7 +12,7 @@ Rules for this file, from `wakanow-engineering-standards` §1:
 - Gate 4 (unit tests) cannot be claimed anywhere until P5 lands (see M-14). Until then every entry
   names which suites actually ran, under which config.
 
-Last updated: **2026-11-06**
+Last updated: **2026-11-07**
 
 ---
 
@@ -76,6 +76,7 @@ Branch `fix/marketing-audit-p1`, **PR #119**, two commits:
 - [x] **P3.3a** Testimonial quotes corrected for payroll sense — minimal edits, nothing invented (D7)
 - [x] **P3.1** Hero subhead rewritten, outcome first — option B (D11)
 - [x] **P3.5** Statutory acronyms removed from the marketing copy site-wide — 72 occurrences, 13 files, 0 left in the rendered HTML; `/features/paye` → `/features/income-tax` with a 308 (D12, D13)
+- [x] **P3.6** Country and currency references removed — 64 edits, 19 files; 8 of 11 marketing pages fully clean in the rendered HTML, 3 with documented exceptions (D15)
 
 **Not yet ticked:** the phase itself. The gates below passed and the preview is green, but the PR is
 unreviewed and unmerged, so P1 is **build-complete, not closed**.
@@ -287,6 +288,22 @@ fault, and a dependency bump is exactly where it bites.
 
 **Still not measured:** the alert count after _this_ branch. Dependabot computes against the default
 branch, so the number can only be re-read after this PR merges. Owed again.
+
+### Open decision: pricing currency
+
+`/pricing` still shows `₦0`, `₦150` per employee and a `₦5,000` base fee, because those are the real
+prices. Under D14 the rest of the site is currency-neutral, which leaves pricing visibly
+inconsistent with it.
+
+Three ways out, and it is a business decision:
+
+| Option                              | Consequence                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------ |
+| Keep naira on `/pricing`            | Honest, but one page contradicts the generic positioning everywhere else |
+| Publish prices in another currency  | Needs a real price in that currency — not a copy edit                    |
+| Show no price, "pricing on request" | Consistent, but loses the self-serve clarity the page has now            |
+
+Unblocking this is **Q8**. Nothing is shipped either way until it is answered.
 
 ### Blocked on
 
