@@ -43,17 +43,20 @@ const steps = [
   {
     n: '01',
     title: 'Add your team',
-    body: "Import employees and salaries once. Bring a spreadsheet and we'll map it.",
+    body:
+      "Import employees and salaries once. Bring a spreadsheet and we'll map it.",
   },
   {
     n: '02',
     title: 'Review the numbers',
-    body: 'See every net salary, PAYE deduction, and remittance before a naira moves.',
+    body:
+      'See every net salary, PAYE deduction, and remittance before a naira moves.',
   },
   {
     n: '03',
     title: 'Approve and relax',
-    body: "One approval pays everyone and files the remittances. That's the job.",
+    body:
+      "One approval pays everyone and files the remittances. That's the job.",
   },
 ];
 
@@ -142,9 +145,7 @@ export const HomePage = () => (
             month.
           </p>
           <div className="mkt-hero__actions">
-            <MarketingButton href="/book-a-demo">
-              Run your first payroll free
-            </MarketingButton>
+            <MarketingButton href="/book-a-demo">Book a demo</MarketingButton>
             <MarketingButton href="#how-it-works" variant="secondary">
               See how it works
             </MarketingButton>

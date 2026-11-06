@@ -13,7 +13,7 @@ export const FinalCtaBand = (props: {
   const {
     title = 'Give your team back the three days payroll steals.',
     sub = 'Salaries, PAYE, and statutory remittances — handled correctly, every month.',
-    cta = 'Run your first payroll free',
+    cta = 'Book a demo',
     href = '/book-a-demo',
   } = props;
 

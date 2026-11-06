@@ -35,7 +35,8 @@ export const MarketingNav = () => {
   // reflect the current theme (set pre-paint in _document) + react to toggles
   useEffect(() => {
     const root = document.documentElement;
-    const read = () => setIsDark(root.getAttribute('data-mkt-theme') === 'dark');
+    const read = () =>
+      setIsDark(root.getAttribute('data-mkt-theme') === 'dark');
     read();
     const mo = new MutationObserver(read);
     mo.observe(root, { attributes: true, attributeFilter: ['data-mkt-theme'] });
@@ -147,7 +148,9 @@ export const MarketingNav = () => {
           <button
             type="button"
             className="mkt-nav__theme"
-            aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+            aria-label={
+              isDark ? 'Switch to light theme' : 'Switch to dark theme'
+            }
             onClick={() => setTheme(isDark ? 'light' : 'dark')}
           >
             {isDark ? '☀' : '☾'}
@@ -156,7 +159,7 @@ export const MarketingNav = () => {
             <a className="mkt-nav__signin">Sign in</a>
           </Link>
           <MarketingButton href="/book-a-demo" size="sm">
-            Run your first payroll free
+            Book a demo
           </MarketingButton>
         </div>
 
@@ -189,7 +192,7 @@ export const MarketingNav = () => {
               size="sm"
               onClick={() => setDrawerOpen(false)}
             >
-              Run your first payroll free
+              Book a demo
             </MarketingButton>
             <button
               type="button"
@@ -203,7 +206,10 @@ export const MarketingNav = () => {
 
           <nav className="mkt-drawer__links" aria-label="Mobile">
             <Link href="/product">
-              <a className="mkt-drawer__link" onClick={() => setDrawerOpen(false)}>
+              <a
+                className="mkt-drawer__link"
+                onClick={() => setDrawerOpen(false)}
+              >
                 Product
               </a>
             </Link>
@@ -218,17 +224,26 @@ export const MarketingNav = () => {
               </Link>
             ))}
             <Link href="/pricing">
-              <a className="mkt-drawer__link" onClick={() => setDrawerOpen(false)}>
+              <a
+                className="mkt-drawer__link"
+                onClick={() => setDrawerOpen(false)}
+              >
                 Pricing
               </a>
             </Link>
             <Link href="/about">
-              <a className="mkt-drawer__link" onClick={() => setDrawerOpen(false)}>
+              <a
+                className="mkt-drawer__link"
+                onClick={() => setDrawerOpen(false)}
+              >
                 About
               </a>
             </Link>
             <Link href="/login">
-              <a className="mkt-drawer__link" onClick={() => setDrawerOpen(false)}>
+              <a
+                className="mkt-drawer__link"
+                onClick={() => setDrawerOpen(false)}
+              >
                 Sign in
               </a>
             </Link>

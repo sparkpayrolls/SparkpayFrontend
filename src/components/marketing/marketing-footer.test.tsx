@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MarketingFooter } from './marketing-footer.component';
 
 // Regression tests for the findings in plan.md. Each `it` names the finding it
@@ -67,63 +67,13 @@ describe('MarketingFooter', () => {
     });
   });
 
-  describe('F-3: the newsletter form', () => {
-    const submit = (value: string) => {
-      render(<MarketingFooter />);
-      const input = screen.getByLabelText(
-        /Payroll tips for Nigerian teams/i,
-      ) as HTMLInputElement;
-      fireEvent.change(input, { target: { value } });
-      fireEvent.click(screen.getByRole('button', { name: 'Subscribe' }));
-      return input;
-    };
-
-    it('gives the input the attributes a real signup field needs', () => {
-      render(<MarketingFooter />);
-      const input = screen.getByLabelText(/Payroll tips for Nigerian teams/i);
-      expect(input).toHaveAttribute('name', 'email');
-      expect(input).toHaveAttribute('type', 'email');
-      expect(input).toHaveAttribute('autocomplete', 'email');
-      expect(input).toBeRequired();
-    });
-
-    it('rejects an empty submission with an announced error', () => {
-      const input = submit('');
-      const error = screen.getByRole('alert');
-      expect(error).toHaveTextContent(/valid email address/i);
-      expect(input).toHaveAttribute('aria-invalid', 'true');
-      expect(input).toHaveAttribute('aria-describedby', error.id);
-      expect(input).toHaveFocus();
-    });
-
-    it('rejects a malformed address that the browser would accept', () => {
-      submit('a@b');
-      expect(screen.getByRole('alert')).toBeTruthy();
-    });
-
-    it('rejects an address with no @', () => {
-      submit('nope.example.com');
-      expect(screen.getByRole('alert')).toBeTruthy();
-    });
-
-    it('clears the error once the person starts correcting it', () => {
-      const input = submit('a@b');
-      expect(screen.getByRole('alert')).toBeTruthy();
-      fireEvent.change(input, { target: { value: 'a@b.com' } });
-      expect(screen.queryByRole('alert')).toBeNull();
-      expect(input).toHaveAttribute('aria-invalid', 'false');
-    });
-
-    it('confirms a valid address in a live region and removes the form', () => {
-      submit('ada@company.com');
-      const status = screen.getByRole('status');
-      expect(status).toHaveTextContent(/we’ll be in touch/i);
-      expect(screen.queryByRole('button', { name: 'Subscribe' })).toBeNull();
-    });
-
-    it('trims surrounding whitespace before validating', () => {
-      submit('  ada@company.com  ');
-      expect(screen.getByRole('status')).toBeTruthy();
+  describe('the newsletter form', () => {
+    it('is not rendered — nothing recorded the address, so it was removed', () => {
+      const { container } = render(<MarketingFooter />);
+      expect(container.querySelector('form')).toBeNull();
+      expect(container.querySelector('input')).toBeNull();
+      expect(container.textContent).not.toMatch(/we.ll be in touch/i);
+      expect(container.textContent).not.toMatch(/subscribe/i);
     });
   });
 
