@@ -1,4 +1,4 @@
-// Marketing footer (guide §5): ink background, 4 columns + newsletter stub.
+// Marketing footer (guide §5): ink background, brand column + 4 link columns.
 
 .mkt-footer {
   background: var(--bg-ink);
@@ -34,66 +34,6 @@
     max-width: 22rem;
     font-size: 0.9375rem;
     line-height: 1.6;
-  }
-
-  &__news-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.8125rem;
-    color: var(--text-on-ink-soft);
-  }
-
-  &__news-row {
-    display: flex;
-    gap: 0.5rem;
-    max-width: 22rem;
-  }
-
-  &__news-input {
-    flex: 1;
-    min-width: 0;
-    height: 44px;
-    padding: 0 0.85rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-on-ink);
-    background: var(--bg-ink-soft);
-    color: var(--text-on-ink);
-    font: inherit;
-    font-size: 0.875rem;
-
-    &::placeholder {
-      color: var(--text-on-ink-soft);
-    }
-  }
-
-  &__news-btn {
-    height: 44px;
-    padding: 0 1.1rem;
-    border: none;
-    border-radius: 8px;
-    background: var(--brand-600);
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-
-    &:hover {
-      background: var(--brand-700);
-    }
-  }
-
-  &__news-error {
-    margin: 0.5rem 0 0;
-    max-width: 22rem;
-    font-size: 0.8125rem;
-    color: var(--danger-on-ink, #ff9b9b);
-  }
-
-  &__news-done {
-    margin: 0;
-    max-width: 22rem;
-    font-size: 0.875rem;
-    color: var(--text-on-ink);
   }
 
   &__cols {

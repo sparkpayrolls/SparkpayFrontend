@@ -53,9 +53,7 @@ export const FeatureLander = (props: FeatureLanderProps) => {
         visual={props.heroVisual}
         actions={
           <>
-            <MarketingButton href="/book-a-demo">
-              Run your first payroll free
-            </MarketingButton>
+            <MarketingButton href="/book-a-demo">Book a demo</MarketingButton>
             <MarketingButton href="/product" variant="secondary">
               See the product
             </MarketingButton>
@@ -81,7 +79,10 @@ export const FeatureLander = (props: FeatureLanderProps) => {
       </section>
 
       {/* worked example, real-shaped numbers in mono */}
-      <section className="mkt-section" style={{ background: 'var(--bg-canvas)' }}>
+      <section
+        className="mkt-section"
+        style={{ background: 'var(--bg-canvas)' }}
+      >
         <div className="mkt-container">
           <div className="mkt-split">
             <div className="mkt-split__copy">

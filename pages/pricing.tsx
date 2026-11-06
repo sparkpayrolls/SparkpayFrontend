@@ -3,7 +3,10 @@ import { MarketingLayout } from '@/components/marketing/marketing-layout.compone
 import { PageHero } from '@/components/marketing/page-hero.component';
 import { SectionHeading } from '@/components/marketing/section-heading.component';
 import { FaqAccordion } from '@/components/ui/faq-accordion.component';
-import { PricingCard, PricingTier } from '@/components/ui/pricing-card.component';
+import {
+  PricingCard,
+  PricingTier,
+} from '@/components/ui/pricing-card.component';
 import { NextPage } from 'next';
 import Head from 'next/head';
 
@@ -19,7 +22,7 @@ const tiers: PricingTier[] = [
       'PAYE calculation',
       'Payslips by email',
     ],
-    cta: 'Start free',
+    cta: 'Book a demo',
     href: '/book-a-demo',
   },
   {
@@ -35,7 +38,7 @@ const tiers: PricingTier[] = [
       'Approval workflow',
       'Full audit trail',
     ],
-    cta: 'Run your first payroll free',
+    cta: 'Book a demo',
     href: '/book-a-demo',
     recommended: true,
   },
@@ -66,23 +69,28 @@ const comparison: { label: string; spark: boolean; manual: boolean }[] = [
 const faq = [
   {
     q: 'What counts as an employee?',
-    a: 'Anyone you pay through SparkPay in a given month. People you do not pay that month are not billed.',
+    a:
+      'Anyone you pay through SparkPay in a given month. People you do not pay that month are not billed.',
   },
   {
     q: 'Is my first payroll really free?',
-    a: 'Yes. You can run your first payroll on the Starter plan without a card, so you can see the whole flow before paying anything.',
+    a:
+      'Yes. You can run your first payroll on the Starter plan without a card, so you can see the whole flow before paying anything.',
   },
   {
     q: 'How does billing work?',
-    a: 'Growth is a ₦5,000 monthly base fee plus ₦150 per employee paid that month. You are only charged for the people you actually pay.',
+    a:
+      'Growth is a ₦5,000 monthly base fee plus ₦150 per employee paid that month. You are only charged for the people you actually pay.',
   },
   {
     q: 'Can I switch plans or leave?',
-    a: 'You can move between plans at any time, and export your data whenever you like. There is no lock-in.',
+    a:
+      'You can move between plans at any time, and export your data whenever you like. There is no lock-in.',
   },
   {
     q: 'Is my payroll data secure?',
-    a: 'Data is encrypted in transit and at rest, with role-based access for every administrator. See our security page for detail.',
+    a:
+      'Data is encrypted in transit and at rest, with role-based access for every administrator. See our security page for detail.',
   },
 ];
 
@@ -131,7 +139,10 @@ const PricingPage: NextPage = () => {
         </div>
       </section>
 
-      <section className="mkt-section" style={{ background: 'var(--bg-canvas)' }}>
+      <section
+        className="mkt-section"
+        style={{ background: 'var(--bg-canvas)' }}
+      >
         <div className="mkt-container">
           <SectionHeading
             eyebrow="VS THE OLD WAY"
@@ -150,8 +161,12 @@ const PricingPage: NextPage = () => {
                 {comparison.map((row) => (
                   <tr key={row.label}>
                     <td>{row.label}</td>
-                    <td className="mkt-compare__spark">{row.spark ? '✓' : '—'}</td>
-                    <td className="mkt-compare__miss">{row.manual ? '✓' : '—'}</td>
+                    <td className="mkt-compare__spark">
+                      {row.spark ? '✓' : '—'}
+                    </td>
+                    <td className="mkt-compare__miss">
+                      {row.manual ? '✓' : '—'}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -162,7 +177,11 @@ const PricingPage: NextPage = () => {
 
       <section className="mkt-section">
         <div className="mkt-container">
-          <SectionHeading center eyebrow="PRICING FAQ" title="Common questions" />
+          <SectionHeading
+            center
+            eyebrow="PRICING FAQ"
+            title="Common questions"
+          />
           <FaqAccordion items={faq} />
         </div>
       </section>

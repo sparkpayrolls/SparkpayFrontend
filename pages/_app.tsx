@@ -11,6 +11,10 @@ import NiceModal from '@ebay/nice-modal-react';
 import { PersistGate, PersistGateProps } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { PropsWithChildren, useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
+import { $api } from 'src/api';
+import { useAppDispatch } from 'src/redux/hooks';
 import { useAppLogic } from 'src/helpers/hooks/use-app-logic.hook';
 import { config } from 'src/helpers/config';
 
@@ -24,6 +28,47 @@ const AppLoader = () => (
     }
   </div>
 );
+
+// Public marketing pages. Nobody on these is signed in, so the session lookup
+// below can only fail for them — and until it settles the whole page is a
+// spinner. Measured on production before this change: first contentful paint
+// 1744ms, and that first paint was the loader, not the page.
+const MARKETING_ROUTES = new Set([
+  '/',
+  '/product',
+  '/pricing',
+  '/about',
+  '/security',
+  '/contact',
+  '/request-access',
+  '/request-received',
+  '/404',
+]);
+const MARKETING_PREFIXES = ['/features/', '/legal/'];
+
+// Marketing pages that do call the API, so they still wait for the runtime
+// config — but never for a session. /book-a-demo loads availability on mount.
+const MARKETING_API_ROUTES = new Set(['/book-a-demo']);
+
+export const isMarketingRoute = (pathname: string) =>
+  MARKETING_ROUTES.has(pathname) ||
+  MARKETING_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+
+export const isMarketingApiRoute = (pathname: string) =>
+  MARKETING_API_ROUTES.has(pathname);
+
+// Registers the axios interceptors without fetching a session. /book-a-demo
+// needs the request headers to look exactly as they did before, but has no use
+// for a profile, a company list or the current administrator.
+const ApiInterceptors = (props: PropsWithChildren<unknown>) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    $api.registerInterceptors(Cookies.get('auth_token') as string, dispatch);
+  }, [dispatch]);
+
+  return <>{props.children}</>;
+};
 
 const AuthManager = (props: PropsWithChildren<unknown>) => {
   const { loading } = useAppLogic();
@@ -45,6 +90,11 @@ const PersistGateWrapper = (props: PersistGateProps) => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [configReady, setConfigReady] = useState(false);
+  const { pathname } = useRouter();
+  // `pathname` is the route pattern (e.g. /legal/[slug]), not the resolved URL,
+  // so it is stable between server render and hydration.
+  const marketing = isMarketingRoute(pathname);
+  const marketingNeedingConfig = isMarketingApiRoute(pathname);
 
   useEffect(() => {
     if (config().apiUrl) {
@@ -99,7 +149,20 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <PersistGateWrapper loading={null} persistor={persistor}>
           <NiceModal.Provider>
-            {!configReady ? (
+            {marketing ? (
+              // Render immediately. These pages are statically generated and
+              // read nothing from the session.
+              <Component {...pageProps} />
+            ) : marketingNeedingConfig ? (
+              // Config and interceptors only — no session lookup.
+              configReady ? (
+                <ApiInterceptors>
+                  <Component {...pageProps} />
+                </ApiInterceptors>
+              ) : (
+                <AppLoader />
+              )
+            ) : !configReady ? (
               <AppLoader />
             ) : (
               <AuthManager>

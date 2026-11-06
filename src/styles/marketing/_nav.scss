@@ -6,8 +6,8 @@
   left: 0;
   right: 0;
   z-index: 100;
-  transition: background-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out),
-    backdrop-filter 0.2s var(--ease-out);
+  transition: background-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out), backdrop-filter 0.2s var(--ease-out);
 
   // near-solid so dark nav text stays readable over the dark problem/bento
   // sections that scroll underneath the fixed bar
@@ -20,7 +20,9 @@
   }
 
   // no backdrop-filter support → fall back to a solid bar, never see-through
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @supports not (
+    (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+  ) {
     &--scrolled {
       background: #ffffff;
     }
@@ -63,7 +65,9 @@
     border-bottom-color: var(--border-on-ink);
   }
 
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @supports not (
+    (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+  ) {
     &--on-dark#{&}--scrolled {
       background: #0c1220;
     }
@@ -72,8 +76,10 @@
   &__theme {
     display: grid;
     place-items: center;
-    width: 36px;
-    height: 36px;
+    // 40px is the smallest comfortable touch target (WCAG 2.5.8 asks 24px
+    // minimum, 44px is Apple's guidance); the footer links use the same floor.
+    width: 40px;
+    height: 40px;
     border-radius: 999px;
     border: 1px solid var(--border-subtle);
     background: transparent;
@@ -212,6 +218,11 @@
   }
 
   &__signin {
+    display: inline-flex;
+    align-items: center;
+    // pad the row out to a 40px target rather than leaving a 24px-tall anchor
+    min-height: 40px;
+    padding: 0 0.25rem;
     font-size: 0.9375rem;
     font-weight: 500;
     color: var(--text-primary);

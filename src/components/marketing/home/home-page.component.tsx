@@ -9,26 +9,36 @@ import { MockupDashboard } from '../mockup-dashboard.component';
 import { FeatureShowcase } from './feature-showcase.component';
 import { Reveal } from './reveal.component';
 
-// Real testimonials, carried over verbatim from the previous site (owner
-// confirmed the copy is correct).
+// Real customers (owner-confirmed, D2). The quotes were written for the
+// previous product and described payment processing, not payroll — see M-11.
+// Daniel asked for them to make payroll sense (D7), so the edits below are
+// deliberately minimal: the wrong product noun is corrected and each person's
+// own meaning, structure and voice are kept. Nothing was invented.
+//
+// NOT fixed here, and it cannot be: none of the three said anything about
+// statutory compliance or remittances. Adding that would be putting a claim in
+// a named person's mouth. It needs asking them — that is Q3, still open.
+//
+// These are still altered quotations. Get a nod from each person before this
+// reaches production.
 const testimonials = [
   {
     name: 'Isaiah',
     role: 'HR, ZEODigitals',
     quote:
-      'SparkPay has revolutionized our payment processing. We’ve seen a significant improvement in transaction speeds and a reduction in errors. Their platform is intuitive and their support is top-notch.',
+      'SparkPay has revolutionized our payroll run. We’ve seen a significant improvement in how quickly salaries reach the team and a reduction in errors. Their platform is intuitive and their support is top-notch.',
   },
   {
     name: 'Blessing',
     role: 'HR, Clyp Technologies',
     quote:
-      'The integration of SparkPay into our existing systems was seamless. Their team provided excellent support throughout the process, and we’ve been impressed with the platform’s reliability and features.',
+      'The integration of SparkPay into our existing HR systems was seamless. Their team provided excellent support throughout the process, and we’ve been impressed with the platform’s reliability and features.',
   },
   {
     name: 'David',
     role: 'Founder, Compas AI',
     quote:
-      'SparkPay has been a game-changer. The platform is user-friendly, and the reporting tools provide valuable insights. We highly recommend SparkPay to any business looking for a reliable payment solution.',
+      'SparkPay has been a game-changer. The platform is user-friendly, and the reporting tools provide valuable insights. We highly recommend SparkPay to any business looking for a reliable payroll platform.',
   },
 ];
 
@@ -136,15 +146,15 @@ export const HomePage = () => (
             <span>The payroll run that took three days</span>{' '}
             <span>now takes three minutes.</span>
           </h1>
+          {/* Outcome first (M-9, D11 = option B). The statutory acronyms were
+              moved out of the hero, not deleted: PAYE, pension, NHF and NSITF
+              still appear in the bento cells and the feature pages below. */}
           <p className="mkt-hero__subhead">
-            SparkPay disburses salaries, calculates PAYE for every state, and
-            remits pension, NHF and NSITF on time — for your whole team, every
-            month.
+            One approval pays every salary and files every statutory deduction,
+            on time, every month.
           </p>
           <div className="mkt-hero__actions">
-            <MarketingButton href="/book-a-demo">
-              Run your first payroll free
-            </MarketingButton>
+            <MarketingButton href="/book-a-demo">Book a demo</MarketingButton>
             <MarketingButton href="#how-it-works" variant="secondary">
               See how it works
             </MarketingButton>
