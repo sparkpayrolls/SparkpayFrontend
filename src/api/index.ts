@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosHeaders, InternalAxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosHeaders,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import { stringify } from 'query-string';
 
 import { config } from '../helpers/config';
@@ -31,10 +35,12 @@ let authToken: string;
 let authDetails: AuthDetails;
 let tokenInterceptor: (
   _cfg: InternalAxiosRequestConfig,
-) =>
-  | InternalAxiosRequestConfig
-  | Promise<InternalAxiosRequestConfig>;
+) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>;
 let authInterceptor: (_error: AxiosError) => Promise<never>;
+// One refresh shared by every request that finds the token expired. A burst
+// (bulk employee upload) used to fire one refresh per request, hit the rate
+// limit, send the expired token and get logged out.
+let refreshing: Promise<void> | null = null;
 export class $api {
   static $axios = () => {
     const { apiUrl: baseURL } = config();
@@ -62,19 +68,28 @@ export class $api {
         moment(authDetails.accessTokenExpires).isBefore(moment()) &&
         moment(authDetails.refreshTokenExpires).isAfter(moment())
       ) {
-        const res = await axios({
-          baseURL: config().apiUrl,
-          url: '/auth/tokens',
-          params: { refreshToken: authDetails.refreshToken },
-        }).catch(() => {
-          /** invalid token */
-        });
-        if (res && res.data && res.data.data) {
-          authDetails = res.data.data;
-          authToken = authDetails.accessToken;
-          Cookies.set('auth_token', authToken);
-          Cookies.set('auth_details', JSON.stringify(authDetails));
-        }
+        refreshing =
+          refreshing ||
+          axios({
+            baseURL: config().apiUrl,
+            url: '/auth/tokens',
+            params: { refreshToken: authDetails.refreshToken },
+          })
+            .then((res) => {
+              if (res && res.data && res.data.data) {
+                authDetails = res.data.data;
+                authToken = authDetails.accessToken;
+                Cookies.set('auth_token', authToken);
+                Cookies.set('auth_details', JSON.stringify(authDetails));
+              }
+            })
+            .catch(() => {
+              /** invalid token */
+            })
+            .finally(() => {
+              refreshing = null;
+            });
+        await refreshing;
       }
 
       const headers = AxiosHeaders.from(_config.headers);

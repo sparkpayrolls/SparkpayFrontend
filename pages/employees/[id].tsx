@@ -10,6 +10,23 @@ import BackIcon from '../../public/svgs/backicon.svg';
 import { Addon } from '@/components/Employee/addon.component';
 import { IF } from '@/components/Misc/if.component';
 import { EmployeePayrollHistory } from '@/components/Employee/payroll-history.component/payroll-history.component';
+import withPermission from 'src/helpers/HOC/withPermission';
+
+function EditDetailsButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button className="employee-details__employee-button" onClick={onClick}>
+      Edit Details
+    </button>
+  );
+}
+
+// The edit form looks up the account name through POST /payouts/validate,
+// which needs Employee write; read-only users got a 403 that reset their
+// selected company. The employee table's menu is gated the same way.
+const EditDetailsButtonWithPermission = withPermission(EditDetailsButton, [
+  'Employee',
+  'write',
+]);
 
 const EmployeeDetailPage: NextPage = () => {
   const [showEditGroupModal, setShowEditGroupModal] = useState(false);
@@ -35,12 +52,9 @@ const EmployeeDetailPage: NextPage = () => {
             </h5>
           </div>
           <IF condition={activeTab === 'details'}>
-            <button
-              className="employee-details__employee-button"
+            <EditDetailsButtonWithPermission
               onClick={() => setShowEditGroupModal(true)}
-            >
-              Edit Details
-            </button>
+            />
           </IF>
           <IF condition={activeTab === 'addons'}>
             <button
