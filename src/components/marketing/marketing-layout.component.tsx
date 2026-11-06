@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import { PropsWithChildren } from 'react';
+import { useRouter } from 'next/router';
+import { PropsWithChildren, useEffect } from 'react';
 import { MarketingFooter } from './marketing-footer.component';
 import { MarketingNav } from './marketing-nav.component';
 
@@ -26,6 +27,50 @@ const organizationJsonLd = {
 };
 
 /**
+ * The app's global CSS sets `height: 100%` and `overflow-x: hidden` on both
+ * html and body (src/styles/core/_overwrite.scss), which makes <body> the
+ * scroll container instead of the document — `window.scrollY` is always 0.
+ * Next resets scroll between routes by calling `window.scrollTo`, which is a
+ * no-op against that container, so following a nav or footer link used to
+ * leave you at whatever offset you were at on the previous page. Clicking
+ * "Pricing" in the footer landed you on /pricing already scrolled past its
+ * h1, looking at an identical footer — so the link appeared to do nothing.
+ *
+ * Reset the real scroller. `instant` matters because that same stylesheet
+ * sets `scroll-behavior: smooth`, which would otherwise animate the jump.
+ */
+const resetScroll = () => {
+  [document.body, document.documentElement].forEach((el) => {
+    if (!el) return;
+    // The global stylesheet sets `scroll-behavior: smooth`, which would
+    // animate this jump on every navigation. Turn it off for the reset only.
+    const previous = el.style.scrollBehavior;
+    el.style.scrollBehavior = 'auto';
+    el.scrollTop = 0;
+    el.scrollLeft = 0;
+    el.style.scrollBehavior = previous;
+  });
+  window.scrollTo(0, 0);
+};
+
+/**
+ * A plain `popstate` listener is no good here: on a Back press Next fires
+ * routeChangeStart -> beforeHistoryChange -> routeChangeComplete -> popstate,
+ * so the flag would be read before it was ever set. `beforePopState` runs
+ * before Next starts routing, which is early enough.
+ *
+ * The flag lives at module scope because this layout remounts on every
+ * navigation, which would reset anything held in component scope.
+ */
+let navigatedViaHistory = false;
+
+const consumeHistoryNavigation = () => {
+  const was = navigatedViaHistory;
+  navigatedViaHistory = false;
+  return was;
+};
+
+/**
  * Shared shell for every marketing page. Unlike the app's DefaultLayout, this
  * renders its children on the server, so content is present for crawlers and
  * first paint (guide §10 SEO).
@@ -36,6 +81,24 @@ export const MarketingLayout = (
   const { seo, children } = props;
   const canonical = `${SITE_URL}${seo.path ?? ''}`;
   const ogImage = seo.ogImage ?? DEFAULT_OG;
+  const router = useRouter();
+
+  // Only forward navigations go to the top; Back/Forward must keep the
+  // browser's restored position.
+  useEffect(() => {
+    router.beforePopState(() => {
+      navigatedViaHistory = true;
+      return true;
+    });
+    const onRouteChange = () => {
+      if (consumeHistoryNavigation()) return;
+      resetScroll();
+    };
+    router.events.on('routeChangeComplete', onRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', onRouteChange);
+    };
+  }, [router]);
 
   return (
     <div className="mkt">
