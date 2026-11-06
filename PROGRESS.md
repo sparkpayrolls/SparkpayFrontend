@@ -73,6 +73,7 @@ Branch `fix/marketing-audit-p1`, **PR #119**, two commits:
 - [x] **P1.3** Nav theme toggle and Sign in to a 40px target — `610678d`
 - [x] **P1.4** Every `/book-a-demo` CTA renamed — `eb02fd7`
 - [x] **P1.5** Newsletter form, styles and tests removed — `eb02fd7`
+- [x] **P3.3a** Testimonial quotes corrected for payroll sense — minimal edits, nothing invented (D7)
 
 **Not yet ticked:** the phase itself. The gates below passed and the preview is green, but the PR is
 unreviewed and unmerged, so P1 is **build-complete, not closed**.
@@ -224,9 +225,32 @@ The headline number is misleading in both directions, and that is the useful par
   a measured result. Dependabot re-resolves after a push and transitive bumps can bring new advisories.
 - **Nothing dismissed in the GitHub UI.** Every alert is still open; this is a plan, not a cleanup.
 
+### P7.3 — Storybook removed, 2026-11-06
+
+Built on `fix/marketing-audit-p1` at `a46df25`. Removes 5 `@storybook/*` devDependencies, both
+scripts, `.storybook/`, and the 3 story files. `babel-loader` left alone — no advisory against it,
+and removing it is a separate question.
+
+| Gate                           | Result                                                                |
+| ------------------------------ | --------------------------------------------------------------------- |
+| `next build`                   | clean                                                                 |
+| `next lint`                    | clean                                                                 |
+| `tsc --noEmit`                 | 2 errors, both still the pre-existing `DashBoardLayout.test.tsx` pair |
+| Footer suite                   | 9/9                                                                   |
+| `@storybook/*` in yarn.lock    | 0 — 5,509 lockfile lines removed                                      |
+| `react-dev-utils` in yarn.lock | gone                                                                  |
+
+**The alert reduction is NOT verified, and I was partly wrong about it.** `express`, `proxy-addr`,
+`shell-quote`, `compression`, `ip`, `webpack-dev-middleware` and `serialize-javascript` are **still
+lockfile entries** — with no parent and nothing installed — and Dependabot resolves from the
+lockfile. So the 10 alerts may or may not clear. M-21 is corrected in the masterplan to say so.
+
+The measurement can only be taken **after merge**, because Dependabot computes alerts against the
+default branch. That re-fetch is P7's exit gate and is still owed.
+
 ### Blocked on
 
-- **Q6** — Storybook: upgrade off 6.3.8 or delete it? Blocks P7.3, which is 10 alerts and 2 criticals.
+- ~~Q6~~ — answered: Storybook removed (D8). The follow-through is the post-merge re-fetch.
 - **Q7** — mine to check: anything outside `src/`/`pages/` relying on `jsonwebtoken`? Before P7.1.
 
 P7.1 and P7.2 are unblocked and are one small PR: 18 alerts, one deleted line plus a lockfile refresh.

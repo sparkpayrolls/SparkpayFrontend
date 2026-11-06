@@ -9,26 +9,36 @@ import { MockupDashboard } from '../mockup-dashboard.component';
 import { FeatureShowcase } from './feature-showcase.component';
 import { Reveal } from './reveal.component';
 
-// Real testimonials, carried over verbatim from the previous site (owner
-// confirmed the copy is correct).
+// Real customers (owner-confirmed, D2). The quotes were written for the
+// previous product and described payment processing, not payroll — see M-11.
+// Daniel asked for them to make payroll sense (D7), so the edits below are
+// deliberately minimal: the wrong product noun is corrected and each person's
+// own meaning, structure and voice are kept. Nothing was invented.
+//
+// NOT fixed here, and it cannot be: none of the three said anything about
+// statutory compliance or remittances. Adding that would be putting a claim in
+// a named person's mouth. It needs asking them — that is Q3, still open.
+//
+// These are still altered quotations. Get a nod from each person before this
+// reaches production.
 const testimonials = [
   {
     name: 'Isaiah',
     role: 'HR, ZEODigitals',
     quote:
-      'SparkPay has revolutionized our payment processing. We’ve seen a significant improvement in transaction speeds and a reduction in errors. Their platform is intuitive and their support is top-notch.',
+      'SparkPay has revolutionized our payroll run. We’ve seen a significant improvement in how quickly salaries reach the team and a reduction in errors. Their platform is intuitive and their support is top-notch.',
   },
   {
     name: 'Blessing',
     role: 'HR, Clyp Technologies',
     quote:
-      'The integration of SparkPay into our existing systems was seamless. Their team provided excellent support throughout the process, and we’ve been impressed with the platform’s reliability and features.',
+      'The integration of SparkPay into our existing HR systems was seamless. Their team provided excellent support throughout the process, and we’ve been impressed with the platform’s reliability and features.',
   },
   {
     name: 'David',
     role: 'Founder, Compas AI',
     quote:
-      'SparkPay has been a game-changer. The platform is user-friendly, and the reporting tools provide valuable insights. We highly recommend SparkPay to any business looking for a reliable payment solution.',
+      'SparkPay has been a game-changer. The platform is user-friendly, and the reporting tools provide valuable insights. We highly recommend SparkPay to any business looking for a reliable payroll platform.',
   },
 ];
 
@@ -43,20 +53,17 @@ const steps = [
   {
     n: '01',
     title: 'Add your team',
-    body:
-      "Import employees and salaries once. Bring a spreadsheet and we'll map it.",
+    body: "Import employees and salaries once. Bring a spreadsheet and we'll map it.",
   },
   {
     n: '02',
     title: 'Review the numbers',
-    body:
-      'See every net salary, PAYE deduction, and remittance before a naira moves.',
+    body: 'See every net salary, PAYE deduction, and remittance before a naira moves.',
   },
   {
     n: '03',
     title: 'Approve and relax',
-    body:
-      "One approval pays everyone and files the remittances. That's the job.",
+    body: "One approval pays everyone and files the remittances. That's the job.",
   },
 ];
 
