@@ -19,6 +19,8 @@
   &__brand {
     display: inline-flex;
     align-items: center;
+    // padding gives the logo a real target too (plan P2.3)
+    padding: 0.25rem 0;
   }
 
   &__logo {
@@ -80,6 +82,20 @@
     }
   }
 
+  &__news-error {
+    margin: 0.5rem 0 0;
+    max-width: 22rem;
+    font-size: 0.8125rem;
+    color: var(--danger-on-ink, #ff9b9b);
+  }
+
+  &__news-done {
+    margin: 0;
+    max-width: 22rem;
+    font-size: 0.875rem;
+    color: var(--text-on-ink);
+  }
+
   &__cols {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -91,7 +107,9 @@
   }
 
   &__col-title {
-    margin: 0 0 1rem;
+    // 1rem minus the first link's own 0.7rem top padding, so the gap under the
+    // title looks the same as before while every link keeps a full target.
+    margin: 0 0 0.3rem;
     font-size: 0.8125rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -105,15 +123,30 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    // no gap: each link carries its own padding so the whole row is clickable
+    // and the padded boxes meet flush instead of overlapping.
+    gap: 0;
   }
 
+  // The hit area is the row, not the glyphs. Block + vertical padding gives a
+  // ~40px target across the full column width.
   &__link {
+    display: block;
+    padding: 0.7rem 0;
     font-size: 0.9375rem;
+    line-height: 1.2;
     color: var(--text-on-ink-soft);
     text-decoration: none;
 
     &:hover {
+      color: var(--text-on-ink);
+    }
+
+    // The global rule in _base.scss uses --brand-600, which is low-contrast on
+    // the ink background; lift it here.
+    &:focus-visible {
+      outline: 2px solid var(--text-on-ink);
+      outline-offset: 2px;
       color: var(--text-on-ink);
     }
   }
@@ -122,14 +155,9 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1.5rem;
-    justify-content: space-between;
     padding-top: 1.5rem;
     padding-bottom: 2rem;
     border-top: 1px solid var(--border-on-ink);
     font-size: 0.8125rem;
-  }
-
-  &__rc {
-    color: var(--text-on-ink-soft);
   }
 }
