@@ -1,6 +1,8 @@
 # Runbook: deployment
 
 **Current production state, 2026-11-06: deployments are broken and have been since 2026-08-18.**
+**Root cause found and fixed in the repo — see "Root cause, verified" below. Not yet confirmed
+by a green Vercel build.**
 `sparkpayhq.com` is serving the build from `3c101be` (2026-08-18). Every commit pushed since then,
 including the five on `main` from 2026-11-06, has failed to deploy. Production is roughly three
 months behind `main`.
@@ -84,56 +86,90 @@ not spend time on the 1-second ones until that log has been read.
 projects.** There is no way to push without deploying unless a project is disconnected or its
 Ignored Build Step is configured.
 
-### Most likely causes — all account-side
+## Root cause, verified 2026-11-06
 
-Ranked. None are fixable from this repository.
+**Vercel builds this app with Node.js 26. `next@12.3.7` cannot load under Node 26.**
 
-1. **Plan vs. repo ownership.** The repo belongs to the `sparkpayrolls` GitHub _organization_.
-   Hobby-plan Vercel projects cannot build from org-owned repos, and that fails instantly. The
-   second project, `mhizterkeyzs-projects`, looks like a personal account.
-2. **Billing, spend cap, or a suspended account.**
-3. **Project paused**, or the Git integration's repository authorization revoked.
-4. **Node version pinned to 18.x** in project settings — no longer an available Vercel runtime.
-   `package.json` declares `engines.node: ">=18.0.0"` and there is no `.nvmrc`.
-5. **Build resource limits** (memory/time) on the builder. This is the only one of the five that
-   would produce the ~3min failure rather than an instant one, and it is the least testable from
-   here — the same tree builds fine locally in a container with no imposed limit.
+Next 12 vendors its own copy of `jsonwebtoken` at
+`node_modules/next/dist/compiled/jsonwebtoken/index.js`. That bundle includes
+`buffer-equal-constant-time`, which reads `SlowBuffer.prototype` at module load:
 
-That two independent Vercel projects fail identically on the same commits points at either the
-GitHub integration or both accounts' standing, rather than at either project's settings.
+```js
+var n = t(300).Buffer;
+var i = t(300).SlowBuffer;   // undefined on Node >= 26
+...
+var o = i.prototype.equal;   // TypeError
+```
+
+`buffer.SlowBuffer` was long deprecated and is **removed in Node 26**. So the module throws the
+moment Next requires it, and the build dies:
+
+```
+TypeError: Cannot read properties of undefined (reading 'prototype')
+    at 112 (/vercel/path0/node_modules/next/dist/compiled/jsonwebtoken/index.js:1:414)
+Node.js v26.13.0
+```
+
+This is not our code. Nothing in `src/` or `pages/` imports `jsonwebtoken` — it is Next's own
+vendored copy, loaded during `next build`.
+
+### Evidence
+
+| Check                                                    | Result                                                   |
+| -------------------------------------------------------- | -------------------------------------------------------- |
+| Vercel build log, branch `fix/vercel-lockfile-drift`     | `Node.js v26.13.0`, the `SlowBuffer` TypeError above     |
+| `node:26-alpine` → `typeof require("buffer").SlowBuffer` | `undefined`                                              |
+| `node:24-alpine` (v24.22.2) → same probe                 | `function`                                               |
+| host Node v24.21.0 → same probe                          | `function`                                               |
+| `next build` on host Node v24.21.0, pinned tree          | **exit 0**, every route compiled                         |
+| `yarn install && yarn build` in `node:22-alpine`         | success (recorded above) — the tree builds fine on Linux |
+
+**Not verified:** a full Linux build on Node 24 specifically. The container run for it could not
+finish — the local Docker VM hit `ENOSPC`. The Node 24 evidence above is a host build plus a Linux
+runtime probe, not a Linux build.
+
+### Why the version drifted
+
+`package.json` declared `engines.node: ">=18.0.0"`. Vercel treats that as a semver _range_, and
+Node 26 satisfies it, so Vercel resolved it to the newest runtime it offers. Per Vercel's docs the
+override has to name a major, e.g. `"24.x"`. There was also no `.nvmrc`, so nothing else pinned it.
+
+The earlier ranked-hypotheses list in this runbook was wrong on all five counts. The closest,
+"Node version pinned to 18.x", had the right subject and the wrong direction: the runtime was too
+**new**, not too old. Everything account-side — plan, billing, org ownership, Git authorization —
+was a dead end.
 
 ---
 
-## Fix it: first lever
+## Fix it
 
-Read the log. A 10-second failure normally states its reason on the first line.
+Pin the major version in the repository, which overrides the project setting:
 
-```bash
-# needs membership of the team that owns the project
-npx vercel inspect dpl_Fs9aChLpHNVGhqdCvx1MpVVhfYyx --logs --scope payeasy-africa  # the ~3min one
-npx vercel inspect dpl_9UxPiwvHCE4xoLAe1Uqek2RpRhEJ --logs --scope payeasy-africa  # a 10s one
+```json
+// package.json
+"engines": { "node": "24.x", ... }
 ```
 
-Or open the deployment in the dashboard:
-`https://vercel.com/payeasy-africa/sparkpay-frontend/9UxPiwvHCE4xoLAe1Uqek2RpRhEJ`
+plus a `.nvmrc` containing `24`, so local work and CI agree.
 
-Then, in the Vercel dashboard for **each** of the two projects, check in this order:
+Do **not** pin `22.x`: it is older, and nothing here needs it. Do not pin `26.x` until Next is
+upgraded. Node 24 is the current Vercel default LTS and has `SlowBuffer`.
 
-1. **Account status** — banner about billing, spend limit, or a blocked account.
-2. **Plan vs. org repo** — if Hobby, either upgrade the project's owner to Pro or transfer the
-   project to a team that is.
-3. **Settings → Git** — is the repository still connected and authorized?
-4. **Settings → General → Node.js Version** — set it to a supported version (22.x or later).
-5. **Is the project paused?**
+The durable fix is to get off Next 12, which is years out of support. Pinning Node 24 buys time; it
+does not remove the hazard, because the next Node major Vercel defaults to may break Next 12 again.
+Treat a Next upgrade as its own slice.
 
-Decide whether both projects should still deploy this repo. Two projects building every commit
-doubles build minutes and makes every PR show two checks. If `mhizterkeyzs-projects` is a leftover
-personal account, disconnect it.
+### Still to confirm after this lands
+
+The near-instant (1–10s) failures in the table above are **not** explained by this. They may be
+superseded/queued deployments, as the refinement section argues, or a second fault. Once a push
+produces a green build, check whether any instant failures remain.
 
 ### Once deployments run again
 
-Merge **PR #116** before anything else. `yarn install --frozen-lockfile` genuinely fails on `main`
-today, reproduced on macOS and in a clean container:
+**PR #116 is merged** (`42497e3`, 2026-11-06), so the lockfile blocker below is resolved. Kept for
+the record: `yarn install --frozen-lockfile` used to fail on `main`, reproduced on macOS and in a
+clean container:
 
 ```
 error Your lockfile needs to be updated, but yarn was run with `--frozen-lockfile`.
@@ -141,7 +177,8 @@ error Your lockfile needs to be updated, but yarn was run with `--frozen-lockfil
 
 `package.json` carries a large `resolutions` block of security pins, but the lockfile was never
 regenerated after some were added — `jsonwebtoken@9.0.3` and `send@0.19.0` were declared and never
-locked. This is a latent blocker that will stop the first build that actually gets to install.
+locked. That was a latent blocker that would have stopped the first build that actually got to install.
+It was never the reason deploys failed — the Node version was.
 
 **Then expect a large release.** Merging to `main` will ship roughly three months of undeployed
 work, including the bank-detail validation and bulk-upload changes from 2026-11-06. Review what is
