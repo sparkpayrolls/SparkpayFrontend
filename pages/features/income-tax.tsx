@@ -5,19 +5,19 @@ import { NextPage } from 'next';
 const PayePage: NextPage = () => (
   <FeatureLander
     seo={{
-      title: 'Income tax calculation by state | SparkPay',
+      title: 'Income tax, calculated on every payslip | SparkPay',
       description:
-        'Income tax differs by state. SparkPay applies the right bands and reliefs for every employee and remits to the correct state tax authority — automatically.',
+        'SparkPay applies the right bands and reliefs for every employee, computes the tax on every payslip and remits it to the authority — automatically.',
       path: '/features/income-tax',
     }}
     eyebrow="INCOME TAX, DONE RIGHT"
-    h1="Tax rates differ by state. Get every figure right."
-    lead="SparkPay applies the correct bands and reliefs for each employee's tax state and remits to the right authority — Lagos, Oyo, Rivers, FCT and beyond."
+    h1="Income tax, right on every payslip."
+    lead="SparkPay applies the correct bands and reliefs for every employee, then remits the tax to the authority before the deadline."
     heroVisual={<MockupPaye />}
     beats={[
       {
-        title: 'We use the right state',
-        body: 'Each employee is taxed under the correct state internal revenue service, not a national guess.',
+        title: 'We use the right details',
+        body: 'Each employee is taxed on their own figures, from their own payslip — not an estimate across the team.',
       },
       {
         title: 'We apply the bands',
@@ -25,24 +25,24 @@ const PayePage: NextPage = () => (
       },
       {
         title: 'We remit on time',
-        body: 'The right amount reaches the right state tax authority before the deadline, with a record you can export.',
+        body: 'The right amount reaches the tax authority before the deadline, with a record you can export.',
       },
     ]}
     example={{
-      heading: 'Same salary, different state, different tax',
-      lead: 'An 850,000 monthly gross produces a different tax figure depending on the state — SparkPay handles the difference for you.',
+      heading: 'One salary, every number accounted for',
+      lead: 'Relief and statutory deductions come off before tax is computed. SparkPay works the whole chain out on every payslip, every run.',
       rows: [
         { label: 'Monthly gross', value: '850,000' },
-        { label: 'Lagos', value: '184,500' },
-        { label: 'Oyo', value: '171,200' },
-        { label: 'Net to employee (Lagos)', value: '665,500', accent: true },
+        { label: 'Relief and statutory deductions', value: '85,000' },
+        { label: 'Income tax', value: '184,500' },
+        { label: 'Net to employee', value: '665,500', accent: true },
       ],
       visual: <MockupPaye />,
     }}
     faq={[
       {
-        q: 'How does SparkPay know which state to remit to?',
-        a: "Each employee's tax state is set on their profile. SparkPay applies that state's tax bands and remits to the correct state tax authority.",
+        q: 'How does SparkPay know what to remit?',
+        a: "Each employee's tax details sit on their profile. SparkPay applies the right bands and reliefs and remits to the tax authority on schedule.",
       },
       {
         q: 'Does SparkPay handle consolidated relief allowance?',

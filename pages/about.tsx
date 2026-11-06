@@ -14,7 +14,7 @@ const timeline = [
   {
     year: '2022',
     title: 'Income tax, done properly',
-    body: 'We built tax calculation that respects the reality that tax differs by state — the thing generic tools get wrong.',
+    body: 'We built tax calculation that gets the bands and the reliefs right on every payslip — the thing generic tools get wrong.',
   },
   {
     year: '2023',
@@ -33,14 +33,14 @@ const AboutPage: NextPage = () => (
     seo={{
       title: 'About — why payroll deserves better tooling | SparkPay',
       description:
-        'SparkPay was built to fix payroll: salaries, income tax per state, and statutory remittances, built for how businesses actually operate.',
+        'SparkPay was built to fix payroll: salaries, income tax, and statutory remittances, built for how businesses actually operate.',
       path: '/about',
     }}
   >
     <PageHero
       eyebrow="OUR STORY"
       title="Payroll deserved better tooling. So we built it."
-      lead="SparkPay exists because the tools built elsewhere never understood tax that differs by state, pension administrators, or the housing fund — the things that actually matter here."
+      lead="SparkPay exists because the tools built elsewhere never understood statutory tax, pension administrators, or the housing fund — the things that actually matter here."
       visual={<MockupDashboard />}
       visualLabel="SparkPay dashboard showing a payroll run"
     />

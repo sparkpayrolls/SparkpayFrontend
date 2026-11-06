@@ -33,7 +33,7 @@ const tiers: PricingTier[] = [
     blurb: 'For growing businesses that run payroll every month.',
     features: [
       'Unlimited employees',
-      'Income tax by state',
+      'Income tax',
       'Pension and statutory remittances',
       'Approval workflow',
       'Full audit trail',
@@ -59,7 +59,7 @@ const tiers: PricingTier[] = [
 
 const comparison: { label: string; spark: boolean; manual: boolean }[] = [
   { label: 'Pay the whole team in one approval', spark: true, manual: false },
-  { label: 'Income tax calculated per state', spark: true, manual: false },
+  { label: 'Income tax calculated automatically', spark: true, manual: false },
   { label: 'Statutory remittances filed on time', spark: true, manual: false },
   { label: 'Payslips sent automatically', spark: true, manual: false },
   { label: 'Exportable audit trail', spark: true, manual: false },

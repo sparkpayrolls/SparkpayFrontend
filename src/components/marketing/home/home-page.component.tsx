@@ -45,7 +45,7 @@ const testimonials = [
 // ── copy lives here, once (guide §6, §10) ─────────────────────────────
 const problemLines = [
   'Salaries typed into a spreadsheet, then sent one bank transfer at a time.',
-  "Income tax worked out by hand — and it's not the same in Lagos, Oyo, and Abuja.",
+  'Income tax worked out by hand, with a mistake you only find out about later.',
   'A pension or housing fund deadline slips in the rush, and a penalty letter follows.',
 ];
 
@@ -71,13 +71,13 @@ const steps = [
 const PayeVisual = () => (
   <div className="mkt-mini mkt-mini--paye">
     {[
-      { state: 'Lagos', rate: '184,500' },
-      { state: 'Oyo', rate: '171,200' },
-      { state: 'Rivers', rate: '179,800' },
+      { label: 'Taxable pay', value: '765,000' },
+      { label: 'Income tax', value: '184,500' },
+      { label: 'Net salary', value: '665,500' },
     ].map((r) => (
-      <div className="mkt-mini__row" key={r.state}>
-        <span>{r.state} tax</span>
-        <span className="mkt-figure">{r.rate}</span>
+      <div className="mkt-mini__row" key={r.label}>
+        <span>{r.label}</span>
+        <span className="mkt-figure">{r.value}</span>
       </div>
     ))}
   </div>
@@ -88,7 +88,7 @@ const RemittanceVisual = () => (
     {[
       { label: 'Pension', state: 'filed' },
       { label: 'Housing fund', state: 'filed' },
-      { label: 'Employee compensation', state: 'scheduled' },
+      { label: 'Compensation', state: 'scheduled' },
     ].map((r) => (
       <div className="mkt-mini__row" key={r.label}>
         <span>{r.label}</span>
@@ -132,7 +132,7 @@ export const HomePage = () => (
     seo={{
       title: 'SparkPay — payroll, income tax and remittances on autopilot',
       description:
-        'SparkPay disburses salaries, calculates income tax for every state, and remits pension and statutory contributions on time, every month.',
+        'SparkPay disburses salaries, calculates income tax, and remits pension and statutory contributions on time, every month.',
       path: '/',
     }}
   >
@@ -270,8 +270,8 @@ export const HomePage = () => (
           <BentoCell
             area="paye"
             className="mkt-bento-cell--large"
-            title="Income tax, correct for every state"
-            body="SparkPay applies the right bands and reliefs per state and remits to the correct state tax authority — Lagos, Oyo, Rivers, all of them."
+            title="Income tax, correct on every payslip"
+            body="SparkPay applies the right bands and reliefs to every salary, then remits the tax to the authority on schedule."
             href="/features/income-tax"
             linkLabel="How income tax works"
             media={<PayeVisual />}
@@ -279,7 +279,7 @@ export const HomePage = () => (
           <BentoCell
             area="remit"
             className="mkt-bento-cell--large"
-            title="Pension and statutory contributions — remitted on schedule"
+            title="Statutory contributions, on schedule"
             body="Every statutory deduction calculated and filed to the right authority, ahead of the deadline."
             href="/features/remittances"
             linkLabel="See remittances"

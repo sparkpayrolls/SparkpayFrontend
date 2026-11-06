@@ -6,8 +6,8 @@ import { MarketingButton } from '../ui/marketing-button.component';
 const featureLinks = [
   {
     href: '/features/income-tax',
-    title: 'Income tax by state',
-    desc: 'Correct tax bands and reliefs for every state.',
+    title: 'Income tax',
+    desc: 'Correct bands and reliefs on every payslip.',
   },
   {
     href: '/features/remittances',

@@ -5,7 +5,7 @@ const columns: { title: string; links: { label: string; href: string }[] }[] = [
     title: 'Product',
     links: [
       { label: 'Product overview', href: '/product' },
-      { label: 'Income tax by state', href: '/features/income-tax' },
+      { label: 'Income tax', href: '/features/income-tax' },
       { label: 'Remittances', href: '/features/remittances' },
       { label: 'Pricing', href: '/pricing' },
     ],
