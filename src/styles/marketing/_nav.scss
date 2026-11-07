@@ -6,8 +6,10 @@
   left: 0;
   right: 0;
   z-index: 100;
-  transition: background-color 0.2s var(--ease-out),
-    box-shadow 0.2s var(--ease-out), backdrop-filter 0.2s var(--ease-out);
+  transition:
+    background-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out),
+    backdrop-filter 0.2s var(--ease-out);
 
   // near-solid so dark nav text stays readable over the dark problem/bento
   // sections that scroll underneath the fixed bar
@@ -86,7 +88,9 @@
     color: var(--text-primary);
     font-size: 1rem;
     cursor: pointer;
-    transition: border-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
+    transition:
+      border-color 0.15s var(--ease-out),
+      color 0.15s var(--ease-out);
 
     &:hover {
       border-color: var(--brand-600);

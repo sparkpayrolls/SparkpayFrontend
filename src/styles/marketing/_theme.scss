@@ -46,17 +46,6 @@
     background: linear-gradient(180deg, #141a2b, #0e1425);
   }
 
-  // skeleton shimmer mid-tone
-  .mkt-skel {
-    background: linear-gradient(
-      90deg,
-      #141d33 25%,
-      #1f2a4a 37%,
-      #141d33 63%
-    );
-    background-size: 400% 100%;
-  }
-
   // recreations use tokens, so they follow; fix the one hardcoded light pill
   .mkt-dash__pill--queued {
     background: #1b2540;

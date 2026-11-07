@@ -3,9 +3,9 @@ import { MarketingButton } from './marketing-button.component';
 
 export type PricingTier = {
   name: string;
-  price: string; // mono figure, e.g. "₦0" or "₦150"
-  unit?: string; // e.g. "/ employee / month"
-  note?: string; // e.g. a base-fee line under the price
+  // Who the tier is for, where a figure used to sit. Pricing is quoted, not
+  // listed, so this slot carries a team size rather than an amount.
+  audience: string;
   blurb: string;
   features: string[];
   cta: string;
@@ -23,13 +23,11 @@ export const PricingCard = (props: { tier: PricingTier }) => {
         'mkt-price--rec': tier.recommended,
       })}
     >
-      {tier.recommended && <span className="mkt-price__badge">Most popular</span>}
+      {tier.recommended && (
+        <span className="mkt-price__badge">Most popular</span>
+      )}
       <h3 className="mkt-price__name">{tier.name}</h3>
-      <p className="mkt-price__amount">
-        <span className="mkt-figure">{tier.price}</span>
-        {tier.unit && <span className="mkt-price__unit">{tier.unit}</span>}
-      </p>
-      {tier.note && <p className="mkt-price__note mkt-figure">{tier.note}</p>}
+      <p className="mkt-price__audience">{tier.audience}</p>
       <p className="mkt-price__blurb">{tier.blurb}</p>
       <MarketingButton
         href={tier.href}

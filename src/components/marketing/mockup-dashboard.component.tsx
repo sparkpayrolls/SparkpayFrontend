@@ -10,24 +10,24 @@ const runs: {
   status: 'paid' | 'processing' | 'queued';
 }[] = [
   {
-    name: 'Adaeze Okafor',
+    name: 'Amara Okonkwo',
     dept: 'Engineering',
     amount: '2,340,000',
     status: 'paid',
   },
   {
-    name: 'Tunde Bakare',
+    name: 'Liam Carter',
     dept: 'Operations',
     amount: '184,500',
     status: 'paid',
   },
   {
-    name: 'Chidinma Nwosu',
+    name: 'Priya Nair',
     dept: 'Finance',
     amount: '675,000',
     status: 'processing',
   },
-  { name: 'Emeka Obi', dept: 'Sales', amount: '910,200', status: 'queued' },
+  { name: 'Tomás Alvarez', dept: 'Sales', amount: '910,200', status: 'queued' },
 ];
 
 const statusLabel: Record<string, string> = {

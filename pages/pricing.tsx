@@ -13,11 +13,9 @@ import Head from 'next/head';
 const tiers: PricingTier[] = [
   {
     name: 'Starter',
-    price: '₦0',
-    unit: '/ month',
-    blurb: 'Run your first payroll free. For small teams finding their feet.',
+    audience: 'Up to 5 employees',
+    blurb: 'For small teams finding their feet. Run your first payroll free.',
     features: [
-      'Up to 5 employees',
       'Salary disbursement',
       'Income tax calculation',
       'Payslips by email',
@@ -27,13 +25,11 @@ const tiers: PricingTier[] = [
   },
   {
     name: 'Growth',
-    price: '₦150',
-    unit: '/ employee / month',
-    note: '+ ₦5,000 base fee / month',
+    audience: '5 to 100 employees',
     blurb: 'For growing businesses that run payroll every month.',
     features: [
+      'Everything in Starter',
       'Unlimited employees',
-      'Income tax',
       'Pension and statutory remittances',
       'Approval workflow',
       'Full audit trail',
@@ -44,7 +40,7 @@ const tiers: PricingTier[] = [
   },
   {
     name: 'Scale',
-    price: 'Custom',
+    audience: '100+ employees, or several entities',
     blurb: 'For multi-entity groups with dedicated support needs.',
     features: [
       'Everything in Growth',
@@ -68,16 +64,16 @@ const comparison: { label: string; spark: boolean; manual: boolean }[] = [
 
 const faq = [
   {
-    q: 'What counts as an employee?',
-    a: 'Anyone you pay through SparkPay in a given month. People you do not pay that month are not billed.',
+    q: 'How is pricing worked out?',
+    a: 'Around the number of people you actually pay each month and the plan you need. People you do not pay in a given month are not counted. Book a demo and we will quote it.',
   },
   {
     q: 'Is my first payroll really free?',
-    a: 'Yes. You can run your first payroll on the Starter plan without a card, so you can see the whole flow before paying anything.',
+    a: 'Yes. You can run your first payroll on the Starter plan without a card, so you can see the whole flow before committing to anything.',
   },
   {
     q: 'How does billing work?',
-    a: 'Growth is a ₦5,000 monthly base fee plus ₦150 per employee paid that month. You are only charged for the people you actually pay.',
+    a: 'Monthly, and tied to the people you actually pay that month rather than everyone on your books. Your quote sets the rate before you start.',
   },
   {
     q: 'Can I switch plans or leave?',
@@ -103,9 +99,9 @@ const PricingPage: NextPage = () => {
   return (
     <MarketingLayout
       seo={{
-        title: 'Pricing — pay for the people you pay | SparkPay',
+        title: 'Pricing — built around your team | SparkPay',
         description:
-          'Simple per-employee pricing. Run your first payroll free, then pay only for the employees you actually pay each month.',
+          'Pricing is quoted around the size of your team and what you need. Book a demo and we will put a number to it.',
         path: '/pricing',
       }}
     >
@@ -120,8 +116,8 @@ const PricingPage: NextPage = () => {
       <PageHero
         center
         eyebrow="PRICING"
-        title="Pay for the people you pay."
-        lead="Start free, then simple per-employee pricing — no setup fees, no lock-in."
+        title="Pricing built around your team."
+        lead="Tell us how many people you pay and what you need. We will quote it — no setup fees, no lock-in."
       />
 
       <section className="mkt-section" style={{ paddingTop: 0 }}>

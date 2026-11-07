@@ -19,8 +19,16 @@
     height: 620px;
     pointer-events: none;
     background:
-      radial-gradient(620px 340px at 82% 12%, rgba(77, 121, 255, 0.22), transparent 60%),
-      radial-gradient(560px 320px at 18% 0%, rgba(122, 92, 255, 0.16), transparent 62%);
+      radial-gradient(
+        620px 340px at 82% 12%,
+        rgba(77, 121, 255, 0.22),
+        transparent 60%
+      ),
+      radial-gradient(
+        560px 320px at 18% 0%,
+        rgba(122, 92, 255, 0.16),
+        transparent 62%
+      );
     // ambient drift — the only looping motion allowed, very slow (guide §7)
     animation: mkt-mesh-drift 72s ease-in-out infinite alternate;
   }
@@ -484,7 +492,9 @@
     letter-spacing: -0.01em;
     color: var(--text-secondary);
     opacity: 0.7;
-    transition: opacity 0.15s var(--ease-out), color 0.15s var(--ease-out);
+    transition:
+      opacity 0.15s var(--ease-out),
+      color 0.15s var(--ease-out);
 
     &:hover {
       opacity: 1;
@@ -578,8 +588,16 @@
     inset: 0;
     pointer-events: none;
     background:
-      radial-gradient(560px 300px at 10% 0%, rgba(77, 121, 255, 0.5), transparent 60%),
-      radial-gradient(600px 320px at 100% 100%, rgba(122, 92, 255, 0.42), transparent 60%),
+      radial-gradient(
+        560px 300px at 10% 0%,
+        rgba(77, 121, 255, 0.5),
+        transparent 60%
+      ),
+      radial-gradient(
+        600px 320px at 100% 100%,
+        rgba(122, 92, 255, 0.42),
+        transparent 60%
+      ),
       linear-gradient(135deg, var(--mesh-1), transparent 60%);
     opacity: 0.9;
   }

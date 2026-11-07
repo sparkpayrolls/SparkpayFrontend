@@ -13,21 +13,17 @@ export const MockupPayslip = () => (
 
     <div className="mkt-slip__body">
       <div className="mkt-slip__intro">
-        <p className="mkt-slip__lead">
-          Here&rsquo;s a detailed breakdown of your earnings for this pay
-          period.
-        </p>
-        <div className="mkt-slip__coin">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/coin.png" alt="" className="mkt-slip__coin-img" />
-          <span className="mkt-slip__coin-amt mkt-figure">500,000</span>
-          <span className="mkt-slip__coin-label">Total Earnings</span>
+        <div>
+          <p className="mkt-slip__lead">Your December pay, in full.</p>
+          <p className="mkt-slip__period">
+            Pay period <strong>1&ndash;31 December</strong>
+          </p>
+        </div>
+        <div className="mkt-slip__total">
+          <span className="mkt-slip__total-label">Take home</span>
+          <span className="mkt-slip__total-amt mkt-figure">623,000</span>
         </div>
       </div>
-
-      <p className="mkt-slip__period">
-        Payroll Period: <strong>Dec 1 to December 30</strong>
-      </p>
 
       <div className="mkt-slip__table">
         <div className="mkt-slip__row mkt-slip__row--head">
@@ -35,16 +31,20 @@ export const MockupPayslip = () => (
           <span />
         </div>
         <div className="mkt-slip__row">
-          <span>Earnings</span>
-          <span className="mkt-figure">500,000</span>
+          <span>Gross salary</span>
+          <span className="mkt-figure">850,000</span>
         </div>
         <div className="mkt-slip__row">
-          <span>Deduction</span>
-          <span className="mkt-figure">0.00</span>
+          <span>Income tax</span>
+          <span className="mkt-figure mkt-slip__minus">&minus;184,500</span>
+        </div>
+        <div className="mkt-slip__row">
+          <span>Pension</span>
+          <span className="mkt-figure mkt-slip__minus">&minus;42,500</span>
         </div>
         <div className="mkt-slip__row mkt-slip__row--total">
           <span>Take home</span>
-          <span className="mkt-figure">500,000</span>
+          <span className="mkt-figure">623,000</span>
         </div>
       </div>
 
@@ -74,23 +74,29 @@ export const MockupCustomPayment = () => (
 
     <div className="mkt-pay__grid">
       <div className="mkt-pay__field">
-        <span className="mkt-pay__label">Select employees</span>
-        <span className="mkt-pay__input" />
+        <span className="mkt-pay__label">Employees</span>
+        <span className="mkt-pay__input mkt-pay__input--filled">
+          Engineering &middot; 12 people
+        </span>
       </div>
       <div className="mkt-pay__field">
-        <span className="mkt-pay__label">Enter amount</span>
-        <span className="mkt-pay__input mkt-figure">500,000</span>
+        <span className="mkt-pay__label">Amount each</span>
+        <span className="mkt-pay__input mkt-pay__input--filled mkt-figure">
+          450,000
+        </span>
       </div>
     </div>
 
     <div className="mkt-pay__field">
-      <span className="mkt-pay__label">Payment description</span>
-      <span className="mkt-pay__input mkt-pay__input--wide" />
+      <span className="mkt-pay__label">Description</span>
+      <span className="mkt-pay__input mkt-pay__input--wide mkt-pay__input--filled">
+        December salaries
+      </span>
     </div>
 
     <label className="mkt-pay__confirm">
-      <span className="mkt-pay__check" aria-hidden="true" />I confirm the
-      payment details above
+      <span className="mkt-pay__check mkt-pay__check--on" aria-hidden="true" />I
+      confirm the payment details above
     </label>
 
     <div className="mkt-pay__actions">

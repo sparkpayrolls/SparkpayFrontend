@@ -3,47 +3,54 @@
 // realistic sample data. Reused as side-views and background decor.
 
 // ── Organisation list (multi-company) ─────────────────────────────────
-// Rendered as a loading skeleton: real customer names are withheld for
-// privacy, so no company is implied to be a customer.
+// Invented company names, like every other mockup on the site. This used to
+// render as an infinite shimmer skeleton so that no real company was implied
+// to be a customer — but it announced "Loading your organisations" and never
+// resolved, so it read as a card that had failed to load. Made-up org names
+// solve the same privacy problem as the made-up people names do elsewhere.
+const orgs = [
+  { name: 'Northwind Logistics', people: '24 people', total: '18,420,000' },
+  { name: 'Bluestone Media', people: '9 people', total: '6,150,000' },
+  { name: 'Harvest Foods', people: '41 people', total: '27,900,000' },
+  { name: 'Meridian Labs', people: '6 people', total: '5,480,000' },
+];
+
 export const MockupOrgs = () => (
   <div className="mkt-rec mkt-rec--orgs">
     <div className="mkt-rec__head">
       <span className="mkt-rec__title">My organisations</span>
       <span className="mkt-rec__hint">Switch anytime</span>
     </div>
-    {[0, 1, 2, 3].map((i) => (
-      <div className="mkt-rec__row" key={i}>
+    {orgs.map((o) => (
+      <div className="mkt-rec__row" key={o.name}>
         <span className="mkt-rec__ident">
-          <span className="mkt-skel mkt-skel--avatar" aria-hidden="true" />
-          <span className="mkt-rec__skel-lines">
-            <span
-              className="mkt-skel mkt-skel--line"
-              style={{ width: `${88 - i * 10}px` }}
-              aria-hidden="true"
-            />
-            <span
-              className="mkt-skel mkt-skel--line mkt-skel--sm"
-              aria-hidden="true"
-            />
+          <span
+            className="mkt-rec__badge mkt-rec__badge--soft"
+            aria-hidden="true"
+          >
+            {o.name.charAt(0)}
+          </span>
+          <span>
+            <span className="mkt-rec__name">{o.name}</span>
+            <span className="mkt-rec__sub">{o.people}</span>
           </span>
         </span>
-        <span className="mkt-skel mkt-skel--amount" aria-hidden="true" />
+        <span className="mkt-rec__amount mkt-figure">{o.total}</span>
       </div>
     ))}
-    <span className="mkt-visually-hidden">Loading your organisations</span>
   </div>
 );
 
 // ── Audit trail ───────────────────────────────────────────────────────
 const audits = [
-  { name: 'Esther Howard', act: 'Logged in', role: 'Admin' },
+  { name: 'Noor Haddad', act: 'Logged in', role: 'Admin' },
   {
-    name: 'Brooklyn Simmons',
-    act: 'Suspended Esther Howard',
+    name: 'Mei Chen',
+    act: 'Suspended Noor Haddad',
     role: 'Super Admin',
   },
-  { name: 'Ralph Edwards', act: 'Ran July payroll', role: 'Payroll Manager' },
-  { name: 'Bessie Cooper', act: 'Exported audit log', role: 'Viewer' },
+  { name: 'Ngozi Adeyemi', act: 'Ran July payroll', role: 'Payroll Manager' },
+  { name: 'James Whitfield', act: 'Exported audit log', role: 'Viewer' },
 ];
 
 export const MockupAudit = () => (
@@ -99,10 +106,10 @@ export const MockupRemittance = () => (
 
 // ── Income tax per payslip ────────────────────────────────────────────────────
 const payeRows = [
-  { name: 'Adaeze Okafor', gross: '850,000', paye: '184,500' },
-  { name: 'Tunde Bakare', gross: '620,000', paye: '128,400' },
-  { name: 'Chidinma Nwosu', gross: '1,150,000', paye: '262,300' },
-  { name: 'Emeka Obi', gross: '450,000', paye: '86,900' },
+  { name: 'Grace Mwangi', gross: '850,000', paye: '184,500' },
+  { name: 'Daniel Kim', gross: '620,000', paye: '128,400' },
+  { name: 'Sofia Rossi', gross: '1,150,000', paye: '262,300' },
+  { name: 'Yusuf Demir', gross: '450,000', paye: '86,900' },
 ];
 
 export const MockupPaye = () => (
