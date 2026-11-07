@@ -35,17 +35,19 @@
   // ── type ────────────────────────────────────────────────────────────
   // next/font is unavailable on Next 12; loaded via <link> in _document,
   // with tuned fallbacks to limit CLS.
-  --font-display: 'Schibsted Grotesk', 'Instrument Sans', 'Segoe UI',
-    system-ui, sans-serif;
+  --font-display:
+    'Schibsted Grotesk', 'Instrument Sans', 'Segoe UI', system-ui, sans-serif;
   --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Geist Mono', 'IBM Plex Mono', ui-monospace, 'SFMono-Regular',
-    'Menlo', monospace;
+  --font-mono:
+    'Geist Mono', 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', 'Menlo',
+    monospace;
 
   // ── radius / elevation ──────────────────────────────────────────────
   --radius-card: 12px;
   --radius-media: 16px;
   --radius-pill: 999px;
-  --shadow-nav: 0 1px 0 rgba(14, 20, 33, 0.06), 0 8px 24px rgba(14, 20, 33, 0.06);
+  --shadow-nav:
+    0 1px 0 rgba(14, 20, 33, 0.06), 0 8px 24px rgba(14, 20, 33, 0.06);
   --shadow-mockup: 0 40px 80px -24px rgba(12, 18, 32, 0.45);
 
   // ── motion ──────────────────────────────────────────────────────────

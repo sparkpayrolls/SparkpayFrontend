@@ -5,8 +5,16 @@
 // gradients — no raster payload)
 .mkt {
   background-image:
-    radial-gradient(900px 500px at 100% -5%, rgba(29, 78, 216, 0.05), transparent 60%),
-    radial-gradient(700px 500px at 0% 8%, rgba(122, 92, 255, 0.04), transparent 60%);
+    radial-gradient(
+      900px 500px at 100% -5%,
+      rgba(29, 78, 216, 0.05),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px 500px at 0% 8%,
+      rgba(122, 92, 255, 0.04),
+      transparent 60%
+    );
   background-attachment: fixed;
   background-repeat: no-repeat;
 }
@@ -83,7 +91,9 @@
 .mkt-card,
 .mkt-testimonial,
 .mkt-price {
-  transition: transform 0.18s var(--ease-out), border-color 0.18s var(--ease-out),
+  transition:
+    transform 0.18s var(--ease-out),
+    border-color 0.18s var(--ease-out),
     box-shadow 0.18s var(--ease-out);
 }
 
