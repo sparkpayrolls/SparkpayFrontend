@@ -77,6 +77,10 @@ Branch `fix/marketing-audit-p1`, **PR #119**, two commits:
 - [x] **P3.1** Hero subhead rewritten, outcome first — option B (D11)
 - [x] **P3.5** Statutory acronyms removed from the marketing copy site-wide — 72 occurrences, 13 files, 0 left in the rendered HTML; `/features/paye` → `/features/income-tax` with a 308 (D12, D13)
 - [x] **P3.6** Country and currency references removed — 64 edits, 19 files; 8 of 11 marketing pages fully clean in the rendered HTML, 3 with documented exceptions (D15)
+- [x] **P3.7** `/pricing` converted to a quote model — no figures anywhere on the site (D16)
+- [x] **P3.8** Showcase section rebuilt: coin badge removed, payslip shows real deductions, empty form filled, section given the eyebrow/h2/lead framing every other section has (D17)
+- [x] **P3.9** "My organisations" infinite loading skeleton replaced with real rows; dead skeleton CSS removed (D17)
+- [x] **P3.10** Sample people blended across all mockups (D18)
 
 **Not yet ticked:** the phase itself. The gates below passed and the preview is green, but the PR is
 unreviewed and unmerged, so P1 is **build-complete, not closed**.
@@ -289,21 +293,10 @@ fault, and a dependency bump is exactly where it bites.
 **Still not measured:** the alert count after _this_ branch. Dependabot computes against the default
 branch, so the number can only be re-read after this PR merges. Owed again.
 
-### Open decision: pricing currency
+### Pricing currency — decided 2026-11-07
 
-`/pricing` still shows `₦0`, `₦150` per employee and a `₦5,000` base fee, because those are the real
-prices. Under D14 the rest of the site is currency-neutral, which leaves pricing visibly
-inconsistent with it.
-
-Three ways out, and it is a business decision:
-
-| Option                              | Consequence                                                              |
-| ----------------------------------- | ------------------------------------------------------------------------ |
-| Keep naira on `/pricing`            | Honest, but one page contradicts the generic positioning everywhere else |
-| Publish prices in another currency  | Needs a real price in that currency — not a copy edit                    |
-| Show no price, "pricing on request" | Consistent, but loses the self-serve clarity the page has now            |
-
-Unblocking this is **Q8**. Nothing is shipped either way until it is answered.
+Resolved as D16: the page is quote-based and shows no figures. The site now
+carries no currency on any page. Q8 closed.
 
 ### Blocked on
 
