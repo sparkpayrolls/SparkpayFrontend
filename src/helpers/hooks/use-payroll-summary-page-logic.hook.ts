@@ -1,6 +1,6 @@
 import { FormikHelpers } from 'formik';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { $api } from 'src/api';
 import { useAppSelector } from 'src/redux/hooks';
@@ -30,6 +30,12 @@ export const usePayrollSummaryPageLogic = () => {
 
   const { isReady, query } = router;
 
+  const urlSelectionRef = useRef<{
+    selectAll?: boolean;
+    excluded?: string[];
+    checked?: string[];
+  } | null>(null);
+
   useEffect(() => {
     try {
       const inflated = Util.inflate(
@@ -39,7 +45,18 @@ export const usePayrollSummaryPageLogic = () => {
       );
 
       if (inflated.params) {
-        setParams((p) => ({ ...p, ...inflated.params, isReady: true }));
+        const {
+          checked,
+          selectAll,
+          excluded,
+          ...rest
+        } = inflated.params as {
+          checked?: string[];
+          selectAll?: boolean;
+          excluded?: string[];
+        } & Record<string, unknown>;
+        urlSelectionRef.current = { checked, selectAll, excluded };
+        setParams((p) => ({ ...p, ...rest, isReady: true }));
       }
 
       if (inflated.updates) {
@@ -53,29 +70,91 @@ export const usePayrollSummaryPageLogic = () => {
   }, [isReady]);
 
   useEffect(() => {
+    const employees = processorData?.employees as { id: string }[] | undefined;
+    if (!employees?.length || !urlSelectionRef.current) return;
+    const stored = urlSelectionRef.current;
+    urlSelectionRef.current = null;
+    const allIds = employees.map((e) => e.id);
+    let checked = stored.checked || [];
+    if (stored.selectAll) {
+      checked = allIds;
+    } else if (Array.isArray(stored.excluded)) {
+      const excluded = new Set(stored.excluded);
+      checked = allIds.filter((id) => !excluded.has(id));
+    }
+    setParams((p) => ({ ...p, checked }));
+  }, [processorData?.employees]);
+
+  useEffect(() => {
+    if (!params.isReady) return;
+    const { checked, ...rest } = params;
+    const employees = (processorData?.employees || []) as { id: string }[];
+    const allIds = employees.map((e) => e.id);
+    let selection: Record<string, unknown> = { checked };
+    if (allIds.length && checked.length === allIds.length) {
+      selection = { selectAll: true };
+    } else if (
+      allIds.length &&
+      checked.length > 0 &&
+      checked.length > allIds.length / 2
+    ) {
+      const checkedSet = new Set(checked);
+      selection = {
+        excluded: allIds.filter((id) => !checkedSet.has(id)),
+      };
+    }
+    const deflated = Util.deflate({
+      params: { ...rest, ...selection },
+      updates,
+    });
+    const current = query.params
+      ? (Util.decodePayload(query.params.toString()) as unknown)
+      : null;
+    if (typeof current === 'string' && current === deflated) return;
     router.replace(
-      `${router.pathname}?params=${Util.signPayload(
-        Util.deflate({ params, updates }),
-      )}`,
+      `${router.pathname}?params=${Util.signPayload(deflated)}`,
+      undefined,
+      { shallow: true },
     );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params, updates]);
+  }, [params, updates, processorData?.employees]);
 
   const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const deflated = Util.signPayload(Util.deflate({ params, updates }));
+  const allIds = ((processorData?.employees || []) as { id: string }[]).map(
+    (e) => e.id,
+  );
+  const urlSelection =
+    allIds.length && params.checked.length === allIds.length
+      ? { selectAll: true }
+      : { checked: params.checked };
+  const deflated = Util.signPayload(
+    Util.deflate({
+      params: {
+        ...pick(params, ['year', 'proRateMonth', 'cycles', 'currentCycle']),
+        ...urlSelection,
+      },
+      updates,
+    }),
+  );
   const createUrl = `/payroll/create?params=${deflated}`;
-  const payroll: ReturnType<typeof PayrollProcessor.process> =
-    processorData &&
-    PayrollProcessor.process({
+  const checkedSet = useMemo(
+    () => new Set(params.checked),
+    [params.checked],
+  );
+  const payroll: ReturnType<typeof PayrollProcessor.process> = useMemo(() => {
+    if (!processorData) return null as any;
+    return PayrollProcessor.process({
       ...processorData,
       cycles: params.cycles || 1,
       currentCycle: params.currentCycle || 1,
       employees: processorData.employees.map((e: any) => ({
         ...e,
-        excludeFromTotals: !params.checked.includes(e.id),
+        excludeFromTotals: !checkedSet.has(e.id),
         salary: updates[e.id]?.salary || e.salary,
-        ...(updates[e.id]?.netSalary ? { netSalary: updates[e.id].netSalary } : {}),
+        ...(updates[e.id]?.netSalary
+          ? { netSalary: updates[e.id].netSalary }
+          : {}),
         bonus: e.bonus
           .concat(updates[e.id]?.bonus || [])
           .filter(
@@ -94,6 +173,14 @@ export const usePayrollSummaryPageLogic = () => {
       })),
       payItems,
     });
+  }, [
+    processorData,
+    params.cycles,
+    params.currentCycle,
+    checkedSet,
+    updates,
+    payItems,
+  ]);
   const initialValues = {
     ...pick(params, ['year', 'proRateMonth', 'cycles', 'currentCycle']),
     employeeIds: params.checked,

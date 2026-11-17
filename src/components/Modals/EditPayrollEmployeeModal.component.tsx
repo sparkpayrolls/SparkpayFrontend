@@ -1,10 +1,7 @@
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import NiceModal from '@ebay/nice-modal-react';
 import { Formik } from 'formik';
 import { Util } from 'src/helpers/util';
-import {
-  PayrollEmployeeAddonValidation,
-  UpdateSalaryValidation,
-} from 'src/helpers/validation';
+import { PayrollEmployeeAddonValidation } from 'src/helpers/validation';
 import { Button } from '../Button/Button.component';
 import { DatePicker } from '../Input/date-picker.component';
 import { InputV2 } from '../Input/Input.component';
@@ -25,8 +22,8 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
     prorate,
     year,
     month,
+    initialAddonType = '',
   } = props;
-  const modal = useModal();
 
   return (
     <ModalLayout
@@ -44,7 +41,7 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
         );
         const [deletedAddons, setDeletedAddons] = useState<number[]>([]);
         const [initialValues, setInitialValues] = useState({
-          type: '',
+          type: initialAddonType,
           name: '',
           amount: '',
           startDate: moment().year(year).month(month).startOf('month'),
@@ -61,83 +58,6 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
 
         return (
           <div className="edit-payroll-employee">
-            <div className="edit-payroll-employee__section">
-              <h3 className="edit-payroll-employee__section-title">
-                Edit Salary
-              </h3>
-
-              <Formik
-                initialValues={{
-                  salary: employee.salary,
-                  netSalary: employee.netSalary,
-                }}
-                onSubmit={(values, helpers) => {
-                  if (values.salary !== employee.salary)
-                    handleUpdates({ type: 'salary', payload: values.salary });
-                  if (values.netSalary !== employee.netSalary)
-                    handleUpdates({
-                      type: 'netSalary',
-                      payload: values.netSalary,
-                    });
-                  helpers.setSubmitting(false);
-                  modal.hide();
-                }}
-                validationSchema={UpdateSalaryValidation}
-              >
-                {(props) => {
-                  const {
-                    errors,
-                    handleChange,
-                    handleSubmit,
-                    isSubmitting,
-                    touched,
-                    values,
-                  } = props;
-
-                  return (
-                    <form
-                      onSubmit={handleSubmit}
-                      className="edit-payroll-employee__form"
-                    >
-                      <InputV2
-                        type="number"
-                        label={`Salary Amount (${currency})`}
-                        placeholder={`Salary Amount (${currency})`}
-                        name="salary"
-                        value={values.salary}
-                        onChange={handleChange}
-                        transformValue={Util.formatMoneyString(currency)}
-                        disabled={isSubmitting}
-                        error={touched.salary && (errors.salary as string)}
-                      />
-
-                      <InputV2
-                        type="number"
-                        label={`Net Salary Amount (${currency})`}
-                        placeholder={`Net Salary Amount (${currency})`}
-                        name="netSalary"
-                        value={values.netSalary}
-                        onChange={handleChange}
-                        transformValue={Util.formatMoneyString(currency)}
-                        disabled={isSubmitting}
-                        error={
-                          touched.netSalary && (errors.netSalary as string)
-                        }
-                      />
-
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        showSpinner={isSubmitting}
-                        label="Update Salary"
-                        primary
-                      />
-                    </form>
-                  );
-                }}
-              </Formik>
-            </div>
-
             <div className="edit-payroll-employee__section">
               <h3 className="edit-payroll-employee__section-title">
                 Add Salary Addon

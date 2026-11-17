@@ -3,11 +3,24 @@ const path = require('path');
 
 module.exports = {
   reactStrictMode: true,
+  // ag-grid-react ships ESM that imports `react-dom/server` without the
+  // `.js` extension. Node's native ESM loader rejects that; keep it in the
+  // webpack bundle instead of treating it as an external.
+  experimental: {
+    esmExternals: false,
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
   images: {
     domains: ['cdn.britannica.com'],
+  },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'react-dom/server': require.resolve('react-dom/server.js'),
+    };
+    return config;
   },
   // Stale duplicates of the marketing pages. The page files still exist and are
   // still linked from the old app layout, but these are the canonical URLs and

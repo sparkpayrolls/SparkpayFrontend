@@ -3,19 +3,26 @@ import { TotalCard } from '@/components/Card/total-card.component';
 import { DatePicker } from '@/components/Input/date-picker.component';
 import { InputV2 } from '@/components/Input/Input.component';
 import { FileStorageSVG } from '@/components/svg';
-import { CheckboxTableColumn } from '@/components/Table/check-box-table-col.component';
 import { TableLayout } from '@/components/Table/table-layout.component';
-import { TableV2 } from '@/components/Table/Table.component';
+import type { PayrollAgGridRow } from '@/components/Payroll/payroll-employees-ag-grid.types';
 import { WalletBalanceChip } from '@/components/WalletBalanceChip/wallet-balance-chip.component';
 import { NextPage } from 'next';
-import { useRef } from 'react';
+import dynamic from 'next/dynamic';
+import { useMemo } from 'react';
 import withAuth from 'src/helpers/HOC/withAuth';
 import { useCreatePayrollPageLogic } from 'src/helpers/hooks/use-create-payroll-page-logic.hook';
 import { Util } from 'src/helpers/util';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 
+const PayrollEmployeesAgGrid = dynamic(
+  () =>
+    import('@/components/Payroll/payroll-employees-ag-grid').then(
+      (mod) => mod.PayrollEmployeesAgGrid,
+    ),
+  { ssr: false },
+) as typeof import('@/components/Payroll/payroll-employees-ag-grid').PayrollEmployeesAgGrid;
+
 const CreatePayroll: NextPage = () => {
-  const ref = useRef<HTMLDivElement>(null);
   const {
     currency,
     payroll,
@@ -29,118 +36,30 @@ const CreatePayroll: NextPage = () => {
     params,
     setParams,
     thisMoment,
-    allChecked,
-    handleCheck,
-    handleCheckAll,
     allUnchecked,
     handleEmployeeClick,
+    handleSelectedIdsChange,
+    handleSalaryChange,
+    handleNetSalaryChange,
   } = useCreatePayrollPageLogic();
 
-  const table = (
-    <div
-      className="min-h-[calc(100% + 128px)]"
-      style={{
-        minHeight: ref.current
-          ? `${ref.current.offsetHeight + 148}px`
-          : 'calc(100% + 128px)',
-      }}
-    >
-      <div ref={ref}>
-        <TableV2 className="payroll-create-table" loading={loadingPayroll}>
-          <thead>
-            <tr>
-              <CheckboxTableColumn
-                checked={allChecked}
-                onChange={handleCheckAll}
-                element="th"
-              >
-                Name
-              </CheckboxTableColumn>
-              <th>Salary</th>
-              <th>Net Salary</th>
-              <th>Bonus</th>
-              <th>Deduction</th>
-              <th>Tax</th>
-              <th>Employer Pension</th>
-              <th>Employee Pension</th>
-              <th>Voluntary Pension</th>
-              <th>NHF</th>
-              <th>NSITF</th>
-              <th>NHIS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payroll?.employees
-              .filter(({ firstname, lastname }) => {
-                const name = `${firstname} ${lastname}`;
-
-                return !search || name.toLowerCase().includes(search);
-              })
-              .map((e) => {
-                return (
-                  <tr key={e.id}>
-                    <CheckboxTableColumn
-                      checked={params.checked.includes(e.id)}
-                      onChange={handleCheck(e.id)}
-                      element="td"
-                    >
-                      <button
-                        className="create-payroll-page__employee-name"
-                        onClick={handleEmployeeClick(e)}
-                      >
-                        {e.firstname} {e.lastname}
-                      </button>
-                    </CheckboxTableColumn>
-                    <td>
-                      {currency} {Util.formatMoneyNumber(e.salary)}
-                    </td>
-                    <td>
-                      {currency} {Util.formatMoneyNumber(e.netSalary)}
-                    </td>
-                    <td>
-                      {currency} {Util.formatMoneyNumber(e.totalBonus)}
-                    </td>
-                    <td>
-                      {currency} {Util.formatMoneyNumber(e.totalDeductions)}
-                    </td>
-                    <td>
-                      {currency} {Util.formatMoneyNumber(e.tax?.amount || 0)}
-                    </td>
-                    <td>
-                      {currency}{' '}
-                      {Util.formatMoneyNumber(
-                        e.pension?.employerContribution as number,
-                      )}
-                    </td>
-                    <td>
-                      {currency}{' '}
-                      {Util.formatMoneyNumber(
-                        e.pension?.employeeContribution as number,
-                      )}
-                    </td>
-                    <td>
-                      {currency}{' '}
-                      {Util.formatMoneyNumber(
-                        e.pension?.voluntaryPension as number,
-                      )}
-                    </td>
-                    <td>
-                      {currency} {Util.formatMoneyNumber(e.nhf?.amount || 0)}
-                    </td>
-                    <td>
-                      {currency} {Util.formatMoneyNumber(e.nsitf?.amount || 0)}
-                    </td>
-                    <td>
-                      {currency} {Util.formatMoneyNumber(e.nhis?.amount || 0)}
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </TableV2>
-      </div>
-    </div>
-  );
+  const rows = useMemo<PayrollAgGridRow[]>(() => {
+    return (payroll?.employees || []).map((e) => ({
+      id: e.id,
+      name: `${e.firstname} ${e.lastname}`,
+      salary: e.salary,
+      netSalary: e.netSalary,
+      bonus: e.totalBonus || 0,
+      deduction: e.totalDeductions || 0,
+      tax: e.tax?.amount || 0,
+      employerPension: (e.pension?.employerContribution as number) || 0,
+      employeePension: (e.pension?.employeeContribution as number) || 0,
+      voluntaryPension: (e.pension?.voluntaryPension as number) || 0,
+      nhf: e.nhf?.amount || 0,
+      nsitf: e.nsitf?.amount || 0,
+      nhis: e.nhis?.amount || 0,
+    }));
+  }, [payroll?.employees]);
 
   return (
     <DashboardLayoutV2
@@ -258,10 +177,32 @@ const CreatePayroll: NextPage = () => {
             </div>
           }
           fixedTitle
-          fixedHeader={table}
         >
           {hasEmployees ? (
-            table
+            <PayrollEmployeesAgGrid
+              mode="create"
+              rows={rows}
+              currency={currency}
+              search={search}
+              loading={loadingPayroll}
+              selectedIds={params.checked}
+              onSelectedIdsChange={handleSelectedIdsChange}
+              onNameClick={(row) => {
+                const employee = payroll?.employees.find((e) => e.id === row.id);
+                if (employee) {
+                  handleEmployeeClick(employee)();
+                }
+              }}
+              onAddonClick={(row, type) => {
+                const employee = payroll?.employees.find((e) => e.id === row.id);
+                if (employee) {
+                  handleEmployeeClick(employee, type)();
+                }
+              }}
+              onSalaryChange={handleSalaryChange}
+              onNetSalaryChange={handleNetSalaryChange}
+              height="calc(100vh - 320px)"
+            />
           ) : (
             <div className="create-payroll-page__empty-state">
               <div className="create-payroll-page__empty-state__icon">
@@ -300,7 +241,7 @@ const CreatePayroll: NextPage = () => {
                 title={'Total Salary'}
                 type="primary"
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalSalary,
+                  payroll?.totalSalary || 0,
                 )}`}
               />
 
@@ -308,7 +249,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total Net Salary'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalNetSalary,
+                  payroll?.totalNetSalary || 0,
                 )}`}
               />
 
@@ -316,7 +257,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total Bonus'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalBonus,
+                  payroll?.totalBonus || 0,
                 )}`}
               />
 
@@ -324,7 +265,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total Deduction'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalDeductions,
+                  payroll?.totalDeductions || 0,
                 )}`}
               />
 
@@ -332,7 +273,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total Tax'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalPayrollTax,
+                  payroll?.totalPayrollTax || 0,
                 )}`}
               />
 
@@ -340,7 +281,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total Pension'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalPayrollPension,
+                  payroll?.totalPayrollPension || 0,
                 )}`}
               />
 
@@ -348,7 +289,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total NHF'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalPayrollNHF,
+                  payroll?.totalPayrollNHF || 0,
                 )}`}
               />
 
@@ -356,7 +297,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total NSITF'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalPayrollNSITF,
+                  payroll?.totalPayrollNSITF || 0,
                 )}`}
               />
 
@@ -364,7 +305,7 @@ const CreatePayroll: NextPage = () => {
                 loading={loadingPayroll}
                 title={'Total NHIS'}
                 value={`${currency} ${Util.formatMoneyNumber(
-                  payroll?.totalPayrollNHIS,
+                  payroll?.totalPayrollNHIS || 0,
                 )}`}
               />
             </div>

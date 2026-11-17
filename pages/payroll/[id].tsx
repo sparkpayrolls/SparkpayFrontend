@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { TableLayout } from '@/components/Table/table-layout.component';
 import { Util } from 'src/helpers/util';
 import { useAppSelector } from 'src/redux/hooks';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import DashboardLayoutV2 from 'src/layouts/dashboard-layout-v2/DashboardLayoutV2';
 import { WalletBalanceChip } from '@/components/WalletBalanceChip/wallet-balance-chip.component';
 import { StatusChip } from '@/components/StatusChip/status-chip.component';
@@ -18,13 +18,11 @@ import {
   Payroll,
   PayrollApprovalAction,
   PayrollEmployee,
-  PayrollEmployeePayoutStatus,
   PayrollStatus,
   PayrollStatusEnum,
   Response,
 } from 'src/api/types';
 import { HttpError } from 'src/api/repo/http.error';
-import { TableV2 } from '@/components/Table/Table.component';
 import { TableEmptyState } from '@/components/EmptyState/table-emptystate.component';
 import { useSocket } from 'src/helpers/hooks/use-socket.hook';
 import { useWalletBalance } from 'src/helpers/hooks/use-wallet-balance.hook';
@@ -33,6 +31,16 @@ import { KebabMenu } from '@/components/KebabMenu/KebabMenu.component';
 import { toast } from 'react-toastify';
 import { Identity } from '@/components/Identity/identity.component';
 import { Button } from '@/components/Button/Button.component';
+import type { PayrollAgGridRow } from '@/components/Payroll/payroll-employees-ag-grid.types';
+import dynamic from 'next/dynamic';
+
+const PayrollEmployeesAgGrid = dynamic(
+  () =>
+    import('@/components/Payroll/payroll-employees-ag-grid').then(
+      (mod) => mod.PayrollEmployeesAgGrid,
+    ),
+  { ssr: false },
+) as typeof import('@/components/Payroll/payroll-employees-ag-grid').PayrollEmployeesAgGrid;
 
 const PayDetails: NextPage = () => {
   const router = useRouter();
@@ -90,23 +98,27 @@ const PayDetails: NextPage = () => {
     }
   }, [payrollId, setEmployees]);
 
-  const getSelectHandler = (id: string) => {
-    return () => {
-      if (selected.includes(id)) {
-        setSelected(selected.filter((s) => s !== id));
-      } else {
-        setSelected([...selected, id]);
-      }
-    };
-  };
-
-  const handleSelectAll = () => {
-    if (selected.length > 0) {
-      setSelected([]);
-    } else {
-      setSelected((employees?.data || []).map((e) => e.id));
-    }
-  };
+  const viewRows = useMemo<PayrollAgGridRow[]>(() => {
+    return (employees?.data || []).map((e) => {
+      const employee = e.employee as Employee;
+      return {
+        id: e.id,
+        name: `${employee.firstname} ${employee.lastname}`,
+        salary: e.salary,
+        netSalary: e.netSalary,
+        bonus: Util.sum(e.bonuses?.map((d) => d.amount) || []),
+        deduction: Util.sum(e.deductions?.map((d) => d.amount) || []),
+        tax: e.tax?.amount || 0,
+        pension:
+          ((e.pension?.employeeContribution as number) || 0) +
+          ((e.pension?.voluntaryContribution as number) || 0),
+        nhf: e.nhf?.amount || 0,
+        nsitf: e.nsitf?.amount || 0,
+        nhis: e.nhis?.amount || 0,
+        payoutStatus: e.payoutStatus,
+      };
+    });
+  }, [employees?.data]);
 
   const downloadPayslips = async (params: {
     shouldDownloadOnly: boolean;
@@ -532,7 +544,7 @@ const PayDetails: NextPage = () => {
               </div>
             </div>
 
-            <div className="d-flex md-align-items-center mt-4 md-justify-content-space-between gap-2 flex-direction-column md-flex-direction-row">
+            <div className="payroll-details-section__employees-toolbar d-flex md-align-items-center md-justify-content-space-between gap-2 flex-direction-column md-flex-direction-row">
               <p className="payroll-details-section__payroll-breakdown-text">
                 Payroll employees
               </p>
@@ -583,140 +595,35 @@ const PayDetails: NextPage = () => {
                 </div>
               </div>
             </div>
-            <TableLayout>
-              <TableV2
-                className="payroll-create-table"
-                loading={loading || !hasEmployees}
-              >
-                <thead>
-                  <tr>
-                    <th style={{ paddingRight: 0 }}>
-                      <input
-                        checked={
-                          selected.length > 0 &&
-                          selected.length >= (employees?.data?.length || 0)
-                        }
-                        onChange={handleSelectAll}
-                        type="checkbox"
-                      />
-                    </th>
-                    <th style={{ paddingLeft: 0 }}>Name</th>
-                    <th>Salary</th>
-                    <th>Net Salary </th>
-                    <th>Bonuses</th>
-                    <th>Deductions</th>
-                    <th>Tax</th>
-                    <th>Pension</th>
-                    <th>NHF</th>
-                    <th>NSITF</th>
-                    <th>NHIS</th>
-                    <th>Payout Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {employees?.data
-                    ?.filter((e) => {
-                      const employee = e.employee as Employee;
-                      const name = `${employee.firstname} ${employee.lastname}`;
-
-                      return name.toLowerCase().includes(search.toLowerCase());
-                    })
-                    ?.map((e) => {
-                      const employee = e.employee as Employee;
-
-                      return (
-                        <tr key={employee.id}>
-                          <td style={{ paddingRight: 0 }}>
-                            <input
-                              checked={selected.includes(e.id)}
-                              onChange={getSelectHandler(e.id)}
-                              type="checkbox"
-                            />
-                          </td>
-                          <td style={{ paddingLeft: 0 }}>
-                            {employee.firstname} {employee.lastname}
-                          </td>
-                          <td>
-                            {currency} {Util.formatMoneyNumber(e.salary)}
-                          </td>
-                          <td>
-                            {currency} {Util.formatMoneyNumber(e.netSalary)}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              Util.sum(e.bonuses?.map((d) => d.amount) || []),
-                            )}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              Util.sum(
-                                e.deductions?.map((d) => d.amount) || [],
-                              ),
-                            )}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(e.tax?.amount || 0)}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(
-                              (e.pension?.employeeContribution as number) +
-                                (e.pension?.voluntaryContribution as number) ||
-                                0,
-                            )}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(e.nhf?.amount || 0)}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(e.nsitf?.amount || 0)}
-                          </td>
-                          <td>
-                            {currency}{' '}
-                            {Util.formatMoneyNumber(e.nhis?.amount || 0)}
-                          </td>
-                          <td>
-                            <div className="d-flex align-items-center justify-content-space-between">
-                              <StatusChip
-                                status={
-                                  e.payoutStatus as PayrollEmployeePayoutStatus
-                                }
-                              />
-                              <KebabMenu
-                                items={[
-                                  {
-                                    action() {
-                                      downloadPayslips({
-                                        shouldDownloadOnly: false,
-                                        payrollEmployeeIds: [e.id],
-                                      });
-                                    },
-                                    value: 'Send payslip',
-                                  },
-                                  {
-                                    action() {
-                                      downloadPayslips({
-                                        shouldDownloadOnly: true,
-                                        payrollEmployeeIds: [e.id],
-                                      });
-                                    },
-                                    value: 'Download payslip',
-                                  },
-                                ]}
-                              />
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </TableV2>
-            </TableLayout>
+            <div className="payroll-details-section__employees-grid">
+              <TableLayout>
+                {hasEmployees ? (
+                  <PayrollEmployeesAgGrid
+                    mode="view"
+                    rows={viewRows}
+                    currency={currency}
+                    search={search}
+                    loading={loading}
+                    selectedIds={selected}
+                    onSelectedIdsChange={setSelected}
+                    onSendPayslip={(id) =>
+                      downloadPayslips({
+                        shouldDownloadOnly: false,
+                        payrollEmployeeIds: [id],
+                      })
+                    }
+                    onDownloadPayslip={(id) =>
+                      downloadPayslips({
+                        shouldDownloadOnly: true,
+                        payrollEmployeeIds: [id],
+                      })
+                    }
+                    fitToContent
+                    maxHeight="min(70vh, calc(100vh - 360px))"
+                  />
+                ) : null}
+              </TableLayout>
+            </div>
             {!hasEmployees && (
               <TableEmptyState
                 className="payroll-details-section__table-empty-state"

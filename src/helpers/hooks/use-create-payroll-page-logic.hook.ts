@@ -1,7 +1,7 @@
 import { EditPayrollEmployeeModal } from '@/components/Modals/EditPayrollEmployeeModal.component';
 import NiceModal from '@ebay/nice-modal-react';
 import moment from 'moment';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { $api } from 'src/api';
 import { PayrollProcessor } from '../payroll-processor/payroll-processor';
 import { useWalletBalance } from './use-wallet-balance.hook';
@@ -9,6 +9,65 @@ import { useAppSelector } from 'src/redux/hooks';
 import { Util } from '../util';
 import pick from 'lodash/pick';
 import { useRouter } from 'next/router';
+
+type CreatePayrollParams = {
+  proRateMonth: string;
+  year: number;
+  cycles: number;
+  currentCycle: number;
+  checked: string[];
+  isReady: boolean;
+  selectAll?: boolean;
+  excluded?: string[];
+};
+
+const sameIdSet = (a: string[], b: string[]) => {
+  if (a === b) return true;
+  if (a.length !== b.length) return false;
+  const set = new Set(a);
+  return b.every((id) => set.has(id));
+};
+
+const toUrlState = (
+  params: CreatePayrollParams,
+  updates: Record<string, unknown>,
+  allEmployeeIds: string[],
+) => {
+  const { checked, isReady, selectAll: _sa, excluded: _ex, ...rest } = params;
+  let selection: Partial<CreatePayrollParams> = { checked };
+
+  if (allEmployeeIds.length > 0) {
+    if (checked.length === allEmployeeIds.length) {
+      selection = { selectAll: true };
+    } else if (checked.length === 0) {
+      selection = { checked: [] };
+    } else if (checked.length > allEmployeeIds.length / 2) {
+      const checkedSet = new Set(checked);
+      selection = {
+        excluded: allEmployeeIds.filter((id) => !checkedSet.has(id)),
+      };
+    }
+  }
+
+  return {
+    params: { ...rest, ...selection },
+    updates,
+  };
+};
+
+const resolveChecked = (
+  stored: Partial<CreatePayrollParams> | undefined,
+  allEmployeeIds: string[],
+): string[] | null => {
+  if (!stored) return null;
+  if (stored.selectAll) return allEmployeeIds;
+  if (Array.isArray(stored.excluded) && allEmployeeIds.length) {
+    const excluded = new Set(stored.excluded);
+    return allEmployeeIds.filter((id) => !excluded.has(id));
+  }
+  if (Array.isArray(stored.checked)) return stored.checked;
+  return null;
+};
 
 export const useProcessorData = (payload: {
   proRateMonth: string;
@@ -44,7 +103,7 @@ export const useCreatePayrollPageLogic = () => {
   const administrator = useAppSelector((state) => state.administrator);
   const { walletBalance, loading: loadingWalletBalance } = useWalletBalance();
   const router = useRouter();
-  const [params, setParams] = useState({
+  const [params, setParams] = useState<CreatePayrollParams>({
     proRateMonth: moment().format('MMMM'),
     year: moment().year(),
     cycles: 1,
@@ -55,6 +114,16 @@ export const useCreatePayrollPageLogic = () => {
   const { processorData, loading: loadingPayroll } = useProcessorData(params);
   const [search, setSearch] = useState('');
   const [updates, setUpdates] = useState<Record<string, any>>({});
+  const lastUrlDeflate = useRef<string | null>(null);
+  const pendingUrlSelection = useRef<Partial<CreatePayrollParams> | null>(
+    null,
+  );
+  const selectionHydrated = useRef(false);
+
+  const allEmployeeIds = useMemo(
+    () => (processorData?.employees || []).map((e: { id: string }) => e.id),
+    [processorData?.employees],
+  );
 
   useEffect(() => {
     if (router.isReady && !params.isReady) {
@@ -66,51 +135,108 @@ export const useCreatePayrollPageLogic = () => {
         );
 
         if (inflated.params) {
-          setParams({ ...params, ...inflated.params, isReady: true });
+          pendingUrlSelection.current = inflated.params;
+          const {
+            checked: _c,
+            selectAll: _s,
+            excluded: _e,
+            ...rest
+          } = inflated.params;
+          setParams((current) => ({
+            ...current,
+            ...rest,
+            isReady: true,
+          }));
+        } else {
+          setParams((current) => ({ ...current, isReady: true }));
         }
 
         if (inflated.updates) {
           setUpdates(inflated.updates);
         }
       } catch (error) {
-        setParams({ ...params, isReady: true });
+        setParams((current) => ({ ...current, isReady: true }));
       }
     }
-  }, [router, params]);
+  }, [router.isReady, params.isReady, router.query.params]);
 
   useEffect(() => {
-    const deflated = Util.signPayload(Util.deflate({ params, updates }));
+    if (!allEmployeeIds.length) return;
+
+    const fromUrl = resolveChecked(
+      pendingUrlSelection.current || undefined,
+      allEmployeeIds,
+    );
+    if (fromUrl) {
+      pendingUrlSelection.current = null;
+      selectionHydrated.current = true;
+      setParams((current) =>
+        sameIdSet(current.checked, fromUrl)
+          ? current
+          : { ...current, checked: fromUrl },
+      );
+      return;
+    }
+
+    if (!router.query.params && params.checked.length === 0) {
+      selectionHydrated.current = true;
+      setParams((current) => ({
+        ...current,
+        checked: allEmployeeIds,
+      }));
+      return;
+    }
+
+    selectionHydrated.current = true;
+  }, [allEmployeeIds, router.query.params, params.checked.length]);
+
+  useEffect(() => {
+    if (!params.isReady || !selectionHydrated.current) return;
+    // Avoid writing an empty selection before URL/default selection is applied.
     if (
-      (router.query.params || params.checked.length) &&
-      router.query.params !== deflated
+      params.checked.length === 0 &&
+      (pendingUrlSelection.current?.selectAll ||
+        pendingUrlSelection.current?.excluded ||
+        pendingUrlSelection.current?.checked)
     ) {
-      router.replace(`${router.pathname}?params=${deflated}`);
+      return;
     }
 
-    if (!router.query.params && processorData?.employees?.length) {
-      setParams({
-        ...params,
-        checked: processorData.employees.map(
-          (e: typeof processorData.employees[0]) => e.id,
-        ),
-      });
+    const urlState = toUrlState(params, updates, allEmployeeIds);
+    const deflated = Util.deflate(urlState);
+    if (lastUrlDeflate.current === deflated) return;
+    if (router.query.params) {
+      const current = Util.decodePayload(
+        router.query.params.toString(),
+      ) as unknown;
+      if (typeof current === 'string' && current === deflated) {
+        lastUrlDeflate.current = deflated;
+        return;
+      }
     }
-  }, [params, updates, router, processorData]);
 
-  const deflated = Util.signPayload(Util.deflate({ params, updates }));
-  const summaryUrl = `/payroll/summary?params=${deflated}`;
-  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
-  const payroll: ReturnType<typeof PayrollProcessor.process> =
-    processorData &&
-    PayrollProcessor.process({
+    lastUrlDeflate.current = deflated;
+    router.replace(
+      `${router.pathname}?params=${Util.signPayload(deflated)}`,
+      undefined,
+      { shallow: true },
+    );
+  }, [params, updates, router, allEmployeeIds]);
+
+  const payroll = useMemo(() => {
+    if (!processorData) return null;
+    const checkedSet = new Set(params.checked);
+    return PayrollProcessor.process({
       ...processorData,
       cycles: params.cycles || 1,
       currentCycle: params.currentCycle || 1,
       employees: processorData.employees.map((e: any) => ({
         ...e,
-        excludeFromTotals: !params.checked.includes(e.id),
+        excludeFromTotals: !checkedSet.has(e.id),
         salary: updates[e.id]?.salary || e.salary,
-        ...(updates[e.id]?.netSalary ? { netSalary: updates[e.id].netSalary } : {}),
+        ...(updates[e.id]?.netSalary
+          ? { netSalary: updates[e.id].netSalary }
+          : {}),
         bonus: e.bonus
           .concat(updates[e.id]?.bonus || [])
           .filter(
@@ -128,6 +254,16 @@ export const useCreatePayrollPageLogic = () => {
             : e.prorate,
       })),
     });
+  }, [processorData, params.checked, params.cycles, params.currentCycle, updates]);
+
+  const summaryUrl = useMemo(() => {
+    const deflated = Util.signPayload(
+      Util.deflate(toUrlState(params, updates, allEmployeeIds)),
+    );
+    return `/payroll/summary?params=${deflated}`;
+  }, [params, updates, allEmployeeIds]);
+
+  const currency = Util.getCurrencySymbolFromAdministrator(administrator);
   const { employees } = processorData || {};
 
   const handleCheck = (id: string) => {
@@ -153,7 +289,10 @@ export const useCreatePayrollPageLogic = () => {
     setParams({ ...params, checked: employees.map((e: any) => e.id) });
   };
 
-  const handleEmployeeClick = (employee: any) => {
+  const handleEmployeeClick = (
+    employee: any,
+    initialAddonType?: 'Bonus' | 'Deduction',
+  ) => {
     const emp = employees.find((e: any) => e.id === employee.id);
     return () => {
       NiceModal.show(EditPayrollEmployeeModal, {
@@ -161,6 +300,7 @@ export const useCreatePayrollPageLogic = () => {
         currency,
         year: params.year,
         month: params.proRateMonth,
+        initialAddonType,
         bonus: emp.bonus
           .concat(updates[employee.id]?.bonus || [])
           .map((_: any, index: number) => ({ ..._, index }))
@@ -290,6 +430,32 @@ export const useCreatePayrollPageLogic = () => {
     };
   };
 
+  const handleSelectedIdsChange = (ids: string[]) => {
+    setParams((current) =>
+      sameIdSet(current.checked, ids)
+        ? current
+        : { ...current, checked: ids },
+    );
+  };
+
+  const handleSalaryChange = (id: string, salary: number) => {
+    setUpdates((current) => {
+      const next = { ...(current[id] || {}), salary };
+      delete next.netSalary;
+      return { ...current, [id]: next };
+    });
+  };
+
+  const handleNetSalaryChange = (id: string, netSalary: number) => {
+    setUpdates((current) => ({
+      ...current,
+      [id]: {
+        ...(current[id] || {}),
+        netSalary,
+      },
+    }));
+  };
+
   return {
     payroll,
     loadingPayroll,
@@ -306,6 +472,9 @@ export const useCreatePayrollPageLogic = () => {
     allChecked: params.checked.length === payroll?.employees?.length,
     handleCheck,
     handleCheckAll,
+    handleSelectedIdsChange,
+    handleSalaryChange,
+    handleNetSalaryChange,
     allUnchecked: !params.checked.length,
     handleEmployeeClick,
   };

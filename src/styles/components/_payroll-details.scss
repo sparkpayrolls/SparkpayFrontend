@@ -1,5 +1,14 @@
 .payroll-details-section {
-  padding-bottom: 9rem;
+  padding-bottom: 3rem;
+
+  &__employees-toolbar {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  &__employees-grid {
+    margin-top: 0.25rem;
+  }
 
   &__payroll-details-header {
     display: flex;

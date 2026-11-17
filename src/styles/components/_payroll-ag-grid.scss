@@ -1,0 +1,92 @@
+.sparkpay-payroll-ag-grid {
+  width: 100%;
+  min-height: 120px;
+
+  &--fit {
+    min-height: 0;
+  }
+
+  &.sparkpay-payroll-ag-grid--loading {
+    opacity: 0.65;
+    pointer-events: none;
+  }
+
+  .ag-root-wrapper {
+    border-color: #e5e7eb;
+    border-radius: 8px;
+  }
+
+  .ag-header {
+    background: #f8fafc;
+    font-weight: 600;
+  }
+
+  .ag-row {
+    font-size: 13px;
+  }
+
+  .ag-row-selected {
+    background-color: rgba(37, 99, 235, 0.06);
+
+    &::before {
+      background-image: none;
+      background-color: transparent;
+    }
+  }
+
+  .ag-row-selected:hover,
+  .ag-row-hover.ag-row-selected {
+    background-color: rgba(37, 99, 235, 0.09);
+
+    &::before {
+      background-image: none;
+      background-color: transparent;
+    }
+  }
+
+  .payroll-ag-grid__editable {
+    cursor: text;
+    background: rgba(59, 130, 246, 0.04);
+  }
+
+  .payroll-ag-grid__row-number {
+    color: #64748b;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .payroll-ag-grid__clickable {
+    cursor: pointer;
+  }
+
+  .payroll-ag-grid__addon-cell {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+
+    &:hover {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+  }
+
+  .create-payroll-page__employee-name {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #2563eb;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
