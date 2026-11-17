@@ -7,6 +7,7 @@ import { PayrollProcessor } from '../payroll-processor/payroll-processor';
 import { useWalletBalance } from './use-wallet-balance.hook';
 import { useAppSelector } from 'src/redux/hooks';
 import { Util } from '../util';
+import omit from 'lodash/omit';
 import pick from 'lodash/pick';
 import { useRouter } from 'next/router';
 
@@ -33,7 +34,16 @@ const toUrlState = (
   updates: Record<string, unknown>,
   allEmployeeIds: string[],
 ) => {
-  const { checked, isReady, selectAll: _sa, excluded: _ex, ...rest } = params;
+  const { checked } = params;
+  const rest = omit(params, [
+    'checked',
+    'isReady',
+    'selectAll',
+    'excluded',
+  ]) as Omit<
+    CreatePayrollParams,
+    'checked' | 'isReady' | 'selectAll' | 'excluded'
+  >;
   let selection: Partial<CreatePayrollParams> = { checked };
 
   if (allEmployeeIds.length > 0) {
@@ -136,12 +146,11 @@ export const useCreatePayrollPageLogic = () => {
 
         if (inflated.params) {
           pendingUrlSelection.current = inflated.params;
-          const {
-            checked: _c,
-            selectAll: _s,
-            excluded: _e,
-            ...rest
-          } = inflated.params;
+          const rest = omit(inflated.params, [
+            'checked',
+            'selectAll',
+            'excluded',
+          ]);
           setParams((current) => ({
             ...current,
             ...rest,

@@ -189,7 +189,9 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                         )}
                         value={values.type}
                         onBlur={handleBlur}
-                        error={(touched.type && errors.type) || ''}
+                        error={
+                          (touched.type && (errors.type as string)) || ''
+                        }
                         onChange={handleChange}
                       />
 
@@ -202,7 +204,9 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                             value={values.name}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            error={touched.name && errors.name}
+                            error={
+                              touched.name && (errors.name as string)
+                            }
                             disabled={isSubmitting}
                           />
 
@@ -214,7 +218,9 @@ export const EditPayrollEmployeeModal = NiceModal.create((props: any) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.amount}
-                            error={touched.amount && errors.amount}
+                            error={
+                              touched.amount && (errors.amount as string)
+                            }
                             transformValue={Util.formatMoneyString(currency)}
                             disabled={isSubmitting}
                           />

@@ -34,16 +34,16 @@ type Props = {
   search: string;
   loading?: boolean;
   selectedIds: string[];
-  onSelectedIdsChange: (ids: string[]) => void;
-  onNameClick?: (row: PayrollAgGridRow) => void;
+  onSelectedIdsChange: (_ids: string[]) => void;
+  onNameClick?: (_row: PayrollAgGridRow) => void;
   onAddonClick?: (
-    row: PayrollAgGridRow,
-    type: 'Bonus' | 'Deduction',
+    _row: PayrollAgGridRow,
+    _type: 'Bonus' | 'Deduction',
   ) => void;
-  onSalaryChange?: (id: string, salary: number) => void;
-  onNetSalaryChange?: (id: string, netSalary: number) => void;
-  onSendPayslip?: (id: string) => void;
-  onDownloadPayslip?: (id: string) => void;
+  onSalaryChange?: (_id: string, _salary: number) => void;
+  onNetSalaryChange?: (_id: string, _netSalary: number) => void;
+  onSendPayslip?: (_id: string) => void;
+  onDownloadPayslip?: (_id: string) => void;
   height?: string | number;
   /** Size the grid to its rows (capped by maxHeight). Best for view pages. */
   fitToContent?: boolean;
@@ -63,7 +63,7 @@ const moneyValue = (params: ValueFormatterParams) => {
 
 const NameCell = (
   props: ICellRendererParams<PayrollAgGridRow> & {
-    onNameClick?: (row: PayrollAgGridRow) => void;
+    onNameClick?: (_row: PayrollAgGridRow) => void;
   },
 ) => {
   const row = props.data;
@@ -86,8 +86,8 @@ const AddonMoneyCell = (
   props: ICellRendererParams<PayrollAgGridRow> & {
     addonType?: 'Bonus' | 'Deduction';
     onAddonClick?: (
-      row: PayrollAgGridRow,
-      type: 'Bonus' | 'Deduction',
+      _row: PayrollAgGridRow,
+      _type: 'Bonus' | 'Deduction',
     ) => void;
   },
 ) => {
@@ -110,8 +110,8 @@ const AddonMoneyCell = (
 
 const PayoutStatusCell = (
   props: ICellRendererParams<PayrollAgGridRow> & {
-    onSendPayslip?: (id: string) => void;
-    onDownloadPayslip?: (id: string) => void;
+    onSendPayslip?: (_id: string) => void;
+    onDownloadPayslip?: (_id: string) => void;
   },
 ) => {
   const row = props.data;
