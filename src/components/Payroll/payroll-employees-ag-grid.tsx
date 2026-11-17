@@ -1,8 +1,11 @@
 import {
+  forwardRef,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useMemo,
   useRef,
+  useState,
   MutableRefObject,
 } from 'react';
 import { AgGridReact } from 'ag-grid-react';
@@ -10,7 +13,9 @@ import type {
   ColDef,
   GridApi,
   GridReadyEvent,
+  ICellEditorParams,
   ICellRendererParams,
+  SuppressKeyboardEventParams,
   ValueFormatterParams,
   ValueSetterParams,
 } from 'ag-grid-community';
@@ -59,6 +64,56 @@ const moneyValue = (params: ValueFormatterParams) => {
   const value = Number(params.value || 0);
   const currency = (params.context?.currency as string) || '';
   return `${currency} ${Util.formatMoneyNumber(value)}`.trim();
+};
+
+/** Keeps the existing amount and places a caret — no wipe-on-type replace. */
+const MoneyCellEditor = forwardRef(
+  (props: ICellEditorParams<PayrollAgGridRow, number>, ref) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [value, setValue] = useState(() =>
+      props.value == null ? '' : String(props.value),
+    );
+
+    useImperativeHandle(ref, () => ({
+      getValue() {
+        return value;
+      },
+    }));
+
+    useEffect(() => {
+      const el = inputRef.current;
+      if (!el) return;
+      el.focus();
+      const len = el.value.length;
+      el.setSelectionRange(len, len);
+    }, []);
+
+    return (
+      <input
+        ref={inputRef}
+        className="payroll-ag-grid__money-editor"
+        type="text"
+        inputMode="decimal"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    );
+  },
+);
+MoneyCellEditor.displayName = 'MoneyCellEditor';
+
+const suppressMoneyReplaceOnKey = (
+  params: SuppressKeyboardEventParams<PayrollAgGridRow>,
+) => {
+  if (params.editing) return false;
+  const { key, ctrlKey, metaKey, altKey } = params.event;
+  if (key === 'Enter' || key === 'F2' || key === 'Tab' || key === 'Escape') {
+    return false;
+  }
+  // Block printable / Backspace / Delete from clearing the cell to type afresh.
+  if (key === 'Backspace' || key === 'Delete') return true;
+  if (key.length === 1 && !ctrlKey && !metaKey && !altKey) return true;
+  return false;
 };
 
 const NameCell = (
@@ -257,6 +312,9 @@ export const PayrollEmployeesAgGrid = (props: Props) => {
         minWidth: 130,
         valueFormatter: moneyValue,
         editable: mode === 'create',
+        singleClickEdit: mode === 'create',
+        cellEditor: MoneyCellEditor,
+        suppressKeyboardEvent: suppressMoneyReplaceOnKey,
         valueSetter: (params) => moneySetter(params, 'salary'),
         cellClass: mode === 'create' ? 'payroll-ag-grid__editable' : undefined,
       },
@@ -266,6 +324,9 @@ export const PayrollEmployeesAgGrid = (props: Props) => {
         minWidth: 130,
         valueFormatter: moneyValue,
         editable: mode === 'create',
+        singleClickEdit: mode === 'create',
+        cellEditor: MoneyCellEditor,
+        suppressKeyboardEvent: suppressMoneyReplaceOnKey,
         valueSetter: (params) => moneySetter(params, 'netSalary'),
         cellClass: mode === 'create' ? 'payroll-ag-grid__editable' : undefined,
       },

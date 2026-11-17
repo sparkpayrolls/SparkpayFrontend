@@ -49,6 +49,19 @@
     background: rgba(59, 130, 246, 0.04);
   }
 
+  .payroll-ag-grid__money-editor {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0 11px;
+    border: none;
+    outline: none;
+    background: #fff;
+    font: inherit;
+    color: inherit;
+  }
+
   .payroll-ag-grid__row-number {
     color: #64748b;
     text-align: right;
