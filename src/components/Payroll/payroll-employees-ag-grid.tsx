@@ -1,23 +1,20 @@
 import {
-  forwardRef,
   useCallback,
   useEffect,
-  useImperativeHandle,
   useMemo,
   useRef,
-  useState,
   MutableRefObject,
 } from 'react';
 import { AgGridReact } from 'ag-grid-react';
+import type { CustomCellEditorProps } from 'ag-grid-react';
 import type {
+  CellValueChangedEvent,
   ColDef,
   GridApi,
   GridReadyEvent,
-  ICellEditorParams,
   ICellRendererParams,
   SuppressKeyboardEventParams,
   ValueFormatterParams,
-  ValueSetterParams,
 } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -66,40 +63,143 @@ const moneyValue = (params: ValueFormatterParams) => {
   return `${currency} ${Util.formatMoneyNumber(value)}`.trim();
 };
 
-/** Keeps the existing amount and places a caret — no wipe-on-type replace. */
-const MoneyCellEditor = forwardRef(
-  (props: ICellEditorParams<PayrollAgGridRow, number>, ref) => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [value, setValue] = useState(() =>
-      props.value == null ? '' : String(props.value),
-    );
+const parseMoneyInput = (raw: unknown) => {
+  const next =
+    typeof raw === 'number'
+      ? raw
+      : Number(String(raw ?? '').replace(/[^0-9.-]/g, ''));
+  return Number.isFinite(next) && next >= 0 ? next : null;
+};
 
-    useImperativeHandle(ref, () => ({
-      getValue() {
-        return value;
-      },
-    }));
+type MoneyPointerDown = {
+  clientX: number;
+  cellLeft: number;
+  paddingLeft: number;
+  font: string;
+  formattedText: string;
+  at: number;
+};
 
-    useEffect(() => {
-      const el = inputRef.current;
-      if (!el) return;
-      el.focus();
-      const len = el.value.length;
-      el.setSelectionRange(len, len);
-    }, []);
+/** Captured on mousedown so the editor can place the caret at the click. */
+let lastMoneyPointerDown: MoneyPointerDown | null = null;
 
-    return (
-      <input
-        ref={inputRef}
-        className="payroll-ag-grid__money-editor"
-        type="text"
-        inputMode="decimal"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-    );
-  },
-);
+const measureCaretIndex = (
+  text: string,
+  font: string,
+  localX: number,
+) => {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return text.length;
+  ctx.font = font;
+  let best = 0;
+  let bestDist = Infinity;
+  for (let i = 0; i <= text.length; i += 1) {
+    const width = ctx.measureText(text.slice(0, i)).width;
+    const dist = Math.abs(width - localX);
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = i;
+    }
+  }
+  return best;
+};
+
+const caretIndexFromClick = (
+  input: HTMLInputElement,
+  pointer: MoneyPointerDown | null,
+) => {
+  const value = input.value;
+  // Ignore stale pointers (e.g. F2 / Enter edit after an older click).
+  if (!pointer || !value || Date.now() - pointer.at > 750) {
+    return value.length;
+  }
+
+  // X relative to where the formatted cell text started.
+  const localX = pointer.clientX - pointer.cellLeft - pointer.paddingLeft;
+  const formatted = pointer.formattedText || value;
+  const fmtIdx = measureCaretIndex(formatted, pointer.font, localX);
+
+  // Map formatted caret → raw editor index (skip currency, commas, spaces).
+  let rawIdx = 0;
+  for (let i = 0; i < fmtIdx && i < formatted.length; i += 1) {
+    if (/[0-9.-]/.test(formatted[i]!)) rawIdx += 1;
+  }
+  return Math.max(0, Math.min(value.length, rawIdx));
+};
+
+const captureMoneyPointerDown = (event: MouseEvent) => {
+  const cell = (event.target as HTMLElement | null)?.closest?.(
+    '.ag-cell',
+  ) as HTMLElement | null;
+  if (!cell) return;
+  const colId = cell.getAttribute('col-id');
+  if (colId !== 'salary' && colId !== 'netSalary') return;
+
+  const rect = cell.getBoundingClientRect();
+  const style = window.getComputedStyle(cell);
+  lastMoneyPointerDown = {
+    clientX: event.clientX,
+    cellLeft: rect.left,
+    paddingLeft: parseFloat(style.paddingLeft) || 0,
+    font: style.font,
+    formattedText: (cell.textContent || '').trim(),
+    at: Date.now(),
+  };
+};
+
+/**
+ * AG Grid React 31 tracks editor value via onValueChange (not getValue/ref).
+ * Keeps the existing amount and places a caret — no wipe-on-type replace.
+ * Commits numbers (not strings) so number cellDataType accepts the value.
+ */
+const MoneyCellEditor = (
+  props: CustomCellEditorProps<PayrollAgGridRow, number | string | null>,
+) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const display = props.value == null ? '' : String(props.value);
+  const pointerAtOpen = useRef(lastMoneyPointerDown);
+
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    const pointer = pointerAtOpen.current;
+    lastMoneyPointerDown = null;
+
+    // Double rAF: wait until the input is laid out in the cell.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        el.focus();
+        const caret = caretIndexFromClick(el, pointer);
+        try {
+          el.setSelectionRange(caret, caret);
+        } catch {
+          // Some browsers throw if the input type rejects selection.
+        }
+      });
+    });
+  }, []);
+
+  return (
+    <input
+      ref={inputRef}
+      className="payroll-ag-grid__money-editor"
+      type="text"
+      inputMode="decimal"
+      value={display}
+      onChange={(e) => {
+        const raw = e.target.value;
+        // AG Grid number columns reject string values in setValue/checkType.
+        if (raw.trim() === '') {
+          props.onValueChange(null);
+          return;
+        }
+        const parsed = parseMoneyInput(raw);
+        props.onValueChange(parsed ?? raw);
+      }}
+    />
+  );
+};
 MoneyCellEditor.displayName = 'MoneyCellEditor';
 
 const suppressMoneyReplaceOnKey = (
@@ -243,28 +343,17 @@ export const PayrollEmployeesAgGrid = (props: Props) => {
     });
   }, []);
 
-  const moneySetter = useCallback(
-    (
-      params: ValueSetterParams<PayrollAgGridRow>,
-      field: 'salary' | 'netSalary',
-    ) => {
-      const raw = params.newValue;
-      const next =
-        typeof raw === 'number'
-          ? raw
-          : Number(String(raw).replace(/[^0-9.-]/g, ''));
-      if (!Number.isFinite(next) || next < 0) {
-        return false;
-      }
-      if (!params.data) return false;
-      if (params.data[field] === next) return false;
-      params.data[field] = next;
+  const onCellValueChanged = useCallback(
+    (event: CellValueChangedEvent<PayrollAgGridRow>) => {
+      const field = event.colDef.field;
+      if (field !== 'salary' && field !== 'netSalary') return;
+      const next = parseMoneyInput(event.newValue);
+      if (next == null || !event.data) return;
       if (field === 'salary') {
-        onSalaryChange?.(params.data.id, next);
+        onSalaryChange?.(event.data.id, next);
       } else {
-        onNetSalaryChange?.(params.data.id, next);
+        onNetSalaryChange?.(event.data.id, next);
       }
-      return true;
     },
     [onNetSalaryChange, onSalaryChange],
   );
@@ -310,24 +399,26 @@ export const PayrollEmployeesAgGrid = (props: Props) => {
         headerName: 'Salary',
         field: 'salary',
         minWidth: 130,
+        cellDataType: 'number',
         valueFormatter: moneyValue,
+        valueParser: (p) => parseMoneyInput(p.newValue) ?? p.oldValue,
         editable: mode === 'create',
         singleClickEdit: mode === 'create',
         cellEditor: MoneyCellEditor,
         suppressKeyboardEvent: suppressMoneyReplaceOnKey,
-        valueSetter: (params) => moneySetter(params, 'salary'),
         cellClass: mode === 'create' ? 'payroll-ag-grid__editable' : undefined,
       },
       {
         headerName: 'Net Salary',
         field: 'netSalary',
         minWidth: 130,
+        cellDataType: 'number',
         valueFormatter: moneyValue,
+        valueParser: (p) => parseMoneyInput(p.newValue) ?? p.oldValue,
         editable: mode === 'create',
         singleClickEdit: mode === 'create',
         cellEditor: MoneyCellEditor,
         suppressKeyboardEvent: suppressMoneyReplaceOnKey,
-        valueSetter: (params) => moneySetter(params, 'netSalary'),
         cellClass: mode === 'create' ? 'payroll-ag-grid__editable' : undefined,
       },
       {
@@ -434,7 +525,6 @@ export const PayrollEmployeesAgGrid = (props: Props) => {
     return cols;
   }, [
     mode,
-    moneySetter,
     onAddonClick,
     onDownloadPayslip,
     onNameClick,
@@ -553,8 +643,20 @@ export const PayrollEmployeesAgGrid = (props: Props) => {
     return { width: '100%', height } as const;
   }, [fitToContent, useAutoHeight, fittedHeight, maxHeight, height]);
 
+  const gridWrapRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const node = gridWrapRef.current;
+    if (!node || mode !== 'create') return undefined;
+    // Capture before AG Grid handles the event so coordinates are reliable.
+    node.addEventListener('mousedown', captureMoneyPointerDown, true);
+    return () => {
+      node.removeEventListener('mousedown', captureMoneyPointerDown, true);
+    };
+  }, [mode]);
+
   return (
     <div
+      ref={gridWrapRef}
       className={`ag-theme-alpine sparkpay-payroll-ag-grid ${
         loading ? 'sparkpay-payroll-ag-grid--loading' : ''
       }${fitToContent ? ' sparkpay-payroll-ag-grid--fit' : ''}`}
@@ -569,11 +671,15 @@ export const PayrollEmployeesAgGrid = (props: Props) => {
         rowSelection="multiple"
         suppressRowClickSelection
         animateRows={false}
+        // Required so React cell editors commit via onValueChange.
+        reactiveCustomComponents
+        stopEditingWhenCellsLoseFocus
         domLayout={useAutoHeight ? 'autoHeight' : 'normal'}
         isExternalFilterPresent={isExternalFilterPresent}
         doesExternalFilterPass={doesExternalFilterPass}
         onGridReady={onGridReady}
         onSelectionChanged={onSelectionChanged}
+        onCellValueChanged={onCellValueChanged}
         rowBuffer={20}
         suppressCellFocus={mode === 'view'}
       />
